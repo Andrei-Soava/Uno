@@ -1,7 +1,7 @@
-2-REQUISITI 
+# 2-REQUISITI 
 
 
-Requisiti front-end (NON durante il gioco):
+**Requisiti front-end (NON durante il gioco):**
 1.	Gioco avviabile mediante un eseguibile (.jar)
 2.	Schermata iniziale di accesso con due opzioni: 1) login (o registrazione) con tasto “Resta collegato”; 2) giocare senza login
 3.	L’utente registrato può visualizzare le sue statistiche (es. partite vinte), mentre l’utente non registrato no;
@@ -12,7 +12,7 @@ Requisiti front-end (NON durante il gioco):
 6.	Ci deve anche essere l’opzione di log-out (se sì è già loggati) o di login (se si sta giocando senza accesso) SOLO quando non si sta giocando; 
 
 
-Requisiti front-end (durante il gioco):
+**Requisiti front-end (durante il gioco):**
 1.	Messaggio di notifica con scritto “Nome_giocatore, è il tuo turno:” in alto;
 2.	Viene mostrata la mano del giocatore, la carta sul banco (con cui bisogna fare gli abbinamenti) e un’indicazione di chi tocca dopo di te oppure di quale è l’ordine dei giocatori (stile orologio);
 3.	Ci devono essere due tipi di azioni: 1) pescare una carta dal mazzo (pulsante o con cursore) 2) scegliere con cursore o tasti una carta (evidenziandola) tra quelle nella mano e PROVARE a metterla sul banco (vedere se è compatibile con la carta già presente a livello di colore o numero) messaggio d’errore
