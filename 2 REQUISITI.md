@@ -28,6 +28,35 @@
 10.	Opzione durante il gioco di abbandonare la partita (bottone “Abbandona la partita” che apre un messaggio di conferma se si vuole abbandonare o meno la partita) si viene riportati sulla HOME qualora si premesse “Conferma”, mentre se si clicca “Annulla”, si continua a giocare;
 
 
+**Requisiti back-end (generici):**
+1.  Utilizzo di Java con Eclipse, in particolare di Maven (per la gestione delle dipendenze singolarmente);
+2.  Utilizzo di Papyrus con Eclipse, per la creazione di diagrammi UML (in particolare generazione di codice Java a partire da diagramma di classe);
+3.  Utilizzo della libreria Log4j per la gestione dei log;
+4.  Utilizzo di Swing per l'interfaccia grafica;
+5.  Utilizzo di PostgresSQL per il database utenti (si tiene conto degli account, eventuale saldo nel portafoglio, lo storico delle partite e le partite in sospeso);
+6.  Utilizzo di Model-View-Controller come design pattern, visto che si sviluppa un gioco;
+
+**Requisiti back-end del server:**
+1.  Gestione delle richieste per partite multigiocatore mediante una pool di threads, responsabili della sincronizzazione sulle azioni delle singole partite;
+2.  Il server di gioco deve essere sempre attivo, indipendemente che ci siano utenti o meno con l'applicazione aperta;
+3.  Il server è responsabile del collegamento al database per la gestione dell'autenticazione e per il salvataggio delle partite (se vsBots: salva le partite incomplete);
+4.  Il server viene richiamato ogni volta che un utente crea una nuova partita con amici (logica client-server)--> creazione lobby con associato un codice numerico (autogenerato) che serve agli altri utenti che si vogliono collegare
+5.  Il server NON gestisce la partita con amici in sè--> quando la lobby "si chiude", la partita verrà gestita dagli utenti (host-p2p, magari con un server dedicato);
+6.  Il server viene SEMPRE richiamato al termine di una partita (o dopo averne abbandonata una) per aggiornare le statistiche del database;
+
+**Requisiti back-end del database:**
+1. Nel database del gioco devono essere presenti:
+  1.1  una tabella UTENTE con campi: id (chiave primaria, ad auto-incremento), nickname (stringa, unique), password (stringa), vittorie (intero positivo);
+  1.2  una tabella PARTITA_INCOMPLETA con campi: id (chiave primaria, ad auto-incremento), idUtente (chiave esterna), dettagliPartita (stringa oppure oggetto JSON);
+2. Il database del gioco NON gestisce le partite multigiocatore, ma SOLO quelle vsBots INCOMPLETE;
+3. Il database deve essere aggiornato ogni volta che un utente vince o perde una partita (indipendemente che sia contro Bots o meno)--> aggiornamento delle statistiche;
+4. Il database deve considerare la possibilità che gli utenti vengano eliminati (on delete cascade sulle partite) o che vengano aggiornati i rispettivi dati   (se nickname  --> verifica unicità);
+5. Il database deve considerare la possibilità che le partite in sospeso vengano eliminate dagli utenti;
+
+ 
+
+
+
 
 
 
