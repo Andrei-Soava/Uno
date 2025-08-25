@@ -183,6 +183,10 @@ Non comprende aspetti di marketing, distribuzione in store o versioni mobile.
 
 ## 7. Requisiti Non Funzionali
 
+- **Qualità**:
+  - Conformità allo standard ISO 9126
+  - Supporto sviluppo mediante Stan4j e SonarLint
+
 - **Performance**:  
   - Tempo di avvio ≤ 5 s  
   - Round-trip client-server ≤ 200 ms  
@@ -204,8 +208,8 @@ Non comprende aspetti di marketing, distribuzione in store o versioni mobile.
 
 ---
 
-## 8. Use Case Principali (da trasformare in UML)
-
+## 8. Use Case Principali (incompleto)
+![UseCase](../documentazione/immagini/UMLUseCase.png)
 | UC ID | Nome                                    | Attori             | Descrizione sintetica                                          |
 |-------|-----------------------------------------|--------------------|----------------------------------------------------------------|
 | UC1   | Accesso al sistema                      | Utente             | Login/registrazione o gioco anonimo                            |
