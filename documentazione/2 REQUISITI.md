@@ -93,24 +93,24 @@ Non comprende aspetti di marketing, distribuzione in store o versioni mobile.
    - Testo in alto: “‹Nome_giocatore›, è il tuo turno:”.  
 
 2. RF10 – Visualizzazioni  
-   - Mano del giocatore  
-   - Carta sul banco  
-   - Indicatore dell’ordine dei turni (stile orologio o “Prossimo: ‹Nome›”)  
+   - Mano del giocatore.  
+   - Carta sul banco.
+   - Indicatore dell’ordine dei turni (stile orologio o “Prossimo: ‹Nome›”).  
 
 3. RF11 – Azioni di gioco  
-   - RF11.1 – Pescare carta (automatico di default, pulsante opzionale).  
+   - RF11.1 – Pescare carta.  
    - RF11.2 – Selezionare carta in mano e tentare di giocarla.  
    - RF11.3 – Messaggio di errore in caso di incompatibilità colore/numero.  
 
-4. RF12 – Pescaggio automatico  
-   - Ciclo finché non esce carta compatibile.  
+4. RF12 – Pescaggio  
+   - Viene pescato una sola carta.  
    - All’arrivo carta “buona”:  
-     - Metti sul banco  
-     - Oppure tienila in mano e riprendi pescaggio manuale  
+     - Metti sul banco.
+     - Oppure tienila in mano e passa il turno.  
 
 5. RF13 – ONE!  
    - Alla penultima carta, mostra finestra (2–3 s) con pulsante “ONE!”.  
-   - Se non premuto, pescaggio automatico.  
+   - Se non premuto, vengono pescate 2 carte.  
 
 6. RF14 – Carte speciali  
    - Per +4 o cambio colore: visualizza finestra di selezione colore.  
