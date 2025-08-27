@@ -42,5 +42,6 @@ Esempio COMPLETO:
 - 21/08, Fabio, miglioramento formattazione dei requisiti (documento 2), null;
 - 25/08 14-16:30, (Andrei, Giuseppe), miglioramento struttura progetto (cartella documentazione) e prima versione use case diagram dentro documento 2, continauzione use case diagram e modellizzazione;
 - 25/08 16:30-18, Andrei, definizione politiche aggiornamento documento 1 (qui presente) e aggiunta log della settimana del 18/08, null;
-- 25/08, **AVVISO**, Andrei, (ciascun membro dovrà fare i propri log d'ora in avanti, salvo sessioni di gruppo in cui la fa uno per tutti);
+- 25/08, **AVVISO**, Andrei, (ciascun membro dovrà fare i propri log d'ora in avanti, salvo sessioni di gruppo in cui li fa uno per tutti);
+- 27/06 15:30, Andrei, descrizione generale architettura software--> documento 3, continuazione progettazione--> design vero e proprio;
 
