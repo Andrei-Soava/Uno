@@ -21,7 +21,7 @@ Definire tutti i requisiti utili a garantire:
 
 Questo SRS copre:
 - Applicativo desktop Java avviabile da file .jar  
-- Modalità di gioco: multiplayer client-server, vs bot, tutorial/regolamento, modalità estrema  
+- Modalità di gioco: multiplayer client-server, vs bot, tutorial/regolamento
 - Autenticazione utenti e gestione statistica  
 - Persistenza delle partite incomplete e dello storico  
 
@@ -31,9 +31,9 @@ Non comprende aspetti di marketing, distribuzione in store o versioni mobile.
 
 ## 4. Stakeholder
 
-- **Giocatori registrati**: usufruiscono di statistiche, modalità estrema a pagamento, salvataggio partite.  
+- **Giocatori registrati**: usufruiscono di statistiche, salvataggio partite.  
 - **Giocatori anonimi**: accedono solo alle modalità gratuite senza salvataggio di statistiche.  
-- **Amministratori di sistema**: gestiscono server, database e servizi di pagamento.  
+- **Amministratori di sistema**: gestiscono server e database. 
 - **Sviluppatori**: implementano, mantengono e testano il software.  
 
 ---
@@ -44,7 +44,6 @@ Non comprende aspetti di marketing, distribuzione in store o versioni mobile.
 - **Lobby**: stanza virtuale per partite client-server, accessibile tramite codice.  
 - **Bot**: avversario controllato dal computer.  
 - **ONE!**: pulsante temporaneo per segnalare penultima carta.  
-- **Modalità estrema**: opzione a pagamento con punizioni realistiche.  
 - **MVC**: modello architetturale Model-View-Controller.  
 
 ---
@@ -70,7 +69,6 @@ Non comprende aspetti di marketing, distribuzione in store o versioni mobile.
      - Partita contro bot  
      - Tutorial o Regolamento  
      - Esci dal gioco  
-     - Modalità estrema (utenti registrati)  
 
 5. RF5 – Modalità client-server  
    - RF5.1 – Crea nuova lobby con codice numerico autogenerato.  
@@ -170,7 +168,6 @@ Non comprende aspetti di marketing, distribuzione in store o versioni mobile.
 |                       | nickname             | VARCHAR(50)   | Unico, non nullo                           |
 |                       | password_hash        | VARCHAR(256)  | Hash bcrypt/scrypt                         |
 |                       | vittorie             | INT ≥ 0       |                                            |
-|                       | saldo_portafoglio    | DECIMAL(10,2) | Modalità estrema                           |
 | PARTITA_INCOMPLETA    | id                   | SERIAL PK     |                                            |
 |                       | idUtente             | INT FK        | References UTENTE(id) ON DELETE CASCADE    |
 |                       | dettagli             | JSONB         | Stato esatto della partita vs bot          |
