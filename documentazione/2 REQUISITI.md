@@ -32,7 +32,7 @@ Non comprende aspetti di marketing, distribuzione in store o versioni mobile.
 ## 4. Stakeholder
 
 - **Giocatori registrati**: usufruiscono di statistiche, salvataggio partite.  
-- **Giocatori anonimi**: accedono solo alle modalità gratuite senza salvataggio di statistiche.  
+- **Giocatori anonimi**: accedono solo alle modalità senza salvataggio di statistiche.  
 - **Amministratori di sistema**: gestiscono server e database. 
 - **Sviluppatori**: implementano, mantengono e testano il software.  
 
@@ -60,7 +60,7 @@ Non comprende aspetti di marketing, distribuzione in store o versioni mobile.
    - Opzione Gioca senza login.  
 
 3. RF3 – Statistiche  
-   - Utente registrato visualizza partite vinte, giocate e bilancio portafoglio.  
+   - Utente registrato visualizza partite vinte e giocate.  
    - Utente anonimo non visualizza statistiche.  
 
 4. RF4 – Home post-accesso  
