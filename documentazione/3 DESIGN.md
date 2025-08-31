@@ -33,6 +33,9 @@ Mostra la suddivisione in macro‑blocchi:
 - Database (tabelle principali e relazioni).
 - Evidenzia la separazione tra strato di presentazione, logica di dominio e persistenza.
 
+#### Diagramma delle classi (incompleto)
+![Class](../UMLDiagrams/ONEclassDiagram.PNG)
+
 ### 2. Vista di processo
 Rappresenta i principali flussi e interazioni concorrenti:
 - Ciclo di vita di una partita multiplayer (creazione lobby → avvio → scambio mosse → conclusione).
