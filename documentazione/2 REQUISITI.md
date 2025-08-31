@@ -206,7 +206,7 @@ Non comprende aspetti di marketing, distribuzione in store o versioni mobile.
 ---
 
 ## 8. Use Case Principali (incompleto)
-![UseCase](../documentazione/immagini/UMLUseCase.png)
+![UseCase](../UMLDiagrams/ONEuseCaseDiagram.PNG)
 | UC ID | Nome                                    | Attori             | Descrizione sintetica                                          |
 |-------|-----------------------------------------|--------------------|----------------------------------------------------------------|
 | UC1   | Accesso al sistema                      | Utente             | Login/registrazione o gioco anonimo                            |
