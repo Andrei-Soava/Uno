@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_e20aIIaHEfCOGqvjHJMRxw" name="UMLDiagrams">
+  <packageImport xmi:type="uml:PackageImport" xmi:id="_e4DwQIaHEfCOGqvjHJMRxw">
+    <importedPackage xmi:type="uml:Model" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#_0"/>
+  </packageImport>
+  <packagedElement xmi:type="uml:StateMachine" xmi:id="_kcGnoIaHEfCOGqvjHJMRxw" name="ONE">
+    <region xmi:type="uml:Region" xmi:id="_nXezoIaHEfCOGqvjHJMRxw" name="Region1">
+      <transition xmi:type="uml:Transition" xmi:id="_8X4ZYIaJEfCOGqvjHJMRxw" source="_4n5goIaJEfCOGqvjHJMRxw" target="_xLGX4IaJEfCOGqvjHJMRxw"/>
+      <transition xmi:type="uml:Transition" xmi:id="_NsopQIaLEfCOGqvjHJMRxw" name="entra" source="_xLGX4IaJEfCOGqvjHJMRxw" target="_FnaOkIaLEfCOGqvjHJMRxw"/>
+      <transition xmi:type="uml:Transition" xmi:id="_TesugIaLEfCOGqvjHJMRxw" name="anonimo/loggato=false" source="_FnaOkIaLEfCOGqvjHJMRxw" target="_SQay8IaKEfCOGqvjHJMRxw"/>
+      <transition xmi:type="uml:Transition" xmi:id="_zveHMIaLEfCOGqvjHJMRxw" name="accedi" source="_FnaOkIaLEfCOGqvjHJMRxw" target="_wXmzgIaLEfCOGqvjHJMRxw"/>
+      <transition xmi:type="uml:Transition" xmi:id="_UI7acIaPEfCOGqvjHJMRxw" name="/loggato=true" source="_wXmzgIaLEfCOGqvjHJMRxw" target="_SQay8IaKEfCOGqvjHJMRxw"/>
+      <transition xmi:type="uml:Transition" xmi:id="__1nGsIaYEfCOGqvjHJMRxw" name="chiudi" source="_xLGX4IaJEfCOGqvjHJMRxw" target="_8G4yMIaYEfCOGqvjHJMRxw"/>
+      <transition xmi:type="uml:Transition" xmi:id="_DU7tQIaZEfCOGqvjHJMRxw" name="esci dal gioco" source="_SQay8IaKEfCOGqvjHJMRxw" target="_8G4yMIaYEfCOGqvjHJMRxw"/>
+      <transition xmi:type="uml:Transition" xmi:id="_SyK3UIaZEfCOGqvjHJMRxw" name="statistiche[loggato==true]" source="_SQay8IaKEfCOGqvjHJMRxw" target="_KxmTIIaZEfCOGqvjHJMRxw"/>
+      <transition xmi:type="uml:Transition" xmi:id="_bFuB4IaZEfCOGqvjHJMRxw" name="indietro" source="_KxmTIIaZEfCOGqvjHJMRxw" target="_SQay8IaKEfCOGqvjHJMRxw"/>
+      <transition xmi:type="uml:Transition" xmi:id="_6HROYIaZEfCOGqvjHJMRxw" name="giocaVSbot" source="_SQay8IaKEfCOGqvjHJMRxw" target="_uSG-QIaZEfCOGqvjHJMRxw"/>
+      <transition xmi:type="uml:Transition" xmi:id="_Z20wYIaaEfCOGqvjHJMRxw" name="tutorial" source="_SQay8IaKEfCOGqvjHJMRxw" target="_U4q0UIaaEfCOGqvjHJMRxw"/>
+      <transition xmi:type="uml:Transition" xmi:id="_dQ9U8IaaEfCOGqvjHJMRxw" name="indietro" source="_U4q0UIaaEfCOGqvjHJMRxw" target="_SQay8IaKEfCOGqvjHJMRxw"/>
+      <transition xmi:type="uml:Transition" xmi:id="_sNF9EIaaEfCOGqvjHJMRxw" name="giocaVSamici" source="_SQay8IaKEfCOGqvjHJMRxw" target="_LbQesIaaEfCOGqvjHJMRxw"/>
+      <transition xmi:type="uml:Transition" xmi:id="_vf3VYIaaEfCOGqvjHJMRxw" name="indietro" source="_LbQesIaaEfCOGqvjHJMRxw" target="_SQay8IaKEfCOGqvjHJMRxw"/>
+      <transition xmi:type="uml:Transition" xmi:id="_0UBA4IaaEfCOGqvjHJMRxw" name="indietro" source="_uSG-QIaZEfCOGqvjHJMRxw" target="_SQay8IaKEfCOGqvjHJMRxw"/>
+      <transition xmi:type="uml:Transition" xmi:id="_Mj3QEIabEfCOGqvjHJMRxw" name="nuova partita" source="_uSG-QIaZEfCOGqvjHJMRxw" target="_A4spcIabEfCOGqvjHJMRxw"/>
+      <transition xmi:type="uml:Transition" xmi:id="_WBOiYIabEfCOGqvjHJMRxw" name="carica partita[loggato==true]" source="_uSG-QIaZEfCOGqvjHJMRxw" target="_PHTdMIabEfCOGqvjHJMRxw"/>
+      <transition xmi:type="uml:Transition" xmi:id="_kpX3gIabEfCOGqvjHJMRxw" name="indietro" source="_A4spcIabEfCOGqvjHJMRxw" target="_uSG-QIaZEfCOGqvjHJMRxw"/>
+      <transition xmi:type="uml:Transition" xmi:id="_oAXogIabEfCOGqvjHJMRxw" name="indietro" source="_PHTdMIabEfCOGqvjHJMRxw" target="_uSG-QIaZEfCOGqvjHJMRxw"/>
+      <transition xmi:type="uml:Transition" xmi:id="_A6mRcIacEfCOGqvjHJMRxw" name="elimina partita" source="_PHTdMIabEfCOGqvjHJMRxw" target="_xvpxQIabEfCOGqvjHJMRxw"/>
+      <transition xmi:type="uml:Transition" xmi:id="_HIUX8IacEfCOGqvjHJMRxw" name="annullaORconferma" source="_xvpxQIabEfCOGqvjHJMRxw" target="_PHTdMIabEfCOGqvjHJMRxw"/>
+      <transition xmi:type="uml:Transition" xmi:id="_cSLtoIacEfCOGqvjHJMRxw" name="crea partita" source="_LbQesIaaEfCOGqvjHJMRxw" target="_ZcD1EIacEfCOGqvjHJMRxw"/>
+      <transition xmi:type="uml:Transition" xmi:id="_l1NjEIacEfCOGqvjHJMRxw" name="collegati a partita" source="_LbQesIaaEfCOGqvjHJMRxw" target="_hV5fIIacEfCOGqvjHJMRxw"/>
+      <transition xmi:type="uml:Transition" xmi:id="_qDqggIacEfCOGqvjHJMRxw" name="indietro" source="_hV5fIIacEfCOGqvjHJMRxw" target="_LbQesIaaEfCOGqvjHJMRxw"/>
+      <transition xmi:type="uml:Transition" xmi:id="_tmiKUIacEfCOGqvjHJMRxw" name="abbandona" source="_ZcD1EIacEfCOGqvjHJMRxw" target="_LbQesIaaEfCOGqvjHJMRxw"/>
+      <transition xmi:type="uml:Transition" xmi:id="_5gSmkIacEfCOGqvjHJMRxw" name="entra[codice corretto]" source="_hV5fIIacEfCOGqvjHJMRxw" target="_ZcD1EIacEfCOGqvjHJMRxw"/>
+      <transition xmi:type="uml:Transition" xmi:id="_p_q74IadEfCOGqvjHJMRxw" name="avvia/online=true" source="_ZcD1EIacEfCOGqvjHJMRxw" target="_vRIuIIagEfCOGqvjHJMRxw"/>
+      <transition xmi:type="uml:Transition" xmi:id="_xJA9IIadEfCOGqvjHJMRxw" name="avvia/online=false" source="_A4spcIabEfCOGqvjHJMRxw" target="_axI_YIahEfCOGqvjHJMRxw"/>
+      <transition xmi:type="uml:Transition" xmi:id="_6FskQIadEfCOGqvjHJMRxw" name="continua partita/online=false" source="_PHTdMIabEfCOGqvjHJMRxw" target="_20hnEIagEfCOGqvjHJMRxw"/>
+      <transition xmi:type="uml:Transition" xmi:id="_uNM20IaeEfCOGqvjHJMRxw" source="_iJC84IaoEfCOGqvjHJMRxw" target="_rLEikIaeEfCOGqvjHJMRxw"/>
+      <transition xmi:type="uml:Transition" xmi:id="_w_9SUIaeEfCOGqvjHJMRxw" name="[online==true]" source="_rLEikIaeEfCOGqvjHJMRxw" target="_LbQesIaaEfCOGqvjHJMRxw"/>
+      <transition xmi:type="uml:Transition" xmi:id="_94jVYIaeEfCOGqvjHJMRxw" name="[online==falseANDloggato==true]" source="_rLEikIaeEfCOGqvjHJMRxw" target="_4sNMUIaeEfCOGqvjHJMRxw"/>
+      <transition xmi:type="uml:Transition" xmi:id="_RcBVAIafEfCOGqvjHJMRxw" name="[online==falseANDloggato==false]" source="_rLEikIaeEfCOGqvjHJMRxw" target="_uSG-QIaZEfCOGqvjHJMRxw"/>
+      <transition xmi:type="uml:Transition" xmi:id="_h206kIafEfCOGqvjHJMRxw" name="salvaORnonsalva" source="_4sNMUIaeEfCOGqvjHJMRxw" target="_uSG-QIaZEfCOGqvjHJMRxw"/>
+      <transition xmi:type="uml:Transition" xmi:id="_hVh5cIahEfCOGqvjHJMRxw" source="_20hnEIagEfCOGqvjHJMRxw" target="_FJe6cIahEfCOGqvjHJMRxw"/>
+      <transition xmi:type="uml:Transition" xmi:id="_9ITRQIarEfCOGqvjHJMRxw" source="_ZBVEEIagEfCOGqvjHJMRxw" target="_4aJgEIarEfCOGqvjHJMRxw"/>
+      <transition xmi:type="uml:Transition" xmi:id="_Ez98cIasEfCOGqvjHJMRxw" name="[online==true]" source="_4aJgEIarEfCOGqvjHJMRxw" target="_LbQesIaaEfCOGqvjHJMRxw"/>
+      <transition xmi:type="uml:Transition" xmi:id="_MbpfgIasEfCOGqvjHJMRxw" name="[online==false]" source="_4aJgEIarEfCOGqvjHJMRxw" target="_uSG-QIaZEfCOGqvjHJMRxw"/>
+      <subvertex xmi:type="uml:State" xmi:id="_xLGX4IaJEfCOGqvjHJMRxw" name="Schermata d'accesso"/>
+      <subvertex xmi:type="uml:Pseudostate" xmi:id="_4n5goIaJEfCOGqvjHJMRxw" name="Apri ONE"/>
+      <subvertex xmi:type="uml:State" xmi:id="_SQay8IaKEfCOGqvjHJMRxw" name="Menù di scelta"/>
+      <subvertex xmi:type="uml:Pseudostate" xmi:id="_FnaOkIaLEfCOGqvjHJMRxw" name="" kind="choice"/>
+      <subvertex xmi:type="uml:State" xmi:id="_wXmzgIaLEfCOGqvjHJMRxw">
+        <region xmi:type="uml:Region" xmi:id="_CaJL4IaMEfCOGqvjHJMRxw" name="Region1">
+          <transition xmi:type="uml:Transition" xmi:id="_y8-d0IaMEfCOGqvjHJMRxw" source="_CaLBEIaMEfCOGqvjHJMRxw" target="_vdBlIIaMEfCOGqvjHJMRxw"/>
+          <transition xmi:type="uml:Transition" xmi:id="_5ZxiIIaMEfCOGqvjHJMRxw" name="no" source="_vdBlIIaMEfCOGqvjHJMRxw" target="_Mq0xgIaMEfCOGqvjHJMRxw"/>
+          <transition xmi:type="uml:Transition" xmi:id="_hv5RUIaNEfCOGqvjHJMRxw" name="registra" source="_Mq0xgIaMEfCOGqvjHJMRxw" target="_YLhYEIaNEfCOGqvjHJMRxw"/>
+          <transition xmi:type="uml:Transition" xmi:id="_2TlX0IaNEfCOGqvjHJMRxw" name="no" source="_YLhYEIaNEfCOGqvjHJMRxw" target="_Mq0xgIaMEfCOGqvjHJMRxw"/>
+          <transition xmi:type="uml:Transition" xmi:id="_GccRwIaOEfCOGqvjHJMRxw" name="sì" source="_YLhYEIaNEfCOGqvjHJMRxw" target="_8KVv0IaNEfCOGqvjHJMRxw"/>
+          <transition xmi:type="uml:Transition" xmi:id="_OjyzYIaOEfCOGqvjHJMRxw" name="sì" source="_vdBlIIaMEfCOGqvjHJMRxw" target="_8KVv0IaNEfCOGqvjHJMRxw"/>
+          <transition xmi:type="uml:Transition" xmi:id="_hstlAIaOEfCOGqvjHJMRxw" name="accedi" source="_8KVv0IaNEfCOGqvjHJMRxw" target="_cyr7AIaOEfCOGqvjHJMRxw"/>
+          <transition xmi:type="uml:Transition" xmi:id="_ljY7oIaOEfCOGqvjHJMRxw" name="no" source="_cyr7AIaOEfCOGqvjHJMRxw" target="_8KVv0IaNEfCOGqvjHJMRxw"/>
+          <transition xmi:type="uml:Transition" xmi:id="_0w0IEIaOEfCOGqvjHJMRxw" name="sì" source="_cyr7AIaOEfCOGqvjHJMRxw" target="_xvtHgIaOEfCOGqvjHJMRxw"/>
+          <subvertex xmi:type="uml:Pseudostate" xmi:id="_CaLBEIaMEfCOGqvjHJMRxw"/>
+          <subvertex xmi:type="uml:State" xmi:id="_Mq0xgIaMEfCOGqvjHJMRxw" name="Registrazione"/>
+          <subvertex xmi:type="uml:Pseudostate" xmi:id="_vdBlIIaMEfCOGqvjHJMRxw" name="registrato?" kind="choice"/>
+          <subvertex xmi:type="uml:Pseudostate" xmi:id="_YLhYEIaNEfCOGqvjHJMRxw" name="registrazione valida?" kind="choice"/>
+          <subvertex xmi:type="uml:State" xmi:id="_8KVv0IaNEfCOGqvjHJMRxw" name="Accesso"/>
+          <subvertex xmi:type="uml:Pseudostate" xmi:id="_cyr7AIaOEfCOGqvjHJMRxw" name="dati corretti?" kind="choice"/>
+          <subvertex xmi:type="uml:FinalState" xmi:id="_xvtHgIaOEfCOGqvjHJMRxw" name=""/>
+        </region>
+      </subvertex>
+      <subvertex xmi:type="uml:FinalState" xmi:id="_8G4yMIaYEfCOGqvjHJMRxw"/>
+      <subvertex xmi:type="uml:State" xmi:id="_KxmTIIaZEfCOGqvjHJMRxw" name="Schermata statistiche"/>
+      <subvertex xmi:type="uml:State" xmi:id="_uSG-QIaZEfCOGqvjHJMRxw" name="Menù gioco offline"/>
+      <subvertex xmi:type="uml:State" xmi:id="_LbQesIaaEfCOGqvjHJMRxw" name="Menù gioco online"/>
+      <subvertex xmi:type="uml:State" xmi:id="_U4q0UIaaEfCOGqvjHJMRxw" name="Schermata tutorial"/>
+      <subvertex xmi:type="uml:State" xmi:id="_A4spcIabEfCOGqvjHJMRxw" name="Configurazione nuova partita"/>
+      <subvertex xmi:type="uml:State" xmi:id="_PHTdMIabEfCOGqvjHJMRxw" name="Elenco vecchie partite"/>
+      <subvertex xmi:type="uml:State" xmi:id="_xvpxQIabEfCOGqvjHJMRxw" name="Schermata eliminazione"/>
+      <subvertex xmi:type="uml:State" xmi:id="_ZcD1EIacEfCOGqvjHJMRxw" name="Lobby"/>
+      <subvertex xmi:type="uml:State" xmi:id="_hV5fIIacEfCOGqvjHJMRxw" name="Schermata inserimento codice"/>
+      <subvertex xmi:type="uml:Pseudostate" xmi:id="_rLEikIaeEfCOGqvjHJMRxw" name="abbandono" kind="choice"/>
+      <subvertex xmi:type="uml:State" xmi:id="_4sNMUIaeEfCOGqvjHJMRxw" name="Schermata salvataggio"/>
+      <subvertex xmi:type="uml:State" xmi:id="_ZBVEEIagEfCOGqvjHJMRxw" name="Schermata di gioco">
+        <connectionPoint xmi:type="uml:Pseudostate" xmi:id="_vRIuIIagEfCOGqvjHJMRxw" name="giocoOnline" kind="entryPoint"/>
+        <connectionPoint xmi:type="uml:Pseudostate" xmi:id="_20hnEIagEfCOGqvjHJMRxw" name="continuaGiocoOffline" kind="entryPoint"/>
+        <connectionPoint xmi:type="uml:Pseudostate" xmi:id="_axI_YIahEfCOGqvjHJMRxw" name="giocoOffline" kind="entryPoint"/>
+        <connectionPoint xmi:type="uml:Pseudostate" xmi:id="_iJC84IaoEfCOGqvjHJMRxw" name="abbandona" kind="exitPoint"/>
+        <region xmi:type="uml:Region" xmi:id="_uCYmkIahEfCOGqvjHJMRxw" name="Region4">
+          <transition xmi:type="uml:Transition" xmi:id="_FMgj0IaiEfCOGqvjHJMRxw" name="after(30sec)/pesca1" source="_zt6mAIahEfCOGqvjHJMRxw" target="_wqkw0IahEfCOGqvjHJMRxw"/>
+          <transition xmi:type="uml:Transition" xmi:id="_lsp_0IajEfCOGqvjHJMRxw" name="tenta pesca[ok==true]/ok=false AND pesca1" source="_zt6mAIahEfCOGqvjHJMRxw" target="_f-rwYIajEfCOGqvjHJMRxw"/>
+          <transition xmi:type="uml:Transition" xmi:id="_s37TsIajEfCOGqvjHJMRxw" name="no" source="_f-rwYIajEfCOGqvjHJMRxw" target="_wqkw0IahEfCOGqvjHJMRxw"/>
+          <transition xmi:type="uml:Transition" xmi:id="_EIt5oIakEfCOGqvjHJMRxw" name="sì" source="_f-rwYIajEfCOGqvjHJMRxw" target="_8PFHEIanEfCOGqvjHJMRxw"/>
+          <transition xmi:type="uml:Transition" xmi:id="_UPRtgIakEfCOGqvjHJMRxw" name="tenta giocata" source="_zt6mAIahEfCOGqvjHJMRxw" target="_MlmmYIakEfCOGqvjHJMRxw"/>
+          <transition xmi:type="uml:Transition" xmi:id="_ZZ3jEIakEfCOGqvjHJMRxw" name="no" source="_MlmmYIakEfCOGqvjHJMRxw" target="_zt6mAIahEfCOGqvjHJMRxw"/>
+          <transition xmi:type="uml:Transition" xmi:id="_ie_7kIakEfCOGqvjHJMRxw" name="sì" source="_MlmmYIakEfCOGqvjHJMRxw" target="_6qQbIIajEfCOGqvjHJMRxw"/>
+          <transition xmi:type="uml:Transition" xmi:id="_o0FY4IalEfCOGqvjHJMRxw" name="sì/gioca carta AND gameover=true" source="_6qQbIIajEfCOGqvjHJMRxw" target="_i2624IalEfCOGqvjHJMRxw"/>
+          <transition xmi:type="uml:Transition" xmi:id="_DUO2wIamEfCOGqvjHJMRxw" name="no" source="_6qQbIIajEfCOGqvjHJMRxw" target="_08A0AIalEfCOGqvjHJMRxw"/>
+          <transition xmi:type="uml:Transition" xmi:id="_PE5BYIamEfCOGqvjHJMRxw" name="no/gioca carta" source="_08A0AIalEfCOGqvjHJMRxw" target="_wqkw0IahEfCOGqvjHJMRxw"/>
+          <transition xmi:type="uml:Transition" xmi:id="_41pikIamEfCOGqvjHJMRxw" name="sì/gioca carta" source="_08A0AIalEfCOGqvjHJMRxw" target="_vPm1YIamEfCOGqvjHJMRxw"/>
+          <transition xmi:type="uml:Transition" xmi:id="_BGkP4IanEfCOGqvjHJMRxw" name="premi bottone" source="_vPm1YIamEfCOGqvjHJMRxw" target="_wqkw0IahEfCOGqvjHJMRxw"/>
+          <transition xmi:type="uml:Transition" xmi:id="_OZyZcIanEfCOGqvjHJMRxw" name="after(2sec)/pesca2" source="_vPm1YIamEfCOGqvjHJMRxw" target="_wqkw0IahEfCOGqvjHJMRxw"/>
+          <transition xmi:type="uml:Transition" xmi:id="_aO3xEIanEfCOGqvjHJMRxw" name="tuo turno/ok=true AND gameover=false" source="_wqkw0IahEfCOGqvjHJMRxw" target="_zt6mAIahEfCOGqvjHJMRxw"/>
+          <transition xmi:type="uml:Transition" xmi:id="_jWHpcIanEfCOGqvjHJMRxw" source="_uCZ0sIahEfCOGqvjHJMRxw" target="_wqkw0IahEfCOGqvjHJMRxw"/>
+          <transition xmi:type="uml:Transition" xmi:id="_FHYkgIaoEfCOGqvjHJMRxw" name="no" source="_8PFHEIanEfCOGqvjHJMRxw" target="_wqkw0IahEfCOGqvjHJMRxw"/>
+          <transition xmi:type="uml:Transition" xmi:id="_JbbMkIaoEfCOGqvjHJMRxw" name="sì" source="_8PFHEIanEfCOGqvjHJMRxw" target="_6qQbIIajEfCOGqvjHJMRxw"/>
+          <transition xmi:type="uml:Transition" xmi:id="_x1luQIaoEfCOGqvjHJMRxw" name="continua" source="_i2624IalEfCOGqvjHJMRxw" target="_YlPrYIaoEfCOGqvjHJMRxw"/>
+          <transition xmi:type="uml:Transition" xmi:id="_DTRGEIapEfCOGqvjHJMRxw" name="[gameover==true]" source="_wqkw0IahEfCOGqvjHJMRxw" target="_9in9IIaoEfCOGqvjHJMRxw"/>
+          <transition xmi:type="uml:Transition" xmi:id="_uURuMIapEfCOGqvjHJMRxw" name="continua" source="_9in9IIaoEfCOGqvjHJMRxw" target="_YlPrYIaoEfCOGqvjHJMRxw"/>
+          <transition xmi:type="uml:Transition" xmi:id="_b3Gy0IaqEfCOGqvjHJMRxw" name="abbandona" source="_wqkw0IahEfCOGqvjHJMRxw" target="_JTV8sIaqEfCOGqvjHJMRxw"/>
+          <transition xmi:type="uml:Transition" xmi:id="_eTtYIIaqEfCOGqvjHJMRxw" name="no" source="_JTV8sIaqEfCOGqvjHJMRxw" target="_wqkw0IahEfCOGqvjHJMRxw"/>
+          <transition xmi:type="uml:Transition" xmi:id="_gUVzIIaqEfCOGqvjHJMRxw" name="sì" source="_JTV8sIaqEfCOGqvjHJMRxw" target="_iJC84IaoEfCOGqvjHJMRxw"/>
+          <transition xmi:type="uml:Transition" xmi:id="_veC9MIaqEfCOGqvjHJMRxw" name="abbandona" source="_zt6mAIahEfCOGqvjHJMRxw" target="_sOAv0IaqEfCOGqvjHJMRxw"/>
+          <transition xmi:type="uml:Transition" xmi:id="_yryEgIaqEfCOGqvjHJMRxw" name="no" source="_sOAv0IaqEfCOGqvjHJMRxw" target="_zt6mAIahEfCOGqvjHJMRxw"/>
+          <transition xmi:type="uml:Transition" xmi:id="_0SEF0IaqEfCOGqvjHJMRxw" name="sì" source="_sOAv0IaqEfCOGqvjHJMRxw" target="_iJC84IaoEfCOGqvjHJMRxw"/>
+          <subvertex xmi:type="uml:Pseudostate" xmi:id="_uCZ0sIahEfCOGqvjHJMRxw" name=""/>
+          <subvertex xmi:type="uml:State" xmi:id="_wqkw0IahEfCOGqvjHJMRxw" name="Attesa"/>
+          <subvertex xmi:type="uml:State" xmi:id="_zt6mAIahEfCOGqvjHJMRxw" name="Mano di gioco"/>
+          <subvertex xmi:type="uml:Pseudostate" xmi:id="_f-rwYIajEfCOGqvjHJMRxw" name="Giocabile?" kind="choice"/>
+          <subvertex xmi:type="uml:Pseudostate" xmi:id="_6qQbIIajEfCOGqvjHJMRxw" name="ultima?" kind="choice"/>
+          <subvertex xmi:type="uml:Pseudostate" xmi:id="_MlmmYIakEfCOGqvjHJMRxw" name="valida?" kind="choice"/>
+          <subvertex xmi:type="uml:State" xmi:id="_i2624IalEfCOGqvjHJMRxw" name="Schermata vittoria"/>
+          <subvertex xmi:type="uml:Pseudostate" xmi:id="_08A0AIalEfCOGqvjHJMRxw" name="penultima?" kind="choice"/>
+          <subvertex xmi:type="uml:State" xmi:id="_vPm1YIamEfCOGqvjHJMRxw" name="SchermataUNO"/>
+          <subvertex xmi:type="uml:Pseudostate" xmi:id="_8PFHEIanEfCOGqvjHJMRxw" name="giocarla?" kind="choice"/>
+          <subvertex xmi:type="uml:FinalState" xmi:id="_YlPrYIaoEfCOGqvjHJMRxw" name="terminapartita"/>
+          <subvertex xmi:type="uml:State" xmi:id="_9in9IIaoEfCOGqvjHJMRxw" name="Schermata sconfitta"/>
+          <subvertex xmi:type="uml:Pseudostate" xmi:id="_JTV8sIaqEfCOGqvjHJMRxw" name="sicuro?" kind="choice"/>
+          <subvertex xmi:type="uml:Pseudostate" xmi:id="_sOAv0IaqEfCOGqvjHJMRxw" name="sicuro?" kind="choice"/>
+          <subvertex xmi:type="uml:Pseudostate" xmi:id="_FJe6cIahEfCOGqvjHJMRxw" kind="deepHistory"/>
+        </region>
+      </subvertex>
+      <subvertex xmi:type="uml:Pseudostate" xmi:id="_4aJgEIarEfCOGqvjHJMRxw" name="partita finita" kind="choice"/>
+    </region>
+  </packagedElement>
+</uml:Model>
