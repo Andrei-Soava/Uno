@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_qszWYIG1EfCPVeispiV_Lw" name="UMLDiagrams">
+  <packageImport xmi:type="uml:PackageImport" xmi:id="_qxiFYIG1EfCPVeispiV_Lw">
+    <importedPackage xmi:type="uml:Model" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#_0"/>
+  </packageImport>
+  <packagedElement xmi:type="uml:Package" xmi:id="_4bJVsIG1EfCPVeispiV_Lw" name="ONE">
+    <ownedComment xmi:type="uml:Comment" xmi:id="_V0FPgIG_EfCPVeispiV_Lw">
+      <body>Condizione: hai giocato la penultima carta&#xD;
+</body>
+    </ownedComment>
+    <ownedComment xmi:type="uml:Comment" xmi:id="_LDMqEIMjEfC8g5_hEwolyA">
+      <body>Condizione: codice inserito valido&#xD;
+</body>
+    </ownedComment>
+    <ownedComment xmi:type="uml:Comment" xmi:id="_ORuCQIMoEfC8g5_hEwolyA">
+      <body>Condizione: avvia partita come host&#xD;
+</body>
+    </ownedComment>
+    <ownedComment xmi:type="uml:Comment" xmi:id="_mNdOYIW0EfCIE4YMk3a4Pw">
+      <body>Condizione: &#xD;
+non registrato</body>
+    </ownedComment>
+    <ownedComment xmi:type="uml:Comment" xmi:id="_JXkWQIW2EfCIE4YMk3a4Pw">
+      <body>Condizione: hai giocato la penultima carta&#xD;
+</body>
+    </ownedComment>
+    <ownedComment xmi:type="uml:Comment" xmi:id="_dusAYIW2EfCIE4YMk3a4Pw">
+      <body>Condizione: hai giocato l'ultima carta</body>
+    </ownedComment>
+    <packagedElement xmi:type="uml:UseCase" xmi:id="_R5D6gIG2EfCPVeispiV_Lw" name="Entra nel sitema">
+      <extensionPoint xmi:type="uml:ExtensionPoint" xmi:id="_ytrnIIG2EfCPVeispiV_Lw" name="ExtensionPoint1"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:UseCase" xmi:id="_uXbYkIG2EfCPVeispiV_Lw" name="Accedi">
+      <extend xmi:type="uml:Extend" xmi:id="_ytpx8IG2EfCPVeispiV_Lw" extendedCase="_R5D6gIG2EfCPVeispiV_Lw" extensionLocation="_ytrnIIG2EfCPVeispiV_Lw"/>
+      <extensionPoint xmi:type="uml:ExtensionPoint" xmi:id="_ZnBSUIW0EfCIE4YMk3a4Pw" name="ExtensionPoint2"/>
+      <include xmi:type="uml:Include" xmi:id="_bfezUIW1EfCIE4YMk3a4Pw" addition="_AjV9AIW1EfCIE4YMk3a4Pw"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:UseCase" xmi:id="_B7LFAIG3EfCPVeispiV_Lw" name="Visualizza statistiche">
+      <include xmi:type="uml:Include" xmi:id="_hjsi4IMgEfC8g5_hEwolyA" addition="_R5D6gIG2EfCPVeispiV_Lw"/>
+      <include xmi:type="uml:Include" xmi:id="_nu9LQIMgEfC8g5_hEwolyA" addition="_uXbYkIG2EfCPVeispiV_Lw"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:UseCase" xmi:id="_7fbUIIG3EfCPVeispiV_Lw" name="Gioca" isAbstract="true">
+      <include xmi:type="uml:Include" xmi:id="_ethnAIMgEfC8g5_hEwolyA" addition="_R5D6gIG2EfCPVeispiV_Lw"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:UseCase" xmi:id="_UvYVcIG4EfCPVeispiV_Lw" name="Gioca con amici">
+      <generalization xmi:type="uml:Generalization" xmi:id="_pRZoAIG4EfCPVeispiV_Lw" general="_7fbUIIG3EfCPVeispiV_Lw"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:UseCase" xmi:id="_WcRVEIG4EfCPVeispiV_Lw" name="Gioca contro il computer">
+      <generalization xmi:type="uml:Generalization" xmi:id="_qtTlUIG4EfCPVeispiV_Lw" general="_7fbUIIG3EfCPVeispiV_Lw"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:UseCase" xmi:id="_077VcIG4EfCPVeispiV_Lw" name="Esci dal gioco">
+      <include xmi:type="uml:Include" xmi:id="_b50JQIMgEfC8g5_hEwolyA" addition="_R5D6gIG2EfCPVeispiV_Lw"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:UseCase" xmi:id="_coP5sIG5EfCPVeispiV_Lw" name="Carica vecchia partita">
+      <include xmi:type="uml:Include" xmi:id="_qhgycIMgEfC8g5_hEwolyA" addition="_uXbYkIG2EfCPVeispiV_Lw"/>
+      <include xmi:type="uml:Include" xmi:id="_ymTIQIMgEfC8g5_hEwolyA" addition="_WcRVEIG4EfCPVeispiV_Lw"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:UseCase" xmi:id="_gVmVMIG5EfCPVeispiV_Lw" name="Crea nuova partita">
+      <include xmi:type="uml:Include" xmi:id="_z_oSsIMgEfC8g5_hEwolyA" addition="_WcRVEIG4EfCPVeispiV_Lw"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:UseCase" xmi:id="_RyYG4IG6EfCPVeispiV_Lw" name="Crea nuova partita (online)">
+      <extensionPoint xmi:type="uml:ExtensionPoint" xmi:id="_wsClkIMhEfC8g5_hEwolyA" name="ExtensionPoint2"/>
+      <extensionPoint xmi:type="uml:ExtensionPoint" xmi:id="_iyDSwIMoEfC8g5_hEwolyA" name="ExtensionPoint3"/>
+      <include xmi:type="uml:Include" xmi:id="_6GJlAIMgEfC8g5_hEwolyA" addition="_UvYVcIG4EfCPVeispiV_Lw"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:UseCase" xmi:id="_YlI0IIG6EfCPVeispiV_Lw" name="Collegati ad una partita">
+      <extensionPoint xmi:type="uml:ExtensionPoint" xmi:id="_VZ_mcYG9EfCPVeispiV_Lw" name="ExtensionPoint1"/>
+      <include xmi:type="uml:Include" xmi:id="_7Mm2wIMgEfC8g5_hEwolyA" addition="_UvYVcIG4EfCPVeispiV_Lw"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:UseCase" xmi:id="_PnNaYIG7EfCPVeispiV_Lw" name="Inserisci codice ">
+      <extensionPoint xmi:type="uml:ExtensionPoint" xmi:id="_Lvzt4IMiEfC8g5_hEwolyA" name="ExtensionPoint2"/>
+      <extensionPoint xmi:type="uml:ExtensionPoint" xmi:id="_ehubIIMqEfC8g5_hEwolyA" name="ExtensionPoint3"/>
+      <include xmi:type="uml:Include" xmi:id="_yNt-QIMiEfC8g5_hEwolyA" addition="_YlI0IIG6EfCPVeispiV_Lw"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:UseCase" xmi:id="_TnFwUIG7EfCPVeispiV_Lw" name="Entra nella lobby">
+      <extend xmi:type="uml:Extend" xmi:id="_iyCEoIMoEfC8g5_hEwolyA" extendedCase="_RyYG4IG6EfCPVeispiV_Lw" extensionLocation="_iyDSwIMoEfC8g5_hEwolyA"/>
+      <extend xmi:type="uml:Extend" xmi:id="_eht0EIMqEfC8g5_hEwolyA" extendedCase="_PnNaYIG7EfCPVeispiV_Lw" extensionLocation="_ehubIIMqEfC8g5_hEwolyA"/>
+      <extensionPoint xmi:type="uml:ExtensionPoint" xmi:id="_5D5y8IMiEfC8g5_hEwolyA" name="ExtensionPoint1"/>
+      <extensionPoint xmi:type="uml:ExtensionPoint" xmi:id="_MboqYIMoEfC8g5_hEwolyA" name="ExtensionPoint2"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:UseCase" xmi:id="_Rh3B0IG-EfCPVeispiV_Lw" name="Scegli azione" isAbstract="true">
+      <include xmi:type="uml:Include" xmi:id="_NqoRQIMhEfC8g5_hEwolyA" addition="_TnFwUIG7EfCPVeispiV_Lw"/>
+      <include xmi:type="uml:Include" xmi:id="_Sy5yoIMhEfC8g5_hEwolyA" addition="_gVmVMIG5EfCPVeispiV_Lw"/>
+      <include xmi:type="uml:Include" xmi:id="_USCDEIMhEfC8g5_hEwolyA" addition="_coP5sIG5EfCPVeispiV_Lw"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:UseCase" xmi:id="_vLsNcIG-EfCPVeispiV_Lw" name="Abbandona partita">
+      <generalization xmi:type="uml:Generalization" xmi:id="_CWE-sIG_EfCPVeispiV_Lw" general="_Rh3B0IG-EfCPVeispiV_Lw"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:UseCase" xmi:id="_0CzGUIG-EfCPVeispiV_Lw" name="Pesca carta">
+      <generalization xmi:type="uml:Generalization" xmi:id="__iSocIG-EfCPVeispiV_Lw" general="_Rh3B0IG-EfCPVeispiV_Lw"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:UseCase" xmi:id="_3TpMAIG-EfCPVeispiV_Lw" name="Gioca carta">
+      <generalization xmi:type="uml:Generalization" xmi:id="_Ak1DgIG_EfCPVeispiV_Lw" general="_Rh3B0IG-EfCPVeispiV_Lw"/>
+      <extensionPoint xmi:type="uml:ExtensionPoint" xmi:id="_T-sbMYG_EfCPVeispiV_Lw" name="ExtensionPoint2"/>
+      <extensionPoint xmi:type="uml:ExtensionPoint" xmi:id="_sC7QQYG_EfCPVeispiV_Lw" name="ExtensionPoint3"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:UseCase" xmi:id="_KmeHkIG_EfCPVeispiV_Lw" name="Chiama ONE!">
+      <extend xmi:type="uml:Extend" xmi:id="_T-sbMIG_EfCPVeispiV_Lw" extendedCase="_3TpMAIG-EfCPVeispiV_Lw" extensionLocation="_T-sbMYG_EfCPVeispiV_Lw"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:UseCase" xmi:id="_i1l-AIG_EfCPVeispiV_Lw" name="Vinci">
+      <extend xmi:type="uml:Extend" xmi:id="_sC7QQIG_EfCPVeispiV_Lw" extendedCase="_3TpMAIG-EfCPVeispiV_Lw" extensionLocation="_sC7QQYG_EfCPVeispiV_Lw"/>
+      <include xmi:type="uml:Include" xmi:id="_mI1skIMhEfC8g5_hEwolyA" addition="_KmeHkIG_EfCPVeispiV_Lw"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:UseCase" xmi:id="_l1BCkIMqEfC8g5_hEwolyA" name="Registrati">
+      <extend xmi:type="uml:Extend" xmi:id="_Zm_dIIW0EfCIE4YMk3a4Pw" extendedCase="_uXbYkIG2EfCPVeispiV_Lw" extensionLocation="_ZnBSUIW0EfCIE4YMk3a4Pw"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:UseCase" xmi:id="_AjV9AIW1EfCIE4YMk3a4Pw" name="Consulta database"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Actor" xmi:id="_F7II4IG2EfCPVeispiV_Lw" name="Utente"/>
+  <packagedElement xmi:type="uml:Association" xmi:id="_gDYEIIG2EfCPVeispiV_Lw" memberEnd="_gDdjsIG2EfCPVeispiV_Lw _gDfY4IG2EfCPVeispiV_Lw">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_gDcVkIG2EfCPVeispiV_Lw" source="org.eclipse.papyrus">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_gDcVkYG2EfCPVeispiV_Lw" key="nature" value="UML_Nature"/>
+    </eAnnotations>
+    <ownedEnd xmi:type="uml:Property" xmi:id="_gDdjsIG2EfCPVeispiV_Lw" name="accedi al sistema" type="_R5D6gIG2EfCPVeispiV_Lw" association="_gDYEIIG2EfCPVeispiV_Lw"/>
+    <ownedEnd xmi:type="uml:Property" xmi:id="_gDfY4IG2EfCPVeispiV_Lw" name="utente" type="_F7II4IG2EfCPVeispiV_Lw" association="_gDYEIIG2EfCPVeispiV_Lw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Actor" xmi:id="_gfVK4IG3EfCPVeispiV_Lw" name="Utente registrato">
+    <generalization xmi:type="uml:Generalization" xmi:id="_yA0EoIG3EfCPVeispiV_Lw" general="_F7II4IG2EfCPVeispiV_Lw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Association" xmi:id="_00YYcIG3EfCPVeispiV_Lw" memberEnd="_00a0soG3EfCPVeispiV_Lw _00bbwIG3EfCPVeispiV_Lw">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_00a0sIG3EfCPVeispiV_Lw" source="org.eclipse.papyrus">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_00a0sYG3EfCPVeispiV_Lw" key="nature" value="UML_Nature"/>
+    </eAnnotations>
+    <ownedEnd xmi:type="uml:Property" xmi:id="_00a0soG3EfCPVeispiV_Lw" name="visualizza statistiche" type="_B7LFAIG3EfCPVeispiV_Lw" association="_00YYcIG3EfCPVeispiV_Lw"/>
+    <ownedEnd xmi:type="uml:Property" xmi:id="_00bbwIG3EfCPVeispiV_Lw" name="utente registrato" type="_gfVK4IG3EfCPVeispiV_Lw" association="_00YYcIG3EfCPVeispiV_Lw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Association" xmi:id="_RlAEIIG4EfCPVeispiV_Lw" memberEnd="_RlB5UYG4EfCPVeispiV_Lw _RlCgYIG4EfCPVeispiV_Lw">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_RlArMIG4EfCPVeispiV_Lw" source="org.eclipse.papyrus">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_RlB5UIG4EfCPVeispiV_Lw" key="nature" value="UML_Nature"/>
+    </eAnnotations>
+    <ownedEnd xmi:type="uml:Property" xmi:id="_RlB5UYG4EfCPVeispiV_Lw" name="scegli la modalità di gioco" type="_7fbUIIG3EfCPVeispiV_Lw" association="_RlAEIIG4EfCPVeispiV_Lw"/>
+    <ownedEnd xmi:type="uml:Property" xmi:id="_RlCgYIG4EfCPVeispiV_Lw" name="utente" type="_F7II4IG2EfCPVeispiV_Lw" association="_RlAEIIG4EfCPVeispiV_Lw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Association" xmi:id="_G8L14IG5EfCPVeispiV_Lw" memberEnd="_G8Mc8oG5EfCPVeispiV_Lw _G8NEAIG5EfCPVeispiV_Lw">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_G8Mc8IG5EfCPVeispiV_Lw" source="org.eclipse.papyrus">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_G8Mc8YG5EfCPVeispiV_Lw" key="nature" value="UML_Nature"/>
+    </eAnnotations>
+    <ownedEnd xmi:type="uml:Property" xmi:id="_G8Mc8oG5EfCPVeispiV_Lw" name="esci dal gioco" type="_077VcIG4EfCPVeispiV_Lw" association="_G8L14IG5EfCPVeispiV_Lw"/>
+    <ownedEnd xmi:type="uml:Property" xmi:id="_G8NEAIG5EfCPVeispiV_Lw" name="utente" type="_F7II4IG2EfCPVeispiV_Lw" association="_G8L14IG5EfCPVeispiV_Lw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Association" xmi:id="_BtBM4IG6EfCPVeispiV_Lw" memberEnd="_BtCbAoG6EfCPVeispiV_Lw _BtCbA4G6EfCPVeispiV_Lw">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_BtCbAIG6EfCPVeispiV_Lw" source="org.eclipse.papyrus">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_BtCbAYG6EfCPVeispiV_Lw" key="nature" value="UML_Nature"/>
+    </eAnnotations>
+    <ownedEnd xmi:type="uml:Property" xmi:id="_BtCbAoG6EfCPVeispiV_Lw" name="carica vecchia partita" type="_coP5sIG5EfCPVeispiV_Lw" association="_BtBM4IG6EfCPVeispiV_Lw"/>
+    <ownedEnd xmi:type="uml:Property" xmi:id="_BtCbA4G6EfCPVeispiV_Lw" name="utente registrato" type="_gfVK4IG3EfCPVeispiV_Lw" association="_BtBM4IG6EfCPVeispiV_Lw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Association" xmi:id="_HydhIIG6EfCPVeispiV_Lw" memberEnd="_HyevQoG6EfCPVeispiV_Lw _HyevQ4G6EfCPVeispiV_Lw">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_HyevQIG6EfCPVeispiV_Lw" source="org.eclipse.papyrus">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_HyevQYG6EfCPVeispiV_Lw" key="nature" value="UML_Nature"/>
+    </eAnnotations>
+    <ownedEnd xmi:type="uml:Property" xmi:id="_HyevQoG6EfCPVeispiV_Lw" name="crea nuova partita" type="_gVmVMIG5EfCPVeispiV_Lw" association="_HydhIIG6EfCPVeispiV_Lw"/>
+    <ownedEnd xmi:type="uml:Property" xmi:id="_HyevQ4G6EfCPVeispiV_Lw" name="utente" type="_F7II4IG2EfCPVeispiV_Lw" association="_HydhIIG6EfCPVeispiV_Lw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Association" xmi:id="_tO67kIG6EfCPVeispiV_Lw" memberEnd="_tO7ioYG6EfCPVeispiV_Lw _tO7iooG6EfCPVeispiV_Lw">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_tO67kYG6EfCPVeispiV_Lw" source="org.eclipse.papyrus">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_tO7ioIG6EfCPVeispiV_Lw" key="nature" value="UML_Nature"/>
+    </eAnnotations>
+    <ownedEnd xmi:type="uml:Property" xmi:id="_tO7ioYG6EfCPVeispiV_Lw" name="crea nuova partita (online)" type="_RyYG4IG6EfCPVeispiV_Lw" association="_tO67kIG6EfCPVeispiV_Lw"/>
+    <ownedEnd xmi:type="uml:Property" xmi:id="_tO7iooG6EfCPVeispiV_Lw" name="utente" type="_F7II4IG2EfCPVeispiV_Lw" association="_tO67kIG6EfCPVeispiV_Lw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Association" xmi:id="_wUmTEIG6EfCPVeispiV_Lw" memberEnd="_wUm6IoG6EfCPVeispiV_Lw _wUm6I4G6EfCPVeispiV_Lw">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_wUm6IIG6EfCPVeispiV_Lw" source="org.eclipse.papyrus">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_wUm6IYG6EfCPVeispiV_Lw" key="nature" value="UML_Nature"/>
+    </eAnnotations>
+    <ownedEnd xmi:type="uml:Property" xmi:id="_wUm6IoG6EfCPVeispiV_Lw" name="collegati ad una partita" type="_YlI0IIG6EfCPVeispiV_Lw" association="_wUmTEIG6EfCPVeispiV_Lw"/>
+    <ownedEnd xmi:type="uml:Property" xmi:id="_wUm6I4G6EfCPVeispiV_Lw" type="_tO67kIG6EfCPVeispiV_Lw" association="_wUmTEIG6EfCPVeispiV_Lw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Association" xmi:id="_gtmMMIG-EfCPVeispiV_Lw" memberEnd="_gtnaUoG-EfCPVeispiV_Lw _gtnaU4G-EfCPVeispiV_Lw">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_gtnaUIG-EfCPVeispiV_Lw" source="org.eclipse.papyrus">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_gtnaUYG-EfCPVeispiV_Lw" key="nature" value="UML_Nature"/>
+    </eAnnotations>
+    <ownedEnd xmi:type="uml:Property" xmi:id="_gtnaUoG-EfCPVeispiV_Lw" name="scegli mossa" type="_Rh3B0IG-EfCPVeispiV_Lw" association="_gtmMMIG-EfCPVeispiV_Lw"/>
+    <ownedEnd xmi:type="uml:Property" xmi:id="_gtnaU4G-EfCPVeispiV_Lw" name="utente" type="_F7II4IG2EfCPVeispiV_Lw" association="_gtmMMIG-EfCPVeispiV_Lw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Actor" xmi:id="_1I4E0IW0EfCIE4YMk3a4Pw" name="Server"/>
+  <packagedElement xmi:type="uml:Association" xmi:id="_dq6JEIW1EfCIE4YMk3a4Pw" memberEnd="_dq-agIW1EfCIE4YMk3a4Pw _dq_BkIW1EfCIE4YMk3a4Pw">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_dq9MYIW1EfCIE4YMk3a4Pw" source="org.eclipse.papyrus">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_dq9zcIW1EfCIE4YMk3a4Pw" key="nature" value="UML_Nature"/>
+    </eAnnotations>
+    <ownedEnd xmi:type="uml:Property" xmi:id="_dq-agIW1EfCIE4YMk3a4Pw" name="consulta database" type="_AjV9AIW1EfCIE4YMk3a4Pw" association="_dq6JEIW1EfCIE4YMk3a4Pw"/>
+    <ownedEnd xmi:type="uml:Property" xmi:id="_dq_BkIW1EfCIE4YMk3a4Pw" name="server" type="_1I4E0IW0EfCIE4YMk3a4Pw" association="_dq6JEIW1EfCIE4YMk3a4Pw"/>
+  </packagedElement>
+</uml:Model>
