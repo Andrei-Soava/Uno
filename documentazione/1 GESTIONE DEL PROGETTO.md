@@ -49,4 +49,5 @@ Esempio COMPLETO:
 - 31/08, Andrei, (1. aggiunta progetto Papyrus con dentro Usa Case Diagram (migliorato rispetto a versione precedente) e Class Diagram (vers.1); 2. rimozione cartella immagini e visualizzazione diagrammi direttamente da cartella progetto Papyrus, in cui sono presenti i PNG esportati; 3. aggiornamento documenti 2 e 3), sequence/state machine diagram o inizio implementazione;
 - 31/08, **AVVISO**, Andrei, (per costruire/modificare i diagrammi UML su Papyrus, clonare la repository su GitHub desktop e successivamente da Eclipse aprire il progetto clonato (nella cartella nome_utente--> Documenti--> GitHub--> ONE(che appare dopo aver clonato la repository)); per visualizzare i diagrammi uml fatti/modificati--> tasto dx su diagramma .di --> export --> papyrus --> export all diagrams --> finish --> apparte file png nella cartella del progetto--> copiare dentro file .md di riferimento il comando `![nome_arbitrario](../UMLDiagrams/nomeimmagine.PNG))`);
 - 31/08 23:00, Andrei, prima versione state machine diagram aggiunto a documento 3, null;
+- 02/09, Andrei, seconda versione class diagram in vista di implementazione, null;
 
