@@ -36,14 +36,15 @@ Mostra la suddivisione in macro‑blocchi:
 #### Diagramma delle classi (incompleto)
 ![Class](../UMLDiagrams/ONEclassDiagram.PNG)
 
+#### Macchina degli stati finiti (incompleto)
+![StateMachine](../UMLDiagrams/ONEstateMachineDiagram.PNG)
+
 ### 2. Vista di processo
 Rappresenta i principali flussi e interazioni concorrenti:
 - Ciclo di vita di una partita multiplayer (creazione lobby → avvio → scambio mosse → conclusione).
 - Partita contro bot e gestione salvataggi locali/remoti.
 - Eventi asincroni (notifiche turno, ONE!, aggiornamenti stato).
 
-#### Macchina degli stati finiti (incompleto)
-![Class](../UMLDiagrams/ONEstateMachineDiagram.PNG)
 
 ### 3. Vista fisica
 Mostra la distribuzione sui nodi:
