@@ -3,7 +3,7 @@
   <packageImport xmi:type="uml:PackageImport" xmi:id="_iQkWgINNEfCsLa1TvNWvGg">
     <importedPackage xmi:type="uml:Model" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#_0"/>
   </packageImport>
-  <packagedElement xmi:type="uml:Package" xmi:id="_ptfMUINTEfCsLa1TvNWvGg" name="Modello">
+  <packagedElement xmi:type="uml:Package" xmi:id="_ptfMUINTEfCsLa1TvNWvGg" name="modello">
     <packagedElement xmi:type="uml:Class" xmi:id="___Wr4INTEfCsLa1TvNWvGg" name="Giocatore" visibility="package" isAbstract="true">
       <ownedAttribute xmi:type="uml:Property" xmi:id="_E0UPsINUEfCsLa1TvNWvGg" name="nome" visibility="protected">
         <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
@@ -207,7 +207,7 @@
       <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_HOXrwINeEfCsLa1TvNWvGg" value="*"/>
     </ownedEnd>
   </packagedElement>
-  <packagedElement xmi:type="uml:Package" xmi:id="_e9u2YIUGEfCQY43u9xlPkw" name="x">
+  <packagedElement xmi:type="uml:Package" xmi:id="_e9u2YIUGEfCQY43u9xlPkw" name="controllore">
     <packagedElement xmi:type="uml:Class" xmi:id="_GxBEUIZyEfCYid9f9vvpzQ" name="LoginController">
       <ownedAttribute xmi:type="uml:Property" xmi:id="_Kd-eQIZyEfCYid9f9vvpzQ" name="loginView" visibility="private" type="_oQ1xcIZvEfCYid9f9vvpzQ"/>
       <ownedAttribute xmi:type="uml:Property" xmi:id="_MH1YAIZyEfCYid9f9vvpzQ" name="authService" visibility="private" type="_KY2bwIZ0EfCYid9f9vvpzQ"/>
@@ -269,7 +269,7 @@
       <ownedOperation xmi:type="uml:Operation" xmi:id="_kDg50Ig6EfC98f4MKwRBfg" name="getUser"/>
     </packagedElement>
   </packagedElement>
-  <packagedElement xmi:type="uml:Package" xmi:id="_kpQOwIUGEfCQY43u9xlPkw" name="Vista">
+  <packagedElement xmi:type="uml:Package" xmi:id="_kpQOwIUGEfCQY43u9xlPkw" name="vista">
     <packagedElement xmi:type="uml:Class" xmi:id="_oQ1xcIZvEfCYid9f9vvpzQ" name="LoginView">
       <ownedAttribute xmi:type="uml:Property" xmi:id="_ILhlYIZwEfCYid9f9vvpzQ" name="passwordField"/>
       <ownedAttribute xmi:type="uml:Property" xmi:id="_Kk_-MIZwEfCYid9f9vvpzQ" name="loginButton"/>
@@ -297,7 +297,7 @@
     <packagedElement xmi:type="uml:Dependency" xmi:id="_S_uqoIZ3EfCYid9f9vvpzQ" name="listner/handler" client="_kpQOwIUGEfCQY43u9xlPkw" supplier="_e9u2YIUGEfCQY43u9xlPkw"/>
     <packagedElement xmi:type="uml:Class" xmi:id="_0WYdoIg1EfC98f4MKwRBfg" name="LobbyView"/>
   </packagedElement>
-  <packagedElement xmi:type="uml:Package" xmi:id="_o3GvQIUGEfCQY43u9xlPkw" name="Server">
+  <packagedElement xmi:type="uml:Package" xmi:id="_o3GvQIUGEfCQY43u9xlPkw" name="server">
     <packagedElement xmi:type="uml:Class" xmi:id="_P-2QYIZzEfCYid9f9vvpzQ" name="GameServer">
       <ownedAttribute xmi:type="uml:Property" xmi:id="_SzbQ0IZzEfCYid9f9vvpzQ" name="serverSocket:ServerSocket" visibility="private"/>
       <ownedAttribute xmi:type="uml:Property" xmi:id="_VE0EoIZzEfCYid9f9vvpzQ" name="lobbyManager" visibility="private" type="_jcGTQIZzEfCYid9f9vvpzQ"/>
@@ -367,7 +367,7 @@
     <packagedElement xmi:type="uml:Dependency" xmi:id="_FpX4EIZ4EfCYid9f9vvpzQ" name="dati" client="_o3GvQIUGEfCQY43u9xlPkw" supplier="_qVLPwIUGEfCQY43u9xlPkw"/>
     <packagedElement xmi:type="uml:Dependency" xmi:id="_eZrwAIZ4EfCYid9f9vvpzQ" name="autenticazione/sincronizzazione" client="_o3GvQIUGEfCQY43u9xlPkw" supplier="_e9u2YIUGEfCQY43u9xlPkw"/>
   </packagedElement>
-  <packagedElement xmi:type="uml:Package" xmi:id="_qVLPwIUGEfCQY43u9xlPkw" name="Persistenza">
+  <packagedElement xmi:type="uml:Package" xmi:id="_qVLPwIUGEfCQY43u9xlPkw" name="persistenza">
     <packagedElement xmi:type="uml:Class" xmi:id="_14VTIIZ1EfCYid9f9vvpzQ" name="DBService" visibility="package">
       <ownedAttribute xmi:type="uml:Property" xmi:id="_34XRMIZ1EfCYid9f9vvpzQ" name="connection:Connection"/>
       <ownedAttribute xmi:type="uml:Property" xmi:id="_YB2WIoZ2EfCYid9f9vvpzQ" name="utentedao" type="_NKl4sIZ2EfCYid9f9vvpzQ" association="_YB1vEIZ2EfCYid9f9vvpzQ">
