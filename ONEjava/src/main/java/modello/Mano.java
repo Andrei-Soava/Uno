@@ -4,6 +4,8 @@
 
 package modello;
 
+import modello.carte.Carta;
+
 /************************************************************/
 /**
  * 

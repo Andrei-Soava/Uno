@@ -4,6 +4,8 @@
 
 package modello;
 
+import modello.giocatori.Giocatore;
+
 /************************************************************/
 /**
  * 
