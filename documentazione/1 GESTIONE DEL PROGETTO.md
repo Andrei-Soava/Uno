@@ -51,5 +51,6 @@ Esempio COMPLETO:
 - 31/08 23:00, Andrei, prima versione state machine diagram aggiunto a documento 3, null;
 - 02/09, Andrei, seconda versione class diagram in vista di implementazione, null;
 - 03/09 10:30, Andrei, prima versione documento 4 (Testing), null;
-- 03/09, **AVVISO**, Andrei, consultare il documento 4 (Testing) prima e durante l'implementazione di codice, eventualmente aggiornandolo; 
+- 03/09, **AVVISO**, Andrei, (consultare il documento 4 (Testing) prima e durante l'implementazione di codice, eventualmente aggiornandolo);
+- 03/09 12:00, Andrei, condivisione progetto Maven su repository + traduzione automatica package "modello" con Papyrus designer, sistemazione classi ed organizzazione + 1a fase di testing se possibile;
 
