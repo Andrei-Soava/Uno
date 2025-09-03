@@ -50,4 +50,6 @@ Esempio COMPLETO:
 - 31/08, **AVVISO**, Andrei, (per costruire/modificare i diagrammi UML su Papyrus, clonare la repository su GitHub desktop e successivamente da Eclipse aprire il progetto clonato (nella cartella nome_utente--> Documenti--> GitHub--> ONE(che appare dopo aver clonato la repository)); per visualizzare i diagrammi uml fatti/modificati--> tasto dx su diagramma .di --> export --> papyrus --> export all diagrams --> finish --> apparte file png nella cartella del progetto--> copiare dentro file .md di riferimento il comando `![nome_arbitrario](../UMLDiagrams/nomeimmagine.PNG))`);
 - 31/08 23:00, Andrei, prima versione state machine diagram aggiunto a documento 3, null;
 - 02/09, Andrei, seconda versione class diagram in vista di implementazione, null;
+- 03/09 10:30, Andrei, prima versione documento 4 (Testing), null;
+- 03/09, **AVVISO**, Andrei, consultare il documento 4 (Testing) prima e durante l'implementazione di codice, eventualmente aggiornandolo; 
 
