@@ -4,20 +4,29 @@
 
 package modello.giocatori;
 
+import java.util.Scanner;
+
+import modello.carte.Carta;
+
 /************************************************************/
 /**
  * 
  */
 public class Bot extends Giocatore {
-	/**
-	 * 
-	 */
-	public void giocaTurno() {
+	public Bot(String nome) {
+		super(nome);
+		// TODO Auto-generated constructor stub
 	}
 
 	/**
 	 * 
 	 */
 	private void scegliMossa() {
+	}
+
+	@Override
+	public void giocaTurno(Carta cartaCorrente, Scanner sc) {
+		// TODO Auto-generated method stub
+		
 	}
 }

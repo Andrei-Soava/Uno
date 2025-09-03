@@ -4,33 +4,101 @@
 
 package modello;
 
-import modello.carte.Carta;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Stack;
+
+import modello.carte.*;
 
 /************************************************************/
 /**
  * 
  */
 public class Mazzo {
-	/**
-	 * 
-	 */
-	private Carta[] carte;
+	private Stack<Carta> carte;
+	private PilaScarti pila;
 
-	/**
-	 * 
-	 */
+	public Mazzo() {
+		this.carte=new Stack<>();
+		this.pila=null;
+		try {
+			creaMazzo();
+		}catch(IOException e) {
+			e.printStackTrace();
+		}
+	}
+	public PilaScarti getPila() {
+		return pila;
+	}
+	public void setPila(PilaScarti pila) {
+		this.pila = pila;
+	}
 	public void mescola() {
+		Collections.shuffle(carte);
+	}
+	
+	public void creaMazzo() throws IOException {
+	    try (InputStream is = getClass().getResourceAsStream("/mazzo");
+	    	     BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
+	        String line;
+	        while ((line = br.readLine()) != null) {
+	            String[] parts = line.split(",");
+	            String tipo = parts[0];
+	            Colore colore = Colore.valueOf(parts[1]);
+	            int quantita = Integer.parseInt(parts[3]);
+
+	            for (int i = 0; i < quantita; i++) {
+	                if (tipo.equals("NUMERO")) {
+	                    int numero = Integer.parseInt(parts[2]);
+	                    carte.add(new CartaNumero(colore, numero));
+	                } else if (tipo.equals("SPECIALE")) {
+	                    TipoSpeciale ts = TipoSpeciale.valueOf(parts[2]);
+	                    carte.add(new CartaSpeciale(colore, ts));
+	                }
+	            }
+	        }
+	    }
+	    mescola();
+	}
+	
+	public void ricostruisciMazzo() {
+		carte.addAll(this.getPila().getCarte());
+		this.getPila().getCarte().removeAll(carte);
+		this.mescola();
 	}
 
 	/**
 	 * 
 	 */
-	public void pesca() {
+	public Carta pesca() {
+		if (!this.isVuoto())
+			return carte.pop();
+		else
+			ricostruisciMazzo();
+			return carte.pop();
+	}
+	
+	public ArrayList<Carta> pescaN(int n) {
+		ArrayList<Carta> temp=new ArrayList<>();
+		for(int i=0;i<n;i++) {
+			temp.add(pesca());
+		}
+		return temp;
 	}
 
 	/**
 	 * 
 	 */
-	public void isVuoto() {
+	public boolean isVuoto() {
+		return carte.size()==0;
+	}
+	@Override
+	public String toString() {
+		return "Mazzo [carte=" + carte.size() + "]";
 	}
 }

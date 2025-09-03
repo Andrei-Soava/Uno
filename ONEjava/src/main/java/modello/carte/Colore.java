@@ -4,6 +4,9 @@
 
 package modello.carte;
 
+import java.util.Random;
+import java.util.Scanner;
+
 /************************************************************/
 /**
  * 
@@ -29,4 +32,24 @@ public enum Colore {
 	 * 
 	 */
 	NERO;
+
+	public static Colore scegliColore(Scanner sc) {
+		int index = -1;
+		while (index < 0 || index > 3) {
+			try {
+				System.out.println("Scegli un colore: 0->Rosso, 1->Blu, 2->Giallo, 3->Verde");
+				String input = sc.nextLine();
+		        index = Integer.parseInt(input);
+			} catch (Exception e) {
+				System.out.println("Errore. Riprovare");
+				index = -1;
+			}
+		}
+		return Colore.values()[index];
+	}
+	
+	public static Colore scegliColoreCasuale() {
+		Random r=new Random();
+		return Colore.values()[r.nextInt(4)];
+	}
 }

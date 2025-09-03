@@ -12,22 +12,22 @@ public enum TipoSpeciale {
 	/**
 	 * 
 	 */
-	piùDue,
+	PIU_DUE,
 	/**
 	 * 
 	 */
-	piùQuattro,
+	PIU_QUATTRO,
 	/**
 	 * 
 	 */
-	blocca,
+	BLOCCA,
 	/**
 	 * 
 	 */
-	inverti,
+	INVERTI,
 	/**
 	 * 
 	 */
-	colore
+	JOLLY
 	;
 }

@@ -4,67 +4,146 @@
 
 package modello;
 
+import java.util.ArrayList;
+import java.util.Scanner;
+
+import modello.carte.*;
 import modello.giocatori.Giocatore;
 
 /************************************************************/
 /**
  * 
  */
-public class Partita {
-	/**
-	 * 
-	 */
-	private Giocatore[] giocatori;
-	/**
-	 * 
-	 */
+public class Partita implements PartitaIF {
+	private ArrayList<Giocatore> giocatori;
 	private Mazzo mazzo;
-	/**
-	 * 
-	 */
 	private PilaScarti pilaScarti;
-	/**
-	 * 
-	 */
-	private int turnoCorrente;
-	/**
-	 * 
-	 */
+	private Navigatore<Giocatore> navigatore;
+	private Giocatore turnoCorrente;
+	private Carta cartaCorrente;
 	private boolean direzione;
+	private boolean effettoAttivato;
+	private Scanner sc;
 
-	/**
-	 * 
-	 */
+	public Partita(ArrayList<Giocatore> giocatori) {
+		this.giocatori = giocatori;
+		this.mazzo = new Mazzo();
+		this.pilaScarti = new PilaScarti();
+		this.navigatore=new Navigatore<>(giocatori);
+		this.turnoCorrente = navigatore.current();
+		this.cartaCorrente = null;
+		this.direzione = true;
+		this.effettoAttivato=true;
+		sc=new Scanner(System.in);
+		mazzo.setPila(pilaScarti);
+	}
+
+	private void distribuisciCarte() {
+		for (Giocatore g : giocatori) {
+			g.setInterfacciaPartita(this);
+			g.getMano().aggiungiCarta(new CartaSpeciale(Colore.BLU,TipoSpeciale.INVERTI));
+			g.getMano().aggiungiCarta(new CartaSpeciale(Colore.NERO,TipoSpeciale.JOLLY));
+		}
+	}
+	
+	public Carta getCartaCorrente() {
+		return cartaCorrente;
+	}
+
+	public void setCartaCorrente(Carta cartaCorrente) {
+		this.cartaCorrente = cartaCorrente;
+	}
+	
+	public Giocatore getGiocatoreCorrente() {
+		return turnoCorrente;
+	}
+	
+	public Giocatore vediProssimoGiocatore() {
+		//default--> senso orario
+		if(direzione) {
+			return navigatore.peekNext();
+		}
+		//senso anti-orario
+		else {
+			return navigatore.peekBack();
+		}
+	}
+	
+	public void prossimoGiocatore() {
+		navigatore.setCurrent(vediProssimoGiocatore());
+		turnoCorrente=navigatore.current();
+	}
+
+	public void applicaEffettoCarta(Carta c) {
+		if (c instanceof CartaSpeciale) {
+			switch (((CartaSpeciale) c).getTipo()) {
+			case PIU_DUE:
+				prossimoGiocatore();
+				turnoCorrente.getMano().aggiungiCarta((mazzo.pescaN(2)));
+				break;
+			case PIU_QUATTRO:
+				prossimoGiocatore();
+				turnoCorrente.getMano().aggiungiCarta((mazzo.pescaN(4)));
+				break;
+			case BLOCCA:
+				prossimoGiocatore();
+				break;
+			case INVERTI:
+				direzione=(!direzione);
+				break;
+			default:
+				prossimoGiocatore();
+				break;
+			}
+		}
+	}
+	
 	public void avvia() {
+		distribuisciCarte();
+		Carta first=mazzo.pesca();
+		if(first.getColore()==Colore.NERO) {
+			first.setColore(Colore.scegliColoreCasuale());
+		}
+		setCartaCorrente(first);
+		while (true) {
+			getGiocatoreCorrente().giocaTurno(getCartaCorrente(), sc);
+			if (verificaFinePartita()) {
+				terminaPartita(getGiocatoreCorrente());
+				break;
+			} else {
+				if(!effettoAttivato) {
+					applicaEffettoCarta(cartaCorrente);
+					effettoAttivato=true;
+				}
+				prossimoGiocatore();
+			}
+		}
 	}
 
-	/**
-	 * 
-	 */
-	public void prossimoTurno() {
+	public boolean verificaFinePartita() {
+		for (Giocatore g : giocatori) {
+			if (g.getMano().getNumCarte() == 0) {
+				return true;
+			}
+		}
+		return false;
 	}
 
-	/**
-	 * 
-	 */
-	public void getGiocatoreCorrente() {
+	public void terminaPartita(Giocatore vincitore) {
+		System.out.println("Ha vinto " + vincitore + "!");
 	}
 
-	/**
-	 * 
-	 */
-	public void applicaEffettoCarta() {
+	@Override
+	public Carta pescaCarta() {
+		return mazzo.pesca();
 	}
 
-	/**
-	 * 
-	 */
-	public void verificaFinePartita() {
-	}
-
-	/**
-	 * 
-	 */
-	public void terminaPartita() {
+	@Override
+	public void giocaCarta(Carta c) {
+		pilaScarti.mettiCarta(cartaCorrente);
+		turnoCorrente.getMano().getCarte().remove(c);
+		setCartaCorrente(c);
+		effettoAttivato=false;
+		System.out.println(pilaScarti.getCarte().size());
 	}
 }

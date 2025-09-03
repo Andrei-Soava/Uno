@@ -53,4 +53,6 @@ Esempio COMPLETO:
 - 03/09 10:30, Andrei, prima versione documento 4 (Testing), null;
 - 03/09, **AVVISO**, Andrei, (consultare il documento 4 (Testing) prima e durante l'implementazione di codice, eventualmente aggiornandolo);
 - 03/09 12:00, Andrei, condivisione progetto Maven su repository + traduzione automatica package "modello" con Papyrus designer, sistemazione classi ed organizzazione + 1a fase di testing se possibile;
+- 03/09 23.45, Andrei, (traduzione completa del gioco ONE in Java (solo da console e senza separazione MVC) + scrittura di un caso di test), separazione su vari package + inizio GUI + guardare persistenza con postgres;
+- 03/09, **AVVISO**, Andrei, non ho avuto il tempo di fare la javadoc del package modello (per adesso);
 

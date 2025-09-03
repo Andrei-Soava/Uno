@@ -4,53 +4,65 @@
 
 package modello.giocatori;
 
-import modello.Mano;
+import java.util.Scanner;
+
+import modello.PartitaIF;
+import modello.carte.Carta;
 
 /************************************************************/
 /**
  * 
  */
 public abstract class Giocatore {
-	/**
-	 * 
-	 */
 	protected String nome;
-	/**
-	 * 
-	 */
 	protected Mano mano;
-	/**
-	 * 
-	 */
 	protected boolean haPremutoOne;
+	protected PartitaIF partitaIF;
 
-	/**
-	 * 
-	 */
-	public abstract void giocaTurno();
+	public Giocatore (String nome) {
+		this.nome=nome;
+		this.mano=new Mano();
+		this.haPremutoOne=false;
+		this.partitaIF=null;
+	}
+	
+	public PartitaIF getInterfacciaPartita() {
+		return partitaIF;
+	}
+
+	public void setInterfacciaPartita(PartitaIF interfacciaPartita) {
+		this.partitaIF = interfacciaPartita;
+	}
+	
+	public abstract void giocaTurno(Carta cartaCorrente, Scanner sc);
 
 	/**
 	 * 
 	 */
 	public void pescaCarta() {
+		mano.aggiungiCarta(partitaIF.pescaCarta());
 	}
 
 	/**
 	 * 
 	 */
-	public void rimuoveCarta() {
+	public void rimuoveCarta(Carta c) {
+		mano.rimuoviCarta(c);
+		partitaIF.giocaCarta(c);
 	}
 
 	/**
 	 * 
 	 */
-	public void getNome() {
+	public String getNome() {
+		return this.nome;
 	}
 
 	/**
 	 * 
 	 */
-	public void getMano() {
+	public Mano getMano() {
+		return this.mano;
 	}
 
 	/**
@@ -63,5 +75,20 @@ public abstract class Giocatore {
 	 * 
 	 */
 	public void setPremutoOne() {
+	}
+
+	@Override
+	public String toString() {
+		return "Giocatore [nome=" + nome + ", carte=" + mano.getNumCarte() + "]";
+	}
+	
+	protected String mostraCarteInMano() {
+		String str="";
+		int i=0;
+		for(Carta c:mano.getCarte()) {
+			str+=i+":"+c+"\n";
+			i++;
+		}
+		return str;
 	}
 }

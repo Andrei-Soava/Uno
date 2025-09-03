@@ -9,14 +9,30 @@ package modello.carte;
  * 
  */
 public class CartaNumero extends Carta {
-	/**
-	 * 
-	 */
-	private int numero;
+	private final int numero;
 
+	public CartaNumero(Colore colore, int numero) {
+		super(colore);
+		this.numero=numero;
+	}
 	/**
 	 * 
 	 */
-	public void giocabileSu() {
+	@Override
+	public boolean giocabileSu(Carta c) {
+		if(this.colore==c.colore || this.colore==Colore.NERO)
+			return true;
+		if(c instanceof CartaNumero && ((CartaNumero)c).numero==this.numero)
+			return true;
+		return false;
 	}
+	
+	public int getNumero() {
+		return numero;
+	}
+	@Override
+	public String toString() {
+		return "CartaNumero [numero=" + numero + ", colore=" + colore + "]";
+	}
+	
 }

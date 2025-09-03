@@ -9,15 +9,19 @@ package modello.carte;
  * 
  */
 public class CartaSpeciale extends Carta {
+	private final TipoSpeciale tipo;
+	
+	public CartaSpeciale(Colore colore, TipoSpeciale tipo) {
+		super(colore);
+		this.tipo=tipo;
+	}
 	/**
 	 * 
 	 */
-	private TipoSpeciale tipo;
-
-	/**
-	 * 
-	 */
-	public void giocabileSu() {
+	public boolean giocabileSu(Carta c) {
+		if(this.colore==c.colore || this.colore==Colore.NERO|| this.tipo==((CartaSpeciale)c).tipo)
+			return true;
+		return false;
 	}
 
 	/**
@@ -25,4 +29,14 @@ public class CartaSpeciale extends Carta {
 	 */
 	public void applicaEffetto() {
 	}
+	
+	public TipoSpeciale getTipo() {
+		return tipo;
+	}
+	
+	@Override
+	public String toString() {
+		return "CartaSpeciale [tipo=" + tipo + ", colore=" + colore + "]";
+	}
+	
 }

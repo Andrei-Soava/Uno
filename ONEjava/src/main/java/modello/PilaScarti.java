@@ -4,6 +4,9 @@
 
 package modello;
 
+import java.util.List;
+import java.util.Stack;
+
 import modello.carte.Carta;
 
 /************************************************************/
@@ -11,20 +14,22 @@ import modello.carte.Carta;
  * 
  */
 public class PilaScarti {
-	/**
-	 * 
-	 */
-	private Carta[] scarti;
-
-	/**
-	 * 
-	 */
-	public void ottieniCima() {
+	private Stack<Carta> scarti;
+	
+	public PilaScarti() {
+		this.scarti=new Stack<>();
 	}
 
-	/**
-	 * 
-	 */
-	public void mettiCarta() {
+	public List<Carta> getCarte() {
+		return scarti;
+	}
+
+	public void mettiCarta(Carta c) {
+		scarti.add(c);
+	}
+	
+	@Override
+	public String toString() {
+		return "Pila [carte=" + scarti.size() + "]";
 	}
 }

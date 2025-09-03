@@ -9,19 +9,24 @@ package modello.carte;
  * 
  */
 public abstract class Carta {
-	/**
-	 * 
-	 */
 	protected Colore colore;
 
-	/**
-	 * 
-	 */
-	public void getColore() {
+	public Carta(Colore colore) {
+		this.colore=colore;
+	}
+	
+	public Colore getColore() {
+		return this.colore;
+	}
+	
+
+	public void setColore(Colore colore) {
+		this.colore = colore;
 	}
 
 	/**
 	 * 
 	 */
-	public abstract void giocabileSu();
+	public abstract boolean giocabileSu(Carta c);
+	
 }

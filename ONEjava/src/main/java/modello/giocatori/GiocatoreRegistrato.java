@@ -4,6 +4,9 @@
 
 package modello.giocatori;
 
+import java.util.Scanner;
+
+import modello.carte.Carta;
 import modello.tabelle.Utente;
 
 /************************************************************/
@@ -11,6 +14,11 @@ import modello.tabelle.Utente;
  * 
  */
 public class GiocatoreRegistrato extends Giocatore {
+	public GiocatoreRegistrato(String nome) {
+		super(nome);
+		// TODO Auto-generated constructor stub
+	}
+
 	/**
 	 * 
 	 */
@@ -29,7 +37,7 @@ public class GiocatoreRegistrato extends Giocatore {
 	}
 
 	@Override
-	public void giocaTurno() {
+	public void giocaTurno(Carta cartaCorrente, Scanner sc) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -43,7 +43,7 @@ Per ogni fase di sviluppo verranno elencati:
 **Tabella riassuntiva**
 | ID Test | Fase di sviluppo | Descrizione test | Input / Azione | Output atteso | Risultato |
 |---------|------------------|------------------|----------------|---------------|-----------|
-| T1.1    | Fase 1 – Model   | Creazione mazzo completo e mescolamento | Istanziare `Mazzo` e chiamare `mescola()` | Mazzo con tutte le carte in ordine casuale | |
+| T1.1    | Fase 1 – Model   | Creazione mazzo completo e mescolamento. Verifico che la prima carta presente nel file mazzo sia diversa dalla prima carta di un nuovo mazzo | Istanziare `Mazzo` e chiamare `mescola()` | Mazzo con tutte le carte in ordine casuale | Eseguito circa una trentina di volte ed è fallito solo una volta (probabilità 1/108)|
 | T1.2    | Fase 1 – Model   | Pesca carta da mazzo | Chiamare `pesca()` | Restituisce una carta e riduce il numero di carte nel mazzo | |
 | T1.3    | Fase 1 – Model   | Giocata carta valida | Giocatore gioca carta compatibile con quella sul banco | Carta accettata e aggiornata pila scarti | |
 | T1.4    | Fase 1 – Model   | Giocata carta non valida | Giocatore gioca carta incompatibile | Messaggio di errore, stato invariato | |
