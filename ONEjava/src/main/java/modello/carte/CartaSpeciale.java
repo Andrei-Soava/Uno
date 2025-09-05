@@ -25,7 +25,9 @@ public class CartaSpeciale extends Carta {
 	 * 
 	 */
 	public boolean giocabileSu(Carta c) {
-		if(this.colore==c.colore || this.colore==Colore.NERO|| this.tipo==((CartaSpeciale)c).tipo)
+		if(this.colore==c.colore || this.colore==Colore.NERO)
+			return true;
+		if(c instanceof CartaSpeciale && this.tipo==((CartaSpeciale)c).tipo)
 			return true;
 		return false;
 	}

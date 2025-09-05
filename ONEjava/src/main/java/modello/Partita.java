@@ -9,6 +9,7 @@ import java.util.Scanner;
 
 import modello.carte.*;
 import modello.giocatori.Giocatore;
+import vista.TemporaryView;
 
 /************************************************************/
 
@@ -25,14 +26,15 @@ import modello.giocatori.Giocatore;
  * scanner--> TEMPORANEO
  * 
  * metodi importanti:
- * distribuisciCarte()--> fornisce N carte a ciascun giocatore dal mazzo
+ * eseguiPrePartita--> imposta l'interfaccia partita di ogni giocatore, fornisce N carte a ciascun giocatore dal mazzo, mette giù la prima carta sul banco
+ * eseguiUnTurno--> esegue un ciclo di gioco (la turnazione adesso viene gestita dal controllore)
  * vediProssimoGiocatore()--> restituisce prossimo giocatore dopo quello corrente, senza tuttavia cambiarlo (giro orario o antiorario gestito)
  * prossimoGiocatore()--> come vediProssimoGiocatore, ma viene cambiato il giocatore corrente con il prossimo
  * applicaEffettoCarta()--> prende la carta corrente e vi applica l'effetto --> effettoAttivato va messo a true
- * avvia()--> gioco vero e proprio (while true finchè non vince qualcuno)
  * verificaFinePartita()--> invocato alla fine di ogni giocata da parte di un giocatore e controlla se non ha più carte (=vince)
  * terminaPartita()--> se restituisce true verificaFinePartita viene invocato questo metodo che dichiara in vincitore
  * pescaCarta()-->fornisce INTERFACCIA per giocatore (pescare carta da mazzo e metterla nella sua mano)
+ * testaGiocaCarta()--> fornisce INTERFACCIA per giocatore (controllare se la carta che sta per giocare il giocatore è valida)
  * giocaCarta()--> fornisce INTERFACCIA per giocatore (mettere carta sul banco--> controlli fatti in giocatore, per ora)
  * 
  */
@@ -45,7 +47,6 @@ public class Partita implements PartitaIF {
 	private Carta cartaCorrente;
 	private boolean direzione;
 	private boolean effettoAttivato;
-	private Scanner sc;
 
 	public Partita(ArrayList<Giocatore> giocatori) {
 		this.giocatori = giocatori;
@@ -56,14 +57,31 @@ public class Partita implements PartitaIF {
 		this.cartaCorrente = null;
 		this.direzione = true;
 		this.effettoAttivato=true;
-		sc=new Scanner(System.in);
 		mazzo.setPila(pilaScarti);
 	}
 
-	private void distribuisciCarte() {
+	public void eseguiPrePartita() {
 		for (Giocatore g : giocatori) {
 			g.setInterfacciaPartita(this);
 			g.getMano().aggiungiCarta(mazzo.pescaN(7));
+		}
+		Carta first=mazzo.pesca();
+		if(first.getColore()==Colore.NERO) {
+			first.setColore(Colore.scegliColoreCasuale());
+		}
+		setCartaCorrente(first);
+	}
+	
+	public void eseguiUnTurno(TemporaryView tv) {
+		getGiocatoreCorrente().giocaTurno(getCartaCorrente().toString(), tv);
+		if (verificaFinePartita()) {
+			tv.printMessage("Ha vinto " + getGiocatoreCorrente() + "!");
+		} else {
+			if(!effettoAttivato) {
+				applicaEffettoCarta(cartaCorrente);
+				effettoAttivato=true;
+			}
+			prossimoGiocatore();
 		}
 	}
 	
@@ -71,15 +89,15 @@ public class Partita implements PartitaIF {
 		return cartaCorrente;
 	}
 
-	public void setCartaCorrente(Carta cartaCorrente) {
+	private void setCartaCorrente(Carta cartaCorrente) {
 		this.cartaCorrente = cartaCorrente;
 	}
 	
-	public Giocatore getGiocatoreCorrente() {
+	private Giocatore getGiocatoreCorrente() {
 		return turnoCorrente;
 	}
 	
-	public Giocatore vediProssimoGiocatore() {
+	private Giocatore vediProssimoGiocatore() {
 		//default--> senso orario
 		if(direzione) {
 			return navigatore.peekNext();
@@ -90,12 +108,12 @@ public class Partita implements PartitaIF {
 		}
 	}
 	
-	public void prossimoGiocatore() {
+	private void prossimoGiocatore() {
 		navigatore.setCurrent(vediProssimoGiocatore());
 		turnoCorrente=navigatore.current();
 	}
 
-	public void applicaEffettoCarta(Carta c) {
+	private void applicaEffettoCarta(Carta c) {
 		if (c instanceof CartaSpeciale) {
 			switch (((CartaSpeciale) c).getTipo()) {
 			case PIU_DUE:
@@ -118,28 +136,6 @@ public class Partita implements PartitaIF {
 			}
 		}
 	}
-	
-	public void avvia() {
-		distribuisciCarte();
-		Carta first=mazzo.pesca();
-		if(first.getColore()==Colore.NERO) {
-			first.setColore(Colore.scegliColoreCasuale());
-		}
-		setCartaCorrente(first);
-		while (true) {
-			getGiocatoreCorrente().giocaTurno(getCartaCorrente(), sc);
-			if (verificaFinePartita()) {
-				terminaPartita(getGiocatoreCorrente());
-				break;
-			} else {
-				if(!effettoAttivato) {
-					applicaEffettoCarta(cartaCorrente);
-					effettoAttivato=true;
-				}
-				prossimoGiocatore();
-			}
-		}
-	}
 
 	public boolean verificaFinePartita() {
 		for (Giocatore g : giocatori) {
@@ -150,21 +146,20 @@ public class Partita implements PartitaIF {
 		return false;
 	}
 
-	public void terminaPartita(Giocatore vincitore) {
-		System.out.println("Ha vinto " + vincitore + "!");
-	}
-
 	@Override
 	public Carta pescaCarta() {
 		return mazzo.pesca();
+	}
+	
+	@Override
+	public boolean tentaGiocaCarta(Carta tentativo) {
+		return tentativo.giocabileSu(cartaCorrente);
 	}
 
 	@Override
 	public void giocaCarta(Carta c) {
 		pilaScarti.mettiCarta(cartaCorrente);
-		turnoCorrente.getMano().getCarte().remove(c);
 		setCartaCorrente(c);
 		effettoAttivato=false;
-		System.out.println(pilaScarti.getCarte().size());
 	}
 }

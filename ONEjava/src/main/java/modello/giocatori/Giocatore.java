@@ -4,10 +4,10 @@
 
 package modello.giocatori;
 
-import java.util.Scanner;
-
 import modello.PartitaIF;
 import modello.carte.Carta;
+import modello.giocatori.modalita.*;
+import vista.TemporaryView;
 
 /************************************************************/
 
@@ -22,8 +22,9 @@ import modello.carte.Carta;
  * 
  * metodi importanti:
  * giocaTurno()--> astratto, aspetto decisionale della partita (cambia tra bot e giocatore fisico)
- * pescaCarta()--> richiama il pescaCarta dalla partita
- * giocaCarta()--> richiama il giocaCarta dalla partita
+ * aggiungiCarta()--> aggiunge carta in mano
+ * rimuoviCarta()--> rimuove carta dalla mano
+ * cambiaModalita()--> cambia tra modalita bot e non-bot
  * 
  * 
  */
@@ -31,6 +32,7 @@ public abstract class Giocatore {
 	protected String nome;
 	protected boolean haPremutoOne;
 	protected Mano mano;
+	protected Modalita modalita;
 	protected PartitaIF partitaIF;
 
 	public Giocatore (String nome) {
@@ -38,6 +40,29 @@ public abstract class Giocatore {
 		this.mano=new Mano();
 		this.haPremutoOne=false;
 		this.partitaIF=null;
+		this.modalita=new NonBot();
+	}
+	
+	public void aggiungiCarta(Carta c) {
+		mano.aggiungiCarta(c);
+	}
+	
+	public void rimuoveCarta(Carta c) {
+		mano.rimuoviCarta(c);
+	}
+	
+	public String getNome() {
+		return this.nome;
+	}
+	
+	public Mano getMano() {
+		return this.mano;
+	}
+	
+	public void haPremutoOne() {
+	}
+	
+	public void setPremutoOne() {
 	}
 	
 	public PartitaIF getInterfacciaPartita() {
@@ -48,55 +73,16 @@ public abstract class Giocatore {
 		this.partitaIF = interfacciaPartita;
 	}
 	
-	public abstract void giocaTurno(Carta cartaCorrente, Scanner sc);
+	public abstract void giocaTurno(String cartaCorrente, TemporaryView tv);
 
-	/**
-	 * 
-	 */
-	public void pescaCarta() {
-		mano.aggiungiCarta(partitaIF.pescaCarta());
-	}
-
-	/**
-	 * 
-	 */
-	public void rimuoveCarta(Carta c) {
-		mano.rimuoviCarta(c);
-		partitaIF.giocaCarta(c);
-	}
-
-	/**
-	 * 
-	 */
-	public String getNome() {
-		return this.nome;
-	}
-
-	/**
-	 * 
-	 */
-	public Mano getMano() {
-		return this.mano;
-	}
-
-	/**
-	 * 
-	 */
-	public void haPremutoOne() {
-	}
-
-	/**
-	 * 
-	 */
-	public void setPremutoOne() {
-	}
-
-	@Override
-	public String toString() {
-		return "Giocatore [nome=" + nome + ", carte=" + mano.getNumCarte() + "]";
+	public void cambiaModalita() {
+		if(modalita instanceof Bot)
+			modalita=new NonBot();
+		else
+			modalita=new Bot();
 	}
 	
-	protected String mostraCarteInMano() {
+	public String mostraCarteInMano() {
 		String str="";
 		int i=0;
 		for(Carta c:mano.getCarte()) {
@@ -105,4 +91,10 @@ public abstract class Giocatore {
 		}
 		return str;
 	}
+	
+	@Override
+	public String toString() {
+		return "Giocatore [nome=" + nome + ", carte=" + mano.getNumCarte() + "]";
+	}
+	
 }

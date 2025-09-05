@@ -4,10 +4,8 @@
 
 package modello.giocatori;
 
-import java.util.Scanner;
-
-import modello.carte.Carta;
 import modello.tabelle.Utente;
+import vista.TemporaryView;
 
 /************************************************************/
 /**
@@ -36,9 +34,9 @@ public class GiocatoreRegistrato extends Giocatore {
 	public void aggiornaStatistiche() {
 	}
 
+
 	@Override
-	public void giocaTurno(Carta cartaCorrente, Scanner sc) {
-		// TODO Auto-generated method stub
-		
+	public void giocaTurno(String cartaCorrente, TemporaryView tv) {
+		modalita.scegliMossa(cartaCorrente, tv, this);
 	}
 }

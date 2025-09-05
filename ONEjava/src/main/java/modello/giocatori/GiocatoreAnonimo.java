@@ -4,131 +4,22 @@
 
 package modello.giocatori;
 
-import java.util.Scanner;
-
-import modello.carte.Carta;
-import modello.carte.Colore;
+import vista.TemporaryView;
 
 /************************************************************/
 
 /**
- * al momento la logica di giocata viene fatta in giocaTurno--> da spostare
+ * classe che modella il giocatore non loggato (potenzialmente anche il bot)
  * 
  */
+
 public class GiocatoreAnonimo extends Giocatore {
 	public GiocatoreAnonimo(String nome) {
 		super(nome);
-		// TODO Auto-generated constructor stub
 	}
 
-	public void giocaTurno(Carta cartaCorrente, Scanner sc) {
-		System.out.println("Turno di " + this.getNome());
-		System.out.println("Carta corrente: " + cartaCorrente);
-		int index = -1;
-		while (index < 0 || index > 2) {
-			try {
-				System.out.println("------");
-				System.out.println(mostraCarteInMano());
-				System.out.println("------");
-				System.out.println("Scegli azione: 0->pesca, 1->giocare carta");
-				String input = sc.nextLine();
-				index = Integer.parseInt(input);
-				if (index < 0 || index > 2) {
-					System.out.println("Valore non valido. Inserisci 0 o 1.");
-				}
-			} catch (Exception e) {
-				System.out.println("Errore. Riprovare");
-				index = -1;
-			}
-		}
-		if (index == 0) {
-			funzionePescaggio(cartaCorrente, sc);
-			return;
-		} else {
-			int indexCarta = -1; // variabile separata per la carta
-			while (indexCarta < 0 || indexCarta >= mano.getNumCarte()) {
-				try {
-					System.out.println(cartaCorrente);
-					System.out.println("------");
-					System.out.println(mostraCarteInMano());
-					System.out.println("------");
-					System.out.println("Scegli indice carta:");
-					String input = sc.nextLine();
-					indexCarta = Integer.parseInt(input);
-					if (indexCarta < 0 || indexCarta >= mano.getNumCarte()) {
-						System.out.println("Valore non valido. Inserisci tra 0 e " + (mano.getNumCarte() - 1));
-					}
-				} catch (Exception e) {
-					System.out.println("Errore. Riprovare");
-					indexCarta = -1;
-				}
-
-				if (indexCarta >= 0 && indexCarta < mano.getNumCarte()) {
-					if (!mano.getCarte().get(indexCarta).giocabileSu(cartaCorrente)) {
-						int scelta = -1;
-						while (scelta < 0 || scelta > 1) {
-							try {
-								System.out.println("Carta non compatibile! Riprovare (0) o pescare (1)?");
-								String input = sc.nextLine();
-								scelta = Integer.parseInt(input);
-								if (scelta < 0 || scelta > 1) {
-									System.out.println("Valore non valido. Inserisci 0 o 1");
-								}
-							} catch (Exception e) {
-								System.out.println("Errore. Riprovare");
-								scelta = -1;
-							}
-						}
-						if (scelta == 1) {
-							funzionePescaggio(cartaCorrente, sc);
-							return; // esci dal metodo
-						} else {
-							indexCarta = -1; // ripeti scelta carta
-						}
-					} else {
-						Carta scelta=mano.getCarte().get(indexCarta);
-						if(scelta.getColore()==Colore.NERO) {
-							scelta.setColore(Colore.scegliColore(sc));
-						}
-						getInterfacciaPartita().giocaCarta(scelta);
-						return; // esci dal metodo dopo aver giocato
-					}
-				}
-			}
-		}
-	}
-
-	private void funzionePescaggio(Carta cartaCorrente, Scanner sc) {
-		int index = -1;
-		Carta c = getInterfacciaPartita().pescaCarta();
-		if (c.giocabileSu(cartaCorrente)) {
-			while (index < 0 || index > 2) {
-				try {
-					System.out.println("Puoi giocare la carta che hai pescato: " + c);
-					System.out.println("Scegli azione: 0->tienila, 1->giocala");
-					String input = sc.nextLine();
-					index = Integer.parseInt(input);
-					if (index < 0 || index > 2) {
-						System.out.println("Valore non valido. Inserisci 0 o 1");
-					}
-				} catch (Exception e) {
-					System.out.println("Errore. Riprovare");
-					index = -1;
-				}
-			}
-			if (index == 0) {
-				this.mano.aggiungiCarta(c);
-				return;
-			} else {
-				if(c.getColore()==Colore.NERO) {
-					c.setColore(Colore.scegliColore(sc));
-				}
-				getInterfacciaPartita().giocaCarta(c);
-				return;
-			}
-		}
-		else {
-			this.mano.aggiungiCarta(c);
-		}
+	@Override
+	public void giocaTurno(String cartaCorrente, TemporaryView tv) {
+		modalita.scegliMossa(cartaCorrente, tv, this);
 	}
 }
