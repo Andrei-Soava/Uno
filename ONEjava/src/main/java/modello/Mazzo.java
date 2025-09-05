@@ -45,12 +45,19 @@ public class Mazzo {
 			e.printStackTrace();
 		}
 	}
+	
 	public PilaScarti getPila() {
 		return pila;
 	}
+	
 	public void setPila(PilaScarti pila) {
 		this.pila = pila;
 	}
+	
+	public int getNumeroCarte() {
+		return carte.size();
+	}
+	
 	public void mescola() {
 		Collections.shuffle(carte);
 	}

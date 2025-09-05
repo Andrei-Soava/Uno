@@ -33,7 +33,8 @@ Per ogni fase di sviluppo verranno elencati:
 3. Giocata carta valida/invalid → verifica regole colore/numero
 4. Applicazione effetti carte speciali (+2, +4, cambio colore, inverti, salta)
 5. Cambio turno e direzione
-6. Rilevamento fine partita (mano vuota)
+6. Ricostruzione mazzo
+7. Rilevamento fine partita (mano vuota) e vittoria
 
 **Criteri di superamento**
 - Tutte le regole rispettate
@@ -43,13 +44,14 @@ Per ogni fase di sviluppo verranno elencati:
 **Tabella riassuntiva**
 | ID Test | Fase di sviluppo | Descrizione test | Input / Azione | Output atteso | Risultato |
 |---------|------------------|------------------|----------------|---------------|-----------|
-| T1.1    | Fase 1 – Model   | Creazione mazzo completo e mescolamento. Verifico che la prima carta presente nel file mazzo sia diversa dalla prima carta di un nuovo mazzo | Istanziare `Mazzo` e chiamare `mescola()` | Mazzo con tutte le carte in ordine casuale | Eseguito circa una trentina di volte ed è fallito solo una volta (probabilità 1/108)|
-| T1.2    | Fase 1 – Model   | Pesca carta da mazzo | Chiamare `pesca()` | Restituisce una carta e riduce il numero di carte nel mazzo | |
-| T1.3    | Fase 1 – Model   | Giocata carta valida | Giocatore gioca carta compatibile con quella sul banco | Carta accettata e aggiornata pila scarti | |
-| T1.4    | Fase 1 – Model   | Giocata carta non valida | Giocatore gioca carta incompatibile | Messaggio di errore, stato invariato | |
-| T1.5    | Fase 1 – Model   | Applicazione effetto carta speciale | Giocare +2, +4, inverti, salta | Effetto applicato correttamente | |
-| T1.6    | Fase 1 – Model   | Cambio turno | Chiamare `prossimoTurno()` | Passa al giocatore successivo (o precedente se invertito) | |
-| T1.7    | Fase 1 – Model   | Fine partita | Mano di un giocatore = 0 | Dichiarazione vincitore | |
+| T1.1    | Fase 1 – Model   | Creazione mazzo completo e mescolamento. Verifico che la prima carta presente nel file mazzo sia diversa dalla prima carta di un nuovo mazzo | Istanziare `Mazzo` e chiamare `mescola()` | Mazzo con tutte le carte in ordine casuale | Eseguito circa una trentina di volte ed è fallito solo una volta (probabilità 1/108); positivo|
+| T1.2    | Fase 1 – Model   | Pesca carta da mazzo | Chiamare `pesca()` | Restituisce una carta e riduce il numero di carte nel mazzo | Dopo due assert separati sulla carta e numero di carte nel mazzo; positivi |
+| T1.3    | Fase 1 – Model   | Giocata carta valida | Giocatore gioca carta compatibile con quella sul banco | Carta accettata e aggiornata pila scarti | Testato manualmente; positivo |
+| T1.4    | Fase 1 – Model   | Giocata carta non valida | Giocatore gioca carta incompatibile | Messaggio di errore, stato invariato | Testato manualmente; positivo |
+| T1.5    | Fase 1 – Model   | Applicazione effetto carta speciale | Giocare +2, +4, inverti, salta | Effetto applicato correttamente | Testato manualmente; positivo |
+| T1.6    | Fase 1 – Model   | Cambio turno | Chiamare `prossimoTurno()` | Passa al giocatore successivo (o precedente se invertito) | Con un assert dopo aver richiamato prossimoGiocatore(); positivo |
+| T1.7    | Fase 1 – Model   | Ricostruzione mazzo | Creare mazzo e pila, associandoli; svuotare mazzo; pescare dal mazzo | Mazzo passa da 0 carte a 107 (dopo aver pescato) | Con due assert sul numero di carte del mazzo; positivo |
+| T1.8    | Fase 1 – Model   | Fine partita | Mano di un giocatore = 0 | Dichiarazione vincitore | Testato manualmente; positivo |
 ---
 
 ### **Fase 2 – Controller offline (console)**
@@ -58,8 +60,7 @@ Per ogni fase di sviluppo verranno elencati:
 **Casi di test**
 1. Input valido → azione corretta sul Model
 2. Input invalido → messaggio di errore e stato invariato
-3. Sequenza di turni completa fino a vittoria
-4. Gestione “ONE!” in modalità console
+3. Gestione “ONE!” in modalità console
 
 **Criteri di superamento**
 - Comandi corretti eseguiti
@@ -68,8 +69,9 @@ Per ogni fase di sviluppo verranno elencati:
 **Tabella riassuntiva**
 | ID Test | Fase di sviluppo | Descrizione test | Input / Azione | Output atteso | Risultato |
 |---------|------------------|------------------|----------------|---------------|-----------|
-| T2.1    | Fase 2 – Controller offline | Input valido da console | Comando “pesca” o “gioca” | Azione eseguita sul Model | |
-| T2.2    | Fase 2 – Controller offline | Input invalido da console | Comando errato | Messaggio di errore, stato invariato | |
+| T2.1    | Fase 2 – Controller offline | Input valido da console | Comando “pesca” o “gioca” | Azione eseguita sul Model | Testato manualmente; positivo |
+| T2.2    | Fase 2 – Controller offline | Input invalido da console | Comando errato | Messaggio di errore, stato invariato | Testato manualmente; positivo |
+| T2.3    | Fase 2 – Controller offline | Gestione ONE in console | Chiamata ONE con 1 o più carte in mano | Messaggio di chiamata corretta o errata |  |
 ---
 
 ### **Fase 3 – Persistenza locale**

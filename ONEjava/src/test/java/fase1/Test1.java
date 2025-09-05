@@ -1,7 +1,6 @@
 package fase1;
 
 import static org.junit.Assert.*;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -13,7 +12,7 @@ import modello.carte.Colore;
 /**
  * testa se la prima carta del mazzo dopo il mescolamento è la stessa di prima che venga letto il file mazzo (0 rosso)
  */
-public class Test1_1 {
+public class Test1 {
 	private Mazzo m;
 
     @Before

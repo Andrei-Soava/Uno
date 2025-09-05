@@ -63,8 +63,7 @@ public class Partita implements PartitaIF {
 	private void distribuisciCarte() {
 		for (Giocatore g : giocatori) {
 			g.setInterfacciaPartita(this);
-			g.getMano().aggiungiCarta(new CartaSpeciale(Colore.BLU,TipoSpeciale.INVERTI));
-			g.getMano().aggiungiCarta(new CartaSpeciale(Colore.NERO,TipoSpeciale.JOLLY));
+			g.getMano().aggiungiCarta(mazzo.pescaN(7));
 		}
 	}
 	
