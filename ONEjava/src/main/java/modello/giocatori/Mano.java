@@ -9,7 +9,16 @@ import java.util.ArrayList;
 import modello.carte.Carta;
 
 /************************************************************/
+
 /**
+ * classe che modella la mano di un giocatore
+ * 
+ * attributi importanti:
+ * lista delle carte in mano
+ * 
+ * metodi importanti:
+ * aggiungiCarta()--> aggiunge una carta o una lista di carte alla mano (overloading)
+ * rimuoviCarta()--> rimuovi una carta dalla mano
  * 
  */
 public class Mano {

@@ -6,7 +6,13 @@ package modello.carte;
 
 /************************************************************/
 /**
+ * classe che modella una carta speciale (estende carta)
  * 
+ * attributi importanti:
+ * tipo, enumerato che modella i tipi speciali (piu_due, piu_quattro, inverti, blocca, jolly)
+ * 
+ * metodi importanti:
+ * giocabileSu()--> override da carta (guardare lì per semantica)
  */
 public class CartaSpeciale extends Carta {
 	private final TipoSpeciale tipo;

@@ -5,8 +5,15 @@
 package modello.carte;
 
 /************************************************************/
+
 /**
+ * classe che modella una carta numero (estende carta)
  * 
+ * attributi importanti:
+ * numero
+ * 
+ * metodi importanti:
+ * giocabileSu()--> override da carta (guardare lì per semantica)
  */
 public class CartaNumero extends Carta {
 	private final int numero;

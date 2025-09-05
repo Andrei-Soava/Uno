@@ -16,7 +16,20 @@ import java.util.Stack;
 import modello.carte.*;
 
 /************************************************************/
+
 /**
+ * classe Mazzo (unicamente associato ad una partita)
+ * 
+ * attributi importanti:
+ * una lista di carte (lette da file)
+ * riferimento alla pilaScarti della partita (per ricostruzione diretta, senza passare per la partita)
+ * 
+ * metodi importanti:
+ * mescola()--> mescola le carte del mazzo
+ * pesca()--> pesca una carta, togliendola dal mazzo; se non ci sono più carte nel mazzo invoca prima ricostruisciMazzo() 
+ * pescaN()--> pesca N carte (intero passato ad input), richiamando pesca() N volte
+ * creaMazzo()--> crea un mazzo leggendo da file "mazzo" le carte
+ * ricostruisciMazzo()--> ricrea mazzo a partire dalla pilaScarti associata
  * 
  */
 public class Mazzo {

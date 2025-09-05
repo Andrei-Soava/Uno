@@ -2,6 +2,18 @@ package modello;
 
 import java.util.List;
 
+/**
+ * classe accessoria utile per la ciclazione dei giocatori durante la partita
+ * 
+ * metodi importanti:
+ * next()--> cambia il giocatore corrente con quello successivo nella lista, e lo restituisce
+ * back()--> cambia il giocatore corrente con quello precedente nella lista, e lo restituisce
+ * current()--> restituisce il giocatore corrente
+ * peekNext()--> restituisce il giocatore successivo nella lista, senza però aggiornare il il giocatore corrente
+ * peekBack()--> restituisce il giocatore precedente nella lista, senza però aggiornare il il giocatore corrente
+ * 
+ * @param <T>
+ */
 public class Navigatore<T> {
     private List<T> items;
     private int currentIndex;

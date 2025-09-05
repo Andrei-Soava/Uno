@@ -5,7 +5,15 @@
 package modello.carte;
 
 /************************************************************/
+
 /**
+ * classe astratta che modella una carta generica
+ * 
+ * attributi importanti:
+ * colore, che può essere cambiato (caso jolly)
+ * 
+ * metodi importanti:
+ * giocabileSu()--> astratto, confronta la carta giocata(this) con quella sul banco (passato come input)
  * 
  */
 public abstract class Carta {

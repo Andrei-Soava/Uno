@@ -11,7 +11,29 @@ import modello.carte.*;
 import modello.giocatori.Giocatore;
 
 /************************************************************/
+
 /**
+ * classe centrale dove avviene il gioco
+ * 
+ * attributi importanti:
+ * lista dei giocatori
+ * riferimento al mazzo e alla pilascarti
+ * riferimento ad un navigatore--> gestione semplice della ciclazione dei giocatori
+ * riferimento al giocatore corrente--> coincide con navigatore.current()
+ * riferimento alla carta corrente sul banco
+ * campi booleani per indicare direzione (true=orario) e se l'effetto della carta corrente è stato attivato (utile per salvataggio)
+ * scanner--> TEMPORANEO
+ * 
+ * metodi importanti:
+ * distribuisciCarte()--> fornisce N carte a ciascun giocatore dal mazzo
+ * vediProssimoGiocatore()--> restituisce prossimo giocatore dopo quello corrente, senza tuttavia cambiarlo (giro orario o antiorario gestito)
+ * prossimoGiocatore()--> come vediProssimoGiocatore, ma viene cambiato il giocatore corrente con il prossimo
+ * applicaEffettoCarta()--> prende la carta corrente e vi applica l'effetto --> effettoAttivato va messo a true
+ * avvia()--> gioco vero e proprio (while true finchè non vince qualcuno)
+ * verificaFinePartita()--> invocato alla fine di ogni giocata da parte di un giocatore e controlla se non ha più carte (=vince)
+ * terminaPartita()--> se restituisce true verificaFinePartita viene invocato questo metodo che dichiara in vincitore
+ * pescaCarta()-->fornisce INTERFACCIA per giocatore (pescare carta da mazzo e metterla nella sua mano)
+ * giocaCarta()--> fornisce INTERFACCIA per giocatore (mettere carta sul banco--> controlli fatti in giocatore, per ora)
  * 
  */
 public class Partita implements PartitaIF {

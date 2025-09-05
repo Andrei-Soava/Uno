@@ -10,13 +10,27 @@ import modello.PartitaIF;
 import modello.carte.Carta;
 
 /************************************************************/
+
 /**
+ * classe che modella il giocatore in una partita
+ * 
+ * attributi importanti:
+ * nome
+ * booleano haPremutoOne per indicare se il giocatore ha una sola carta in mano
+ * riferimento ad una mano--> contiente le carte del giocatore
+ * riferimento ad una partita mediante un'interfaccia (settata)
+ * 
+ * metodi importanti:
+ * giocaTurno()--> astratto, aspetto decisionale della partita (cambia tra bot e giocatore fisico)
+ * pescaCarta()--> richiama il pescaCarta dalla partita
+ * giocaCarta()--> richiama il giocaCarta dalla partita
+ * 
  * 
  */
 public abstract class Giocatore {
 	protected String nome;
-	protected Mano mano;
 	protected boolean haPremutoOne;
+	protected Mano mano;
 	protected PartitaIF partitaIF;
 
 	public Giocatore (String nome) {

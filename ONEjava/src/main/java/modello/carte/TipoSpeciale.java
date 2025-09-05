@@ -5,7 +5,9 @@
 package modello.carte;
 
 /************************************************************/
+
 /**
+ * enumerato che modella i tipi speciali
  * 
  */
 public enum TipoSpeciale {

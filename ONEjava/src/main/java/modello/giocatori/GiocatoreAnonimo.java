@@ -10,7 +10,9 @@ import modello.carte.Carta;
 import modello.carte.Colore;
 
 /************************************************************/
+
 /**
+ * al momento la logica di giocata viene fatta in giocaTurno--> da spostare
  * 
  */
 public class GiocatoreAnonimo extends Giocatore {
@@ -18,10 +20,6 @@ public class GiocatoreAnonimo extends Giocatore {
 		super(nome);
 		// TODO Auto-generated constructor stub
 	}
-
-	/**
-	 * 
-	 */
 
 	public void giocaTurno(Carta cartaCorrente, Scanner sc) {
 		System.out.println("Turno di " + this.getNome());

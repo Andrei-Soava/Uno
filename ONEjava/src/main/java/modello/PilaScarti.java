@@ -10,8 +10,15 @@ import java.util.Stack;
 import modello.carte.Carta;
 
 /************************************************************/
+
 /**
+ * classe che gestisce la pila degli scarti
  * 
+ * attributi importanti:
+ * lista di carte=scarti--> la carta sul banco NON appartiene alla pila degli scarti
+ * 
+ * metodi importanti:
+ * mettiCarta()--> aggiunge una carta alla pila degli scarti
  */
 public class PilaScarti {
 	private Stack<Carta> scarti;

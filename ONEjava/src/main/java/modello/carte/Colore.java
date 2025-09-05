@@ -8,8 +8,10 @@ import java.util.Random;
 import java.util.Scanner;
 
 /************************************************************/
+
 /**
- * 
+ * enumerato che modella i 4+1 colori
+ *	 
  */
 public enum Colore {
 	/**
