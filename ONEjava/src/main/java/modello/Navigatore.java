@@ -6,52 +6,52 @@ import java.util.List;
  * classe accessoria utile per la ciclazione dei giocatori durante la partita
  * 
  * metodi importanti:
- * next()--> cambia il giocatore corrente con quello successivo nella lista, e lo restituisce
- * back()--> cambia il giocatore corrente con quello precedente nella lista, e lo restituisce
- * current()--> restituisce il giocatore corrente
- * peekNext()--> restituisce il giocatore successivo nella lista, senza però aggiornare il il giocatore corrente
- * peekBack()--> restituisce il giocatore precedente nella lista, senza però aggiornare il il giocatore corrente
+ * prossimo()--> cambia il giocatore corrente con quello successivo nella lista, e lo restituisce
+ * precedente()--> cambia il giocatore corrente con quello precedente nella lista, e lo restituisce
+ * corrente()--> restituisce il giocatore corrente
+ * vediProssimo()--> restituisce il giocatore successivo nella lista, senza però aggiornare il il giocatore corrente
+ * vediPrecedente()--> restituisce il giocatore precedente nella lista, senza però aggiornare il il giocatore corrente
  * 
  * @param <T>
  */
 public class Navigatore<T> {
     private List<T> items;
-    private int currentIndex;
+    private int indiceCorrente;
 
     public Navigatore(List<T> items) {
         if (items == null || items.isEmpty()) {
             throw new IllegalArgumentException("La lista non può essere vuota");
         }
         this.items = items;
-        this.currentIndex = 0; // Partiamo dal primo elemento
+        this.indiceCorrente = 0; // Partiamo dal primo elemento
     }
 
-    public T current() {
-        return items.get(currentIndex);
+    public T corrente() {
+        return items.get(indiceCorrente);
     }
 
-    public T next() {
-        currentIndex = (currentIndex + 1) % items.size();
-        return current();
+    public T prossimo() {
+        indiceCorrente = (indiceCorrente + 1) % items.size();
+        return corrente();
     }
     
-    public T peekNext() {
-    	return items.get((currentIndex + 1) % items.size());
+    public T vediProssimo() {
+    	return items.get((indiceCorrente + 1) % items.size());
     }
 
-    public T back() {
-        currentIndex = (currentIndex - 1 + items.size()) % items.size();
-        return current();
+    public T precedente() {
+        indiceCorrente = (indiceCorrente - 1 + items.size()) % items.size();
+        return corrente();
     }
     
-    public T peekBack() {
-    	return items.get((currentIndex - 1 + items.size()) % items.size());
+    public T vediPrecedente() {
+    	return items.get((indiceCorrente - 1 + items.size()) % items.size());
     }
 
-    public void setCurrent(T item) {
+    public void setCorrente(T item) {
         int index = items.indexOf(item);
         if (index == -1) throw new IllegalArgumentException("Elemento non trovato");
-        currentIndex = index;
+        indiceCorrente = index;
     }
 }
 

@@ -14,9 +14,9 @@ public class NonBot implements Modalita {
 	@Override
 	public void scegliMossa(String cartaCorrente, TemporaryView tv, Giocatore g) {
 		PartitaIF partitaIF=g.getInterfacciaPartita();
-		tv.printMessage(
+		tv.stampaMessaggio(
 				"Turno di " + g.getNome() + "\n" + "CARTA CORRENTE: " + cartaCorrente + "\n" + g.mostraCarteInMano());
-		int index = tv.chooseBetweenTwo("scegli azione", "pesca", "gioca carta");
+		int index = tv.scegliTraDue("scegli azione", "pesca", "gioca carta");
 		if (index == 0) {
 			funzionePescaggio(tv, partitaIF, g);
 			return;
@@ -25,11 +25,11 @@ public class NonBot implements Modalita {
 			while (indexCarta < 0 || indexCarta >= g.getMano().getNumCarte()) {
 
 				String s = "CARTA CORRENTE: " + cartaCorrente + "\n" + g.mostraCarteInMano() + "\n";
-				indexCarta = tv.chooseBetweenN(s, 0, (g.getMano().getNumCarte() - 1));
+				indexCarta = tv.scegliTraN(s, 0, (g.getMano().getNumCarte() - 1));
 
 				if (indexCarta >= 0 && indexCarta < g.getMano().getNumCarte()) {
 					if (!partitaIF.tentaGiocaCarta(g.getMano().getCarte().get(indexCarta))) {
-						int scelta = tv.chooseBetweenTwo("carta non compatibile", "riprova", "pesca");
+						int scelta = tv.scegliTraDue("carta non compatibile", "riprova", "pesca");
 						if (scelta == 1) {
 							funzionePescaggio(tv, partitaIF, g);
 							return; // esci dal metodo
@@ -39,7 +39,7 @@ public class NonBot implements Modalita {
 					} else {
 						Carta scelta = g.getMano().getCarte().get(indexCarta);
 						if (scelta.getColore() == Colore.NERO) {
-							scelta.setColore(tv.chooseColor());
+							scelta.setColore(tv.scegliColore());
 						}
 						g.rimuoveCarta(scelta);
 						partitaIF.giocaCarta(scelta);
@@ -54,13 +54,13 @@ public class NonBot implements Modalita {
 		int index = -1;
 		Carta c = partitaIF.pescaCarta();
 		if (partitaIF.tentaGiocaCarta(c)) {
-			index = tv.chooseBetweenTwo("Puoi giocare la carta che hai pescato:" + c + " Scegli", "tienila", "giocala");
+			index = tv.scegliTraDue("Puoi giocare la carta che hai pescato:" + c + " Scegli", "tienila", "giocala");
 			if (index == 0) {
 				g.aggiungiCarta(c);
 				return;
 			} else {
 				if (c.getColore() == Colore.NERO) {
-					c.setColore(tv.chooseColor());
+					c.setColore(tv.scegliColore());
 				}
 				g.rimuoveCarta(c);
 				partitaIF.giocaCarta(c);

@@ -5,7 +5,6 @@
 package modello.giocatori;
 
 import modello.tabelle.Utente;
-import vista.TemporaryView;
 
 /************************************************************/
 /**
@@ -34,9 +33,4 @@ public class GiocatoreRegistrato extends Giocatore {
 	public void aggiornaStatistiche() {
 	}
 
-
-	@Override
-	public void giocaTurno(String cartaCorrente, TemporaryView tv) {
-		modalita.scegliMossa(cartaCorrente, tv, this);
-	}
 }

@@ -4,7 +4,6 @@
 
 package modello.giocatori;
 
-import vista.TemporaryView;
 
 /************************************************************/
 
@@ -18,8 +17,4 @@ public class GiocatoreAnonimo extends Giocatore {
 		super(nome);
 	}
 
-	@Override
-	public void giocaTurno(String cartaCorrente, TemporaryView tv) {
-		modalita.scegliMossa(cartaCorrente, tv, this);
-	}
 }

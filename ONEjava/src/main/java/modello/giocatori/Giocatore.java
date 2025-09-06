@@ -6,7 +6,6 @@ package modello.giocatori;
 
 import modello.PartitaIF;
 import modello.carte.Carta;
-import modello.giocatori.modalita.*;
 import vista.TemporaryView;
 
 /************************************************************/
@@ -32,7 +31,7 @@ public abstract class Giocatore {
 	protected String nome;
 	protected boolean haPremutoOne;
 	protected Mano mano;
-	protected Modalita modalita;
+	protected boolean bot;
 	protected PartitaIF partitaIF;
 
 	public Giocatore (String nome) {
@@ -40,7 +39,7 @@ public abstract class Giocatore {
 		this.mano=new Mano();
 		this.haPremutoOne=false;
 		this.partitaIF=null;
-		this.modalita=new NonBot();
+		this.bot=false;
 	}
 	
 	public void aggiungiCarta(Carta c) {
@@ -73,13 +72,12 @@ public abstract class Giocatore {
 		this.partitaIF = interfacciaPartita;
 	}
 	
-	public abstract void giocaTurno(String cartaCorrente, TemporaryView tv);
-
 	public void cambiaModalita() {
-		if(modalita instanceof Bot)
-			modalita=new NonBot();
-		else
-			modalita=new Bot();
+		bot=!bot;
+	}
+	
+	public boolean isBot() {
+		return bot;
 	}
 	
 	public String mostraCarteInMano() {

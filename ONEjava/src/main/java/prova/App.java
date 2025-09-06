@@ -22,7 +22,7 @@ public class App {
         logger.error("MOSTRATO DI DEFAULT");
         
         TemporaryController tc=new TemporaryController();
-        tc.configuraNuovaPartitaVsBot();
+        tc.configuraNuovaPartita();
         tc.avviaPartita();
         
         

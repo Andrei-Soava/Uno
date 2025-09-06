@@ -56,4 +56,5 @@ Esempio COMPLETO:
 - 03/09 23.45, Andrei, (traduzione completa del gioco ONE in Java (solo da console e senza separazione MVC) + scrittura di un caso di test), separazione su vari package + inizio GUI + guardare persistenza con postgres;
 - 03/09, **AVVISO**, Andrei, non ho avuto il tempo di fare la javadoc del package modello (per adesso);
 - 05/09, Andrei, (implementazione base del pattern MVC da console (con un controllore temporaneo e con una view temporanea)+ eseguito refactoring generale del codice+ Pattern PLAYER-ROLE per modalità bot e non-bot), GUI o persistenza;
+- 06/09, Andrei, (separazione mvc più netta, eliminazione temporanea delle modalità (e quindi del player role pattern) e prove con altre versione di avviaPartita()), null;
 
