@@ -4,9 +4,11 @@
 
 package modello.giocatori;
 
+import modello.Mossa;
+import modello.Mossa.TipoMossa;
 import modello.PartitaIF;
 import modello.carte.Carta;
-import vista.TemporaryView;
+import modello.carte.Colore;
 
 /************************************************************/
 
@@ -78,6 +80,31 @@ public abstract class Giocatore {
 	
 	public boolean isBot() {
 		return bot;
+	}
+	
+	public Mossa scegliMossaAutomatica() {
+		Mossa m;
+		for(Carta c:this.getMano().getCarte()) {
+			if(partitaIF.tentaGiocaCarta(c)) {
+				m=new Mossa(TipoMossa.GIOCA_CARTA,c);
+				if(c.getColore()==Colore.NERO) {
+					c.setColore(Colore.scegliColoreCasuale());
+					m.setTipoMossa(TipoMossa.SCEGLI_COLORE);
+				}
+				return m;
+			}
+		}
+		m=new Mossa(TipoMossa.PESCA);
+		Carta pescata=partitaIF.pescaCarta();
+		if(partitaIF.tentaGiocaCarta(pescata)) {
+			m.setTipoMossa(TipoMossa.GIOCA_CARTA);
+			if(pescata.getColore()==Colore.NERO) {
+				pescata.setColore(Colore.scegliColoreCasuale());
+				m.setTipoMossa(TipoMossa.SCEGLI_COLORE);
+			}
+		}
+		return m;
+		
 	}
 	
 	public String mostraCarteInMano() {

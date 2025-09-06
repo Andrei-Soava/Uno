@@ -5,12 +5,10 @@
 package modello;
 
 import java.util.ArrayList;
-import java.util.Scanner;
 
 import modello.Mossa.TipoMossa;
 import modello.carte.*;
 import modello.giocatori.Giocatore;
-import vista.TemporaryView;
 
 /************************************************************/
 
@@ -29,9 +27,8 @@ import vista.TemporaryView;
  * vediProssimoGiocatore()--> restituisce prossimo giocatore dopo quello corrente, senza tuttavia cambiarlo (giro orario o antiorario gestito) 
  * prossimoGiocatore()--> come vediProssimoGiocatore, ma viene cambiato il giocatore corrente con il prossimo 
  * applicaEffettoCarta()--> prende la carta corrente e vi applica l'effetto --> effettoAttivato va messo a true 
+ * applicaMossa()--> gestisce l'input del giocatore e prova ad applicare la sua mossa alla partita (mossa può essere rimandata al controllore in alcuni casi)
  * verificaFinePartita()-->invocato alla fine di ogni giocata da parte di un giocatore e controlla se non ha più carte (=vince) 
- * terminaPartita()--> se restituisce true
- * verificaFinePartita viene invocato questo metodo che dichiara in vincitore
  * pescaCarta()-->fornisce INTERFACCIA per giocatore (pescare carta da mazzo e metterla nella sua mano) 
  * testaGiocaCarta()--> fornisce INTERFACCIA per giocatore (controllare se la carta che sta per giocare il giocatore è valida)
  * giocaCarta()--> fornisce INTERFACCIA per giocatore (mettere carta sul banco--> controlli fatti in giocatore, per ora)
@@ -59,9 +56,9 @@ public class Partita implements PartitaIF {
 
 	public void eseguiPrePartita() {
 		for (Giocatore g : giocatori) {
-			//g.getMano().aggiungiCarta(mazzo.pescaN(7));
-			g.getMano().aggiungiCarta(new CartaSpeciale(Colore.NERO,TipoSpeciale.PIU_QUATTRO));
-			g.getMano().aggiungiCarta(new CartaSpeciale(Colore.NERO,TipoSpeciale.PIU_QUATTRO));
+			g.getMano().aggiungiCarta(mazzo.pescaN(7));
+			//g.getMano().aggiungiCarta(new CartaSpeciale(Colore.NERO,TipoSpeciale.PIU_QUATTRO));
+			//g.getMano().aggiungiCarta(new CartaSpeciale(Colore.NERO,TipoSpeciale.PIU_QUATTRO));
 		}
 		Carta first = mazzo.pesca();
 		if (first.getColore() == Colore.NERO) {
@@ -125,32 +122,54 @@ public class Partita implements PartitaIF {
 		}
 	}
 	
-	/*
+	
 	public Mossa applicaMossa(Giocatore g, Mossa mossa) {
-		if (mossa.getTipoMossa() == TipoMossa.PESCA) {
+		//caso 1:devo pescare
+		if (mossa.getTipoMossa() == TipoMossa.PESCA) 
+		{
 	        Carta pescata = pescaCarta();
 	        g.aggiungiCarta(pescata);
-	        if (tentaGiocaCarta(pescata)) {
-	            return new Mossa(TipoMossa.GIOCA_CARTA,pescata);
-	        } else {
+	        //verifico se posso giocare carta pescata--> Mossa modificata in GIOCA_CARTA
+	        if (tentaGiocaCarta(pescata)) 
+	        {
+	        	mossa.setCartaScelta(pescata);
+	        	mossa.setTipoMossa(TipoMossa.GIOCA_CARTA);
+	            return mossa;
+	        }
+	        //altrimenti restituisco null--> Mossa CONCLUSA
+	        else 
+	        {
 	            return null;
 	        }
-	    } else if (mossa.getTipoMossa() == TipoMossa.GIOCA_CARTA || mossa.getTipoMossa()==TipoMossa.SCEGLI_COLORE) {
-	        if(tentaGiocaCarta(mossa.getCartaMossa())) {
-	        	if(mossa.getCartaMossa().getColore()==Colore.NERO)
-	        		return new Mossa(TipoMossa.SCEGLI_COLORE,mossa.getCartaMossa());
-	        	else {
-	        		g.rimuoveCarta(mossa.getCartaMossa());
-					giocaCarta(mossa.getCartaMossa());
+	    } 
+		//caso 2:devo giocare carta 
+		else if (mossa.getTipoMossa() == TipoMossa.GIOCA_CARTA 
+				|| mossa.getTipoMossa()==TipoMossa.SCEGLI_COLORE) 
+		{
+			//verifico se posso giocare carta
+	        if(tentaGiocaCarta(mossa.getCartaScelta())||(mossa.getTipoMossa()==TipoMossa.SCEGLI_COLORE)) 
+	        {
+	        	//verifico se la carta che gioco è NERA--> da cambiare il colore
+	        	if(mossa.getCartaScelta().getColore()==Colore.NERO) {
+	        		return mossa;
+	        	}
+	        	//la carta non è (più) da cambiare di colore--> Mossa CONCLUSA
+	        	else 
+	        	{
+	        		g.rimuoveCarta(mossa.getCartaScelta());
+					giocaCarta(mossa.getCartaScelta());
 	        		return mossa;
 	        	}
 	        }
+	        //altrimenti restituisco null--> carta NON giocabile
 	        else 
 	        	return null;
 	    }
-		return null;
+		//caso 3:nessun tipo specificato nella Mossa--
+		else
+			return null;
 	}
-	*/
+	
 
 	public boolean verificaFinePartita() {
 		for (Giocatore g : giocatori) {

@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import modello.Mossa;
 import modello.Mossa.TipoMossa;
 import modello.Partita;
-import modello.carte.Carta;
 import modello.carte.Colore;
 import modello.giocatori.Giocatore;
 import modello.giocatori.GiocatoreAnonimo;
@@ -46,21 +45,8 @@ public class TemporaryController {
 		setPartitaIF(giocatori, partita);
 		partita.eseguiPrePartita();
 	}
-
-	/*
-	public void avviaPartita() {
-		try {
-			while (!partita.verificaFinePartita()) {
-				partita.getGiocatoreCorrente().giocaTurno(partita.getCartaCorrente().toString(), tv);
-				partita.eseguiUnTurno();
-			}
-			tv.stampaMessaggio("Ha vinto "+partita.getGiocatoreCorrente().getNome()+"!");
-		} catch (NullPointerException e) {
-			tv.stampaMessaggio("Non hai configurato una nuova partita!");
-		}
-	}
-	*/
 	
+	/*
 	public void avviaPartita() {
 		try {
 			while (!partita.verificaFinePartita()) {
@@ -85,38 +71,60 @@ public class TemporaryController {
 			tv.stampaMessaggio("Non hai configurato una nuova partita!");
 		}
 	}
+	*/
 	
-	/*
-	public void avviaPartita3() {
+	public void avviaPartita() {
 		try {
 			while (!partita.verificaFinePartita()) {
 				Giocatore g=partita.getGiocatoreCorrente();
 				if(g.isBot()) {
-					scegliMossaAutomatica(g);
+					Mossa m=g.scegliMossaAutomatica();
+					if(m.getTipoMossa()==TipoMossa.PESCA)
+						tv.stampaMessaggio(g.getNome()+" ha pescato");
+					else
+						tv.stampaMessaggio(g.getNome() + " ha giocato la carta: " + m.getCartaScelta());
+					partita.applicaMossa(g, m);
 				}
 				else {
 					Mossa m = tv.scegliMossa(partita.getCartaCorrente().toString(), g);
-					if (m.getTipoMossa() == TipoMossa.PESCA) {
+					if (m.getTipoMossa() == TipoMossa.PESCA) 
+					{
 						gestisciPescaggioInterno(g,m);
-					} else {
+					} 
+					else 
+					{
+						m.setCartaScelta(tv.scegliCarta(partita.getCartaCorrente().toString(), g));
 						do {
-							if(partita.applicaMossa(g, m)==null) {
-								if(tv.scegliTraDue("carta non compatibile", "riprova", "pesca")==1) {
-									gestisciPescaggioInterno(g,new Mossa(TipoMossa.PESCA));
+							//se la carta selezionata non è giocabile--> o riprovo o pesco
+							
+							if (partita.applicaMossa(g, m) == null) 
+							{
+								//pesco (applico mossa) ed esco dal ciclo
+								if (tv.scegliTraDue("carta non compatibile", "riprova", "pesca") == 1) 
+								{
+									m.setTipoMossa(TipoMossa.PESCA);
+									gestisciPescaggioInterno(g, m);
 									break;
-								}
+								} 
+								//riprovo--> scelgo un'altra carta
 								else
-									m=new Mossa(TipoMossa.GIOCA_CARTA,tv.scegliCarta(partita.getCartaCorrente().toString(), g));
-							}
-							else {
-								if(m.getCartaMossa().getColore()!=Colore.NERO)
-									tv.stampaMessaggio(g.getNome()+" ha giocato la carta: "+m.getCartaMossa());
-								if(m.getTipoMossa()==TipoMossa.SCEGLI_COLORE) {
-									m.getCartaMossa().setColore(tv.scegliColore());
-									tv.stampaMessaggio(g.getNome()+" ha cambiato il colore sul banco a "+m.getCartaMossa().getColore().name());
-								}
-								else
-									break;
+									m.setCartaScelta(tv.scegliCarta(partita.getCartaCorrente().toString(), g));
+							} 
+							//la carta è giocabile--> verifico se colore è da cambiare o no
+							else 
+							{
+								tv.stampaMessaggio(g.getNome() + " ha giocato la carta: " + m.getCartaScelta());
+								//devo cambiare il colore
+								if (m.getCartaScelta().getColore() == Colore.NERO)
+								{
+									m.setTipoMossa(TipoMossa.SCEGLI_COLORE);
+									m.getCartaScelta().setColore(tv.scegliColore());
+									tv.stampaMessaggio(g.getNome() + " ha cambiato il colore sul banco a "
+											+ m.getCartaScelta().getColore().name());
+								} 
+								//non devo (più) cambiare il colore--> esco dal ciclo
+								partita.applicaMossa(g, m);
+								break;
 							}
 						} while (true);
 					}
@@ -131,18 +139,22 @@ public class TemporaryController {
 	}
 	
 	private void gestisciPescaggioInterno(Giocatore g, Mossa m) {
+		//il pescaggio non ha ulteriori effetti (la carta pescata non è giocabile)
 		if (partita.applicaMossa(g, m) == null) {
-			
-		} else {
+			;
+		} 
+		//il pescaggio ha restituito una carta giocabile--> posso scegliere cosa farne
+		else 
+		{
 			if (tv.scegliTraDue(
-					"Puoi giocare la carta che hai pescato:" + m.getCartaMossa() + " Scegli", "tienila",
+					"Puoi giocare la carta che hai pescato:" + m.getCartaScelta() + " Scegli", "tienila",
 					"giocala") == 1)
 				
-				partita.applicaMossa(g, new Mossa(TipoMossa.GIOCA_CARTA, m.getCartaMossa()));
+				partita.applicaMossa(g, m);
 		}
 	}
-	*/
 	
+	/*
 	private void gestisciPescaggio(Giocatore g) {
 		int index = -1;
 		Carta c = partita.pescaCarta();
@@ -200,6 +212,7 @@ public class TemporaryController {
 		tv.stampaMessaggio(g.getNome()+" ha pescato");
 		gestisciPescaggio(g);
 	}
+	*/
 	
 	private void setPartitaIF(ArrayList<Giocatore> giocatori, Partita partita) {
 		for(Giocatore g:giocatori) {

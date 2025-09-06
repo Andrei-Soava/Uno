@@ -1,13 +1,9 @@
 package prova;
 
-import java.util.ArrayList;
 
 import org.apache.logging.log4j.*;
 
 import controllore.TemporaryController;
-import modello.*;
-import modello.giocatori.*;
-import vista.TemporaryView;
 
 /**
  * Hello world!
@@ -22,7 +18,7 @@ public class App {
         logger.error("MOSTRATO DI DEFAULT");
         
         TemporaryController tc=new TemporaryController();
-        tc.configuraNuovaPartita();
+        tc.configuraNuovaPartitaVsBot();
         tc.avviaPartita();
         
         

@@ -16,11 +16,19 @@ public class Mossa {
 		this(tipo,null);
 	}
 	
-	public Carta getCartaMossa() {
+	public Carta getCartaScelta() {
 		return cartaScelta;
+	}
+	
+	public void setCartaScelta(Carta c) {
+		this.cartaScelta=c;
 	}
 	
 	public TipoMossa getTipoMossa() {
 		return tipo;
+	}
+	
+	public void setTipoMossa(TipoMossa tipo) {
+		this.tipo=tipo;
 	}
 }
