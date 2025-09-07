@@ -4,6 +4,8 @@
 
 package modello.carte;
 
+import modello.Partita;
+
 /************************************************************/
 /**
  * classe che modella una carta speciale (estende carta)
@@ -15,15 +17,49 @@ package modello.carte;
  * giocabileSu()--> override da carta (guardare lì per semantica)
  */
 public class CartaSpeciale extends Carta {
+	public enum TipoSpeciale {
+		
+		PIU_DUE,
+		
+		PIU_QUATTRO,
+		
+		BLOCCA,
+		
+		INVERTI,
+		
+		JOLLY
+		;
+	}
 	private final TipoSpeciale tipo;
 	
 	public CartaSpeciale(Colore colore, TipoSpeciale tipo) {
 		super(colore);
 		this.tipo=tipo;
 	}
-	/**
-	 * 
-	 */
+	
+	@Override
+	public void applicaEffetto(Partita p) {
+			switch (this.getTipo()) {
+			case PIU_DUE:
+				p.prossimoGiocatore();
+				p.getGiocatoreCorrente().getMano().aggiungiCarta((p.getMazzo().pescaN(2)));
+				break;
+			case PIU_QUATTRO:
+				p.prossimoGiocatore();
+				p.getGiocatoreCorrente().getMano().aggiungiCarta((p.getMazzo().pescaN(4)));
+				break;
+			case BLOCCA:
+				p.prossimoGiocatore();
+				break;
+			case INVERTI:
+				p.cambiaDirezione();
+				break;
+			default:
+				p.prossimoGiocatore();
+				break;
+			}
+	}
+	
 	public boolean giocabileSu(Carta c) {
 		if(this.colore==c.colore || this.colore==Colore.NERO)
 			return true;
@@ -32,12 +68,6 @@ public class CartaSpeciale extends Carta {
 		return false;
 	}
 
-	/**
-	 * 
-	 */
-	public void applicaEffetto() {
-	}
-	
 	public TipoSpeciale getTipo() {
 		return tipo;
 	}

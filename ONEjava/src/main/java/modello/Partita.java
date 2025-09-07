@@ -59,12 +59,17 @@ public class Partita implements PartitaIF {
 			g.getMano().aggiungiCarta(mazzo.pescaN(7));
 			//g.getMano().aggiungiCarta(new CartaSpeciale(Colore.NERO,TipoSpeciale.PIU_QUATTRO));
 			//g.getMano().aggiungiCarta(new CartaSpeciale(Colore.NERO,TipoSpeciale.PIU_QUATTRO));
+			//g.getMano().aggiungiCarta(new CartaSpeciale(Colore.GIALLO,TipoSpeciale.PIU_DUE));
+			//g.getMano().aggiungiCarta(new CartaSpeciale(Colore.GIALLO,TipoSpeciale.PIU_DUE));
+			//g.getMano().aggiungiCarta(new CartaNumero(Colore.BLU,2));
+			//g.getMano().aggiungiCarta(new CartaNumero(Colore.GIALLO,4));
 		}
 		Carta first = mazzo.pesca();
 		if (first.getColore() == Colore.NERO) {
 			first.setColore(Colore.scegliColoreCasuale());
 		}
 		setCartaCorrente(first);
+		//setCartaCorrente(new CartaNumero(Colore.ROSSO,0));
 	}
 
 	public void eseguiUnTurno() {
@@ -84,21 +89,30 @@ public class Partita implements PartitaIF {
 	private void setCartaCorrente(Carta cartaCorrente) {
 		this.cartaCorrente = cartaCorrente;
 	}
+	
+	public Mazzo getMazzo() {
+		return this.mazzo;
+	}
+	
+	public void cambiaDirezione() {
+		direzione=!direzione;
+	}
 
 	public Giocatore getGiocatoreCorrente() {
 		return navigatore.corrente();
 	}
 
-	private Giocatore vediProssimoGiocatore() {
+	public Giocatore vediProssimoGiocatore() {
 		//direzione=true--> orario, direzione=false--> antiorario
 		return direzione ? navigatore.vediProssimo() : navigatore.vediPrecedente();
 	}
 
-	private void prossimoGiocatore() {
+	public void prossimoGiocatore() {
 		navigatore.setCorrente(vediProssimoGiocatore());
 	}
 
 	private void applicaEffettoCarta(Carta c) {
+		/*
 		if (c instanceof CartaSpeciale) {
 			switch (((CartaSpeciale) c).getTipo()) {
 			case PIU_DUE:
@@ -120,6 +134,8 @@ public class Partita implements PartitaIF {
 				break;
 			}
 		}
+		*/
+		c.applicaEffetto(this);
 	}
 	
 	
@@ -183,6 +199,7 @@ public class Partita implements PartitaIF {
 	@Override
 	public Carta pescaCarta() {
 		return mazzo.pesca();
+		//return new CartaSpeciale(Colore.NERO,TipoSpeciale.JOLLY);
 	}
 
 	@Override

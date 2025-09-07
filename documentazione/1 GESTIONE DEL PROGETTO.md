@@ -58,4 +58,5 @@ Esempio COMPLETO:
 - 05/09, Andrei, (implementazione base del pattern MVC da console (con un controllore temporaneo e con una view temporanea)+ eseguito refactoring generale del codice+ Pattern PLAYER-ROLE per modalità bot e non-bot), GUI o persistenza;
 - 06/09, Andrei, (separazione mvc più netta, eliminazione temporanea delle modalità (e quindi del player role pattern) e prove con altre versione di avviaPartita()), null;
 - 07/09, Andrei, (completamento del commit precedente: MVC puro tra le componenti, specialmente tra model e controller), GUI o persistenza
+- 07/09, Andrei, (sistemazione alcuni bug durante esecuzione + spostamento logica applicaEffettoCarta dentro CartaSpeciale +spostamento enumerato TipoSpeciale dentro CartaSpeciale ), null;
 

@@ -4,6 +4,8 @@
 
 package modello.carte;
 
+import modello.Partita;
+
 /************************************************************/
 
 /**
@@ -22,9 +24,12 @@ public class CartaNumero extends Carta {
 		super(colore);
 		this.numero=numero;
 	}
-	/**
-	 * 
-	 */
+	
+	@Override
+	public void applicaEffetto(Partita p) {
+		
+	}
+	
 	@Override
 	public boolean giocabileSu(Carta c) {
 		if(this.colore==c.colore || this.colore==Colore.NERO)

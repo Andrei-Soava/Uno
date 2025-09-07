@@ -77,13 +77,13 @@ public class TemporaryController {
 		try {
 			while (!partita.verificaFinePartita()) {
 				Giocatore g=partita.getGiocatoreCorrente();
+				//se giocatore è un bot--> gestisco le sue scelte E aggiunta/rimozione carte della mano dentro il giocatore (applicaEffetto non serve)
 				if(g.isBot()) {
 					Mossa m=g.scegliMossaAutomatica();
 					if(m.getTipoMossa()==TipoMossa.PESCA)
 						tv.stampaMessaggio(g.getNome()+" ha pescato");
 					else
 						tv.stampaMessaggio(g.getNome() + " ha giocato la carta: " + m.getCartaScelta());
-					partita.applicaMossa(g, m);
 				}
 				else {
 					Mossa m = tv.scegliMossa(partita.getCartaCorrente().toString(), g);
@@ -103,8 +103,10 @@ public class TemporaryController {
 								if (tv.scegliTraDue("carta non compatibile", "riprova", "pesca") == 1) 
 								{
 									m.setTipoMossa(TipoMossa.PESCA);
-									gestisciPescaggioInterno(g, m);
-									break;
+									//se pescaggio NON fornisce carta valida--> esco dal ciclo
+									//altrimenti--> la carta è giocabile quindi ulteriore ciclo
+									if(!gestisciPescaggioInterno(g, m));
+										break;
 								} 
 								//riprovo--> scelgo un'altra carta
 								else
@@ -134,23 +136,33 @@ public class TemporaryController {
 			}
 			tv.stampaMessaggio("Ha vinto "+partita.getGiocatoreCorrente().getNome()+"!");
 		} catch (NullPointerException e) {
+			e.printStackTrace();
 			tv.stampaMessaggio("Non hai configurato una nuova partita!");
 		}
 	}
 	
-	private void gestisciPescaggioInterno(Giocatore g, Mossa m) {
+	private boolean gestisciPescaggioInterno(Giocatore g, Mossa m) {
 		//il pescaggio non ha ulteriori effetti (la carta pescata non è giocabile)
 		if (partita.applicaMossa(g, m) == null) {
-			;
+			return false;
 		} 
 		//il pescaggio ha restituito una carta giocabile--> posso scegliere cosa farne
 		else 
 		{
 			if (tv.scegliTraDue(
 					"Puoi giocare la carta che hai pescato:" + m.getCartaScelta() + " Scegli", "tienila",
-					"giocala") == 1)
-				
+					"giocala") == 1) {
+				if (m.getCartaScelta().getColore() == Colore.NERO)
+				{
+					m.setTipoMossa(TipoMossa.SCEGLI_COLORE);
+					m.getCartaScelta().setColore(tv.scegliColore());
+					tv.stampaMessaggio(g.getNome() + " ha cambiato il colore sul banco a "
+							+ m.getCartaScelta().getColore().name());
+				} 
 				partita.applicaMossa(g, m);
+			}
+				
+			return true;
 		}
 	}
 	

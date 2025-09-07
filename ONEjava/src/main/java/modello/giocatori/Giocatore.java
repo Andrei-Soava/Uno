@@ -91,17 +91,22 @@ public abstract class Giocatore {
 					c.setColore(Colore.scegliColoreCasuale());
 					m.setTipoMossa(TipoMossa.SCEGLI_COLORE);
 				}
+				rimuoveCarta(c);
+				partitaIF.giocaCarta(c);
 				return m;
 			}
 		}
-		m=new Mossa(TipoMossa.PESCA);
 		Carta pescata=partitaIF.pescaCarta();
+		aggiungiCarta(pescata);
+		m=new Mossa(TipoMossa.PESCA,pescata);
 		if(partitaIF.tentaGiocaCarta(pescata)) {
 			m.setTipoMossa(TipoMossa.GIOCA_CARTA);
 			if(pescata.getColore()==Colore.NERO) {
 				pescata.setColore(Colore.scegliColoreCasuale());
 				m.setTipoMossa(TipoMossa.SCEGLI_COLORE);
 			}
+			rimuoveCarta(pescata);
+			partitaIF.giocaCarta(pescata);
 		}
 		return m;
 		

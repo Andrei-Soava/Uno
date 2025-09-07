@@ -4,6 +4,8 @@
 
 package modello.carte;
 
+import modello.Partita;
+
 /************************************************************/
 
 /**
@@ -31,6 +33,8 @@ public abstract class Carta {
 	public void setColore(Colore colore) {
 		this.colore = colore;
 	}
+	
+	public abstract void applicaEffetto(Partita p);
 
 	/**
 	 * 
