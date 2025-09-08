@@ -59,4 +59,5 @@ Esempio COMPLETO:
 - 06/09, Andrei, (separazione mvc più netta, eliminazione temporanea delle modalità (e quindi del player role pattern) e prove con altre versione di avviaPartita()), null;
 - 07/09, Andrei, (completamento del commit precedente: MVC puro tra le componenti, specialmente tra model e controller), GUI o persistenza
 - 07/09, Andrei, (sistemazione alcuni bug durante esecuzione + spostamento logica applicaEffettoCarta dentro CartaSpeciale +spostamento enumerato TipoSpeciale dentro CartaSpeciale ), null;
+- 08/09, Andrei, (implementazione di salvataggio/caricamento Partita (utilizzando serializzazione/deserializzazione in JSON con Jackson)--> ristrutturazione classi in modo da permettere il processo; ulteriore modularizzazione del controllore e aggiunte a package 'persistenza'), GUI gioco
 

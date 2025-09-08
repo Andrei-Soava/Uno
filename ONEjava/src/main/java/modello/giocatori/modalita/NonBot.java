@@ -4,7 +4,7 @@ import modello.PartitaIF;
 import modello.carte.Carta;
 import modello.carte.Colore;
 import modello.giocatori.Giocatore;
-import vista.TemporaryView;
+import vista.VistaTemporanea;
 
 /**
  * classe che implementa il giocatore (gioco manuale)
@@ -12,7 +12,7 @@ import vista.TemporaryView;
 public class NonBot implements Modalita {
 
 	@Override
-	public void scegliMossa(String cartaCorrente, TemporaryView tv, Giocatore g) {
+	public void scegliMossa(String cartaCorrente, VistaTemporanea tv, Giocatore g) {
 		PartitaIF partitaIF=g.getInterfacciaPartita();
 		tv.stampaMessaggio(
 				"Turno di " + g.getNome() + "\n" + "CARTA CORRENTE: " + cartaCorrente + "\n" + g.mostraCarteInMano());
@@ -50,7 +50,7 @@ public class NonBot implements Modalita {
 		}
 	}
 	
-	private void funzionePescaggio(TemporaryView tv, PartitaIF partitaIF, Giocatore g) {
+	private void funzionePescaggio(VistaTemporanea tv, PartitaIF partitaIF, Giocatore g) {
 		int index = -1;
 		Carta c = partitaIF.pescaCarta();
 		if (partitaIF.tentaGiocaCarta(c)) {

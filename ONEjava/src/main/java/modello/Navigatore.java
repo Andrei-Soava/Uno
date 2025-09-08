@@ -2,6 +2,8 @@ package modello;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * classe accessoria utile per la ciclazione dei giocatori durante la partita
  * 
@@ -15,9 +17,32 @@ import java.util.List;
  * @param <T>
  */
 public class Navigatore<T> {
+	@JsonIgnore
     private List<T> items;
     private int indiceCorrente;
+    
+    @JsonIgnore
+    public List<T> getItems() {
+		return items;
+	}
 
+    @JsonIgnore
+	public void setItems(List<T> items) {
+		this.items = items;
+	}
+
+	public int getIndiceCorrente() {
+		return indiceCorrente;
+	}
+
+	public void setIndiceCorrente(int indiceCorrente) {
+		this.indiceCorrente = indiceCorrente;
+	}
+
+
+    //costruttore vuoto per Jackson
+    public Navigatore() {items=null; indiceCorrente=0;}
+    
     public Navigatore(List<T> items) {
         if (items == null || items.isEmpty()) {
             throw new IllegalArgumentException("La lista non può essere vuota");

@@ -18,8 +18,11 @@ import modello.Partita;
  * giocabileSu()--> override da carta (guardare lì per semantica)
  */
 public class CartaNumero extends Carta {
-	private final int numero;
+	private int numero;
 
+	//costruttore vuoto per Jackson
+	public CartaNumero() {this.numero = 0;}
+	
 	public CartaNumero(Colore colore, int numero) {
 		super(colore);
 		this.numero=numero;
@@ -41,6 +44,10 @@ public class CartaNumero extends Carta {
 	
 	public int getNumero() {
 		return numero;
+	}
+	
+	public void setNumero(int n) {
+		this.numero=n;
 	}
 	@Override
 	public String toString() {

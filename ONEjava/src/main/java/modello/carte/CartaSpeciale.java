@@ -30,7 +30,10 @@ public class CartaSpeciale extends Carta {
 		JOLLY
 		;
 	}
-	private final TipoSpeciale tipo;
+	private TipoSpeciale tipo;
+	
+	//costruttore vuoto per Jackson
+	public CartaSpeciale() {this.tipo = null;}
 	
 	public CartaSpeciale(Colore colore, TipoSpeciale tipo) {
 		super(colore);
@@ -70,6 +73,10 @@ public class CartaSpeciale extends Carta {
 
 	public TipoSpeciale getTipo() {
 		return tipo;
+	}
+	
+	public void setTipo(TipoSpeciale tipo) {
+		this.tipo=tipo;
 	}
 	
 	@Override

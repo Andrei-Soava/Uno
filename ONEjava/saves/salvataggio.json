@@ -1,0 +1,461 @@
+{
+  "giocatori" : [ {
+    "tipoGiocatore" : "anonimo",
+    "nome" : "aaa",
+    "mano" : {
+      "carte" : [ {
+        "tipoCarta" : "numero",
+        "colore" : "ROSSO",
+        "numero" : 2
+      }, {
+        "tipoCarta" : "numero",
+        "colore" : "BLU",
+        "numero" : 2
+      }, {
+        "tipoCarta" : "numero",
+        "colore" : "ROSSO",
+        "numero" : 1
+      }, {
+        "tipoCarta" : "numero",
+        "colore" : "ROSSO",
+        "numero" : 4
+      }, {
+        "tipoCarta" : "numero",
+        "colore" : "VERDE",
+        "numero" : 7
+      }, {
+        "tipoCarta" : "numero",
+        "colore" : "GIALLO",
+        "numero" : 1
+      }, {
+        "tipoCarta" : "numero",
+        "colore" : "BLU",
+        "numero" : 3
+      } ]
+    },
+    "bot" : false
+  }, {
+    "tipoGiocatore" : "anonimo",
+    "nome" : "bbb",
+    "mano" : {
+      "carte" : [ {
+        "tipoCarta" : "numero",
+        "colore" : "GIALLO",
+        "numero" : 5
+      }, {
+        "tipoCarta" : "numero",
+        "colore" : "GIALLO",
+        "numero" : 8
+      }, {
+        "tipoCarta" : "speciale",
+        "colore" : "VERDE",
+        "tipo" : "INVERTI"
+      }, {
+        "tipoCarta" : "numero",
+        "colore" : "GIALLO",
+        "numero" : 8
+      }, {
+        "tipoCarta" : "speciale",
+        "colore" : "ROSSO",
+        "tipo" : "INVERTI"
+      }, {
+        "tipoCarta" : "numero",
+        "colore" : "VERDE",
+        "numero" : 3
+      }, {
+        "tipoCarta" : "numero",
+        "colore" : "ROSSO",
+        "numero" : 6
+      }, {
+        "tipoCarta" : "numero",
+        "colore" : "BLU",
+        "numero" : 5
+      }, {
+        "tipoCarta" : "numero",
+        "colore" : "ROSSO",
+        "numero" : 4
+      }, {
+        "tipoCarta" : "numero",
+        "colore" : "VERDE",
+        "numero" : 5
+      }, {
+        "tipoCarta" : "numero",
+        "colore" : "VERDE",
+        "numero" : 9
+      }, {
+        "tipoCarta" : "numero",
+        "colore" : "VERDE",
+        "numero" : 1
+      }, {
+        "tipoCarta" : "speciale",
+        "colore" : "NERO",
+        "tipo" : "JOLLY"
+      }, {
+        "tipoCarta" : "numero",
+        "colore" : "VERDE",
+        "numero" : 4
+      } ]
+    },
+    "bot" : false
+  } ],
+  "mazzo" : {
+    "carte" : [ {
+      "tipoCarta" : "numero",
+      "colore" : "GIALLO",
+      "numero" : 0
+    }, {
+      "tipoCarta" : "speciale",
+      "colore" : "GIALLO",
+      "tipo" : "INVERTI"
+    }, {
+      "tipoCarta" : "numero",
+      "colore" : "GIALLO",
+      "numero" : 1
+    }, {
+      "tipoCarta" : "numero",
+      "colore" : "ROSSO",
+      "numero" : 9
+    }, {
+      "tipoCarta" : "numero",
+      "colore" : "GIALLO",
+      "numero" : 2
+    }, {
+      "tipoCarta" : "numero",
+      "colore" : "GIALLO",
+      "numero" : 4
+    }, {
+      "tipoCarta" : "numero",
+      "colore" : "BLU",
+      "numero" : 4
+    }, {
+      "tipoCarta" : "numero",
+      "colore" : "GIALLO",
+      "numero" : 7
+    }, {
+      "tipoCarta" : "numero",
+      "colore" : "GIALLO",
+      "numero" : 6
+    }, {
+      "tipoCarta" : "numero",
+      "colore" : "ROSSO",
+      "numero" : 7
+    }, {
+      "tipoCarta" : "numero",
+      "colore" : "BLU",
+      "numero" : 9
+    }, {
+      "tipoCarta" : "numero",
+      "colore" : "GIALLO",
+      "numero" : 9
+    }, {
+      "tipoCarta" : "numero",
+      "colore" : "BLU",
+      "numero" : 6
+    }, {
+      "tipoCarta" : "numero",
+      "colore" : "BLU",
+      "numero" : 4
+    }, {
+      "tipoCarta" : "numero",
+      "colore" : "GIALLO",
+      "numero" : 3
+    }, {
+      "tipoCarta" : "speciale",
+      "colore" : "VERDE",
+      "tipo" : "PIU_DUE"
+    }, {
+      "tipoCarta" : "numero",
+      "colore" : "ROSSO",
+      "numero" : 3
+    }, {
+      "tipoCarta" : "speciale",
+      "colore" : "GIALLO",
+      "tipo" : "BLOCCA"
+    }, {
+      "tipoCarta" : "numero",
+      "colore" : "BLU",
+      "numero" : 1
+    }, {
+      "tipoCarta" : "speciale",
+      "colore" : "ROSSO",
+      "tipo" : "PIU_DUE"
+    }, {
+      "tipoCarta" : "numero",
+      "colore" : "BLU",
+      "numero" : 9
+    }, {
+      "tipoCarta" : "speciale",
+      "colore" : "GIALLO",
+      "tipo" : "PIU_DUE"
+    }, {
+      "tipoCarta" : "speciale",
+      "colore" : "ROSSO",
+      "tipo" : "INVERTI"
+    }, {
+      "tipoCarta" : "speciale",
+      "colore" : "NERO",
+      "tipo" : "JOLLY"
+    }, {
+      "tipoCarta" : "numero",
+      "colore" : "VERDE",
+      "numero" : 8
+    }, {
+      "tipoCarta" : "numero",
+      "colore" : "VERDE",
+      "numero" : 5
+    }, {
+      "tipoCarta" : "speciale",
+      "colore" : "VERDE",
+      "tipo" : "INVERTI"
+    }, {
+      "tipoCarta" : "speciale",
+      "colore" : "NERO",
+      "tipo" : "JOLLY"
+    }, {
+      "tipoCarta" : "numero",
+      "colore" : "VERDE",
+      "numero" : 2
+    }, {
+      "tipoCarta" : "numero",
+      "colore" : "BLU",
+      "numero" : 7
+    }, {
+      "tipoCarta" : "numero",
+      "colore" : "VERDE",
+      "numero" : 4
+    }, {
+      "tipoCarta" : "speciale",
+      "colore" : "VERDE",
+      "tipo" : "BLOCCA"
+    }, {
+      "tipoCarta" : "numero",
+      "colore" : "GIALLO",
+      "numero" : 4
+    }, {
+      "tipoCarta" : "speciale",
+      "colore" : "GIALLO",
+      "tipo" : "INVERTI"
+    }, {
+      "tipoCarta" : "speciale",
+      "colore" : "GIALLO",
+      "tipo" : "PIU_DUE"
+    }, {
+      "tipoCarta" : "numero",
+      "colore" : "BLU",
+      "numero" : 3
+    }, {
+      "tipoCarta" : "speciale",
+      "colore" : "BLU",
+      "tipo" : "INVERTI"
+    }, {
+      "tipoCarta" : "numero",
+      "colore" : "GIALLO",
+      "numero" : 7
+    }, {
+      "tipoCarta" : "speciale",
+      "colore" : "GIALLO",
+      "tipo" : "BLOCCA"
+    }, {
+      "tipoCarta" : "speciale",
+      "colore" : "VERDE",
+      "tipo" : "PIU_DUE"
+    }, {
+      "tipoCarta" : "numero",
+      "colore" : "BLU",
+      "numero" : 5
+    }, {
+      "tipoCarta" : "numero",
+      "colore" : "ROSSO",
+      "numero" : 8
+    }, {
+      "tipoCarta" : "numero",
+      "colore" : "ROSSO",
+      "numero" : 7
+    }, {
+      "tipoCarta" : "numero",
+      "colore" : "BLU",
+      "numero" : 2
+    }, {
+      "tipoCarta" : "speciale",
+      "colore" : "BLU",
+      "tipo" : "BLOCCA"
+    }, {
+      "tipoCarta" : "numero",
+      "colore" : "ROSSO",
+      "numero" : 3
+    }, {
+      "tipoCarta" : "numero",
+      "colore" : "BLU",
+      "numero" : 7
+    }, {
+      "tipoCarta" : "numero",
+      "colore" : "GIALLO",
+      "numero" : 5
+    }, {
+      "tipoCarta" : "speciale",
+      "colore" : "BLU",
+      "tipo" : "BLOCCA"
+    }, {
+      "tipoCarta" : "numero",
+      "colore" : "GIALLO",
+      "numero" : 6
+    }, {
+      "tipoCarta" : "numero",
+      "colore" : "VERDE",
+      "numero" : 1
+    }, {
+      "tipoCarta" : "numero",
+      "colore" : "VERDE",
+      "numero" : 6
+    }, {
+      "tipoCarta" : "speciale",
+      "colore" : "BLU",
+      "tipo" : "INVERTI"
+    }, {
+      "tipoCarta" : "numero",
+      "colore" : "ROSSO",
+      "numero" : 0
+    }, {
+      "tipoCarta" : "numero",
+      "colore" : "ROSSO",
+      "numero" : 5
+    }, {
+      "tipoCarta" : "numero",
+      "colore" : "GIALLO",
+      "numero" : 9
+    }, {
+      "tipoCarta" : "speciale",
+      "colore" : "BLU",
+      "tipo" : "PIU_DUE"
+    }, {
+      "tipoCarta" : "numero",
+      "colore" : "ROSSO",
+      "numero" : 5
+    }, {
+      "tipoCarta" : "numero",
+      "colore" : "BLU",
+      "numero" : 6
+    }, {
+      "tipoCarta" : "numero",
+      "colore" : "VERDE",
+      "numero" : 8
+    }, {
+      "tipoCarta" : "numero",
+      "colore" : "VERDE",
+      "numero" : 3
+    }, {
+      "tipoCarta" : "speciale",
+      "colore" : "BLU",
+      "tipo" : "PIU_DUE"
+    }, {
+      "tipoCarta" : "numero",
+      "colore" : "BLU",
+      "numero" : 8
+    }, {
+      "tipoCarta" : "speciale",
+      "colore" : "ROSSO",
+      "tipo" : "BLOCCA"
+    }, {
+      "tipoCarta" : "numero",
+      "colore" : "VERDE",
+      "numero" : 7
+    }, {
+      "tipoCarta" : "numero",
+      "colore" : "VERDE",
+      "numero" : 6
+    }, {
+      "tipoCarta" : "speciale",
+      "colore" : "NERO",
+      "tipo" : "JOLLY"
+    }, {
+      "tipoCarta" : "numero",
+      "colore" : "GIALLO",
+      "numero" : 2
+    }, {
+      "tipoCarta" : "speciale",
+      "colore" : "ROSSO",
+      "tipo" : "BLOCCA"
+    }, {
+      "tipoCarta" : "numero",
+      "colore" : "ROSSO",
+      "numero" : 9
+    }, {
+      "tipoCarta" : "numero",
+      "colore" : "BLU",
+      "numero" : 8
+    }, {
+      "tipoCarta" : "numero",
+      "colore" : "VERDE",
+      "numero" : 9
+    }, {
+      "tipoCarta" : "speciale",
+      "colore" : "ROSSO",
+      "tipo" : "PIU_DUE"
+    }, {
+      "tipoCarta" : "numero",
+      "colore" : "ROSSO",
+      "numero" : 1
+    }, {
+      "tipoCarta" : "numero",
+      "colore" : "BLU",
+      "numero" : 0
+    }, {
+      "tipoCarta" : "numero",
+      "colore" : "ROSSO",
+      "numero" : 6
+    }, {
+      "tipoCarta" : "numero",
+      "colore" : "VERDE",
+      "numero" : 2
+    }, {
+      "tipoCarta" : "numero",
+      "colore" : "ROSSO",
+      "numero" : 2
+    }, {
+      "tipoCarta" : "speciale",
+      "colore" : "NERO",
+      "tipo" : "PIU_QUATTRO"
+    }, {
+      "tipoCarta" : "numero",
+      "colore" : "ROSSO",
+      "numero" : 8
+    }, {
+      "tipoCarta" : "speciale",
+      "colore" : "NERO",
+      "tipo" : "PIU_QUATTRO"
+    }, {
+      "tipoCarta" : "numero",
+      "colore" : "BLU",
+      "numero" : 1
+    }, {
+      "tipoCarta" : "numero",
+      "colore" : "GIALLO",
+      "numero" : 3
+    } ]
+  },
+  "pilaScarti" : {
+    "scarti" : [ {
+      "tipoCarta" : "speciale",
+      "colore" : "VERDE",
+      "tipo" : "BLOCCA"
+    }, {
+      "tipoCarta" : "numero",
+      "colore" : "VERDE",
+      "numero" : 0
+    }, {
+      "tipoCarta" : "speciale",
+      "colore" : "NERO",
+      "tipo" : "PIU_QUATTRO"
+    } ]
+  },
+  "navigatore" : {
+    "indiceCorrente" : 1
+  },
+  "cartaCorrente" : {
+    "tipoCarta" : "speciale",
+    "colore" : "BLU",
+    "tipo" : "PIU_QUATTRO"
+  },
+  "direzione" : true,
+  "effettoAttivato" : true
+}

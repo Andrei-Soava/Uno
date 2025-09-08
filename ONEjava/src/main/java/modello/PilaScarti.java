@@ -4,7 +4,6 @@
 
 package modello;
 
-import java.util.List;
 import java.util.Stack;
 
 import modello.carte.Carta;
@@ -23,12 +22,16 @@ import modello.carte.Carta;
 public class PilaScarti {
 	private Stack<Carta> scarti;
 	
-	public PilaScarti() {
-		this.scarti=new Stack<>();
+	public Stack<Carta> getScarti() {
+		return scarti;
 	}
 
-	public List<Carta> getCarte() {
-		return scarti;
+	public void setScarti(Stack<Carta> scarti) {
+		this.scarti = scarti;
+	}
+
+	public PilaScarti() {
+		this.scarti=new Stack<>();
 	}
 
 	public void mettiCarta(Carta c) {

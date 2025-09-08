@@ -6,8 +6,11 @@ package modello;
 
 import java.util.ArrayList;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import modello.Mossa.TipoMossa;
 import modello.carte.*;
+import modello.carte.CartaSpeciale.TipoSpeciale;
 import modello.giocatori.Giocatore;
 
 /************************************************************/
@@ -43,9 +46,13 @@ public class Partita implements PartitaIF {
 	private boolean direzione;
 	private boolean effettoAttivato;
 
+	//costruttore vuoto per Jackson
+	public Partita() {}
+	
 	public Partita(ArrayList<Giocatore> giocatori) {
 		this.giocatori = giocatori;
 		this.mazzo = new Mazzo();
+		this.mazzo.inizializzaNuovoMazzo();
 		this.pilaScarti = new PilaScarti();
 		this.navigatore = new Navigatore<>(giocatori);
 		this.cartaCorrente = null;
@@ -97,7 +104,8 @@ public class Partita implements PartitaIF {
 	public void cambiaDirezione() {
 		direzione=!direzione;
 	}
-
+	
+	@JsonIgnore
 	public Giocatore getGiocatoreCorrente() {
 		return navigatore.corrente();
 	}
@@ -112,29 +120,6 @@ public class Partita implements PartitaIF {
 	}
 
 	private void applicaEffettoCarta(Carta c) {
-		/*
-		if (c instanceof CartaSpeciale) {
-			switch (((CartaSpeciale) c).getTipo()) {
-			case PIU_DUE:
-				prossimoGiocatore();
-				getGiocatoreCorrente().getMano().aggiungiCarta((mazzo.pescaN(2)));
-				break;
-			case PIU_QUATTRO:
-				prossimoGiocatore();
-				getGiocatoreCorrente().getMano().aggiungiCarta((mazzo.pescaN(4)));
-				break;
-			case BLOCCA:
-				prossimoGiocatore();
-				break;
-			case INVERTI:
-				direzione = (!direzione);
-				break;
-			default:
-				prossimoGiocatore();
-				break;
-			}
-		}
-		*/
 		c.applicaEffetto(this);
 	}
 	
@@ -209,8 +194,60 @@ public class Partita implements PartitaIF {
 
 	@Override
 	public void giocaCarta(Carta c) {
-		pilaScarti.mettiCarta(cartaCorrente);
+		if (cartaCorrente != null && cartaCorrente != c) { 
+			if(cartaCorrente instanceof CartaSpeciale && (((CartaSpeciale)cartaCorrente).getTipo()==TipoSpeciale.JOLLY
+						||((CartaSpeciale)cartaCorrente).getTipo()==TipoSpeciale.PIU_QUATTRO))
+					cartaCorrente.setColore(Colore.NERO);
+			
+	        pilaScarti.mettiCarta(cartaCorrente);
+	    }
 		setCartaCorrente(c);
 		effettoAttivato = false;
 	}
+
+	public ArrayList<Giocatore> getGiocatori() {
+		return giocatori;
+	}
+
+	public void setGiocatori(ArrayList<Giocatore> giocatori) {
+		this.giocatori = giocatori;
+	}
+
+	public PilaScarti getPilaScarti() {
+		return pilaScarti;
+	}
+
+	public void setPilaScarti(PilaScarti pilaScarti) {
+		this.pilaScarti = pilaScarti;
+	}
+
+	public Navigatore<Giocatore> getNavigatore() {
+		return navigatore;
+	}
+
+	public void setNavigatore(Navigatore<Giocatore> navigatore) {
+		this.navigatore = navigatore;
+	}
+
+	public boolean isDirezione() {
+		return direzione;
+	}
+
+	public void setDirezione(boolean direzione) {
+		this.direzione = direzione;
+	}
+
+	public boolean isEffettoAttivato() {
+		return effettoAttivato;
+	}
+
+	public void setEffettoAttivato(boolean effettoAttivato) {
+		this.effettoAttivato = effettoAttivato;
+	}
+
+	public void setMazzo(Mazzo mazzo) {
+		this.mazzo = mazzo;
+	}
+	
+	
 }

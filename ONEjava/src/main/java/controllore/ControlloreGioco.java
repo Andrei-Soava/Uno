@@ -1,22 +1,56 @@
 package controllore;
 
 import java.util.ArrayList;
-
 import modello.Mossa;
 import modello.Mossa.TipoMossa;
 import modello.Partita;
 import modello.carte.Colore;
 import modello.giocatori.Giocatore;
 import modello.giocatori.GiocatoreAnonimo;
-import vista.TemporaryView;
+import vista.VistaTemporanea;
 
-public class TemporaryController {
-	private TemporaryView tv;
+/**
+ * classe centrale per l'esecuzione del gioco
+ * 
+ * attributi importanti:
+ * -tv--> riferimento a VistaTemporanea per raccolta input durante il gioco
+ * -partita--> riferimento alla partita attualmente in corso
+ * -cp--> riferimento a ControllorePersistenza per gestire salvataggi/caricamenti di partita
+ * 
+ * metodi importanti:
+ * -configuraPartita--> inizializza una nuova partita senza avviarla
+ * -configuraPartitaVsBot--> come sopra ma solo un giocatore è umano
+ * -avviaPartita--> loop di gioco
+ * -caricaPartita--> scorciatoia per caricare partita tramite cp
+ * 
+ */
+public class ControlloreGioco {
+	private VistaTemporanea tv;
 	private Partita partita;
+	private ControllorePersistenza cp;
 
-	public TemporaryController() {
-		this.tv = new TemporaryView();
+	public ControlloreGioco() {
+		this.tv = new VistaTemporanea();
+		this.cp=new ControllorePersistenza(null);
 	}
+	
+	public VistaTemporanea getTv() {
+		return tv;
+	}
+
+	public Partita getPartita() {
+		return partita;
+	}
+
+	public ControllorePersistenza getCp() {
+		return cp;
+	}
+	
+	public void setPartita(Partita partita) {
+		this.partita = partita;
+	}
+
+
 
 	public void configuraNuovaPartita() {
 		int numero = tv.scegliTraN("Seleziona numero giocatori", 2, 4);
@@ -28,6 +62,9 @@ public class TemporaryController {
 		partita = new Partita(giocatori);
 		setPartitaIF(giocatori, partita);
 		partita.eseguiPrePartita();
+		//da fare solo se persona è loggata
+		cp.setSalvataggioCorrente();
+		//salvataggioCorrente=getNomeDisponibile();
 	}
 	
 	public void configuraNuovaPartitaVsBot() {
@@ -44,36 +81,13 @@ public class TemporaryController {
 		partita = new Partita(giocatori);
 		setPartitaIF(giocatori, partita);
 		partita.eseguiPrePartita();
+		//da fare solo se persona è loggata
+		cp.setSalvataggioCorrente();
+		//salvataggioCorrente=getNomeDisponibile();
 	}
 	
-	/*
 	public void avviaPartita() {
-		try {
-			while (!partita.verificaFinePartita()) {
-				Giocatore g=partita.getGiocatoreCorrente();
-				if(g.isBot()) {
-					scegliMossaAutomatica(g);
-				}
-				else {
-					Mossa m=tv.scegliMossa(partita.getCartaCorrente().toString(), g);
-					if(m.getTipoMossa()==TipoMossa.PESCA) {
-						gestisciPescaggio(g);
-					}
-					else {
-						gestisciSceltaCarta(g);
-					}
-						
-				}
-				partita.eseguiUnTurno();
-			}
-			tv.stampaMessaggio("Ha vinto "+partita.getGiocatoreCorrente().getNome()+"!");
-		} catch (NullPointerException e) {
-			tv.stampaMessaggio("Non hai configurato una nuova partita!");
-		}
-	}
-	*/
-	
-	public void avviaPartita() {
+		cp.salvaPartitaAutomatico(this);
 		try {
 			while (!partita.verificaFinePartita()) {
 				Giocatore g=partita.getGiocatoreCorrente();
@@ -133,6 +147,7 @@ public class TemporaryController {
 
 				}
 				partita.eseguiUnTurno();
+				cp.salvaPartitaAutomatico(this);
 			}
 			tv.stampaMessaggio("Ha vinto "+partita.getGiocatoreCorrente().getNome()+"!");
 		} catch (NullPointerException e) {
@@ -140,6 +155,7 @@ public class TemporaryController {
 			tv.stampaMessaggio("Non hai configurato una nuova partita!");
 		}
 	}
+
 	
 	private boolean gestisciPescaggioInterno(Giocatore g, Mossa m) {
 		//il pescaggio non ha ulteriori effetti (la carta pescata non è giocabile)
@@ -160,75 +176,19 @@ public class TemporaryController {
 							+ m.getCartaScelta().getColore().name());
 				} 
 				partita.applicaMossa(g, m);
-			}
-				
+			}	
 			return true;
 		}
 	}
-	
-	/*
-	private void gestisciPescaggio(Giocatore g) {
-		int index = -1;
-		Carta c = partita.pescaCarta();
-		if (partita.tentaGiocaCarta(c)) {
-			if(!g.isBot())
-				index = tv.scegliTraDue("Puoi giocare la carta che hai pescato:" + c + " Scegli", "tienila", "giocala");
-			else
-				index=1;
-			if (index == 0) {
-				g.aggiungiCarta(c);
-			} else {
-				gestisciGiocaCarta(c,g);
-			}
-		} else {
-			g.aggiungiCarta(c);
-		}
-	}
-	
-	private void gestisciSceltaCarta(Giocatore g){
-		do {
-			Carta c=tv.scegliCarta(partita.getCartaCorrente().toString(), g);
-			if(partita.tentaGiocaCarta(c)) {
-				gestisciGiocaCarta(c,g);
-				break;
-			}
-			else {
-				if(tv.scegliTraDue("carta non compatibile", "riprova", "pesca")==1) {
-					gestisciGiocaCarta(c,g);
-					break;
-				}
-			}
-		} while(true);
-	}
-	
-	private void gestisciGiocaCarta(Carta c, Giocatore g) {
-		tv.stampaMessaggio(g.getNome()+" ha giocato la carta: "+c);
-		if (c.getColore() == Colore.NERO) {
-			if(!g.isBot())
-				c.setColore(tv.scegliColore());
-			else
-				c.setColore(Colore.scegliColoreCasuale());
-			tv.stampaMessaggio(g.getNome()+" ha cambiato il colore sul banco a "+c.getColore().name());
-		}
-		g.rimuoveCarta(c);
-		partita.giocaCarta(c);
-	}
-	
-	private void scegliMossaAutomatica(Giocatore g) {
-		for(Carta c:g.getMano().getCarte()) {
-			if(partita.tentaGiocaCarta(c)) {
-				gestisciGiocaCarta(c,g);
-				return;
-			}
-		}
-		tv.stampaMessaggio(g.getNome()+" ha pescato");
-		gestisciPescaggio(g);
-	}
-	*/
-	
-	private void setPartitaIF(ArrayList<Giocatore> giocatori, Partita partita) {
+		
+	static void setPartitaIF(ArrayList<Giocatore> giocatori, Partita partita) {
 		for(Giocatore g:giocatori) {
 			g.setInterfacciaPartita(partita);
 		}
 	}
+	
+	public void caricaPartita() {
+		cp.caricaPartita(this);
+	}
+	
 }

@@ -4,6 +4,8 @@
 
 package modello.giocatori;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import modello.Mossa;
 import modello.Mossa.TipoMossa;
 import modello.PartitaIF;
@@ -26,16 +28,33 @@ import modello.carte.Colore;
  * aggiungiCarta()--> aggiunge carta in mano
  * rimuoviCarta()--> rimuove carta dalla mano
  * cambiaModalita()--> cambia tra modalita bot e non-bot
- * 
+ * PROVA
  * 
  */
+
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+
+@JsonTypeInfo(
+    use = JsonTypeInfo.Id.NAME, // usa un nome leggibile
+    include = JsonTypeInfo.As.PROPERTY, // aggiungi un campo nel JSON
+    property = "tipoGiocatore" // nome del campo nel JSON
+)
+@JsonSubTypes({
+    @JsonSubTypes.Type(value = GiocatoreAnonimo.class, name = "anonimo")
+    // qui puoi aggiungere altre sottoclassi in futuro
+})
 public abstract class Giocatore {
 	protected String nome;
 	protected boolean haPremutoOne;
 	protected Mano mano;
 	protected boolean bot;
+	@JsonIgnore
 	protected PartitaIF partitaIF;
 
+	//costruttore vuoto per Jackson
+	public Giocatore() {}
+	
 	public Giocatore (String nome) {
 		this.nome=nome;
 		this.mano=new Mano();
@@ -66,6 +85,7 @@ public abstract class Giocatore {
 	public void setPremutoOne() {
 	}
 	
+	@JsonIgnore
 	public PartitaIF getInterfacciaPartita() {
 		return partitaIF;
 	}
