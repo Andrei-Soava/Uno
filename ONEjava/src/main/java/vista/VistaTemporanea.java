@@ -8,11 +8,11 @@ import modello.carte.Carta;
 import modello.carte.Colore;
 import modello.giocatori.Giocatore;
 
-public class TemporaryView {
+public class VistaTemporanea {
 
 	private Scanner sc;
 	
-	public TemporaryView() {
+	public VistaTemporanea() {
 		sc=new Scanner(System.in);
 	}
 	

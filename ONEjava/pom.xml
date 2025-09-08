@@ -9,12 +9,15 @@
 	<name>ONEjava</name>
 	<url>http://maven.apache.org</url>
 	<dependencies>
+
+		<!-- Junit versione 4 -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.13.2</version>
 			<scope>test</scope>
 		</dependency>
+
 		<!-- Log4j 2 API -->
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
@@ -28,5 +31,13 @@
 			<artifactId>log4j-core</artifactId>
 			<version>2.23.1</version>
 		</dependency>
+
+		<!-- Json con Jackson -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.17.0</version>
+		</dependency>
+
 	</dependencies>
 </project>

@@ -18,9 +18,24 @@ import modello.Partita;
  * giocabileSu()--> astratto, confronta la carta giocata(this) con quella sul banco (passato come input)
  * 
  */
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+
+@JsonTypeInfo(
+    use = JsonTypeInfo.Id.NAME,           // usa un nome leggibile
+    include = JsonTypeInfo.As.PROPERTY,   // aggiungi un campo nel JSON
+    property = "tipoCarta"                // nome del campo nel JSON
+)
+@JsonSubTypes({
+    @JsonSubTypes.Type(value = CartaNumero.class, name = "numero"),
+    @JsonSubTypes.Type(value = CartaSpeciale.class, name = "speciale")
+})
 public abstract class Carta {
 	protected Colore colore;
 
+	//costruttore vuoto per Jackson
+	public Carta() {}
+	
 	public Carta(Colore colore) {
 		this.colore=colore;
 	}

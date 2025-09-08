@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Stack;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import modello.carte.*;
 import modello.carte.CartaSpeciale.TipoSpeciale;
 
@@ -34,11 +36,16 @@ import modello.carte.CartaSpeciale.TipoSpeciale;
  */
 public class Mazzo {
 	private Stack<Carta> carte;
+	@JsonIgnore
 	private PilaScarti pila;
 
+	//costruttore vuoto per Jackson
 	public Mazzo() {
 		this.carte=new Stack<>();
-		this.pila=null;
+	}
+	
+	public void inizializzaNuovoMazzo() {
+		this.carte.clear();
 		try {
 			creaMazzo();
 		}catch(IOException e) {
@@ -46,14 +53,25 @@ public class Mazzo {
 		}
 	}
 	
+	public Stack<Carta> getCarte() {
+		return carte;
+	}
+
+	public void setCarte(Stack<Carta> carte) {
+		this.carte = carte;
+	}
+
+	@JsonIgnore
 	public PilaScarti getPila() {
 		return pila;
 	}
 	
+	@JsonIgnore
 	public void setPila(PilaScarti pila) {
 		this.pila = pila;
 	}
 	
+	@JsonIgnore
 	public int getNumeroCarte() {
 		return carte.size();
 	}
@@ -86,21 +104,17 @@ public class Mazzo {
 	    mescola();
 	}
 	
+	@JsonIgnore
 	public void ricostruisciMazzo() {
-		carte.addAll(this.getPila().getCarte());
-		this.getPila().getCarte().removeAll(carte);
+		carte.addAll(this.getPila().getScarti());
+		this.getPila().getScarti().clear();
 		this.mescola();
 	}
 
-	/**
-	 * 
-	 */
 	public Carta pesca() {
-		if (!this.isVuoto())
-			return carte.pop();
-		else
+		if (this.isVuoto())
 			ricostruisciMazzo();
-			return carte.pop();
+		return carte.pop();
 	}
 	
 	public ArrayList<Carta> pescaN(int n) {
@@ -111,9 +125,7 @@ public class Mazzo {
 		return temp;
 	}
 
-	/**
-	 * 
-	 */
+	@JsonIgnore
 	public boolean isVuoto() {
 		return carte.size()==0;
 	}

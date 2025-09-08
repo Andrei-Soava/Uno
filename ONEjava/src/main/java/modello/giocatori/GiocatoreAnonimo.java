@@ -13,6 +13,9 @@ package modello.giocatori;
  */
 
 public class GiocatoreAnonimo extends Giocatore {
+	//costruttore vuoto per Jackson
+	public GiocatoreAnonimo() {}
+	
 	public GiocatoreAnonimo(String nome) {
 		super(nome);
 	}

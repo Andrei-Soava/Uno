@@ -23,7 +23,7 @@ public class Test7 {
 
     @Test
     public void testaRicostruzioneMazzo() {
-        ps.getCarte().addAll(m.pescaN(108));
+        ps.getScarti().addAll(m.pescaN(108));
         assertSame("Mazzo non vuoto",0,m.getNumeroCarte());
         ps.mettiCarta(m.pesca());
         assertSame("Mazzo non ricostruito",107,m.getNumeroCarte());

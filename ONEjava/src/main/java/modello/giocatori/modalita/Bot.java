@@ -4,7 +4,7 @@ import modello.PartitaIF;
 import modello.carte.Carta;
 import modello.carte.Colore;
 import modello.giocatori.Giocatore;
-import vista.TemporaryView;
+import vista.VistaTemporanea;
 
 /**
  * classe che implementa il bot (gioco automatico)
@@ -13,11 +13,11 @@ public class Bot implements Modalita {
 
 
 	@Override
-	public void scegliMossa(String cartaCorrente, TemporaryView tv, Giocatore g) {
+	public void scegliMossa(String cartaCorrente, VistaTemporanea tv, Giocatore g) {
 		scegliMossa(tv, g);
 	}
 
-	private void scegliMossa(TemporaryView tv, Giocatore g) {
+	private void scegliMossa(VistaTemporanea tv, Giocatore g) {
 		PartitaIF partitaIF=g.getInterfacciaPartita();
 		for(Carta c:g.getMano().getCarte()) {
 			if(partitaIF.tentaGiocaCarta(c)) {

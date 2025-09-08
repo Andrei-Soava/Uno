@@ -6,6 +6,8 @@ package modello.giocatori;
 
 import java.util.ArrayList;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import modello.carte.Carta;
 
 /************************************************************/
@@ -43,6 +45,10 @@ public class Mano {
 		return carte;
 	}
 
+	public void setCarte(ArrayList<Carta> carte) {
+		this.carte = carte;
+	}
+	@JsonIgnore
 	public int getNumCarte() {
 		return carte.size();
 	}
