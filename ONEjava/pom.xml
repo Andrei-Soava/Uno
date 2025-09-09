@@ -39,5 +39,39 @@
 			<version>2.17.0</version>
 		</dependency>
 
+		<!-- JavaFX base -->
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-controls</artifactId>
+			<version>21.0.2</version>
+		</dependency>
+
+		<!-- Modulo grafico -->
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-graphics</artifactId>
+			<version>21.0.2</version>
+		</dependency>
+
+		<!-- Modulo FXML (se usi file .fxml) -->
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-fxml</artifactId>
+			<version>21.0.2</version>
+		</dependency>
 	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.openjfx</groupId>
+				<artifactId>javafx-maven-plugin</artifactId>
+				<version>0.0.8</version>
+				<configuration>
+					<mainClass>prova.AppWithMaven</mainClass>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
 </project>

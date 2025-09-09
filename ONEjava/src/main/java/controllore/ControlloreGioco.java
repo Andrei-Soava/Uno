@@ -7,6 +7,8 @@ import modello.Partita;
 import modello.carte.Colore;
 import modello.giocatori.Giocatore;
 import modello.giocatori.GiocatoreAnonimo;
+import vista.InterfacciaVistaTemporanea;
+import vista.VistaGioco;
 import vista.VistaTemporanea;
 
 /**
@@ -25,7 +27,7 @@ import vista.VistaTemporanea;
  * 
  */
 public class ControlloreGioco {
-	private VistaTemporanea tv;
+	private InterfacciaVistaTemporanea tv;
 	private Partita partita;
 	private ControllorePersistenza cp;
 
@@ -34,7 +36,7 @@ public class ControlloreGioco {
 		this.cp=new ControllorePersistenza(null);
 	}
 	
-	public VistaTemporanea getTv() {
+	public InterfacciaVistaTemporanea getTv() {
 		return tv;
 	}
 
@@ -100,14 +102,14 @@ public class ControlloreGioco {
 						tv.stampaMessaggio(g.getNome() + " ha giocato la carta: " + m.getCartaScelta());
 				}
 				else {
-					Mossa m = tv.scegliMossa(partita.getCartaCorrente().toString(), g);
+					Mossa m = tv.scegliMossa(partita.getCartaCorrente(), g);
 					if (m.getTipoMossa() == TipoMossa.PESCA) 
 					{
 						gestisciPescaggioInterno(g,m);
 					} 
 					else 
 					{
-						m.setCartaScelta(tv.scegliCarta(partita.getCartaCorrente().toString(), g));
+						m.setCartaScelta(tv.scegliCarta(partita.getCartaCorrente(), g));
 						do {
 							//se la carta selezionata non è giocabile--> o riprovo o pesco
 							
@@ -124,7 +126,7 @@ public class ControlloreGioco {
 								} 
 								//riprovo--> scelgo un'altra carta
 								else
-									m.setCartaScelta(tv.scegliCarta(partita.getCartaCorrente().toString(), g));
+									m.setCartaScelta(tv.scegliCarta(partita.getCartaCorrente(), g));
 							} 
 							//la carta è giocabile--> verifico se colore è da cambiare o no
 							else 
@@ -190,5 +192,5 @@ public class ControlloreGioco {
 	public void caricaPartita() {
 		cp.caricaPartita(this);
 	}
-	
+		
 }

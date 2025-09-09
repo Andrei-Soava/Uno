@@ -6,6 +6,7 @@ import java.util.List;
 import modello.Partita;
 import persistenza.InterfacciaPersistenza;
 import persistenza.ManagerPersistenza;
+import vista.InterfacciaVistaTemporanea;
 import vista.VistaTemporanea;
 
 /**
@@ -44,7 +45,7 @@ public class ControllorePersistenza {
 
 	// in teoria da utilizzare solo quando si abbandona la partita--> per ora non serve considerarlo
 	public void salvaPartita(ControlloreGioco cg) {
-		VistaTemporanea tv = cg.getTv();
+		InterfacciaVistaTemporanea tv = cg.getTv();
 		Partita partita = cg.getPartita();
 		String nome;
 		do {
@@ -64,7 +65,7 @@ public class ControllorePersistenza {
 	}
 
 	public void salvaPartitaAutomatico(ControlloreGioco cg) {
-		VistaTemporanea tv = cg.getTv();
+		InterfacciaVistaTemporanea tv = cg.getTv();
 		Partita partita = cg.getPartita();
 		// sarà da fare solo se giocatore è loggato
 		try {
@@ -76,7 +77,7 @@ public class ControllorePersistenza {
 	}
 
 	public void caricaPartita(ControlloreGioco cg) {
-		VistaTemporanea tv = cg.getTv();
+		InterfacciaVistaTemporanea tv = cg.getTv();
 		Partita partita = cg.getPartita();
 		List<String> salvataggi = ManagerPersistenza.listaSalvataggi();
 		if (salvataggi.isEmpty()) {
@@ -122,7 +123,7 @@ public class ControllorePersistenza {
 	}
 
 	public void rinominaSalvataggio(ControlloreGioco cg) {
-		VistaTemporanea tv = cg.getTv();
+		InterfacciaVistaTemporanea tv = cg.getTv();
 		List<String> salvataggi = ManagerPersistenza.listaSalvataggi();
 		if (salvataggi.isEmpty()) {
 			tv.stampaMessaggio("Nessun salvataggio trovato.");

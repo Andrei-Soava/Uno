@@ -9,10 +9,6 @@
         "numero" : 2
       }, {
         "tipoCarta" : "numero",
-        "colore" : "BLU",
-        "numero" : 2
-      }, {
-        "tipoCarta" : "numero",
         "colore" : "ROSSO",
         "numero" : 1
       }, {
@@ -90,6 +86,10 @@
         "tipoCarta" : "numero",
         "colore" : "VERDE",
         "numero" : 4
+      }, {
+        "tipoCarta" : "numero",
+        "colore" : "GIALLO",
+        "numero" : 3
       } ]
     },
     "bot" : false
@@ -423,10 +423,6 @@
       "tipoCarta" : "numero",
       "colore" : "BLU",
       "numero" : 1
-    }, {
-      "tipoCarta" : "numero",
-      "colore" : "GIALLO",
-      "numero" : 3
     } ]
   },
   "pilaScarti" : {
@@ -446,6 +442,10 @@
       "tipoCarta" : "speciale",
       "colore" : "NERO",
       "tipo" : "PIU_QUATTRO"
+    }, {
+      "tipoCarta" : "numero",
+      "colore" : "BLU",
+      "numero" : 5
     } ]
   },
   "navigatore" : {
@@ -454,7 +454,7 @@
   "cartaCorrente" : {
     "tipoCarta" : "numero",
     "colore" : "BLU",
-    "numero" : 5
+    "numero" : 2
   },
   "direzione" : true,
   "effettoAttivato" : true

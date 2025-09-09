@@ -8,7 +8,7 @@ import modello.carte.Carta;
 import modello.carte.Colore;
 import modello.giocatori.Giocatore;
 
-public class VistaTemporanea {
+public class VistaTemporanea implements InterfacciaVistaTemporanea{
 
 	private Scanner sc;
 	
@@ -20,15 +20,18 @@ public class VistaTemporanea {
 		sc.close();
 	}
 	
+	@Override
 	public void stampaMessaggio(String s) {
 		System.out.println(s);
 	}
 	
+	@Override
 	public String inserisciStringa(String message) {
 		this.stampaMessaggio(message);
 		return sc.nextLine();
 	}
 	
+	@Override
 	public int scegliTraDue(String message, String optionZero, String optionOne) {
 		int scelta = -1;
 		do { 
@@ -44,6 +47,7 @@ public class VistaTemporanea {
 		return scelta;
 	}
 	
+	@Override
 	public int scegliTraN(String message, int minValue, int maxValue) {
 		int scelta = 0;
 		boolean loop = true;
@@ -68,12 +72,14 @@ public class VistaTemporanea {
 		return scelta;
 	}
 	
+	@Override
 	public Colore scegliColore() {
 		int index = scegliTraN("Scegli un colore: 0->Rosso, 1->Blu, 2->Giallo, 3->Verde", 0, 3);
 		return Colore.values()[index];
 	}
-		
-	public Mossa scegliMossa(String cartaCorrente, Giocatore g) {
+
+	@Override
+	public Mossa scegliMossa(Carta cartaCorrente, Giocatore g) {
 		this.stampaMessaggio(
 				"Turno di " + g.getNome() + "\n" + "CARTA CORRENTE: " + cartaCorrente + "\n" + g.mostraCarteInMano());
 		int index = this.scegliTraDue("scegli azione", "pesca", "gioca carta");
@@ -83,7 +89,8 @@ public class VistaTemporanea {
 			return new Mossa(TipoMossa.GIOCA_CARTA);
 	}
 	
-	public Carta scegliCarta(String cartaCorrente, Giocatore g) {
+	@Override
+	public Carta scegliCarta(Carta cartaCorrente, Giocatore g) {
 		int indexCarta = -1; // variabile separata per la carta
 		String s = "CARTA CORRENTE: " + cartaCorrente + "\n" + g.mostraCarteInMano() + "\n";
 		indexCarta = this.scegliTraN(s, 0, (g.getMano().getNumCarte() - 1));
