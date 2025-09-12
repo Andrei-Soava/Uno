@@ -61,4 +61,5 @@ Esempio COMPLETO:
 - 07/09, Andrei, (sistemazione alcuni bug durante esecuzione + spostamento logica applicaEffettoCarta dentro CartaSpeciale +spostamento enumerato TipoSpeciale dentro CartaSpeciale ), null;
 - 08/09, Andrei, (implementazione di salvataggio/caricamento Partita (utilizzando serializzazione/deserializzazione in JSON con Jackson)--> ristrutturazione classi in modo da permettere il processo; ulteriore modularizzazione del controllore e aggiunte a package 'persistenza'), GUI gioco;
 - 09/09, Andrei, (preparazione/modifiche di alcuni elementi in vista di sviluppo gui con javaFX), inizio GUI gioco;
+- 09/09 - 12/09, Andrei, (versione 1 di ONE offline avente interfaccia grafica con JavaFX -> adattamento ControlloreGioco all'approccio event-driven + gestore salvataggi a livello grafico + implementazioni + implementazioni specifiche (es bottone ONE) + piccoli miglioramenti a classi esistenti + aggiornamento documento 4 (testing)), inizio implementazione lato server;
 

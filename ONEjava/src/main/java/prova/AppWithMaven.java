@@ -4,10 +4,11 @@ import org.apache.logging.log4j.*;
 
 import controllore.ControlloreGioco;
 import javafx.application.Application;
-import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.stage.Stage;
-//import vista.VistaIniziale;
+import vista.VistaConfigurazione;
+import vista.VistaGioco;
+import vista.VistaIniziale;
+import vista.VistaSalvataggi;
 
 
 /**
@@ -15,34 +16,57 @@ import javafx.stage.Stage;
  *
  */
 public class AppWithMaven extends Application {
-	private static Logger logger = LogManager.getLogger();
+	public static Logger logger = LogManager.getLogger();
 
 	public static void main(String[] args) {
 		launch(args);
 	}
+	
+	private Stage primaryStage;
 
-	@Override
-	public void start(Stage primaryStage) throws Exception {
-		logger.info("Non mostrato di default");
-		logger.warn("Non mostrato di default");
-		logger.error("MOSTRATO DI DEFAULT");
-		System.out.println(System.getProperty("java.version"));
-		
-		ControlloreGioco tc = new ControlloreGioco();
+    @Override
+    public void start(Stage stage) {
+        this.primaryStage = stage;
+        stage.setTitle("UNO - JavaFX");
 
-		/*
-		VistaIniziale vista = new VistaIniziale(primaryStage);
+        // Mostra la vista iniziale
+        mostraVistaIniziale();
 
-		// Mostro la schermata iniziale con due pulsanti
-		vista.mostraSceltaIniziale("Scegli cosa fare:", "Caricare partita", "Nuova partita", scelta -> {
-			if (scelta == 1) {
-				tc.configuraNuovaPartitaVsBot();
-				tc.avviaPartita2();
-			} else {
-				tc.caricaPartita();
-				tc.avviaPartita2();
-			}
-		});
-		*/
-	}
+        stage.show();
+    }
+
+    public void mostraVistaIniziale() {
+        VistaIniziale vista = new VistaIniziale(this);
+        primaryStage.setScene(vista.getScene());
+    }
+
+    public void mostraVistaSalvataggi() {
+        VistaSalvataggi vista = new VistaSalvataggi(this);
+        primaryStage.setScene(vista.getScene());
+    }
+
+    public void mostraVistaConfigurazione() {
+        VistaConfigurazione vista = new VistaConfigurazione(this);
+        primaryStage.setScene(vista.getScene());
+    }
+
+    public void mostraVistaGiocoCaricato(String salvataggio) {
+        VistaGioco vista = new VistaGioco(this);
+        ControlloreGioco controllore = new ControlloreGioco(vista); // Passo la vista al controller
+        vista.cg=controllore;
+        controllore.caricaPartita(salvataggio);
+        primaryStage.setScene(vista.getScene());
+        controllore.avviaPartita();
+    }
+    
+    public void mostraVistaGiocoNuovo(int numGiocatori) {
+        VistaGioco vista = new VistaGioco(this);
+        ControlloreGioco controllore = new ControlloreGioco(vista); //passo la vista al controller (serve per interrompere il gioco)
+        vista.cg=controllore;
+        //se si vuole giocatori tra persone umane toglie il "vsBot"
+        controllore.configuraNuovaPartitaVsBot(numGiocatori);
+        primaryStage.setScene(vista.getScene());
+        controllore.avviaPartita();
+    }
+
 }

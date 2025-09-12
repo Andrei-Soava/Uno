@@ -13,7 +13,7 @@ Per ogni fase di sviluppo verranno elencati:
 - **Ambito**: cosa si testa
 - **Casi di test principali**
 - **Criteri di superamento**
-- **Tabella riassuntiva con colonna "Risultati"**: dove verranno inseriti gli esiti man mano 
+- **Tabella riassuntiva con colonna "Risultati"**: dove verranno inseriti gli esiti man mano (acronimi: TBE--> To Be Evaluated; TBP--> To Be Proven)
 
 ---
 
@@ -71,7 +71,7 @@ Per ogni fase di sviluppo verranno elencati:
 |---------|------------------|------------------|----------------|---------------|-----------|
 | T2.1    | Fase 2 – Controller offline | Input valido da console | Comando “pesca” o “gioca” | Azione eseguita sul Model | Testato manualmente; positivo |
 | T2.2    | Fase 2 – Controller offline | Input invalido da console | Comando errato | Messaggio di errore, stato invariato | Testato manualmente; positivo |
-| T2.3    | Fase 2 – Controller offline | Gestione ONE in console | Chiamata ONE con 1 o più carte in mano | Messaggio di chiamata corretta o errata |  |
+| T2.3    | Fase 2 – Controller offline | Gestione ONE in console | Chiamata ONE con 1 o più carte in mano | Messaggio di chiamata corretta o errata | Testato manualmente con gui; positivo |
 ---
 
 ### **Fase 3 – Persistenza locale**
@@ -89,9 +89,9 @@ Per ogni fase di sviluppo verranno elencati:
 **Tabella riassuntiva**
 | ID Test | Fase di sviluppo | Descrizione test | Input / Azione | Output atteso | Risultato |
 |---------|------------------|------------------|----------------|---------------|-----------|
-| T3.1    | Fase 3 – Persistenza locale | Salvataggio partita | Stato partita in corso | File/JSON creato con dati corretti | |
-| T3.2    | Fase 3 – Persistenza locale | Caricamento partita | File/JSON valido | Stato partita ripristinato | |
-| T3.3    | Fase 3 – Persistenza locale | Caricamento file corrotto | File non valido | Messaggio di errore | |
+| T3.1    | Fase 3 – Persistenza locale | Salvataggio partita | Stato partita in corso | File/JSON creato con dati corretti | Testato manualmente; positivo e TBP |
+| T3.2    | Fase 3 – Persistenza locale | Caricamento partita | File/JSON valido | Stato partita ripristinato | Testato manualmente; positivo e TBP |
+| T3.3    | Fase 3 – Persistenza locale | Caricamento file corrotto | File non valido | Messaggio di errore | TBE |
 ---
 
 ### **Fase 4 – GUI Swing (offline)**
@@ -110,10 +110,10 @@ Per ogni fase di sviluppo verranno elencati:
 **Tabella riassuntiva**
 | ID Test | Fase di sviluppo | Descrizione test | Input / Azione | Output atteso | Risultato |
 |---------|------------------|------------------|----------------|---------------|-----------|
-| T4.1    | Fase 4 – GUI Swing | Navigazione schermate | Click pulsanti menu | Apertura schermata corretta | |
-| T4.2    | Fase 4 – GUI Swing | Aggiornamento mano grafica | Pesca o gioca carta | GUI aggiornata con nuove carte | |
-| T4.3    | Fase 4 – GUI Swing | Notifica turno | Cambio turno | Messaggio “È il tuo turno” aggiornato | |
-| T4.4    | Fase 4 – GUI Swing | Dialog ONE! | Penultima carta | Dialog mostrato, penalità se non premuto | |
+| T4.1    | Fase 4 – GUI Swing | Navigazione schermate | Click pulsanti menu | Apertura schermata corretta | Testato manualmente; positivo |
+| T4.2    | Fase 4 – GUI Swing | Aggiornamento mano grafica | Pesca o gioca carta | GUI aggiornata con nuove carte | Testato manualmente; positivo |
+| T4.3    | Fase 4 – GUI Swing | Notifica turno | Cambio turno | Messaggio “È il tuo turno” aggiornato | Testato manualmente; positivo |
+| T4.4    | Fase 4 – GUI Swing | Dialog ONE! | Penultima carta | Dialog mostrato, penalità se non premuto | Testato manualmente; positivo |
 ---
 
 ### **Fase 5 – Server e multiplayer**

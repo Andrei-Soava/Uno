@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
     @JsonSubTypes.Type(value = CartaNumero.class, name = "numero"),
     @JsonSubTypes.Type(value = CartaSpeciale.class, name = "speciale")
 })
-public abstract class Carta {
+public abstract class Carta implements Comparable<Carta> {
 	protected Colore colore;
 
 	//costruttore vuoto per Jackson
@@ -51,9 +51,56 @@ public abstract class Carta {
 	
 	public abstract void applicaEffetto(Partita p);
 
-	/**
-	 * 
-	 */
 	public abstract boolean giocabileSu(Carta c);
+	
+	@Override
+	public int compareTo(Carta other) {
+		switch(this.colore) {
+		case NERO:{
+			if(other.colore==Colore.NERO)
+				return 0;
+			else
+				return -1;
+		}
+			
+		case ROSSO:{
+			switch(other.colore) {
+			case NERO: return 1;
+			case ROSSO: return 0;
+			default: return -1;
+			}
+			
+		}
+		
+		case BLU:{
+			switch(other.colore) {
+			case NERO: return 1;
+			case ROSSO: return 1;
+			case BLU: return 0;
+			default: return -1;
+			}
+		}
+		
+		case GIALLO:{
+			switch(other.colore) {
+			case NERO: return 1;
+			case ROSSO: return 1;
+			case BLU: return 1;
+			case GIALLO: return 0;
+			default: return -1;
+			}
+		}
+			
+		default:{
+			switch(other.colore) {
+			case NERO: return 1;
+			case ROSSO: return 1;
+			case BLU: return 1;
+			case GIALLO: return 1;
+			default: return 0;
+			}
+		}
+		}
+	}
 	
 }

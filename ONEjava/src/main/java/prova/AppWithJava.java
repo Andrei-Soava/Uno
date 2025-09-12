@@ -9,7 +9,7 @@ import vista.VistaTemporanea;
 public class AppWithJava {
 
 	public static void main(String[] args) {
-
+		/*
 		Logger logger = LogManager.getLogger();
 
 		logger.info("Non mostrato di default");
@@ -25,7 +25,7 @@ public class AppWithJava {
 			tc.caricaPartita();
 			tc.avviaPartita();
 		}
-
+		*/
 	}
 
 }

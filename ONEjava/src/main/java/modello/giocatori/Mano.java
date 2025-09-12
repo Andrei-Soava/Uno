@@ -5,6 +5,7 @@
 package modello.giocatori;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -31,10 +32,12 @@ public class Mano {
 	}
 	public void aggiungiCarta(Carta c) {
 		carte.add(c);
+		Collections.sort(carte);
 	}
 	
 	public void aggiungiCarta(ArrayList<Carta> c) {
 		carte.addAll(c);
+		Collections.sort(carte);
 	}
 
 	public void rimuoviCarta(Carta c) {

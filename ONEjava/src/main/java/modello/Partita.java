@@ -45,6 +45,8 @@ public class Partita implements PartitaIF {
 	private Carta cartaCorrente;
 	private boolean direzione;
 	private boolean effettoAttivato;
+	@JsonIgnore
+	private Giocatore vincitore;
 
 	//costruttore vuoto per Jackson
 	public Partita() {}
@@ -123,6 +125,11 @@ public class Partita implements PartitaIF {
 		c.applicaEffetto(this);
 	}
 	
+	@JsonIgnore
+	public Giocatore getVincitore() {
+		return this.vincitore;
+	}
+	
 	
 	public Mossa applicaMossa(Giocatore g, Mossa mossa) {
 		//caso 1:devo pescare
@@ -175,6 +182,7 @@ public class Partita implements PartitaIF {
 	public boolean verificaFinePartita() {
 		for (Giocatore g : giocatori) {
 			if (g.getMano().getNumCarte() == 0) {
+				vincitore=g;
 				return true;
 			}
 		}

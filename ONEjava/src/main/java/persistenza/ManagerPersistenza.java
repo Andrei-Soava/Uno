@@ -52,6 +52,18 @@ public class ManagerPersistenza {
 
         return fileVecchio.renameTo(fileNuovo);
     }
+    
+    public static boolean verificaRinominaSalvataggio(String nomeVecchio, String nomeNuovo) {
+    	File dir = new File(SAVE_DIR);
+        File fileVecchio = new File(dir, nomeVecchio + ".json");
+        File fileNuovo = new File(dir, nomeNuovo + ".json");
+
+        // Controlli di sicurezza
+        if (!fileVecchio.exists()) return false;
+        if (fileNuovo.exists()) return false; // evita di sovrascrivere
+
+        return true;
+    }
 
     public static boolean eliminaSalvataggio(String nomeFile) {
     	File dir = new File(SAVE_DIR);

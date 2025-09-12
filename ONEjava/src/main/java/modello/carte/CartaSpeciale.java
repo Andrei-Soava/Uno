@@ -83,5 +83,23 @@ public class CartaSpeciale extends Carta {
 	public String toString() {
 		return "CartaSpeciale [tipo=" + tipo + ", colore=" + colore + "]";
 	}
+
+	@Override
+	public int compareTo(Carta other) {
+		switch(super.compareTo(other)) {
+		case -1:{
+			return -1;
+		}
+		case 0:{
+			if(other instanceof CartaNumero)
+				return -1;
+			else
+				return 0;
+		}
+		default:{
+			return 1;
+		}
+		}
+	}
 	
 }

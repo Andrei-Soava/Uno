@@ -7,6 +7,7 @@ import modello.Partita;
 import persistenza.InterfacciaPersistenza;
 import persistenza.ManagerPersistenza;
 import vista.InterfacciaVistaTemporanea;
+import vista.VistaGioco;
 import vista.VistaTemporanea;
 
 /**
@@ -43,9 +44,9 @@ public class ControllorePersistenza {
 		return this.salvataggioCorrente;
 	}
 
-	// in teoria da utilizzare solo quando si abbandona la partita--> per ora non serve considerarlo
+	//in teoria da utilizzare solo quando si abbandona la partita--> per ora non serve considerarlo
 	public void salvaPartita(ControlloreGioco cg) {
-		InterfacciaVistaTemporanea tv = cg.getTv();
+		VistaGioco tv = cg.getTv();
 		Partita partita = cg.getPartita();
 		String nome;
 		do {
@@ -65,9 +66,9 @@ public class ControllorePersistenza {
 	}
 
 	public void salvaPartitaAutomatico(ControlloreGioco cg) {
-		InterfacciaVistaTemporanea tv = cg.getTv();
+		VistaGioco tv = cg.getTv();
 		Partita partita = cg.getPartita();
-		// sarà da fare solo se giocatore è loggato
+		//sarà da fare solo se giocatore è loggato
 		try {
 			ManagerPersistenza.salvaPartita(partita, salvataggioCorrente);
 			tv.stampaMessaggio("Partita salvata con successo!");
@@ -77,7 +78,7 @@ public class ControllorePersistenza {
 	}
 
 	public void caricaPartita(ControlloreGioco cg) {
-		InterfacciaVistaTemporanea tv = cg.getTv();
+		VistaGioco tv = cg.getTv();
 		Partita partita = cg.getPartita();
 		List<String> salvataggi = ManagerPersistenza.listaSalvataggi();
 		if (salvataggi.isEmpty()) {
@@ -85,7 +86,7 @@ public class ControllorePersistenza {
 			return;
 		}
 
-		// Mostra elenco salvataggi
+		//mostra elenco salvataggi
 		StringBuilder sb = new StringBuilder("Salvataggi disponibili:\n");
 		for (int i = 0; i < salvataggi.size(); i++) {
 			sb.append(i).append(") ").append(salvataggi.get(i)).append("\n");
@@ -123,7 +124,7 @@ public class ControllorePersistenza {
 	}
 
 	public void rinominaSalvataggio(ControlloreGioco cg) {
-		InterfacciaVistaTemporanea tv = cg.getTv();
+		VistaGioco tv = cg.getTv();
 		List<String> salvataggi = ManagerPersistenza.listaSalvataggi();
 		if (salvataggi.isEmpty()) {
 			tv.stampaMessaggio("Nessun salvataggio trovato.");
@@ -171,4 +172,24 @@ public class ControllorePersistenza {
 		}
 	}
 
+	//versioni modificate per gui
+	public void caricaPartita(ControlloreGioco cg, String salvataggio) {
+		Partita partita = cg.getPartita();
+
+		try {
+			partita = ManagerPersistenza.caricaPartita(salvataggio);
+			cg.setPartita(partita);
+			// Riaggancio il navigatore ai giocatori
+			partita.getNavigatore().setItems(partita.getGiocatori());
+			// Riaggancio l'interfaccia partita ai giocatori
+			ControlloreGioco.setPartitaIF(partita.getGiocatori(), partita);
+			// Riaggancio mazzo alla sua pila
+			partita.getMazzo().setPila(partita.getPilaScarti());
+			salvataggioCorrente = salvataggio;
+		} catch (IOException e) {
+			e.getMessage();
+		}
+
+	}
+	//fine
 }
