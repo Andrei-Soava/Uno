@@ -57,9 +57,11 @@ Esempio COMPLETO:
 - 03/09, **AVVISO**, Andrei, non ho avuto il tempo di fare la javadoc del package modello (per adesso);
 - 05/09, Andrei, (implementazione base del pattern MVC da console (con un controllore temporaneo e con una view temporanea)+ eseguito refactoring generale del codice+ Pattern PLAYER-ROLE per modalità bot e non-bot), GUI o persistenza;
 - 06/09, Andrei, (separazione mvc più netta, eliminazione temporanea delle modalità (e quindi del player role pattern) e prove con altre versione di avviaPartita()), null;
-- 07/09, Andrei, (completamento del commit precedente: MVC puro tra le componenti, specialmente tra model e controller), GUI o persistenza
+- 07/09, Andrei, (completamento del commit precedente: MVC puro tra le componenti, specialmente tra model e controller), GUI o persistenza;
 - 07/09, Andrei, (sistemazione alcuni bug durante esecuzione + spostamento logica applicaEffettoCarta dentro CartaSpeciale +spostamento enumerato TipoSpeciale dentro CartaSpeciale ), null;
 - 08/09, Andrei, (implementazione di salvataggio/caricamento Partita (utilizzando serializzazione/deserializzazione in JSON con Jackson)--> ristrutturazione classi in modo da permettere il processo; ulteriore modularizzazione del controllore e aggiunte a package 'persistenza'), GUI gioco;
 - 09/09, Andrei, (preparazione/modifiche di alcuni elementi in vista di sviluppo gui con javaFX), inizio GUI gioco;
 - 09/09 - 12/09, Andrei, (versione 1 di ONE offline avente interfaccia grafica con JavaFX -> adattamento ControlloreGioco all'approccio event-driven + gestore salvataggi a livello grafico + implementazioni + implementazioni specifiche (es bottone ONE) + piccoli miglioramenti a classi esistenti + aggiornamento documento 4 (testing)), inizio implementazione lato server;
+- 18/09 14:15-16:00, (Andrei, Giuseppe e Fabio), (pianificazione lavoro prossimi giorni--> finire vista, implementare controllori client per mandare/ricevere messaggi server, discussione tecnologie per realizzazione del server websocket), inizio implementazione server;
+- 18/09, **AVVISO**, Andrei, aggiornare il projectPlan e documento 2 (requisiti);
 
