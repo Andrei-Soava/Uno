@@ -13,7 +13,6 @@ import modello.Mossa.TipoMossa;
 import modello.Partita;
 import modello.carte.Colore;
 import modello.giocatori.Giocatore;
-import modello.giocatori.GiocatoreAnonimo;
 import vista.VistaGioco;
 
 /**
@@ -215,10 +214,10 @@ public class ControlloreGioco {
 	public void configuraNuovaPartitaVsBot(int numeroGiocatori) {
 		ArrayList<Giocatore> giocatori = new ArrayList<>();
 		String s = vg.inserisciStringa("Scegli un nome per te:");
-		giocatori.add(new GiocatoreAnonimo(s));
+		giocatori.add(new Giocatore(s));
 		for (int i = 0; i < (numeroGiocatori-1); i++) {
 			s="Bot"+(i+1);
-			Giocatore g=new GiocatoreAnonimo(s);
+			Giocatore g=new Giocatore(s);
 			g.cambiaModalita();
 			giocatori.add(g);
 		}
@@ -235,7 +234,7 @@ public class ControlloreGioco {
 		for (int i = 0; i < numero; i++) {
 			//String s = tv.inserisciStringa("Scegli un nome per il giocatore " + (i + 1) + ":");
 			String s="giocatore"+i;
-			giocatori.add(new GiocatoreAnonimo(s));
+			giocatori.add(new Giocatore(s));
 		}
 		partita = new Partita(giocatori);
 		setPartitaIF(giocatori, partita);

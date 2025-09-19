@@ -32,9 +32,10 @@ import modello.carte.Colore;
  * 
  */
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonSubTypes;
+//import com.fasterxml.jackson.annotation.JsonTypeInfo;
+//import com.fasterxml.jackson.annotation.JsonSubTypes;
 
+/*
 @JsonTypeInfo(
     use = JsonTypeInfo.Id.NAME, // usa un nome leggibile
     include = JsonTypeInfo.As.PROPERTY, // aggiungi un campo nel JSON
@@ -44,7 +45,8 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
     @JsonSubTypes.Type(value = GiocatoreAnonimo.class, name = "anonimo")
     // qui puoi aggiungere altre sottoclassi in futuro
 })
-public abstract class Giocatore {
+*/
+public class Giocatore {
 	protected String nome;
 	protected boolean haPremutoOne;
 	protected Mano mano;

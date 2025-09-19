@@ -7,7 +7,6 @@ import org.junit.Test;
 import java.util.ArrayList;
 import modello.Partita;
 import modello.giocatori.Giocatore;
-import modello.giocatori.GiocatoreAnonimo;
 
 /**
  * testa se, dopo aver invocato il metodo prossimoGiocatore(), il giocatore corrente cambia
@@ -18,10 +17,10 @@ public class Test6 {
     @Before
     public void setUp() {
     	ArrayList<Giocatore> players=new ArrayList<>(); 
-        Giocatore a=new GiocatoreAnonimo("Andrei");
-        Giocatore b=new GiocatoreAnonimo("Barbabr");
-        Giocatore c=new GiocatoreAnonimo("Cilecca");
-        Giocatore d=new GiocatoreAnonimo("Mateo");
+        Giocatore a=new Giocatore("Andrei");
+        Giocatore b=new Giocatore("Barbabr");
+        Giocatore c=new Giocatore("Cilecca");
+        Giocatore d=new Giocatore("Mateo");
         players.add(a);
         players.add(b);
         players.add(c);

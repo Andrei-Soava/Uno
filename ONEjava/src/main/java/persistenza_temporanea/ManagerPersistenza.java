@@ -1,4 +1,4 @@
-package persistenza;
+package persistenza_temporanea;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 

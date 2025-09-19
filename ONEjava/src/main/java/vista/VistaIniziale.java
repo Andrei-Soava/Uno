@@ -1,11 +1,11 @@
 package vista;
 
 
+import esecuzione.AppWithMaven;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
-import prova.AppWithMaven;
 
 public class VistaIniziale {
 

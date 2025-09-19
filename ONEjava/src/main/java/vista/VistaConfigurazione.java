@@ -1,11 +1,11 @@
 package vista;
 
+import esecuzione.AppWithMaven;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import prova.AppWithMaven;
 
 public class VistaConfigurazione {
 

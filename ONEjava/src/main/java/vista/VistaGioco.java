@@ -21,8 +21,7 @@ import modello.carte.Carta;
 import modello.carte.CartaSpeciale;
 import modello.carte.Colore;
 import modello.giocatori.Giocatore;
-import persistenza.ManagerPersistenza;
-import prova.AppWithMaven;
+import persistenza_temporanea.ManagerPersistenza;
 import vista.accessori.GestoreHoverCarta;
 import vista.accessori.GestoreGraficaCarta;
 
@@ -33,6 +32,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 
 import controllore.ControlloreGioco;
+import esecuzione.AppWithMaven;
 
 public class VistaGioco {
 

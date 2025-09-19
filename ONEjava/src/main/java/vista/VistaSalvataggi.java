@@ -3,13 +3,13 @@ package vista;
 
 import java.util.List;
 
+import esecuzione.AppWithMaven;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import persistenza.ManagerPersistenza;
-import prova.AppWithMaven;
+import persistenza_temporanea.ManagerPersistenza;
 
 public class VistaSalvataggi {
 
