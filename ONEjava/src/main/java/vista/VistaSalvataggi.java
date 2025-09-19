@@ -98,7 +98,7 @@ public class VistaSalvataggi {
 
     	root.setCenter(contenitore);
 
-    	scene = new Scene(root, 900, 600);
+    	scene = new Scene(root);
     }
 
     public Scene getScene() {

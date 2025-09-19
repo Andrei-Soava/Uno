@@ -64,4 +64,6 @@ Esempio COMPLETO:
 - 09/09 - 12/09, Andrei, (versione 1 di ONE offline avente interfaccia grafica con JavaFX -> adattamento ControlloreGioco all'approccio event-driven + gestore salvataggi a livello grafico + implementazioni + implementazioni specifiche (es bottone ONE) + piccoli miglioramenti a classi esistenti + aggiornamento documento 4 (testing)), inizio implementazione lato server;
 - 18/09 14:15-16:00, (Andrei, Giuseppe e Fabio), (pianificazione lavoro prossimi giorni--> finire vista, implementare controllori client per mandare/ricevere messaggi server, discussione tecnologie per realizzazione del server websocket), inizio implementazione server;
 - 18/09, **AVVISO**, Andrei, aggiornare il projectPlan e documento 2 (requisiti);
+- 19/09, Andrei, (eliminazione di alcuni classi inutili + prima versione VistaAccesso), (continuazione varie viste, perlomeno basilari);
+- 19/09, **AVVISO**, Andrei, il branch con javaFX è diventato quello di default--> lavorare solo su quello;
 

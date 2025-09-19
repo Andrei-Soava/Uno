@@ -22,8 +22,9 @@ public class VistaIniziale {
         btnNuova.setOnAction(e -> app.mostraVistaConfigurazione());
 
         root.getChildren().addAll(btnCarica, btnNuova);
-
-        scene = new Scene(root, 900, 600);
+        
+        
+        scene = new Scene(root);
     }
 
     public Scene getScene() {

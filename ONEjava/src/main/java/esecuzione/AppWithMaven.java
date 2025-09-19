@@ -5,6 +5,7 @@ import org.apache.logging.log4j.*;
 import controllore.ControlloreGioco;
 import javafx.application.Application;
 import javafx.stage.Stage;
+import vista.VistaAccesso;
 import vista.VistaConfigurazione;
 import vista.VistaGioco;
 import vista.VistaIniziale;
@@ -28,11 +29,22 @@ public class AppWithMaven extends Application {
     public void start(Stage stage) {
         this.primaryStage = stage;
         stage.setTitle("UNO - JavaFX");
-
-        // Mostra la vista iniziale
-        mostraVistaIniziale();
+        stage.setWidth(900);
+        stage.setHeight(600);
+        
+        //vista mostrata di default
+        mostraVistaAccesso();
 
         stage.show();
+    }
+    
+    public Stage getPrimaryStage() {
+    	return this.primaryStage;
+    }
+    
+    public void mostraVistaAccesso() {
+    	VistaAccesso vista=new VistaAccesso(this);
+    	primaryStage.setScene(vista.getScene());
     }
 
     public void mostraVistaIniziale() {

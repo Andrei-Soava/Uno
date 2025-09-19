@@ -53,7 +53,7 @@ public class VistaConfigurazione {
 
     	root.setCenter(centro);
 
-        scene = new Scene(root, 900, 600);
+        scene = new Scene(root);
     }
 
     public Scene getScene() {

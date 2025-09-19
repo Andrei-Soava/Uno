@@ -245,7 +245,7 @@ public class VistaGioco {
 
 
         StackPane sceneRoot = new StackPane(root, overlay);
-    	scene = new Scene(sceneRoot, 900, 600);
+    	scene = new Scene(sceneRoot);
     	
     }
 
