@@ -28,5 +28,6 @@ public class Test7 {
         ps.mettiCarta(m.pesca());
         assertSame("Mazzo non ricostruito",107,m.getNumeroCarte());
         
+        
     }
 }
