@@ -6,4 +6,35 @@
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   <artifactId>onegame-server</artifactId>
+  
+  <dependencies>
+    <!-- DTO, protocolli JSON e utilità comuni -->
+    <dependency>
+      <groupId>ONE</groupId>
+      <artifactId>ONEjava-common</artifactId>
+    </dependency>
+
+    <!-- Networking e Socket.IO -->
+    <dependency>
+      <groupId>com.corundumstudio.socketio</groupId>
+      <artifactId>netty-socketio</artifactId>
+    </dependency>
+
+    <!-- Logging lato server -->
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-core</artifactId>
+    </dependency>
+
+    <!-- Test -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
 </project>
