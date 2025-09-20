@@ -4,4 +4,9 @@
   <artifactId>onegame-root</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>pom</packaging>
+  <modules>
+  	<module>onegame-common</module>
+  	<module>onegame-server</module>
+  	<module>onegame-client</module>
+  </modules>
 </project>
