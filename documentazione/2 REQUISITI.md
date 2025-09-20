@@ -91,14 +91,16 @@ Non comprende aspetti di marketing, distribuzione in store o versioni mobile.
    - Testo in alto: “‹Nome_giocatore›, è il tuo turno:”.  
 
 2. RF10 – Visualizzazioni  
-   - Mano del giocatore.  
+   - Mano del giocatore.
+   - Numero di carte degli altri giocatori  
    - Carta sul banco.
    - Indicatore dell’ordine dei turni (stile orologio o “Prossimo: ‹Nome›”).  
 
 3. RF11 – Azioni di gioco  
    - RF11.1 – Pescare carta.  
-   - RF11.2 – Selezionare carta in mano e tentare di giocarla.  
-   - RF11.3 – Messaggio di errore in caso di incompatibilità colore/numero.  
+   - RF11.2 – Selezionare carta in mano e tentare di giocarla. 
+   - RF11.3 - Passare il turno.
+   - RF11.4 – Messaggio di errore in caso di incompatibilità colore/numero.  
 
 4. RF12 – Pescaggio  
    - Viene pescato una sola carta.  
@@ -136,7 +138,7 @@ Non comprende aspetti di marketing, distribuzione in store o versioni mobile.
    - Java 11+, Eclipse + Maven.  
    - Papyrus per UML e generazione di codice.  
    - Log4j per logging.  
-   - Swing per GUI.  
+   - JavaFX per GUI.  
    - Pattern MVC.  
    - PostgreSQL per persistenza.  
 
@@ -154,8 +156,8 @@ Non comprende aspetti di marketing, distribuzione in store o versioni mobile.
 4. RF23 – Creazione lobby  
    - Endpoint per creare lobby con codice; notifiche di join.  
 
-5. RF24 – Gestione partita peer-to-peer  
-   - Server solo per lobby; game loop in P2P tra client.  
+5. RF24 – Gestione partita 
+   - La partita viene gestita dal server con cui i client comunicano.
 
 6. RF25 – Chiusura partita  
    - Endpoint per aggiornare statistiche e rimuovere lobby.  
@@ -172,7 +174,7 @@ Non comprende aspetti di marketing, distribuzione in store o versioni mobile.
 |                       | idUtente             | INT FK        | References UTENTE(id) ON DELETE CASCADE    |
 |                       | dettagli             | JSONB         | Stato esatto della partita vs bot          |
 
-- Il DB non memorizza partite multiplayer (gestite P2P).  
+- Il DB non memorizza partite multiplayer.  
 - Aggiornamento statistiche a ogni fine partita o abbandono.  
 - Supporto cancellazione account con cascade dei record.  
 

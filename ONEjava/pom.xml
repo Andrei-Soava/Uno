@@ -59,6 +59,14 @@
 			<artifactId>javafx-fxml</artifactId>
 			<version>21.0.2</version>
 		</dependency>
+		
+		<!-- Netty-socketio -->
+		<dependency>
+		    <groupId>com.corundumstudio.socketio</groupId>
+		    <artifactId>netty-socketio</artifactId>
+		    <version>1.7.17</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
