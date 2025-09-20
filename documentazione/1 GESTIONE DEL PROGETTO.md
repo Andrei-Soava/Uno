@@ -67,4 +67,5 @@ Esempio COMPLETO:
 - 19/09, Andrei, (eliminazione di alcuni classi inutili + prima versione VistaAccesso), (continuazione varie viste, perlomeno basilari);
 - 19/09, **AVVISO**, Andrei, il branch con javaFX è diventato quello di default--> lavorare solo su quello;
 - 20/09, Andrei, continuazione interfaccia grafica senza gestione controllore--> aggiunta cartella stile in resources per css, (continuazione interfaccia grafica + gestione controllore);
+- 20/09 19:00, Andrei, piccola implementazione del ControlloreAccesso e del ControlloreHome per accedere da VistaAccesso a VistaHome--> solo system.out.println per ora, (continuazione controllori e viste); 
 

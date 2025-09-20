@@ -1,5 +1,6 @@
 package vista;
 
+import controllore.ControlloreHome;
 import esecuzione.AppWithMaven;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -11,8 +12,12 @@ import javafx.scene.layout.VBox;
 
 public class VistaHome {
 	private Scene scene;
+	private ControlloreHome ch;
 
-	public VistaHome(AppWithMaven app) {
+	public VistaHome(AppWithMaven app, ControlloreHome ch) {
+		this.ch=ch;
+		System.out.println(ch.getUtente());
+		
 		Label titolo = new Label("Scegli modalità");
 		titolo.getStyleClass().add("titolo");
 		

@@ -2,7 +2,9 @@ package esecuzione;
 
 import org.apache.logging.log4j.*;
 
+import controllore.ControlloreAccesso;
 import controllore.ControlloreGioco;
+import controllore.ControlloreHome;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import vista.VistaAccesso;
@@ -25,10 +27,13 @@ public class AppWithMaven extends Application {
 	}
 	
 	private Stage primaryStage;
-
+	private ControlloreHome ch;
+	
+	
     @Override
     public void start(Stage stage) {
         this.primaryStage = stage;
+        this.ch=new ControlloreHome();
         stage.setTitle("UNO - JavaFX");
         stage.setWidth(900);
         stage.setHeight(600);
@@ -45,11 +50,19 @@ public class AppWithMaven extends Application {
     
     public void mostraVistaAccesso() {
     	VistaAccesso vista=new VistaAccesso(this);
+    	ControlloreAccesso ca=new ControlloreAccesso(vista,ch);
     	primaryStage.setScene(vista.getScene());
+    	ca.eseguiAccesso();
     }
     
     public void mostraVistaHome() {
-    	VistaHome vista=new VistaHome(this);
+    	VistaHome vista=new VistaHome(this, ch);
+    	primaryStage.setScene(vista.getScene());
+    }
+    
+    public void mostraVistaHomeOspite() {
+    	ch.setUtente(null);
+    	VistaHome vista=new VistaHome(this, ch);
     	primaryStage.setScene(vista.getScene());
     }
 
