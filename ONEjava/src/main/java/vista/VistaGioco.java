@@ -61,12 +61,12 @@ public class VistaGioco {
     	this.cg=null;
     	BorderPane root = new BorderPane();
     	root.setPadding(new Insets(10));
-    	root.setStyle("-fx-background-color: orange;");
-
+    	
     	//---------------------------------------------------------------------------------
     	//barra superiore con pulsante Home & label per indicare il turno
     	//bottone per abbandonare
-    	Button abbandonaBtn = new Button("← Home");
+    	Button abbandonaBtn = new Button("Abbandona");
+    	abbandonaBtn.getStyleClass().add("logout");
     	abbandonaBtn.setOnAction(e -> {
     	    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
     	    alert.setTitle("Conferma");
@@ -130,16 +130,13 @@ public class VistaGioco {
     	sottoContenitoreCentrale.getChildren().addAll(logAreaLbl,spacer0,cartaCorrenteLbl, cartaCorrente);
     	
     	//
-    	//zona messaggi e futuro pulsante ONE (centrale a destra)
+    	//zona prossimo turno e futuro pulsante ONE (centrale a destra)
     	VBox sottoContenitoreDestra = new VBox(10);
     	sottoContenitoreDestra.setPadding(new Insets(0));
     	//sottoContenitoreDestra.setStyle("-fx-border-color:black;");
     	prossimoTurnoLbl=new Label();
     	prossimoTurnoLbl.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
     	timerBox=new HBox();
-    	//logAreaLbl = new Label(); // manteniamo il nome logArea
-    	//logAreaLbl.setStyle("-fx-background-color: rgba(0,0,0,0.8); -fx-text-fill: white; -fx-padding: 10px; -fx-background-radius: 5;");
-    	//logAreaLbl.setVisible(false);
     	Region spacer = new Region();
     	VBox.setVgrow(spacer, Priority.ALWAYS);
     	ONEBtn=new Button("ONE!");
@@ -245,7 +242,10 @@ public class VistaGioco {
 
 
         StackPane sceneRoot = new StackPane(root, overlay);
-    	scene = new Scene(sceneRoot);
+    	scene = new Scene(sceneRoot, app.getPrimaryStage().getWidth(), app.getPrimaryStage().getHeight());
+    	scene.getStylesheets().add(
+        	    getClass().getResource("/stile/base.css").toExternalForm()
+        	);
     	
     }
 

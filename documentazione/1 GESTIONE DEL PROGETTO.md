@@ -66,4 +66,5 @@ Esempio COMPLETO:
 - 18/09, **AVVISO**, Andrei, aggiornare il projectPlan e documento 2 (requisiti);
 - 19/09, Andrei, (eliminazione di alcuni classi inutili + prima versione VistaAccesso), (continuazione varie viste, perlomeno basilari);
 - 19/09, **AVVISO**, Andrei, il branch con javaFX è diventato quello di default--> lavorare solo su quello;
+- 20/09, Andrei, continuazione interfaccia grafica senza gestione controllore--> aggiunta cartella stile in resources per css, (continuazione interfaccia grafica + gestione controllore);
 

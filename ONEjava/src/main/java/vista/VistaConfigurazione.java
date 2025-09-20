@@ -15,10 +15,11 @@ public class VistaConfigurazione {
 
     	BorderPane root = new BorderPane();
 
-    	Button btnHome = new Button("← Home");
-    	btnHome.setOnAction(e -> app.mostraVistaIniziale());
+    	Button homeBtn = new Button("← Home");
+    	homeBtn.setOnAction(e -> app.mostraVistaIniziale());
 
     	Label titolo = new Label("CONFIGURA NUOVA PARTITA");
+    	titolo.getStyleClass().add("titolo");
 
     	Region leftSpacer = new Region();
     	Region rightSpacer = new Region();
@@ -29,7 +30,7 @@ public class VistaConfigurazione {
     	HBox topBar = new HBox(10);
     	topBar.setPadding(new Insets(10));
     	topBar.setAlignment(Pos.CENTER_LEFT);
-    	topBar.getChildren().addAll(btnHome, leftSpacer, titolo, rightSpacer);
+    	topBar.getChildren().addAll(homeBtn, leftSpacer, titolo, rightSpacer);
 
     	root.setTop(topBar);
 
@@ -54,6 +55,10 @@ public class VistaConfigurazione {
     	root.setCenter(centro);
 
         scene = new Scene(root);
+        
+        scene.getStylesheets().add(
+        	    getClass().getResource("/stile/base.css").toExternalForm()
+        	);
     }
 
     public Scene getScene() {

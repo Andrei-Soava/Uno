@@ -41,7 +41,7 @@ public class GestoreGraficaCarta {
 			name = t.name().toLowerCase();
 		else
 			name="logo";
-	    return new Image(GestoreGraficaCarta.class.getResourceAsStream("/images/"+ name +".png"));
+	    return new Image(GestoreGraficaCarta.class.getResourceAsStream("/immagini/"+ name +".png"));
 	}
 	
 	// Sincronizza le proprietà intermedie con il modello

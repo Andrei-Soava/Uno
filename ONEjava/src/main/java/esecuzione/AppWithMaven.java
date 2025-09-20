@@ -8,6 +8,7 @@ import javafx.stage.Stage;
 import vista.VistaAccesso;
 import vista.VistaConfigurazione;
 import vista.VistaGioco;
+import vista.VistaHome;
 import vista.VistaIniziale;
 import vista.VistaSalvataggi;
 
@@ -44,6 +45,11 @@ public class AppWithMaven extends Application {
     
     public void mostraVistaAccesso() {
     	VistaAccesso vista=new VistaAccesso(this);
+    	primaryStage.setScene(vista.getScene());
+    }
+    
+    public void mostraVistaHome() {
+    	VistaHome vista=new VistaHome(this);
     	primaryStage.setScene(vista.getScene());
     }
 

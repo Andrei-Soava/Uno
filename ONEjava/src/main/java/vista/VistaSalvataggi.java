@@ -19,10 +19,11 @@ public class VistaSalvataggi {
     	BorderPane root = new BorderPane();
 
     	// --- TopBar ---
-    	Button btnIndietro = new Button("← Home");
-    	btnIndietro.setOnAction(e -> app.mostraVistaIniziale());
+    	Button homeBtn = new Button("← Home");
+    	homeBtn.setOnAction(e -> app.mostraVistaIniziale());
 
     	Label titolo = new Label("SALVATAGGI");
+    	titolo.getStyleClass().add("titolo");
 
     	Region leftSpacer = new Region();
     	Region rightSpacer = new Region();
@@ -33,7 +34,7 @@ public class VistaSalvataggi {
     	HBox topBar = new HBox(10);
     	topBar.setPadding(new Insets(10));
     	topBar.setAlignment(Pos.CENTER_LEFT);
-    	topBar.getChildren().addAll(btnIndietro, leftSpacer, titolo, rightSpacer);
+    	topBar.getChildren().addAll(homeBtn, leftSpacer, titolo, rightSpacer);
 
     	VBox lista = new VBox(10);
     	lista.setAlignment(Pos.TOP_CENTER);
@@ -99,6 +100,10 @@ public class VistaSalvataggi {
     	root.setCenter(contenitore);
 
     	scene = new Scene(root);
+    	
+    	scene.getStylesheets().add(
+        	    getClass().getResource("/stile/base.css").toExternalForm()
+        	);
     }
 
     public Scene getScene() {

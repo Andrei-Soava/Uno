@@ -21,7 +21,7 @@ public class VistaAccesso {
 		
 		//titolo
         Label titolo = new Label("Benvenuto su ONE! Scegli un opzione");
-        titolo.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
+        titolo.getStyleClass().add("titolo");
         
         //spaziatore
         Region spacer0 = new Region();
@@ -35,7 +35,7 @@ public class VistaAccesso {
 
         //campo password
         PasswordField passwordField = new PasswordField();
-        passwordField.setPromptText("Password");
+        passwordField.setPromptText("Inserisci password");
         passwordField.setMaxWidth(200);
 
         //pulsanti "accedi" e "registrati" 
@@ -52,7 +52,7 @@ public class VistaAccesso {
 
         //bottone "Entra come ospite"
         Button ospiteBtn = new Button("Entra come ospite");
-        ospiteBtn.setOnAction(e -> app.mostraVistaIniziale());
+        ospiteBtn.setOnAction(e -> app.mostraVistaHome());
 
         //costruzione scena
         VBox root = new VBox(15, titolo, spacer0, usernameField, passwordField,
@@ -61,6 +61,9 @@ public class VistaAccesso {
         root.setPadding(new Insets(20));
 
         scene = new Scene(root);
+        scene.getStylesheets().add(
+        	    getClass().getResource("/stile/base.css").toExternalForm()
+        	);
         Platform.runLater(() -> root.requestFocus());
 	}
 	
