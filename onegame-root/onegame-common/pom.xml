@@ -45,4 +45,16 @@
       <artifactId>log4j-core</artifactId>
     </dependency>
   </dependencies>
+  
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-maven-plugin</artifactId>
+        <configuration>
+          <mainClass>esecuzione.AppWithMaven</mainClass>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 </project>
