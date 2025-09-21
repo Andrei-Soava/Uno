@@ -16,6 +16,7 @@
     <javafx.version>21.0.2</javafx.version>
     <netty-socketio.version>1.7.17</netty-socketio.version>
     <junit.version>4.13.2</junit.version>
+    <h2.version>2.1.214</h2.version>
   </properties>
 
   <dependencyManagement>
@@ -61,6 +62,11 @@
         <version>${junit.version}</version>
         <scope>test</scope>
       </dependency>
+      <dependency>
+  		<groupId>com.h2database</groupId>
+  		<artifactId>h2</artifactId>
+  		<version>${h2.version}</version>
+	  </dependency>
     </dependencies>
   </dependencyManagement>
 

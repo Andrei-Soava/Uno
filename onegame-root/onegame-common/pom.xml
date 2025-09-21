@@ -7,6 +7,7 @@
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   <artifactId>onegame-common</artifactId>
+  <packaging>jar</packaging>
   
 
   <name>onegame-common</name>
@@ -18,6 +19,13 @@
   </properties>
 
   <dependencies>
+  
+    <!-- JSON DTO e serializzazione -->
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+    </dependency>
+
   	<!-- Test -->
     <dependency>
       <groupId>junit</groupId>

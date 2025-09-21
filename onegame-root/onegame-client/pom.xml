@@ -9,11 +9,11 @@
   
   <dependencies>
   	<!-- DTO, protocolli JSON e utilità comuni -->
-<!--    <dependency>
+    <dependency>
       <groupId>onegame</groupId>
       <artifactId>onegame-common</artifactId>
       <version>0.0.1-SNAPSHOT</version>
-    </dependency>-->
+    </dependency>
     
     <!-- JSON DTO e serializzazione -->
     <dependency>
