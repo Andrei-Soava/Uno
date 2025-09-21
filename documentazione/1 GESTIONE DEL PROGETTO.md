@@ -69,5 +69,5 @@ Esempio COMPLETO:
 - 20/09, Andrei, continuazione interfaccia grafica senza gestione controllore--> aggiunta cartella stile in resources per css, (continuazione interfaccia grafica + gestione controllore);
 - 20/09 19:00, Andrei, piccola implementazione del ControlloreAccesso e del ControlloreHome per accedere da VistaAccesso a VistaHome--> solo system.out.println per ora, (continuazione controllori e viste); 
 - 20/09, Fabio, (aggiornamento documentazione e definizione messaggi di comunicazione, scelta della libreria di comunicazione), null;
-- 20/09 - 21/09, Fabio, divisione in moduli del progetto, null;
+- 20/09, Fabio, inizio divisione del progetto in moduli, continuazione divisione in moduli;
 
