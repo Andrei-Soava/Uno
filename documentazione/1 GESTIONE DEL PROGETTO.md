@@ -73,4 +73,4 @@ Esempio COMPLETO:
 - 21/09, Fabio, (riorganizzazione moduli, prima versione database), null;
 - 22/09, Andrei, (Aggiunta VistaRegistrazione e ControlloreRegistrazione + aggiunta erroreLabel per messaggi d'errore), collegamento al server per autenticazione;
 - 22/09, **AVVISO**, Andrei, il branch `ONEdivisioneInModuli` è diventato quello di default--> lavorare solo su quello;
-
+- 22/09 20:43, Giuseppe, inizializzazione del server con la creazione del gameserver (dove viene creato il sever per la gestione delle connessione e disconnesioni dei giocatori) e del ServerLaunch (usato per avviare il server);
