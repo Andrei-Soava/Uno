@@ -1,4 +1,4 @@
-package modello;
+package onegame.modello;
 
 import java.util.Random;
 
@@ -6,7 +6,8 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import modello.carte.Carta;
+import onegame.modello.Mazzo;
+import onegame.modello.carte.Carta;
 
 
 public class MazzoTest {

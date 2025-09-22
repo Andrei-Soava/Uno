@@ -3,7 +3,7 @@ package controllore;
 import java.io.IOException;
 import java.util.List;
 
-import modello.Partita;
+import onegame.modello.Partita;
 import persistenza_temporanea.InterfacciaPersistenza;
 import persistenza_temporanea.ManagerPersistenza;
 import vista.InterfacciaVistaTemporanea;

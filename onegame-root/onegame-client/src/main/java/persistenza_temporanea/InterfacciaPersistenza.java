@@ -1,6 +1,6 @@
 package persistenza_temporanea;
 
-import modello.Partita;
+import onegame.modello.Partita;
 
 /**
  * interfaccia per gestione della persistenza

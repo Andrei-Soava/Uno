@@ -10,11 +10,11 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
-import modello.carte.Carta;
-import modello.carte.CartaNumero;
-import modello.carte.CartaSpeciale;
-import modello.carte.CartaSpeciale.TipoSpeciale;
-import modello.carte.Colore;
+import onegame.modello.carte.Carta;
+import onegame.modello.carte.CartaNumero;
+import onegame.modello.carte.CartaSpeciale;
+import onegame.modello.carte.Colore;
+import onegame.modello.carte.CartaSpeciale.TipoSpeciale;
 import javafx.scene.control.Label;
 
 public class GestoreGraficaCarta {

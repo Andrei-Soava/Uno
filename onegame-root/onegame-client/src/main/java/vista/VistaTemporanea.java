@@ -2,11 +2,11 @@ package vista;
 
 import java.util.Scanner;
 
-import modello.Mossa;
-import modello.Mossa.TipoMossa;
-import modello.carte.Carta;
-import modello.carte.Colore;
-import modello.giocatori.Giocatore;
+import onegame.modello.Mossa;
+import onegame.modello.Mossa.TipoMossa;
+import onegame.modello.carte.Carta;
+import onegame.modello.carte.Colore;
+import onegame.modello.giocatori.Giocatore;
 
 public class VistaTemporanea implements InterfacciaVistaTemporanea{
 

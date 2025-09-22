@@ -1,9 +1,9 @@
 package vista;
 
-import modello.Mossa;
-import modello.carte.Carta;
-import modello.carte.Colore;
-import modello.giocatori.Giocatore;
+import onegame.modello.Mossa;
+import onegame.modello.carte.Carta;
+import onegame.modello.carte.Colore;
+import onegame.modello.giocatori.Giocatore;
 
 public interface InterfacciaVistaTemporanea {
 	public void stampaMessaggio(String s);

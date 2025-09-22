@@ -8,11 +8,11 @@ import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.util.Duration;
-import modello.Mossa;
-import modello.Mossa.TipoMossa;
-import modello.Partita;
-import modello.carte.Colore;
-import modello.giocatori.Giocatore;
+import onegame.modello.Mossa;
+import onegame.modello.Partita;
+import onegame.modello.Mossa.TipoMossa;
+import onegame.modello.carte.Colore;
+import onegame.modello.giocatori.Giocatore;
 import vista.VistaGioco;
 
 /**

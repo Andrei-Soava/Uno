@@ -1,6 +1,6 @@
-package modello;
+package onegame.modello;
 
-import modello.carte.Carta;
+import onegame.modello.carte.Carta;
 
 /**
  * interfaccia partita implementata da classe partita e da fornire a giocatore (contiene uniche azioni "legali" da giocatore)

@@ -1,4 +1,4 @@
-package modello;
+package onegame.modello;
 
 import static org.junit.Assert.*;
 
@@ -11,7 +11,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import modello.giocatori.Giocatore;
+import onegame.modello.Partita;
+import onegame.modello.giocatori.Giocatore;
 
 public class PartitaTest {
 	int numGiocatori = 4;

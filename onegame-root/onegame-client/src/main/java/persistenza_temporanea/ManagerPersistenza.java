@@ -2,7 +2,7 @@ package persistenza_temporanea;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import modello.Partita;
+import onegame.modello.Partita;
 
 import java.io.File;
 import java.io.IOException;

@@ -4,7 +4,7 @@
 
 package controllore;
 
-import modello.tabelle.Utente;
+import onegame.modello.tabelle.Utente;
 
 /************************************************************/
 /**

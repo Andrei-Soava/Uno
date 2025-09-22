@@ -1,6 +1,6 @@
-package modello;
+package onegame.modello;
 
-import modello.carte.Carta;
+import onegame.modello.carte.Carta;
 
 public class Mossa {
 	public enum TipoMossa {PESCA, GIOCA_CARTA, SCEGLI_COLORE};

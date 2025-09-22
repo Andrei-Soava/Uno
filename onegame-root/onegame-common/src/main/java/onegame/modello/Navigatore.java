@@ -1,4 +1,4 @@
-package modello;
+package onegame.modello;
 
 import java.util.List;
 
