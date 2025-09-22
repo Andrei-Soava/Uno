@@ -72,4 +72,5 @@ Esempio COMPLETO:
 - 20/09, Fabio, inizio divisione del progetto in moduli, continuazione divisione in moduli;
 - 21/09, Fabio, (riorganizzazione moduli, prima versione database), null;
 - 22/09, Andrei, (Aggiunta VistaRegistrazione e ControlloreRegistrazione + aggiunta erroreLabel per messaggi d'errore), collegamento al server per autenticazione;
+- 22/09, **AVVISO**, Andrei, il branch `ONEdivisioneInModuli` è diventato quello di default--> lavorare solo su quello;
 
