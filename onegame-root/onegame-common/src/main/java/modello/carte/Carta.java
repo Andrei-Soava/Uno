@@ -9,98 +9,162 @@ import modello.Partita;
 /************************************************************/
 
 /**
- * classe astratta che modella una carta generica
- * 
- * attributi importanti:
- * colore, che può essere cambiato (caso jolly)
- * 
- * metodi importanti:
- * giocabileSu()--> astratto, confronta la carta giocata(this) con quella sul banco (passato come input)
- * 
+ * Classe astratta che modella una carta generica del gioco UNO.
+ * <p>
+ * Attributi principali:
+ * <ul>
+ *   <li><b>colore</b>: rappresenta il colore della carta. Può essere modificato, ad esempio nel caso delle carte jolly.</li>
+ * </ul>
+ * <p>
+ * Metodi principali:
+ * <ul>
+ *   <li>{@link #giocabileSu(Carta)}: metodo astratto che determina se la carta può essere giocata sopra un'altra carta specificata come parametro.</li>
+ *   <li>{@link #applicaEffetto(Partita)}: metodo astratto che applica l'effetto della carta alla partita.</li>
+ *   <li>{@link #compareTo(Carta)}: confronta due carte in base al colore secondo una gerarchia definita.</li>
+ *   <li>{@link #getColore()}: restituisce il colore della carta.</li>
+ *   <li>{@link #setColore(Colore)}: imposta il colore della carta.</li>
+ * </ul>
+ * <p>
+ * Serializzazione:
+ * <ul>
+ *   <li>Annotazioni Jackson per la serializzazione/deserializzazione polimorfica delle sottoclassi.</li>
+ * </ul>
  */
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 
-@JsonTypeInfo(
-    use = JsonTypeInfo.Id.NAME,           // usa un nome leggibile
-    include = JsonTypeInfo.As.PROPERTY,   // aggiungi un campo nel JSON
-    property = "tipoCarta"                // nome del campo nel JSON
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, // usa un nome leggibile
+		include = JsonTypeInfo.As.PROPERTY, // aggiungi un campo nel JSON
+		property = "tipoCarta" // nome del campo nel JSON
 )
-@JsonSubTypes({
-    @JsonSubTypes.Type(value = CartaNumero.class, name = "numero"),
-    @JsonSubTypes.Type(value = CartaSpeciale.class, name = "speciale")
-})
+@JsonSubTypes({ @JsonSubTypes.Type(value = CartaNumero.class, name = "numero"),
+		@JsonSubTypes.Type(value = CartaSpeciale.class, name = "speciale") })
 public abstract class Carta implements Comparable<Carta> {
+	/**
+	 * Colore della carta. Può essere modificato (ad esempio per le carte jolly).
+	 */
 	protected Colore colore;
 
-	//costruttore vuoto per Jackson
-	public Carta() {}
-	
-	public Carta(Colore colore) {
-		this.colore=colore;
+	/**
+	 * Costruttore vuoto richiesto per la deserializzazione con Jackson.
+	 */
+	public Carta() {
 	}
-	
+
+	/**
+	 * Costruttore che inizializza la carta con un colore specifico.
+	 * 
+	 * @param colore il colore della carta
+	 */
+	public Carta(Colore colore) {
+		this.colore = colore;
+	}
+
+	/**
+	 * Restituisce il colore della carta.
+	 * 
+	 * @return il colore della carta
+	 */
 	public Colore getColore() {
 		return this.colore;
 	}
-	
 
+	/**
+	 * Imposta il colore della carta.
+	 * 
+	 * @param colore il nuovo colore da assegnare alla carta
+	 */
 	public void setColore(Colore colore) {
 		this.colore = colore;
 	}
-	
+
+	/**
+	 * Applica l'effetto della carta alla partita.
+	 * 
+	 * @param p la partita su cui applicare l'effetto
+	 */
 	public abstract void applicaEffetto(Partita p);
 
+	/**
+	 * Determina se la carta può essere giocata sopra la carta specificata.
+	 * 
+	 * @param c la carta presente sul banco
+	 * @return true se la carta può essere giocata, false altrimenti
+	 */
 	public abstract boolean giocabileSu(Carta c);
-	
+
+	/**
+	 * Confronta questa carta con un'altra in base al colore, secondo una gerarchia:
+	 * NERO < ROSSO < BLU < GIALLO < altri.
+	 * 
+	 * @param other l'altra carta da confrontare
+	 * @return 0 se i colori sono uguali, -1 se questa carta precede l'altra, 1
+	 *         altrimenti
+	 */
 	@Override
 	public int compareTo(Carta other) {
-		switch(this.colore) {
-		case NERO:{
-			if(other.colore==Colore.NERO)
+		switch (this.colore) {
+		case NERO: {
+			if (other.colore == Colore.NERO)
 				return 0;
 			else
 				return -1;
 		}
-			
-		case ROSSO:{
-			switch(other.colore) {
-			case NERO: return 1;
-			case ROSSO: return 0;
-			default: return -1;
+
+		case ROSSO: {
+			switch (other.colore) {
+			case NERO:
+				return 1;
+			case ROSSO:
+				return 0;
+			default:
+				return -1;
 			}
-			
+
 		}
-		
-		case BLU:{
-			switch(other.colore) {
-			case NERO: return 1;
-			case ROSSO: return 1;
-			case BLU: return 0;
-			default: return -1;
-			}
-		}
-		
-		case GIALLO:{
-			switch(other.colore) {
-			case NERO: return 1;
-			case ROSSO: return 1;
-			case BLU: return 1;
-			case GIALLO: return 0;
-			default: return -1;
+
+		case BLU: {
+			switch (other.colore) {
+			case NERO:
+				return 1;
+			case ROSSO:
+				return 1;
+			case BLU:
+				return 0;
+			default:
+				return -1;
 			}
 		}
-			
-		default:{
-			switch(other.colore) {
-			case NERO: return 1;
-			case ROSSO: return 1;
-			case BLU: return 1;
-			case GIALLO: return 1;
-			default: return 0;
+
+		case GIALLO: {
+			switch (other.colore) {
+			case NERO:
+				return 1;
+			case ROSSO:
+				return 1;
+			case BLU:
+				return 1;
+			case GIALLO:
+				return 0;
+			default:
+				return -1;
+			}
+		}
+
+		default: {
+			switch (other.colore) {
+			case NERO:
+				return 1;
+			case ROSSO:
+				return 1;
+			case BLU:
+				return 1;
+			case GIALLO:
+				return 1;
+			default:
+				return 0;
 			}
 		}
 		}
 	}
-	
 }

@@ -7,8 +7,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import modello.carte.Carta;
-import modello.carte.CartaNumero;
-import modello.carte.Colore;
 
 
 public class MazzoTest {
@@ -16,7 +14,7 @@ public class MazzoTest {
 	private Random random = new Random();
 	
 	@Before
-    public void setup() {
+    public void setUp() {
         mazzo = new Mazzo();
         mazzo.inizializzaNuovoMazzo();
     }
@@ -29,7 +27,6 @@ public class MazzoTest {
 	
 	@Test
 	public void testSvuotaMazzo() {
-		mazzo.inizializzaNuovoMazzo();
         assertFalse("Il mazzo è vuoto, ma dovrebbe essere pieno", mazzo.isVuoto());
 		mazzo.pescaN(mazzo.getNumeroCarte());
 		assertTrue("Il mazzo non è stato svuotato", mazzo.isVuoto());
@@ -37,7 +34,6 @@ public class MazzoTest {
 	
 	@Test
 	public void testPescaUnaCarta() {
-		mazzo.inizializzaNuovoMazzo();
 		int count1 = mazzo.getNumeroCarte();
 		mazzo.pesca();
 		int count2 = mazzo.getNumeroCarte();
@@ -46,7 +42,6 @@ public class MazzoTest {
 	
 	@Test
 	public void testPescaNCarte() {
-		mazzo.inizializzaNuovoMazzo();
 		int count1 = mazzo.getNumeroCarte();
 		int numeroCarteDaPescare = random.nextInt(count1);
 		mazzo.pescaN(numeroCarteDaPescare);
