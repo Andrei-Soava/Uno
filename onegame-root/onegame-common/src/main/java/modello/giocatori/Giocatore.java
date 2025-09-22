@@ -47,10 +47,10 @@ import modello.carte.Colore;
 })
 */
 public class Giocatore {
-	protected String nome;
-	protected boolean haPremutoOne;
-	protected Mano mano;
-	protected boolean bot;
+	private String nome;
+	private boolean haPremutoOne;
+	private Mano mano;
+	private boolean bot;
 	@JsonIgnore
 	protected PartitaIF partitaIF;
 

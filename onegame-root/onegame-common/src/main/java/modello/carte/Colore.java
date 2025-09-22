@@ -10,8 +10,11 @@ import java.util.Scanner;
 /************************************************************/
 
 /**
- * enumerato che modella i 4+1 colori
- *	 
+ * Enumerazione dei colori delle carte
+ * 
+ * valori possibili: ROSSO, BLU, GIALLO, VERDE, NERO
+ * 
+ *
  */
 public enum Colore {
 	/**
@@ -35,13 +38,20 @@ public enum Colore {
 	 */
 	NERO;
 
-	public static Colore scegliColore(Scanner sc) {
+	/**
+	 * Metodo che permette di scegliere un colore da tastiera
+	 * 
+	 * @param sc Scanner da cui leggere l'input
+	 * @return Colore scelto
+	 */
+	@SuppressWarnings("unused")
+	private static Colore scegliColore(Scanner sc) {
 		int index = -1;
 		while (index < 0 || index > 3) {
 			try {
 				System.out.println("Scegli un colore: 0->Rosso, 1->Blu, 2->Giallo, 3->Verde");
 				String input = sc.nextLine();
-		        index = Integer.parseInt(input);
+				index = Integer.parseInt(input);
 			} catch (Exception e) {
 				System.out.println("Errore. Riprovare");
 				index = -1;
@@ -49,9 +59,14 @@ public enum Colore {
 		}
 		return Colore.values()[index];
 	}
-	
+
+	/**
+	 * Metodo che genera un colore casuale
+	 * 
+	 * @return Colore casuale
+	 */
 	public static Colore scegliColoreCasuale() {
-		Random r=new Random();
+		Random r = new Random();
 		return Colore.values()[r.nextInt(4)];
 	}
 }
