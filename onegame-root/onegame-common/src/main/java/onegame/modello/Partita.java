@@ -5,6 +5,7 @@
 package onegame.modello;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -38,6 +39,8 @@ import onegame.modello.giocatori.Giocatore;
  * 
  */
 public class Partita implements PartitaIF {
+	private final static int NUMERO_CARTE_INIZIALI = 7;
+
 	private ArrayList<Giocatore> giocatori;
 	private Mazzo mazzo;
 	private PilaScarti pilaScarti;
@@ -51,8 +54,11 @@ public class Partita implements PartitaIF {
 	//costruttore vuoto per Jackson
 	public Partita() {}
 	
-	public Partita(ArrayList<Giocatore> giocatori) {
-		this.giocatori = giocatori;
+	public Partita(List<Giocatore> giocatori) {
+		this.giocatori = new ArrayList<>();
+		for (Giocatore giocatore : giocatori) {
+			aggiungiGiocatore(giocatore);
+		}
 		this.mazzo = new Mazzo();
 		this.mazzo.inizializzaNuovoMazzo();
 		this.pilaScarti = new PilaScarti();
@@ -65,7 +71,7 @@ public class Partita implements PartitaIF {
 
 	public void eseguiPrePartita() {
 		for (Giocatore g : giocatori) {
-			g.getMano().aggiungiCarta(mazzo.pescaN(7));
+			g.getMano().aggiungiCarta(mazzo.pescaN(NUMERO_CARTE_INIZIALI));
 			//g.getMano().aggiungiCarta(new CartaSpeciale(Colore.NERO,TipoSpeciale.PIU_QUATTRO));
 			//g.getMano().aggiungiCarta(new CartaSpeciale(Colore.NERO,TipoSpeciale.PIU_QUATTRO));
 			//g.getMano().aggiungiCarta(new CartaSpeciale(Colore.GIALLO,TipoSpeciale.PIU_DUE));
@@ -217,9 +223,15 @@ public class Partita implements PartitaIF {
 		return giocatori;
 	}
 
-	public void setGiocatori(ArrayList<Giocatore> giocatori) {
-		this.giocatori = giocatori;
+//	public void setGiocatori(ArrayList<Giocatore> giocatori) {
+//		this.giocatori = giocatori;
+//	}
+	
+	private void aggiungiGiocatore(Giocatore g) {
+		giocatori.add(g);
+		g.setPartita(this);
 	}
+	
 
 	public PilaScarti getPilaScarti() {
 		return pilaScarti;

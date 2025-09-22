@@ -52,7 +52,7 @@ public class Giocatore {
 	private Mano mano;
 	private boolean bot;
 	@JsonIgnore
-	protected PartitaIF partitaIF;
+	private PartitaIF partitaIF;
 
 	//costruttore vuoto per Jackson
 	public Giocatore() {}
@@ -88,12 +88,12 @@ public class Giocatore {
 	}
 	
 	@JsonIgnore
-	public PartitaIF getInterfacciaPartita() {
+	public PartitaIF getPartita() {
 		return partitaIF;
 	}
 
-	public void setInterfacciaPartita(PartitaIF interfacciaPartita) {
-		this.partitaIF = interfacciaPartita;
+	public void setPartita(PartitaIF partita) {
+		this.partitaIF = partita;
 	}
 	
 	public void cambiaModalita() {

@@ -76,39 +76,41 @@ public class ControllorePersistenza {
 			tv.stampaMessaggio("Errore nel salvataggio: " + e.getMessage());
 		}
 	}
-
-	public void caricaPartita(ControlloreGioco cg) {
-		VistaGioco tv = cg.getTv();
-		Partita partita = cg.getPartita();
-		List<String> salvataggi = ManagerPersistenza.listaSalvataggi();
-		if (salvataggi.isEmpty()) {
-			tv.stampaMessaggio("Nessun salvataggio trovato.");
-			return;
-		}
-
-		//mostra elenco salvataggi
-		StringBuilder sb = new StringBuilder("Salvataggi disponibili:\n");
-		for (int i = 0; i < salvataggi.size(); i++) {
-			sb.append(i).append(") ").append(salvataggi.get(i)).append("\n");
-		}
-		int scelta = tv.scegliTraN(sb.toString(), 0, salvataggi.size() - 1);
-		String nomeFile = salvataggi.get(scelta);
-
-		try {
-			partita = ManagerPersistenza.caricaPartita(nomeFile);
-			cg.setPartita(partita);
-			// Riaggancio il navigatore ai giocatori
-			partita.getNavigatore().setItems(partita.getGiocatori());
-			// Riaggancio l'interfaccia partita ai giocatori
-			ControlloreGioco.setPartitaIF(partita.getGiocatori(), partita);
-			// Riaggancio mazzo alla sua pila
-			partita.getMazzo().setPila(partita.getPilaScarti());
-			tv.stampaMessaggio("Partita '" + nomeFile + "' caricata con successo!");
-			salvataggioCorrente = nomeFile;
-		} catch (IOException e) {
-			tv.stampaMessaggio("Errore nel caricamento: " + e.getMessage());
-		}
-	}
+	
+//	Non usare
+//	@Deprecated
+//	public void caricaPartita(ControlloreGioco cg) {
+//		VistaGioco tv = cg.getTv();
+//		Partita partita = cg.getPartita();
+//		List<String> salvataggi = ManagerPersistenza.listaSalvataggi();
+//		if (salvataggi.isEmpty()) {
+//			tv.stampaMessaggio("Nessun salvataggio trovato.");
+//			return;
+//		}
+//
+//		//mostra elenco salvataggi
+//		StringBuilder sb = new StringBuilder("Salvataggi disponibili:\n");
+//		for (int i = 0; i < salvataggi.size(); i++) {
+//			sb.append(i).append(") ").append(salvataggi.get(i)).append("\n");
+//		}
+//		int scelta = tv.scegliTraN(sb.toString(), 0, salvataggi.size() - 1);
+//		String nomeFile = salvataggi.get(scelta);
+//
+//		try {
+//			partita = ManagerPersistenza.caricaPartita(nomeFile);
+//			cg.setPartita(partita);
+//			// Riaggancio il navigatore ai giocatori
+//			partita.getNavigatore().setItems(partita.getGiocatori());
+//			// Riaggancio l'interfaccia partita ai giocatori
+//			ControlloreGioco.setPartitaIF(partita.getGiocatori(), partita);
+//			// Riaggancio mazzo alla sua pila
+//			partita.getMazzo().setPila(partita.getPilaScarti());
+//			tv.stampaMessaggio("Partita '" + nomeFile + "' caricata con successo!");
+//			salvataggioCorrente = nomeFile;
+//		} catch (IOException e) {
+//			tv.stampaMessaggio("Errore nel caricamento: " + e.getMessage());
+//		}
+//	}
 
 	private String trovaSalvataggio(String nome) {
 		List<String> salvataggi = ManagerPersistenza.listaSalvataggi();
@@ -182,7 +184,7 @@ public class ControllorePersistenza {
 			// Riaggancio il navigatore ai giocatori
 			partita.getNavigatore().setItems(partita.getGiocatori());
 			// Riaggancio l'interfaccia partita ai giocatori
-			ControlloreGioco.setPartitaIF(partita.getGiocatori(), partita);
+			//ControlloreGioco.setPartitaIF(partita.getGiocatori(), partita);
 			// Riaggancio mazzo alla sua pila
 			partita.getMazzo().setPila(partita.getPilaScarti());
 			salvataggioCorrente = salvataggio;

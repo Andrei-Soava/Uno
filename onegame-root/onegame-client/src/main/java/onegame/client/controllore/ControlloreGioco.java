@@ -204,11 +204,11 @@ public class ControlloreGioco {
 	}
 	*/
     
-	static void setPartitaIF(ArrayList<Giocatore> giocatori, Partita partita) {
-		for(Giocatore g:giocatori) {
-			g.setInterfacciaPartita(partita);
-		}
-	}
+//	static void setPartitaIF(ArrayList<Giocatore> giocatori, Partita partita) {
+//		for(Giocatore g:giocatori) {
+//			g.setInterfacciaPartita(partita);
+//		}
+//	}
 	//---------------------------------------------------------------------------------
 	//versione con GUI javafx
 	public void configuraNuovaPartitaVsBot(int numeroGiocatori) {
@@ -222,7 +222,6 @@ public class ControlloreGioco {
 			giocatori.add(g);
 		}
 		partita = new Partita(giocatori);
-		setPartitaIF(giocatori, partita);
 		partita.eseguiPrePartita();
 		//da fare solo se persona è loggata
 		cp.setSalvataggioCorrente();
@@ -237,7 +236,6 @@ public class ControlloreGioco {
 			giocatori.add(new Giocatore(s));
 		}
 		partita = new Partita(giocatori);
-		setPartitaIF(giocatori, partita);
 		partita.eseguiPrePartita();
 		//da fare solo se persona è loggata
 		cp.setSalvataggioCorrente();

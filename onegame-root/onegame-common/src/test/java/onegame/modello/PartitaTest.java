@@ -36,13 +36,9 @@ public class PartitaTest {
 		}
 		partita = new Partita(giocatori);
 		partita.eseguiPrePartita();
-		for (int i = 0; i < numGiocatori; i++) {
-			giocatori.get(i).setInterfacciaPartita(partita);
-		}
 		
 		assertEquals("Numero di giocatori incoerente", numGiocatori, partita.getGiocatori().size());
 		
-	
 		partita.getGiocatoreCorrente().scegliMossaAutomatica();
 	}
 
