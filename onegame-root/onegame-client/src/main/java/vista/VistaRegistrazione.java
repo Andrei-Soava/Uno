@@ -13,63 +13,59 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
-public class VistaAccesso {
-
+public class VistaRegistrazione {
+	private AppWithMaven app;
 	private Scene scene;
-	AppWithMaven app;
 	private TextField usernameField;
 	private PasswordField passwordField;
+	private PasswordField confermaPasswordField;
 	private Label erroreLabel;
-	private Button accediBtn;
 	private Button registratiBtn;
-
-	public VistaAccesso(AppWithMaven app) {
+	
+	
+	public VistaRegistrazione(AppWithMaven app) {
 		this.app=app;
 		// titolo
-		Label titolo = new Label("Benvenuto su ONE! Scegli un opzione");
+		Label titolo = new Label("Compila i campi");
 		titolo.getStyleClass().add("titolo");
 
 		// spaziatore
 		Region spacer0 = new Region();
-		spacer0.setPrefHeight(25);
+		spacer0.setPrefHeight(0);
 
 		// campo nome utente
 		usernameField = new TextField();
-		usernameField.setPromptText("Inserisci nome utente");
+		usernameField.setPromptText("Scegli nome utente");
 		usernameField.setMaxWidth(200);
 
 		// campo password
 		passwordField = new PasswordField();
-		passwordField.setPromptText("Inserisci password");
+		passwordField.setPromptText("Scegli password");
 		passwordField.setMaxWidth(200);
-
-		// campo errore 
+		
+		//campo conferma password
+		confermaPasswordField = new PasswordField();
+		confermaPasswordField.setPromptText("Reinserisci password scelta");
+		confermaPasswordField.setMaxWidth(200);
+		
+		// campo errore
 		erroreLabel = new Label();
 		erroreLabel.getStyleClass().add("errore");
 		erroreLabel.setVisible(false);
 		erroreLabel.setManaged(false);
 		
-		// pulsanti "accedi" e "registrati"
-		accediBtn = new Button("Accedi");
+		// pulsanti registrati ed annulla
+		Button annullaBtn = new Button("Annulla");
+		annullaBtn.setOnAction(e->app.mostraVistaAccesso());
+		annullaBtn.setPrefWidth(95);
 		registratiBtn = new Button("Registrati");
-		registratiBtn.setOnAction(e->app.mostraVistaRegistrazione());
-		HBox bottoni = new HBox(10, accediBtn, registratiBtn);
+		registratiBtn.setPrefWidth(95);
+		HBox bottoni = new HBox(10, registratiBtn, annullaBtn);
 		bottoni.setAlignment(Pos.CENTER);
 		bottoni.setMaxWidth(200);
-		accediBtn.setPrefWidth(95);
-		registratiBtn.setPrefWidth(95);
-
-		// scritta "oppure"
-		Label oppureLabel = new Label("oppure");
-
-		// bottone "Entra come ospite"
-		Button ospiteBtn = new Button("Entra come ospite");
-		ospiteBtn.setOnAction(e -> {
-			app.mostraVistaHomeOspite();
-			});
-
+		
 		// costruzione scena
-		VBox root = new VBox(15, titolo, spacer0, usernameField, passwordField, erroreLabel, bottoni, oppureLabel, ospiteBtn);
+		VBox root = new VBox(15, titolo, spacer0, usernameField, passwordField, confermaPasswordField, erroreLabel, bottoni);
 		root.setAlignment(Pos.CENTER);
 		root.setPadding(new Insets(20));
 
@@ -77,22 +73,18 @@ public class VistaAccesso {
 		scene.getStylesheets().add(getClass().getResource("/stile/base.css").toExternalForm());
 		Platform.runLater(() -> root.requestFocus());
 	}
-
+	
 	public Scene getScene() {
 		return scene;
 	}
-
-	public void svuotaCampi() {
-		usernameField.clear();
+	
+	public void visualizzaAccesso() {
+		app.mostraVistaAccesso(usernameField.getText());
+	}
+	
+	public void svuotaPassword() {
 		passwordField.clear();
-	}
-	
-	public void visualizzaHome() {
-		app.mostraVistaHome();
-	}
-	
-	public void compilaUsername(String user) {
-		this.usernameField.setText(user);
+		confermaPasswordField.clear();
 	}
 	
 	public void compilaMessaggioErrore(String messaggio) {
@@ -100,19 +92,21 @@ public class VistaAccesso {
 		erroreLabel.setVisible(true);
 		erroreLabel.setManaged(true);
 	}
+	
 	/**
-	 * sezione ottenimento dati da campo di login
+	 * sezione ottenimento dati da campo di registrazione
 	 */
 	@FunctionalInterface
-	public interface DatiAccessoCallback {
-		void mandaDatiAccesso(String username, String password);
+	public interface DatiRegistrazioneCallback {
+		void mandaDatiRegistrazione(String username, String password, String confermaPassword);
 	}
 
-	public void ottieniDati(DatiAccessoCallback callback) {
-		accediBtn.setOnAction(e -> {
+	public void ottieniDati(DatiRegistrazioneCallback callback) {
+		registratiBtn.setOnAction(e -> {
 			String username = usernameField.getText();
 			String password = passwordField.getText();
-			callback.mandaDatiAccesso(username, password);
+			String confermaPassword = confermaPasswordField.getText();
+			callback.mandaDatiRegistrazione(username, password, confermaPassword);
 		});
 
 	}

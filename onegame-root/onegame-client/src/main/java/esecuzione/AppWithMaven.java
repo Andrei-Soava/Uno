@@ -5,6 +5,7 @@ import org.apache.logging.log4j.*;
 import controllore.ControlloreAccesso;
 import controllore.ControlloreGioco;
 import controllore.ControlloreHome;
+import controllore.ControlloreRegistrazione;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import vista.VistaAccesso;
@@ -12,6 +13,7 @@ import vista.VistaConfigurazione;
 import vista.VistaGioco;
 import vista.VistaHome;
 import vista.VistaIniziale;
+import vista.VistaRegistrazione;
 import vista.VistaSalvataggi;
 
 
@@ -48,11 +50,24 @@ public class AppWithMaven extends Application {
     	return this.primaryStage;
     }
     
-    public void mostraVistaAccesso() {
+    
+    public void mostraVistaAccesso(String username) {
     	VistaAccesso vista=new VistaAccesso(this);
+    	vista.compilaUsername(username);
     	ControlloreAccesso ca=new ControlloreAccesso(vista,ch);
     	primaryStage.setScene(vista.getScene());
     	ca.eseguiAccesso();
+    }
+    
+    public void mostraVistaAccesso() {
+    	this.mostraVistaAccesso("");
+    }
+    
+    public void mostraVistaRegistrazione() {
+    	VistaRegistrazione vista=new VistaRegistrazione(this);
+    	ControlloreRegistrazione cr=new ControlloreRegistrazione(vista);
+    	primaryStage.setScene(vista.getScene());
+    	cr.eseguiRegistrazione();
     }
     
     public void mostraVistaHome() {

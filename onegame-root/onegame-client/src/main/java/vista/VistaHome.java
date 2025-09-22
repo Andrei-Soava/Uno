@@ -12,6 +12,12 @@ import javafx.scene.layout.VBox;
 
 public class VistaHome {
 	private Scene scene;
+	
+	private Button giocaOnlineBtn;
+	private Button giocaOfflineBtn;
+	private Button statisticheBtn;
+	private Button logoutBtn;
+	
 	private ControlloreHome ch;
 
 	public VistaHome(AppWithMaven app, ControlloreHome ch) {
@@ -24,20 +30,27 @@ public class VistaHome {
 		Region spacer0 = new Region();
     	spacer0.setPrefHeight(25);
 		
-		Button giocaOnlineBtn = new Button("Gioca con amici");
+		giocaOnlineBtn = new Button("Gioca con amici");
 		giocaOnlineBtn.setPrefWidth(200);
 		
-		Button giocaOfflineBtn = new Button("Gioca contro computer");
+		giocaOfflineBtn = new Button("Gioca contro computer");
 		giocaOfflineBtn.setPrefWidth(200);
 		giocaOfflineBtn.setOnAction(e -> app.mostraVistaIniziale());
 
-		Button statisticheBtn = new Button("Mostra statistiche");
+		statisticheBtn = new Button("Mostra statistiche");
 		statisticheBtn.setPrefWidth(200);
+		if(ch.getUtente()==null) {
+			statisticheBtn.setDisable(true);
+			statisticheBtn.setOpacity(0.5);
+		}
 
-		Button logoutBtn = new Button("Logout");
+		logoutBtn = new Button("Logout");
 		logoutBtn.setPrefWidth(200);
 		logoutBtn.getStyleClass().add("logout");
-		logoutBtn.setOnAction(e -> app.mostraVistaAccesso());
+		logoutBtn.setOnAction(e -> {
+			ch.setUtente(null);
+			app.mostraVistaAccesso();
+			});
 
 		VBox root = new VBox(15, titolo, spacer0, giocaOnlineBtn, giocaOfflineBtn, statisticheBtn, logoutBtn);
 		root.setAlignment(Pos.CENTER);

@@ -16,8 +16,9 @@ public class ControlloreAccesso {
 			System.out.println(username);
 			System.out.println(password);
 			if(username.length()==0 || password.length()==0) {
-				System.out.println("Campo vuoto");
+				va.compilaMessaggioErrore("Uno o più campi vuoti");
 				eseguiAccesso();
+				return;
 			}
 			
 			//condizionale (sarà dentro una send asincrona al server e se la response == true, si va alla vista successiva)
@@ -26,7 +27,7 @@ public class ControlloreAccesso {
 				va.visualizzaHome();	
 			}
 			else {
-				System.out.println("Credenziali errate");
+				va.compilaMessaggioErrore("Credenziali errate");
 				va.svuotaCampi();
 				eseguiAccesso();
 			}

@@ -14,6 +14,11 @@
     -fx-font-weight:bold;
 }
 
+.errore {
+    -fx-text-fill: black;
+    -fx-font-weight: bold;
+}
+
 /*stile campi input*/
 .text-field, .password-field {
     -fx-background-color: #ffd700;
