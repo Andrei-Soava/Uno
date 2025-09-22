@@ -59,7 +59,7 @@
         <groupId>org.openjfx</groupId>
         <artifactId>javafx-maven-plugin</artifactId>
         <configuration>
-          <mainClass>esecuzione.AppWithMaven</mainClass>
+          <mainClass>onegame.client.esecuzione.AppWithMaven</mainClass>
         </configuration>
       </plugin>
     </plugins>
