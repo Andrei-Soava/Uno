@@ -142,7 +142,7 @@ public class Partita implements PartitaIF {
 		return navigatore;
 	}
 
-	public void setNavigatore(Navigatore<Giocatore> navigatore) {
+	private void setNavigatore(Navigatore<Giocatore> navigatore) {
 		this.navigatore = navigatore;
 	}
 

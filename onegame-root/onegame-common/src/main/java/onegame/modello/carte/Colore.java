@@ -45,6 +45,7 @@ public enum Colore {
 	 * @return Colore scelto
 	 */
 	@SuppressWarnings("unused")
+	@Deprecated
 	private static Colore scegliColore(Scanner sc) {
 		int index = -1;
 		while (index < 0 || index > 3) {

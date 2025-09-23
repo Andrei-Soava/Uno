@@ -76,4 +76,5 @@ Esempio COMPLETO:
 - 22/09 20:43, Giuseppe, inizializzazione del server con la creazione del gameserver (dove viene creato il sever per la gestione delle connessione e disconnesioni dei giocatori) e del ServerLaunch (usato per avviare il server), null;
 - 22/09, Fabio, (ultimata riorganizzazione moduli, documentazione, creati casi di test per mazzo e partita), creazione nuovi casi di test e refactoring del codice di common e client;
 - 22/09, 20-21:30, rinominati tutti i package secondo convenzione, null;
-- 23/09, Andrei, bug fixing + eliminazione classi inutili + migliore leggibilità classe Partita, continuazione gui;
+- 23/09, Andrei, eliminazione classi inutili + migliore leggibilità classe Partita, continuazione gui;
+- 23/09, Fabio, (refactoring, aggiunta metodi per serializzare e deserializzare Partita), null;
