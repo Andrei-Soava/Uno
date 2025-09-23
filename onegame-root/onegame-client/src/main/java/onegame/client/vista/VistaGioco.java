@@ -388,7 +388,6 @@ public class VistaGioco {
      */
     //mostra la carta pescata
     public void stampaCartaPescataAsync(Carta pescata, Consumer<Integer> callback) {
-    	System.out.println("dentro il scegli azione su carta");
         Platform.runLater(() -> {
             Alert alert = new Alert(Alert.AlertType.NONE);
             alert.setTitle("Scegli");
@@ -413,7 +412,6 @@ public class VistaGioco {
 
     //mostra la scelta colore
     public void stampaColoriAsync(Consumer<Colore> callback) {
-    	System.out.println("dentro il scegli colore");
         Platform.runLater(() -> {
             List<Colore> colori = Arrays.asList(Colore.values()).subList(0, 4);
             Colore coloreDefault = Colore.ROSSO;
@@ -497,7 +495,6 @@ public class VistaGioco {
      * sezione scelta principale durante il turno
      */
     public void scegliMossaAsync(Carta cartaCorrente, Giocatore g, Consumer<Mossa> callback) {
-    	System.out.println("dentro il scegli mossa");
     	Platform.runLater(() -> {
     		impostaCartaCorrente(cartaCorrente);
             mano.getChildren().clear();

@@ -51,14 +51,16 @@ public class Partita implements PartitaIF {
 	@JsonIgnore
 	private Giocatore vincitore;
 
+	//SEZIONE costruttori
 	//costruttore vuoto per Jackson
 	public Partita() {}
 	
 	public Partita(List<Giocatore> giocatori) {
 		this.giocatori = new ArrayList<>();
-		for (Giocatore giocatore : giocatori) {
-			aggiungiGiocatore(giocatore);
+		for (Giocatore g : giocatori) {
+			this.giocatori.add(g);
 		}
+		setPartitaGiocatori();
 		this.mazzo = new Mazzo();
 		this.mazzo.inizializzaNuovoMazzo();
 		this.pilaScarti = new PilaScarti();
@@ -68,7 +70,90 @@ public class Partita implements PartitaIF {
 		this.effettoAttivato = true;
 		mazzo.setPila(pilaScarti);
 	}
+	//------------------------------
+	
+	//SEZIONE getters & setters
+	//metodo che setta la partita di ogni giocatore (utile per quando si deserializza)
+	public void setPartitaGiocatori() {
+		for(Giocatore g:giocatori)
+			g.setPartita(this);
+	}
+	
+	public Carta getCartaCorrente() {
+		return cartaCorrente;
+	}
 
+	private void setCartaCorrente(Carta cartaCorrente) {
+		this.cartaCorrente = cartaCorrente;
+	}
+	
+	public Mazzo getMazzo() {
+		return this.mazzo;
+	}
+	
+	public void setMazzo(Mazzo mazzo) {
+		this.mazzo = mazzo;
+	}
+	
+	public PilaScarti getPilaScarti() {
+		return pilaScarti;
+	}
+
+	public void setPilaScarti(PilaScarti pilaScarti) {
+		this.pilaScarti = pilaScarti;
+	}
+	
+	//metodo che restituisce il giocatore corrente (utile per gui)
+	@JsonIgnore
+	public Giocatore getGiocatoreCorrente() {
+		return navigatore.corrente();
+	}
+	
+	//metodo che restituisce il vincitore (utile per gui)
+	@JsonIgnore
+	public Giocatore getVincitore() {
+		return this.vincitore;
+	}
+	
+
+	public ArrayList<Giocatore> getGiocatori() {
+		return giocatori;
+	}
+
+	//in teoria servirebbe a Jackson per deserializzare, però con le collezioni si può omettere
+	//	public void setGiocatori(ArrayList<Giocatore> giocatori) {
+	//		this.giocatori = giocatori;
+	//	}
+	
+
+	public Navigatore<Giocatore> getNavigatore() {
+		return navigatore;
+	}
+
+	public void setNavigatore(Navigatore<Giocatore> navigatore) {
+		this.navigatore = navigatore;
+	}
+
+	public boolean isDirezione() {
+		return direzione;
+	}
+
+	public void setDirezione(boolean direzione) {
+		this.direzione = direzione;
+	}
+
+	public boolean isEffettoAttivato() {
+		return effettoAttivato;
+	}
+
+	public void setEffettoAttivato(boolean effettoAttivato) {
+		this.effettoAttivato = effettoAttivato;
+	}
+
+	//------------------------------
+
+	//SEZIONE funzioni specifiche partita
+	//metodo che distribuisce le carte ad inizio partita e setta la carta iniziale
 	public void eseguiPrePartita() {
 		for (Giocatore g : giocatori) {
 			g.getMano().aggiungiCarta(mazzo.pescaN(NUMERO_CARTE_INIZIALI));
@@ -87,6 +172,7 @@ public class Partita implements PartitaIF {
 		//setCartaCorrente(new CartaNumero(Colore.ROSSO,0));
 	}
 
+	//metodo che imposta il prossimo turno
 	public void eseguiUnTurno() {
 		if (verificaFinePartita()) 
 			return;
@@ -96,47 +182,13 @@ public class Partita implements PartitaIF {
 		}
 		prossimoGiocatore();
 	}
-
-	public Carta getCartaCorrente() {
-		return cartaCorrente;
-	}
-
-	private void setCartaCorrente(Carta cartaCorrente) {
-		this.cartaCorrente = cartaCorrente;
-	}
 	
-	public Mazzo getMazzo() {
-		return this.mazzo;
-	}
-	
+	//metodo che inverte la turnazione dei giocatori (orario<->antiorario)
 	public void cambiaDirezione() {
 		direzione=!direzione;
 	}
 	
-	@JsonIgnore
-	public Giocatore getGiocatoreCorrente() {
-		return navigatore.corrente();
-	}
-
-	public Giocatore vediProssimoGiocatore() {
-		//direzione=true--> orario, direzione=false--> antiorario
-		return direzione ? navigatore.vediProssimo() : navigatore.vediPrecedente();
-	}
-
-	public void prossimoGiocatore() {
-		navigatore.setCorrente(vediProssimoGiocatore());
-	}
-
-	private void applicaEffettoCarta(Carta c) {
-		c.applicaEffetto(this);
-	}
-	
-	@JsonIgnore
-	public Giocatore getVincitore() {
-		return this.vincitore;
-	}
-	
-	
+	//metodo di validazione (ed eventuale applicazione) di una giocata 
 	public Mossa applicaMossa(Giocatore g, Mossa mossa) {
 		//caso 1:devo pescare
 		if (mossa.getTipoMossa() == TipoMossa.PESCA) 
@@ -184,7 +236,23 @@ public class Partita implements PartitaIF {
 			return null;
 	}
 	
+	//metodo che serve ad applicare l'effetto delle carte speciali
+	private void applicaEffettoCarta(Carta c) {
+		c.applicaEffetto(this);
+	}
 
+	//metodo che restituisce il prossimo giocatore senza modificare il giocatore corrente (utile per gui)
+	public Giocatore vediProssimoGiocatore() {
+		//direzione=true--> orario, direzione=false--> antiorario
+		return direzione ? navigatore.vediProssimo() : navigatore.vediPrecedente();
+	}
+
+	//metodo che modifica il prossimo giocatore
+	public void prossimoGiocatore() {
+		navigatore.setCorrente(vediProssimoGiocatore());
+	}
+	
+	//metodo che controlla se la partita è finita (in quel caso imposta il giocatore vincitore)
 	public boolean verificaFinePartita() {
 		for (Giocatore g : giocatori) {
 			if (g.getMano().getNumCarte() == 0) {
@@ -194,18 +262,23 @@ public class Partita implements PartitaIF {
 		}
 		return false;
 	}
-
+	//------------------------------
+	
+	//SEZIONE interfacce per giocatore
+	//metodo che restituisce la carta in cima al mazzo
 	@Override
 	public Carta pescaCarta() {
 		return mazzo.pesca();
 		//return new CartaSpeciale(Colore.NERO,TipoSpeciale.JOLLY);
 	}
 
+	//metodo che controlla se è una carta giocata è compatibile con la carta corrente
 	@Override
 	public boolean tentaGiocaCarta(Carta tentativo) {
 		return tentativo.giocabileSu(cartaCorrente);
 	}
 
+	//metodo che imposta la nuova carta corrente, manda la vecchia carta corrente nella pila scarti ed setta a false effettoAttivato
 	@Override
 	public void giocaCarta(Carta c) {
 		if (cartaCorrente != null && cartaCorrente != c) { 
@@ -217,57 +290,6 @@ public class Partita implements PartitaIF {
 	    }
 		setCartaCorrente(c);
 		effettoAttivato = false;
-	}
-
-	public ArrayList<Giocatore> getGiocatori() {
-		return giocatori;
-	}
-
-//	public void setGiocatori(ArrayList<Giocatore> giocatori) {
-//		this.giocatori = giocatori;
-//	}
-	
-	private void aggiungiGiocatore(Giocatore g) {
-		giocatori.add(g);
-		g.setPartita(this);
-	}
-	
-
-	public PilaScarti getPilaScarti() {
-		return pilaScarti;
-	}
-
-	public void setPilaScarti(PilaScarti pilaScarti) {
-		this.pilaScarti = pilaScarti;
-	}
-
-	public Navigatore<Giocatore> getNavigatore() {
-		return navigatore;
-	}
-
-	public void setNavigatore(Navigatore<Giocatore> navigatore) {
-		this.navigatore = navigatore;
-	}
-
-	public boolean isDirezione() {
-		return direzione;
-	}
-
-	public void setDirezione(boolean direzione) {
-		this.direzione = direzione;
-	}
-
-	public boolean isEffettoAttivato() {
-		return effettoAttivato;
-	}
-
-	public void setEffettoAttivato(boolean effettoAttivato) {
-		this.effettoAttivato = effettoAttivato;
-	}
-
-	public void setMazzo(Mazzo mazzo) {
-		this.mazzo = mazzo;
-	}
-	
-	
+	}	
+	//------------------------------
 }

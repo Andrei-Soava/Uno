@@ -310,7 +310,7 @@ public class ControlloreGioco {
 	        if(partitaAttiva)
 	        	eseguiTurno(); // turno successivo
 	    } else {
-	    	System.out.println("dentro il turno umano");
+	    	System.out.println();
 	        //turno umano 
 	    	//setup timer e counter -> da mandare alla VistaGioco
 	    	AtomicBoolean mossaEffettuata = new AtomicBoolean(false);
