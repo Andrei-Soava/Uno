@@ -1,4 +1,4 @@
-package onegame.client.vista;
+package onegame.client.vista.deprecato;
 
 import onegame.modello.Mossa;
 import onegame.modello.carte.Carta;

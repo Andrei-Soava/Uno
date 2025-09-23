@@ -5,9 +5,9 @@ import java.util.List;
 
 import onegame.client.persistenza_temporanea.InterfacciaPersistenza;
 import onegame.client.persistenza_temporanea.ManagerPersistenza;
-import onegame.client.vista.InterfacciaVistaTemporanea;
 import onegame.client.vista.VistaGioco;
-import onegame.client.vista.VistaTemporanea;
+import onegame.client.vista.deprecato.InterfacciaVistaTemporanea;
+import onegame.client.vista.deprecato.VistaTemporanea;
 import onegame.modello.Partita;
 
 /**

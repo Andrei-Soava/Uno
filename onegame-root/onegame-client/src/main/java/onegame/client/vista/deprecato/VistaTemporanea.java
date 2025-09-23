@@ -1,4 +1,4 @@
-package onegame.client.vista;
+package onegame.client.vista.deprecato;
 
 import java.util.Scanner;
 
