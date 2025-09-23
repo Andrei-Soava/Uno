@@ -23,6 +23,7 @@ import onegame.modello.Partita;
  * -caricaPartita--> permette di scegliere tra le partite salvate una da caricare e quindi avviare
  * -rinominaSalvataggio--> permette di scegliere tra i salvataggi uno e rinominarlo
  */
+@Deprecated
 public class ControllorePersistenza {
 	private String salvataggioCorrente;
 	private InterfacciaPersistenza persistenzaIF;
