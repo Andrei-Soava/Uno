@@ -8,6 +8,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.MapperFeature;
+import com.fasterxml.jackson.databind.jsontype.BasicPolymorphicTypeValidator;
+
 
 import onegame.modello.Mossa.TipoMossa;
 import onegame.modello.carte.*;
@@ -40,6 +49,8 @@ import onegame.modello.giocatori.Giocatore;
  */
 public class Partita implements PartitaIF {
 	private final static int NUMERO_CARTE_INIZIALI = 7;
+	public static final JsonMapper MAPPER = createMapper();
+	
 
 	private ArrayList<Giocatore> giocatori;
 	private Mazzo mazzo;
@@ -53,14 +64,10 @@ public class Partita implements PartitaIF {
 
 	//SEZIONE costruttori
 	//costruttore vuoto per Jackson
-	public Partita() {}
+	public Partita() {	}
 	
 	public Partita(List<Giocatore> giocatori) {
-		this.giocatori = new ArrayList<>();
-		for (Giocatore g : giocatori) {
-			this.giocatori.add(g);
-		}
-		setPartitaGiocatori();
+		setGiocatori(giocatori);
 		this.mazzo = new Mazzo();
 		this.mazzo.inizializzaNuovoMazzo();
 		this.pilaScarti = new PilaScarti();
@@ -70,15 +77,11 @@ public class Partita implements PartitaIF {
 		this.effettoAttivato = true;
 		mazzo.setPila(pilaScarti);
 	}
+	
 	//------------------------------
 	
 	//SEZIONE getters & setters
-	//metodo che setta la partita di ogni giocatore (utile per quando si deserializza)
-	public void setPartitaGiocatori() {
-		for(Giocatore g:giocatori)
-			g.setPartita(this);
-	}
-	
+	//metodo che setta la partita di ogni giocatore (utile per quando si deserializza)	
 	public Carta getCartaCorrente() {
 		return cartaCorrente;
 	}
@@ -118,6 +121,15 @@ public class Partita implements PartitaIF {
 
 	public ArrayList<Giocatore> getGiocatori() {
 		return giocatori;
+	}
+	
+	@JsonProperty("giocatori")
+	private void setGiocatori(List<Giocatore> giocatori) {
+		this.giocatori = new ArrayList<>();
+		for (Giocatore g : giocatori) {
+			this.giocatori.add(g);
+			g.setPartita(this);
+		}
 	}
 
 	//in teoria servirebbe a Jackson per deserializzare, però con le collezioni si può omettere
@@ -292,4 +304,32 @@ public class Partita implements PartitaIF {
 		effettoAttivato = false;
 	}	
 	//------------------------------
+	
+
+	private static JsonMapper createMapper() {
+		JsonMapper mapper = new JsonMapper();
+		mapper.enable(SerializationFeature.INDENT_OUTPUT);
+		mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+		return mapper;
+	}
+	
+	public String toJson() {
+		try {
+			return MAPPER.writeValueAsString(this);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public static Partita fromJson(String json) {
+		try {
+			Partita p = MAPPER.readValue(json, Partita.class);
+			p.getMazzo().setPila(p.getPilaScarti());
+			return p;
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 }

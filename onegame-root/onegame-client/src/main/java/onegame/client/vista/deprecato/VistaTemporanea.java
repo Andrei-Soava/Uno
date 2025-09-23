@@ -8,6 +8,7 @@ import onegame.modello.carte.Carta;
 import onegame.modello.carte.Colore;
 import onegame.modello.giocatori.Giocatore;
 
+@Deprecated
 public class VistaTemporanea implements InterfacciaVistaTemporanea{
 
 	private Scanner sc;

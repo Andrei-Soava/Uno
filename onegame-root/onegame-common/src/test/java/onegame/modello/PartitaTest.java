@@ -11,7 +11,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import onegame.modello.Partita;
 import onegame.modello.giocatori.Giocatore;
 
 public class PartitaTest {
@@ -36,10 +35,13 @@ public class PartitaTest {
 		}
 		partita = new Partita(giocatori);
 		partita.eseguiPrePartita();
-		
+
 		assertEquals("Numero di giocatori incoerente", numGiocatori, partita.getGiocatori().size());
 		
-		partita.getGiocatoreCorrente().scegliMossaAutomatica();
+		String str = partita.toJson();
+		Partita partita2 = Partita.fromJson(str);
+		
 	}
+	
 
 }

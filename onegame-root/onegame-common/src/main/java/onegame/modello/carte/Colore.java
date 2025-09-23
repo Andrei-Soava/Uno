@@ -61,7 +61,7 @@ public enum Colore {
 	}
 
 	/**
-	 * Metodo che genera un colore casuale
+	 * Metodo che genera un colore casuale (ROSSO, BLU, GIALLO, VERDE)
 	 * 
 	 * @return Colore casuale
 	 */

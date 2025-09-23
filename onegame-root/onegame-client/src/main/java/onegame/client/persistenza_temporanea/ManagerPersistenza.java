@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
  * -eliminaSalvataggio-->procede, se possibile, alla eliminazione di un file
  * -listaSalvataggi-->fornisce la lista dei salvataggi presenti
  */
+@Deprecated
 public class ManagerPersistenza {
     private static final ObjectMapper mapper = new ObjectMapper();
     private static final String SAVE_DIR = "saves";
@@ -31,11 +32,13 @@ public class ManagerPersistenza {
         }
     }
     
+    @Deprecated
     public static void salvaPartita(Partita partita, String nomeFile) throws IOException {
         File file = new File(SAVE_DIR, nomeFile + ".json");
         mapper.writerWithDefaultPrettyPrinter().writeValue(file, partita);
     }
 
+    @Deprecated
     public static Partita caricaPartita(String nomeFile) throws IOException {
         File file = new File(SAVE_DIR, nomeFile + ".json");
         return mapper.readValue(file, Partita.class);

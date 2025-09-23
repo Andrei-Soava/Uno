@@ -183,8 +183,6 @@ public class ControllorePersistenza {
 			cg.setPartita(partita);
 			// Riaggancio il navigatore ai giocatori
 			partita.getNavigatore().setItems(partita.getGiocatori());
-			// Riaggancio l'interfaccia partita ai giocatori
-			partita.setPartitaGiocatori();
 			// Riaggancio mazzo alla sua pila
 			partita.getMazzo().setPila(partita.getPilaScarti());
 			salvataggioCorrente = salvataggio;

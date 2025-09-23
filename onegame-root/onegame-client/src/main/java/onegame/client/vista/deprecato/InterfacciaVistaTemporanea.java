@@ -5,6 +5,7 @@ import onegame.modello.carte.Carta;
 import onegame.modello.carte.Colore;
 import onegame.modello.giocatori.Giocatore;
 
+@Deprecated
 public interface InterfacciaVistaTemporanea {
 	public void stampaMessaggio(String s);
 	public String inserisciStringa(String message);
