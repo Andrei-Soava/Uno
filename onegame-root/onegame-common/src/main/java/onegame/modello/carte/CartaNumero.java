@@ -28,6 +28,9 @@ public class CartaNumero extends Carta {
 		this.numero=numero;
 	}
 	
+	/**
+	 * se la carta è una CartaNumero, non ci sono effetti
+	 */
 	@Override
 	public void applicaEffetto(Partita p) {
 		

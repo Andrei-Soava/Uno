@@ -40,6 +40,20 @@ public class CartaSpeciale extends Carta {
 		this.tipo=tipo;
 	}
 	
+	/**
+	 * se la carta è una CartaSpeciale, l'effetto varia in base alla carta
+	 * 
+	 * funzionamento:
+	 * 1) switch case in base al Tipo della CartaSpeciale;
+	 * 2) azioni specifiche carta sul giocatore vittima;
+	 * 
+	 * NOTE:
+	 * quando viene invocato questo metodo: 
+	 * partita.eseguiUnTurno--> partita.applicaEffettoCarta--> carta.applicaEffetto
+	 * si noti che da eseguiUnTurno fino alla sua conclusione il giocatore viene cambiato
+	 * al massimo due volte (un prossimoGiocatore() qui + un prossimoGiocatore() alla fine
+	 * di eseguiUnTurno), nel caso in cui si abbia una carta che fa saltare un turno  
+	 */
 	@Override
 	public void applicaEffetto(Partita p) {
 			switch (this.getTipo()) {

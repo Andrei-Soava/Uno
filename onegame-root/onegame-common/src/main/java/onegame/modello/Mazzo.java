@@ -44,6 +44,10 @@ public class Mazzo {
 		this.carte=new Stack<>();
 	}
 	
+	/**
+	 * metodo di inizializzazione del mazzo 
+	 * (da invocare solo in costruttore Partita non vuotot)
+	 */
 	public void inizializzaNuovoMazzo() {
 		this.carte.clear();
 		try {
@@ -80,6 +84,12 @@ public class Mazzo {
 		Collections.shuffle(carte);
 	}
 	
+	/**
+	 * metodo che legge le carte che ci devono essere in un mazzo, le crea
+	 * e le inserisce dentro il mazzo stesso, mescolandolo alla fine
+	 * 
+	 * @throws IOException errore lettura file
+	 */
 	public void creaMazzo() throws IOException {
 	    try (InputStream is = getClass().getResourceAsStream("/mazzo");
 	    	     BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
@@ -104,6 +114,9 @@ public class Mazzo {
 	    mescola();
 	}
 	
+	/**
+	 * metodo che ricostruisce mazzo a partite da pilascarti ad esso associato
+	 */
 	@JsonIgnore
 	public void ricostruisciMazzo() {
 		carte.addAll(this.getPila().getScarti());

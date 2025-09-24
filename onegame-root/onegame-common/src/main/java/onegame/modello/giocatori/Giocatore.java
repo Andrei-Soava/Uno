@@ -48,7 +48,6 @@ import onegame.modello.carte.Colore;
 */
 public class Giocatore {
 	private String nome;
-	private boolean haPremutoOne;
 	private Mano mano;
 	private boolean bot;
 	@JsonIgnore
@@ -60,15 +59,24 @@ public class Giocatore {
 	public Giocatore (String nome) {
 		this.nome=nome;
 		this.mano=new Mano();
-		this.haPremutoOne=false;
 		this.partitaIF=null;
 		this.bot=false;
 	}
 	
+	/**
+	 * metodo che aggiunge carta nella mano
+	 * 
+	 * @param c carta aggiunta
+	 */
 	public void aggiungiCarta(Carta c) {
 		mano.aggiungiCarta(c);
 	}
 	
+	/**
+	 * metodo che rimuove carta da mano (coerenza mantenuta nel controllore)
+	 * 
+	 * @param c carta rimossa
+	 */
 	public void rimuoveCarta(Carta c) {
 		mano.rimuoviCarta(c);
 	}
@@ -81,12 +89,6 @@ public class Giocatore {
 		return this.mano;
 	}
 	
-	public void haPremutoOne() {
-	}
-	
-	public void setPremutoOne() {
-	}
-	
 	@JsonIgnore
 	public PartitaIF getPartita() {
 		return partitaIF;
@@ -96,14 +98,28 @@ public class Giocatore {
 		this.partitaIF = partita;
 	}
 	
+	/**
+	 * metodo che rende un giocatore umano un bot e viceversa
+	 * (utile per partite offline)
+	 */
 	public void cambiaModalita() {
 		bot=!bot;
 	}
 	
+	/**
+	 * getter per vedere se giocatore è un bot (=true) o meno (=false)
+	 * (utile per partite offline e online con perdita di connessione)
+	 */
 	public boolean isBot() {
 		return bot;
 	}
 	
+	/**
+	 * metodo di scelta di mossa automatica con applicazione DIRETTA
+	 * sulla partita (applicaMossa() non serve qui)
+	 * 
+	 * @return mossa finale applicata (per gui)
+	 */
 	public Mossa scegliMossaAutomatica() {
 		Mossa m;
 		for(Carta c:this.getMano().getCarte()) {

@@ -78,3 +78,4 @@ Esempio COMPLETO:
 - 22/09, 20-21:30, rinominati tutti i package secondo convenzione, null;
 - 23/09, Andrei, eliminazione classi inutili + migliore leggibilità classe Partita, continuazione gui;
 - 23/09, Fabio, (refactoring, aggiunta metodi per serializzare e deserializzare Partita), null;
+- 24/09, Andrei, (javadoc alcuni parti del modello), null;

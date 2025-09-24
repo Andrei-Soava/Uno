@@ -30,16 +30,32 @@ public class Mano {
 	public Mano() {
 		this.carte=new ArrayList<>();
 	}
+	
+	/**
+	 * metodo di aggiunta di una carta
+	 * 
+	 * @param c carta aggiunta
+	 */
 	public void aggiungiCarta(Carta c) {
 		carte.add(c);
 		Collections.sort(carte);
 	}
 	
+	/**
+	 * metodo di aggiunta di più carte (es pescaN)
+	 * 
+	 * @param c carte aggiunte
+	 */
 	public void aggiungiCarta(ArrayList<Carta> c) {
 		carte.addAll(c);
 		Collections.sort(carte);
 	}
-
+	
+	/**
+	 * metodo di rimozione di una carta
+	 * 
+	 * @param c
+	 */
 	public void rimuoviCarta(Carta c) {
 		carte.remove(c);
 	}

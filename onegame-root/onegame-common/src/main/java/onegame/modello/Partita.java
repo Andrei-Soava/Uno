@@ -17,7 +17,6 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.jsontype.BasicPolymorphicTypeValidator;
 
-
 import onegame.modello.Mossa.TipoMossa;
 import onegame.modello.carte.*;
 import onegame.modello.carte.CartaSpeciale.TipoSpeciale;
@@ -28,29 +27,34 @@ import onegame.modello.giocatori.Giocatore;
 /**
  * classe centrale dove avviene il gioco
  * 
- * attributi importanti: 
- * lista dei giocatori riferimento al mazzo e alla pilascarti 
- * riferimento ad un navigatore--> gestione semplice della ciclazione dei giocatori 
- * riferimento alla carta corrente sul banco 
- * campi booleani per indicare direzione (true=orario) e se l'effetto della carta corrente è stato attivato (utile per salvataggio)
+ * attributi importanti: lista dei giocatori riferimento al mazzo e alla
+ * pilascarti riferimento ad un navigatore--> gestione semplice della ciclazione
+ * dei giocatori riferimento alla carta corrente sul banco campi booleani per
+ * indicare direzione (true=orario) e se l'effetto della carta corrente è stato
+ * attivato (utile per salvataggio)
  * 
- * metodi importanti: 
- * eseguiPrePartita--> fornisce N carte a ciascun giocatore dal mazzo, mette giù la prima carta sul banco 
- * eseguiUnTurno--> esegue un ciclo di gioco (la turnazione adesso viene gestita dal controllore) 
- * vediProssimoGiocatore()--> restituisce prossimo giocatore dopo quello corrente, senza tuttavia cambiarlo (giro orario o antiorario gestito) 
- * prossimoGiocatore()--> come vediProssimoGiocatore, ma viene cambiato il giocatore corrente con il prossimo 
- * applicaEffettoCarta()--> prende la carta corrente e vi applica l'effetto --> effettoAttivato va messo a true 
- * applicaMossa()--> gestisce l'input del giocatore e prova ad applicare la sua mossa alla partita (mossa può essere rimandata al controllore in alcuni casi)
- * verificaFinePartita()-->invocato alla fine di ogni giocata da parte di un giocatore e controlla se non ha più carte (=vince) 
- * pescaCarta()-->fornisce INTERFACCIA per giocatore (pescare carta da mazzo e metterla nella sua mano) 
- * testaGiocaCarta()--> fornisce INTERFACCIA per giocatore (controllare se la carta che sta per giocare il giocatore è valida)
- * giocaCarta()--> fornisce INTERFACCIA per giocatore (mettere carta sul banco--> controlli fatti in giocatore, per ora)
+ * metodi importanti: eseguiPrePartita--> fornisce N carte a ciascun giocatore
+ * dal mazzo, mette giù la prima carta sul banco eseguiUnTurno--> esegue un
+ * ciclo di gioco (la turnazione adesso viene gestita dal controllore)
+ * vediProssimoGiocatore()--> restituisce prossimo giocatore dopo quello
+ * corrente, senza tuttavia cambiarlo (giro orario o antiorario gestito)
+ * prossimoGiocatore()--> come vediProssimoGiocatore, ma viene cambiato il
+ * giocatore corrente con il prossimo applicaEffettoCarta()--> prende la carta
+ * corrente e vi applica l'effetto --> effettoAttivato va messo a true
+ * applicaMossa()--> gestisce l'input del giocatore e prova ad applicare la sua
+ * mossa alla partita (mossa può essere rimandata al controllore in alcuni casi)
+ * verificaFinePartita()-->invocato alla fine di ogni giocata da parte di un
+ * giocatore e controlla se non ha più carte (=vince) pescaCarta()-->fornisce
+ * INTERFACCIA per giocatore (pescare carta da mazzo e metterla nella sua mano)
+ * testaGiocaCarta()--> fornisce INTERFACCIA per giocatore (controllare se la
+ * carta che sta per giocare il giocatore è valida) giocaCarta()--> fornisce
+ * INTERFACCIA per giocatore (mettere carta sul banco--> controlli fatti in
+ * giocatore, per ora)
  * 
  */
 public class Partita implements PartitaIF {
 	private final static int NUMERO_CARTE_INIZIALI = 7;
 	public static final JsonMapper MAPPER = createMapper();
-	
 
 	private ArrayList<Giocatore> giocatori;
 	private Mazzo mazzo;
@@ -62,10 +66,20 @@ public class Partita implements PartitaIF {
 	@JsonIgnore
 	private Giocatore vincitore;
 
-	//SEZIONE costruttori
-	//costruttore vuoto per Jackson
-	public Partita() {	}
+	// SEZIONE costruttori
 	
+	/**
+	 *  costruttore vuoto per Jackson
+	 */
+	public Partita() {
+	}
+
+	/**
+	 * costruttore utilizzato quando viene creata un nuova partita
+	 * -->non quando viene caricata
+	 * 
+	 * @param giocatori i giocatori della partita
+	 */
 	public Partita(List<Giocatore> giocatori) {
 		setGiocatori(giocatori);
 		this.mazzo = new Mazzo();
@@ -77,11 +91,11 @@ public class Partita implements PartitaIF {
 		this.effettoAttivato = true;
 		mazzo.setPila(pilaScarti);
 	}
-	
-	//------------------------------
-	
-	//SEZIONE getters & setters
-	//metodo che setta la partita di ogni giocatore (utile per quando si deserializza)	
+
+	// ------------------------------
+
+	// SEZIONE getters & setters
+
 	public Carta getCartaCorrente() {
 		return cartaCorrente;
 	}
@@ -89,15 +103,15 @@ public class Partita implements PartitaIF {
 	private void setCartaCorrente(Carta cartaCorrente) {
 		this.cartaCorrente = cartaCorrente;
 	}
-	
+
 	public Mazzo getMazzo() {
 		return this.mazzo;
 	}
-	
+
 	public void setMazzo(Mazzo mazzo) {
 		this.mazzo = mazzo;
 	}
-	
+
 	public PilaScarti getPilaScarti() {
 		return pilaScarti;
 	}
@@ -105,24 +119,46 @@ public class Partita implements PartitaIF {
 	public void setPilaScarti(PilaScarti pilaScarti) {
 		this.pilaScarti = pilaScarti;
 	}
-	
-	//metodo che restituisce il giocatore corrente (utile per gui)
+
+	/**
+	 * metodo che restituisce il giocatore corrente (utile per gui)
+	 * 
+	 * @return il giocatore corrente (restituito dal navigatore della partita)
+	 */
 	@JsonIgnore
 	public Giocatore getGiocatoreCorrente() {
 		return navigatore.corrente();
 	}
-	
-	//metodo che restituisce il vincitore (utile per gui)
+
+	/**
+	 * metodo che restituisce il vincitore (utile per gui)
+	 * 
+	 * @return il vincitore (il quale viene settato in automatico dentro il metodo
+	 *         verificaFinePartita)
+	 */
 	@JsonIgnore
 	public Giocatore getVincitore() {
 		return this.vincitore;
 	}
-	
 
+	/**
+	 * getter per Jackson
+	 * 
+	 * @return i giocatori della partita
+	 */
 	public ArrayList<Giocatore> getGiocatori() {
 		return giocatori;
 	}
-	
+
+	/**
+	 * setter che: 
+	 * 1) istanzia la lista che conterrà i giocatori; 
+	 * 2) aggiunge ogni giocatore a suddetta lista; 
+	 * 3) setta l'interfaccia partita di ogni giocatore
+	 * 	con la partita attuale (= la partita d'interesse);
+	 * 
+	 * @param giocatori (la lista di giocatori della partita)
+	 */
 	@JsonProperty("giocatori")
 	private void setGiocatori(List<Giocatore> giocatori) {
 		this.giocatori = new ArrayList<>();
@@ -131,12 +167,6 @@ public class Partita implements PartitaIF {
 			g.setPartita(this);
 		}
 	}
-
-	//in teoria servirebbe a Jackson per deserializzare, però con le collezioni si può omettere
-	//	public void setGiocatori(ArrayList<Giocatore> giocatori) {
-	//		this.giocatori = giocatori;
-	//	}
-	
 
 	public Navigatore<Giocatore> getNavigatore() {
 		return navigatore;
@@ -154,39 +184,94 @@ public class Partita implements PartitaIF {
 		this.direzione = direzione;
 	}
 
+	/**
+	 * getter del effettoAttivato (per Jackson)
+	 * 
+	 * @return booleano che restituisce se l'effetto di una carta speciale è già
+	 *         stato applicato ad un giocatore
+	 */
 	public boolean isEffettoAttivato() {
 		return effettoAttivato;
 	}
 
+	/**
+	 * setter del effettoAttivato (per Jackson)
+	 * 
+	 * @param effettoAttivato
+	 */
 	public void setEffettoAttivato(boolean effettoAttivato) {
 		this.effettoAttivato = effettoAttivato;
 	}
 
-	//------------------------------
+	// ------------------------------
 
-	//SEZIONE funzioni specifiche partita
-	//metodo che distribuisce le carte ad inizio partita e setta la carta iniziale
+	// SEZIONE funzioni specifiche partita
+	
+	/**
+	 *  metodo che distribuisce le carte ad inizio partita e setta la carta iniziale
+	 *  
+	 *  funzionamento:
+	 *  1) for-each di tutti i giocatori in cui vengono fornite NUMERO_CARTE_INIZIALI carte
+	 *    	a ciascuno (estraendole a blocco dal mazzo);
+	 *  2) pescaggio di una carta in più che diventerà la prima carta sul tavolo;
+	 *  3) se la carta pescata in 2) è di Colore.NERO, allora randomicamente viene scelto 
+	 *  	un Colore diverso dal Colore.NERO, mediante apposita funzione 
+	 *  	Colore.scegliColoreCasuale()--> evitare di avere una carta nera come carta iniziale;
+	 *  4) imposta la carta del punto 2) (ed eventualmente dopo 3)) come cartaCorrente;
+	 *  
+	 *  NOTE:
+	 *  la carta iniziale NON avrà MAI effetti di pescaggio/salto turno, visto che
+	 *  nel costruttore non vuoto della Partita effettoAttivato=true-->
+	 *  nessuna penalizzazione per il primo giocatore della turnazione
+	 *  	
+	 */
 	public void eseguiPrePartita() {
 		for (Giocatore g : giocatori) {
 			g.getMano().aggiungiCarta(mazzo.pescaN(NUMERO_CARTE_INIZIALI));
-			//g.getMano().aggiungiCarta(new CartaSpeciale(Colore.NERO,TipoSpeciale.PIU_QUATTRO));
-			//g.getMano().aggiungiCarta(new CartaSpeciale(Colore.NERO,TipoSpeciale.PIU_QUATTRO));
-			//g.getMano().aggiungiCarta(new CartaSpeciale(Colore.GIALLO,TipoSpeciale.PIU_DUE));
-			//g.getMano().aggiungiCarta(new CartaSpeciale(Colore.GIALLO,TipoSpeciale.PIU_DUE));
-			//g.getMano().aggiungiCarta(new CartaNumero(Colore.BLU,2));
-			//g.getMano().aggiungiCarta(new CartaNumero(Colore.GIALLO,4));
+			// g.getMano().aggiungiCarta(new
+			// CartaSpeciale(Colore.NERO,TipoSpeciale.PIU_QUATTRO));
+			// g.getMano().aggiungiCarta(new
+			// CartaSpeciale(Colore.NERO,TipoSpeciale.PIU_QUATTRO));
+			// g.getMano().aggiungiCarta(new
+			// CartaSpeciale(Colore.GIALLO,TipoSpeciale.PIU_DUE));
+			// g.getMano().aggiungiCarta(new
+			// CartaSpeciale(Colore.GIALLO,TipoSpeciale.PIU_DUE));
+			// g.getMano().aggiungiCarta(new CartaNumero(Colore.BLU,2));
+			// g.getMano().aggiungiCarta(new CartaNumero(Colore.GIALLO,4));
 		}
 		Carta first = mazzo.pesca();
 		if (first.getColore() == Colore.NERO) {
 			first.setColore(Colore.scegliColoreCasuale());
 		}
 		setCartaCorrente(first);
-		//setCartaCorrente(new CartaNumero(Colore.ROSSO,0));
+		// setCartaCorrente(new CartaNumero(Colore.ROSSO,0));
 	}
 
-	//metodo che imposta il prossimo turno
+	/**
+	 *  metodo che imposta il prossimo turno giocabile
+	 *  
+	 *  funzionamento:
+	 *  1) verifica che la partita non sia finita-->
+	 *  	in caso contrario non bisogna impostare nessun turno successivo;
+	 *  2) verifica se l'effetto di una carta è già stato applicato-->
+	 *  	in caso contrario applica l'effetto della carta al giocatore "vittima"
+	 *  	e poi imposta effettoCarta a true (evita che effetto venga riattivato);
+	 *  3) imposta il prossimo giocatore GIOCANTE della turnazione;
+	 *  
+	 *  NOTE:
+	 *  -per giocatore GIOCANTE si intende un giocatore che potrà giocare il suo turno,
+	 *  	visto che applicaEffettoCarta POTENZIALMENTE fa saltare un turno automaticamente
+	 *  	ad un giocatore (es. +2, +4 ecc);
+	 *  -lo scopo di eseguiUnTurno è di fatto quello di ottenere il prossimo giocatore GIOCANTE;
+	 *  
+	 *  ESEMPIO:
+	 *  giocatore1 gioca nel suo turno un +4--> effettoAttivato è a false quindi viene applicato
+	 *  l'effetto della carta al giocatore2 (guarda applicaEffetto dentro CartaSpeciale) 
+	 *  e effettoAttivato è messo a true--> il giocatore2 NON è GIOCANTE visto che con il +4 ricevuto 
+	 *  gli salta il turno--> prossimoGiocatore() quindi selezionerà giocatore3 come GIOCANTE.
+	 */
 	public void eseguiUnTurno() {
-		if (verificaFinePartita()) 
+		if (verificaFinePartita())
 			return;
 		if (!effettoAttivato) {
 			applicaEffettoCarta(cartaCorrente);
@@ -194,125 +279,189 @@ public class Partita implements PartitaIF {
 		}
 		prossimoGiocatore();
 	}
-	
-	//metodo che inverte la turnazione dei giocatori (orario<->antiorario)
+
+	/**
+	 *  metodo che inverte la turnazione dei giocatori (orario<->antiorario)
+	 *  convenzione: direzione=true-> orario
+	 */
 	public void cambiaDirezione() {
-		direzione=!direzione;
+		direzione = !direzione;
 	}
-	
-	//metodo di validazione (ed eventuale applicazione) di una giocata 
+
+	/**
+	 * metodo di validazione (ed eventuale applicazione) di una giocata
+	 *  
+	 * @param g giocatore che sta eseguendo la mossa
+	 * @param mossa mossa che è stata scelta dal giocatore g
+	 * @return l'esito dell'applicazione della mossa (considerando estensioni alla mossa stessa)
+	 * 
+	 * scopo:
+	 * questo metodo NON deve essere inteso come applicazione assoluta della mossa scelta del giocatore
+	 * (in quel caso eseguiUnTurno e applicaMossa sarebbero stati un unico metodo)
+	 * bensì come "comunicatore" che si può fare evenutualmente altro con una mossa.
+	 * 
+	 * funzionamento:
+	 * 1) dopo che il giocatore ha scelto che mossa compiere, nel controllore viene invocato questo metodo;
+	 * 2) il metodo essenzialmente contempla due tipi scenari: 3)pescare carta o 4)giocare carta;
+	 * 3) pescare carta (più semplice da capire) quindi TipoMossa.PESCA;
+	 * 3.1) si entra dentro il primo if--> viene pescata una carta dal mazzo e viene aggiunta alla mano del giocatore;
+	 * 3.2) si controlla che la carta pescata sia giocabile--> se no, viene restituito null (=NON è possibile fare altro)
+	 * 		quindi nel controllore potrò già procedere ad impostare il turno successivo con eseguiUnTurno;
+	 * 3.3) se la carta pescata è giocabile, allora bisogna notificare il controllore che si può fare altro con la carta-->
+	 * 		cambio il tipo della mossa in TipoMossa.GIOCA_CARTA e la restituisco al controllore (=posso fare altro)-->
+	 * 		il controllore vede che la mossa NON è null come in 3.2) quindi permetterà di giocare la carta pescata-->
+	 * 		eventualmente verrà riapplicato applicaMossa ma questa volta si andrà dentro la sezione di 4) giocare carta;
+	 * 4) giocare carta (eventualmente utlizzato anche dopo una mossa di pescaggio)
+	 * 4.1) si entra dentro l'else if visto che il tipo mossa è TipoMossa.GIOCA_CARTA 
+	 * 4.2) si controlla se la carta della mossa (mossa.getCartaScelta()) è compatibile con la carta sul tavolo-->
+	 * 		se no, viene restituito null (=NON è possibile giocare la carta), quindi il controllore si comporterà 
+	 * 		di conseguenza (aspetta che giocatore scelga una carta valida);
+	 * 4.3) se la carta scelta è compatibile, quest'ultima viene rimossa dalla mano del giocatore e viene eseguita
+	 * 		la logica di aggiornamento di cartaCorrente--> viene restituita la mossa al controllore, che vede che 
+	 * 		non è null--> provvederà ad impostare il turno successivo con eseguiUnTurno();
+	 * 4.4) CASO PARTICOLARE: giocare carta dove serve cambiare il colore (quindi da Colore.NERO ad altro)-->
+	 * 		si entra sempre nel ramo di 4) ma vengono fatti ulteriori controlli sul fatto che la carta abbia colore
+	 * 		diverso da Colore.NERO (in quel caso viene restituita al controllore la mossa per cambiare il colore),
+	 * 		anche se di fatto si può anticipare questo scenario direttamente nel controllore (evitare un'altra 
+	 * 		invocazione di applicaMossa());
+	 * 5)	caso in cui TipoMossa non è impostato--> restituisce null (=non è una mossa);
+	 */
 	public Mossa applicaMossa(Giocatore g, Mossa mossa) {
-		//caso 1:devo pescare
-		if (mossa.getTipoMossa() == TipoMossa.PESCA) 
-		{
-	        Carta pescata = pescaCarta();
-	        g.aggiungiCarta(pescata);
-	        //verifico se posso giocare carta pescata--> Mossa modificata in GIOCA_CARTA
-	        if (tentaGiocaCarta(pescata)) 
-	        {
-	        	mossa.setCartaScelta(pescata);
-	        	mossa.setTipoMossa(TipoMossa.GIOCA_CARTA);
-	            return mossa;
-	        }
-	        //altrimenti restituisco null--> Mossa CONCLUSA
-	        else 
-	        {
-	            return null;
-	        }
-	    } 
-		//caso 2:devo giocare carta 
-		else if (mossa.getTipoMossa() == TipoMossa.GIOCA_CARTA 
-				|| mossa.getTipoMossa()==TipoMossa.SCEGLI_COLORE) 
-		{
-			//verifico se posso giocare carta
-	        if(tentaGiocaCarta(mossa.getCartaScelta())||(mossa.getTipoMossa()==TipoMossa.SCEGLI_COLORE)) 
-	        {
-	        	//verifico se la carta che gioco è NERA--> da cambiare il colore
-	        	if(mossa.getCartaScelta().getColore()==Colore.NERO) {
-	        		return mossa;
-	        	}
-	        	//la carta non è (più) da cambiare di colore--> Mossa CONCLUSA
-	        	else 
-	        	{
-	        		g.rimuoveCarta(mossa.getCartaScelta());
+		// caso 1:devo pescare
+		if (mossa.getTipoMossa() == TipoMossa.PESCA) {
+			Carta pescata = pescaCarta();
+			g.aggiungiCarta(pescata);
+			// verifico se posso giocare carta pescata--> Mossa modificata in GIOCA_CARTA
+			if (tentaGiocaCarta(pescata)) {
+				mossa.setCartaScelta(pescata);
+				mossa.setTipoMossa(TipoMossa.GIOCA_CARTA);
+				return mossa;
+			}
+			// altrimenti restituisco null--> Mossa CONCLUSA
+			else {
+				return null;
+			}
+		}
+		// caso 2:devo giocare carta
+		else if (mossa.getTipoMossa() == TipoMossa.GIOCA_CARTA || mossa.getTipoMossa() == TipoMossa.SCEGLI_COLORE) {
+			// verifico se posso giocare carta
+			if (tentaGiocaCarta(mossa.getCartaScelta()) || (mossa.getTipoMossa() == TipoMossa.SCEGLI_COLORE)) {
+				// verifico se la carta che gioco è NERA--> da cambiare il colore
+				if (mossa.getCartaScelta().getColore() == Colore.NERO) {
+					return mossa;
+				}
+				// la carta non è (più) da cambiare di colore--> Mossa CONCLUSA
+				else {
+					g.rimuoveCarta(mossa.getCartaScelta());
 					giocaCarta(mossa.getCartaScelta());
-	        		return mossa;
-	        	}
-	        }
-	        //altrimenti restituisco null--> carta NON giocabile
-	        else 
-	        	return null;
-	    }
-		//caso 3:nessun tipo specificato nella Mossa--
+					return mossa;
+				}
+			}
+			// altrimenti restituisco null--> carta NON giocabile
+			else
+				return null;
+		}
+		// caso 3:nessun tipo specificato nella Mossa--
 		else
 			return null;
 	}
-	
-	//metodo che serve ad applicare l'effetto delle carte speciali
+
+	/**
+	 *  metodo che serve ad applicare l'effetto delle carte speciali 
+	 *  (se non è speciale, allora non c'è effetto)
+	 *  
+	 * @param c carta che genera l'effetto
+	 * 
+	 * NOTE:
+	 * guardare applicaEffetto() dentro Carta e sue sottoclassi
+	 */
 	private void applicaEffettoCarta(Carta c) {
 		c.applicaEffetto(this);
 	}
 
-	//metodo che restituisce il prossimo giocatore senza modificare il giocatore corrente (utile per gui)
+	/**
+	 * metodo che restituisce il prossimo giocatore senza modificare il giocatore
+	 * corrente (utile per gui)
+	 * 
+	 * @return prossimo giocatore nella turnazione
+	 */
 	public Giocatore vediProssimoGiocatore() {
-		//direzione=true--> orario, direzione=false--> antiorario
+		// direzione=true--> orario, direzione=false--> antiorario
 		return direzione ? navigatore.vediProssimo() : navigatore.vediPrecedente();
 	}
 
-	//metodo che modifica il prossimo giocatore
+	/**
+	 *  metodo che modifica il prossimo giocatore
+	 */
 	public void prossimoGiocatore() {
 		navigatore.setCorrente(vediProssimoGiocatore());
 	}
-	
-	//metodo che controlla se la partita è finita (in quel caso imposta il giocatore vincitore)
+
+	/**
+	 * metodo che controlla se la partita è finita (in quel caso imposta il
+	 * giocatore vincitore)
+	 * 
+	 * @return se la partita è finita (=true) o meno (=false)
+	 */
 	public boolean verificaFinePartita() {
 		for (Giocatore g : giocatori) {
 			if (g.getMano().getNumCarte() == 0) {
-				vincitore=g;
+				vincitore = g;
 				return true;
 			}
 		}
 		return false;
 	}
-	//------------------------------
-	
-	//SEZIONE interfacce per giocatore
-	//metodo che restituisce la carta in cima al mazzo
+	// ------------------------------
+
+	// SEZIONE interfacce per giocatore
+	/**
+	 * metodo che restituisce la carta in cima al mazzo
+	 * senza contemplare le eventuali conseguenze
+	 */
 	@Override
 	public Carta pescaCarta() {
 		return mazzo.pesca();
-		//return new CartaSpeciale(Colore.NERO,TipoSpeciale.JOLLY);
+		// return new CartaSpeciale(Colore.NERO,TipoSpeciale.JOLLY);
 	}
 
-	//metodo che controlla se è una carta giocata è compatibile con la carta corrente
+	/**
+	 *  metodo che controlla se è una carta giocata è compatibile con la carta
+	 *  corrente
+	 */
 	@Override
 	public boolean tentaGiocaCarta(Carta tentativo) {
 		return tentativo.giocabileSu(cartaCorrente);
 	}
 
-	//metodo che imposta la nuova carta corrente, manda la vecchia carta corrente nella pila scarti ed setta a false effettoAttivato
+	/**
+	 *  metodo che imposta la nuova carta corrente, manda la vecchia carta corrente
+	 *  nella pila scarti e setta a false effettoAttivato
+	 */
 	@Override
 	public void giocaCarta(Carta c) {
-		if (cartaCorrente != null && cartaCorrente != c) { 
-			if(cartaCorrente instanceof CartaSpeciale && (((CartaSpeciale)cartaCorrente).getTipo()==TipoSpeciale.JOLLY
-						||((CartaSpeciale)cartaCorrente).getTipo()==TipoSpeciale.PIU_QUATTRO))
-					cartaCorrente.setColore(Colore.NERO);
-			
-	        pilaScarti.mettiCarta(cartaCorrente);
-	    }
+		if (cartaCorrente != null && cartaCorrente != c) {
+			if (cartaCorrente instanceof CartaSpeciale
+					&& (((CartaSpeciale) cartaCorrente).getTipo() == TipoSpeciale.JOLLY
+							|| ((CartaSpeciale) cartaCorrente).getTipo() == TipoSpeciale.PIU_QUATTRO))
+				cartaCorrente.setColore(Colore.NERO);
+
+			pilaScarti.mettiCarta(cartaCorrente);
+		}
 		setCartaCorrente(c);
 		effettoAttivato = false;
-	}	
-	//------------------------------
+	}
+	// ------------------------------
 	
-
+	//SEZIONE serializzazione/deserializzazione
+	
 	private static JsonMapper createMapper() {
 		JsonMapper mapper = new JsonMapper();
 		mapper.enable(SerializationFeature.INDENT_OUTPUT);
 		mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 		return mapper;
 	}
-	
+
 	public String toJson() {
 		try {
 			return MAPPER.writeValueAsString(this);
@@ -321,7 +470,7 @@ public class Partita implements PartitaIF {
 			return null;
 		}
 	}
-	
+
 	public static Partita fromJson(String json) {
 		try {
 			Partita p = MAPPER.readValue(json, Partita.class);
@@ -332,4 +481,5 @@ public class Partita implements PartitaIF {
 			return null;
 		}
 	}
+	// ------------------------------
 }
