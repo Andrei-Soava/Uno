@@ -100,7 +100,7 @@ public class Partita implements PartitaIF {
 		return cartaCorrente;
 	}
 
-	private void setCartaCorrente(Carta cartaCorrente) {
+	public void setCartaCorrente(Carta cartaCorrente) {
 		this.cartaCorrente = cartaCorrente;
 	}
 
