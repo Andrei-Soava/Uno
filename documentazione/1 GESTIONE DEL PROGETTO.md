@@ -81,3 +81,5 @@ Esempio COMPLETO:
 - 24/09, Andrei, (javadoc alcuni parti del modello), null;
 - 24/09 14:00-15:15, Giuseppe, piccola modifica alla classe GameServer e creazione della classe PlayerConnection (rappresenta il giocatore connesso al server), null;
 - 24/09 15:00-20:00, Andrei, (aggiunta casi di test in Junit per il modello + aggiornamento documento 4 per fase 1 e 2), null;
+- 24/09 9:00-14:00, Fabio, refactoring modello, null;
+- 24/09, Fabio, (refactoring modello, aggiunta metodi safe per server, corrette dipendenze, introdotta nuova libreria per il client, documentazione), eventuale continuazione refactoring;

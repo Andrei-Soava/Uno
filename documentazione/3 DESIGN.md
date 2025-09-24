@@ -12,7 +12,8 @@ Client costituito da un'applicazione desktop Java sviluppata con JavaFX struttur
 - Database: database relazionale embedded per conservare utenti, statistiche e salvataggi delle partite incompiute.
 
 Comunicazione in rete:
-- Comunicazione tra client e server realizzata con la libreria netty-socketio.
+- Comunicazione da client verso server realizzata con la libreria socket.io-client.
+- Comunicazione da server verso client realizzata con la libreria netty-socketio.
 
 Pattern architetturale di riferimento:
 - Chiarezza di separazione tra presentazione (GUI), logica di gioco (engine) e gestione dati.
