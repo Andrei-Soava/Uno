@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Stack;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -39,9 +40,12 @@ public class Mazzo {
 	@JsonIgnore
 	private PilaScarti pila;
 
+//	private final Deque<Carta> carte = new ArrayDeque<>();
+//	private final List<Carta> pila = new ArrayList<>();
+
 	//costruttore vuoto per Jackson
 	public Mazzo() {
-		this.carte=new Stack<>();
+		this.carte = new Stack<>();
 	}
 	
 	/**
@@ -50,11 +54,7 @@ public class Mazzo {
 	 */
 	public void inizializzaNuovoMazzo() {
 		this.carte.clear();
-		try {
-			creaMazzo();
-		}catch(IOException e) {
-			e.printStackTrace();
-		}
+		init();
 	}
 	
 	public Stack<Carta> getCarte() {
@@ -90,7 +90,8 @@ public class Mazzo {
 	 * 
 	 * @throws IOException errore lettura file
 	 */
-	public void creaMazzo() throws IOException {
+	@Deprecated
+	private void creaMazzoDaFile() throws IOException {
 	    try (InputStream is = getClass().getResourceAsStream("/mazzo");
 	    	     BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
 	        String line;
@@ -112,6 +113,29 @@ public class Mazzo {
 	        }
 	    }
 	    mescola();
+	}
+	
+	private void init() {
+		List<Carta> all = new ArrayList<>();
+		for (Colore c : new Colore[] { Colore.ROSSO, Colore.GIALLO, Colore.VERDE, Colore.BLU }) {
+			for (int i = 0; i <= 9; i++) {
+				all.add(Carta.numero(c, i));
+				if (i != 0)
+					all.add(Carta.numero(c, i));
+			}
+			all.add(Carta.skip(c));
+			all.add(Carta.skip(c));
+			all.add(Carta.cambioGiro(c));
+			all.add(Carta.cambioGiro(c));
+			all.add(Carta.pescaDue(c));
+			all.add(Carta.pescaDue(c));
+		}
+		for (int i = 0; i < 4; i++)
+			all.add(Carta.cambioColore());
+		for (int i = 0; i < 4; i++)
+			all.add(Carta.pescaQuattro());
+		Collections.shuffle(all);
+		carte.addAll(all);
 	}
 	
 	/**

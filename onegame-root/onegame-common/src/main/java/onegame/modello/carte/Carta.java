@@ -31,6 +31,7 @@ package onegame.modello.carte;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import onegame.modello.Partita;
+import onegame.modello.carte.CartaSpeciale.TipoSpeciale;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 
@@ -77,6 +78,30 @@ public abstract class Carta implements Comparable<Carta> {
 	 */
 	public void setColore(Colore colore) {
 		this.colore = colore;
+	}
+
+	public static CartaNumero numero(Colore colore, int num) {
+		return new CartaNumero(colore, num);
+	}
+
+	public static CartaSpeciale skip(Colore colore) {
+		return new CartaSpeciale(colore, TipoSpeciale.BLOCCA);
+	}
+
+	public static CartaSpeciale cambioGiro(Colore colore) {
+		return new CartaSpeciale(colore, TipoSpeciale.INVERTI);
+	}
+
+	public static CartaSpeciale pescaDue(Colore colore) {
+		return new CartaSpeciale(colore, TipoSpeciale.PIU_DUE);
+	}
+
+	public static Carta cambioColore() {
+		return new CartaSpeciale(Colore.NERO, TipoSpeciale.JOLLY);
+	}
+
+	public static Carta pescaQuattro() {
+		return new CartaSpeciale(Colore.NERO, TipoSpeciale.PIU_QUATTRO);
 	}
 
 	/**
