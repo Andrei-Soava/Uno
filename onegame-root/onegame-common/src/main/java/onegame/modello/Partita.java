@@ -270,7 +270,7 @@ public class Partita implements PartitaIF {
 	 *  e effettoAttivato è messo a true--> il giocatore2 NON è GIOCANTE visto che con il +4 ricevuto 
 	 *  gli salta il turno--> prossimoGiocatore() quindi selezionerà giocatore3 come GIOCANTE.
 	 */
-	public void eseguiUnTurno() {
+	public void passaTurno() {
 		if (verificaFinePartita())
 			return;
 		if (!effettoAttivato) {
@@ -286,6 +286,13 @@ public class Partita implements PartitaIF {
 	 */
 	public void cambiaDirezione() {
 		direzione = !direzione;
+	}
+	
+	public Mossa applicaMossaSafe(Giocatore g, Mossa mossa) throws Exception {
+		if (g != getGiocatoreCorrente()) {
+			throw new Exception("Giocatore non valido");
+		}
+		return applicaMossa(g, mossa);
 	}
 
 	/**

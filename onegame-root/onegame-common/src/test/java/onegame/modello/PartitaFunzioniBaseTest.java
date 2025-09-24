@@ -37,9 +37,6 @@ public class PartitaFunzioniBaseTest {
 	@Test //test1.8
 	public void testNumeroGiocatori() {
 		assertEquals("Numero di giocatori incoerente", numGiocatori, partita.getGiocatori().size());
-		
-		String str = partita.toJson();
-		Partita partita2 = Partita.fromJson(str);
 	}
 	
 	@Test //test1.9
@@ -49,7 +46,7 @@ public class PartitaFunzioniBaseTest {
 	
 	@Test //test1.10
 	public void testEseguiUnTurnoOrario() {
-		partita.eseguiUnTurno();
+		partita.passaTurno();
 		assertEquals("Non è cambiato il giocatore", giocatori.get(1), partita.getGiocatoreCorrente());
 	}
 	
@@ -63,7 +60,7 @@ public class PartitaFunzioniBaseTest {
 	@Test //test1.12
 	public void testEseguiUnTurnoAntiOrario() {
 		partita.cambiaDirezione();
-		partita.eseguiUnTurno();
+		partita.passaTurno();
 		assertEquals("Non è cambiato il giocatore", giocatori.get(3), partita.getGiocatoreCorrente());
 	}
 	

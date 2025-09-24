@@ -140,7 +140,7 @@ public class PartitaFunzioniAvanzate {
 		partita.getGiocatoreCorrente().aggiungiCarta(daGiocare);
 		Mossa mossa = new Mossa(TipoMossa.GIOCA_CARTA, daGiocare);
 		partita.applicaMossa(partita.getGiocatoreCorrente(), mossa);
-		partita.eseguiUnTurno();
+		partita.passaTurno();
 		assertEquals("Il giocatore#1 non ha pescato carte", 9, giocatori.get(1).getMano().getNumCarte());
 		assertEquals("Il giocatore#0 non è il giocatore corrente", partita.getGiocatoreCorrente(), giocatori.get(0));
 		assertEquals("Il giocatore#0 non ha 7 carte, partendo da 8", 7, giocatori.get(0).getMano().getNumCarte());
@@ -154,7 +154,7 @@ public class PartitaFunzioniAvanzate {
 		partita.eseguiPrePartita();
 		while(!partita.verificaFinePartita()) {
 			partita.getGiocatoreCorrente().scegliMossaAutomatica();
-			partita.eseguiUnTurno();
+			partita.passaTurno();
 		}
 		assertNotEquals("Non è presente un vincitore",null,partita.getVincitore());
 		System.out.println(partita.toJson());

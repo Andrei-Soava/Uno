@@ -51,16 +51,16 @@ public class Giocatore {
 	private Mano mano;
 	private boolean bot;
 	@JsonIgnore
-	private PartitaIF partitaIF;
+	private PartitaIF partita;
 
 	//costruttore vuoto per Jackson
 	public Giocatore() {}
 	
 	public Giocatore (String nome) {
-		this.nome=nome;
-		this.mano=new Mano();
-		this.partitaIF=null;
-		this.bot=false;
+		this.nome = nome;
+		this.mano = new Mano();
+		this.partita = null;
+		this.bot = false;
 	}
 	
 	/**
@@ -91,11 +91,11 @@ public class Giocatore {
 	
 	@JsonIgnore
 	public PartitaIF getPartita() {
-		return partitaIF;
+		return partita;
 	}
 
 	public void setPartita(PartitaIF partita) {
-		this.partitaIF = partita;
+		this.partita = partita;
 	}
 	
 	/**
@@ -123,31 +123,37 @@ public class Giocatore {
 	public Mossa scegliMossaAutomatica() {
 		Mossa m;
 		for(Carta c:this.getMano().getCarte()) {
-			if(partitaIF.tentaGiocaCarta(c)) {
+			if(partita.tentaGiocaCarta(c)) {
 				m=new Mossa(TipoMossa.GIOCA_CARTA,c);
 				if(c.getColore()==Colore.NERO) {
 					c.setColore(Colore.scegliColoreCasuale());
 					m.setTipoMossa(TipoMossa.SCEGLI_COLORE);
 				}
 				rimuoveCarta(c);
-				partitaIF.giocaCarta(c);
+				partita.giocaCarta(c);
 				return m;
 			}
 		}
-		Carta pescata=partitaIF.pescaCarta();
+		Carta pescata=partita.pescaCarta();
 		aggiungiCarta(pescata);
 		m=new Mossa(TipoMossa.PESCA,pescata);
-		if(partitaIF.tentaGiocaCarta(pescata)) {
+		if(partita.tentaGiocaCarta(pescata)) {
 			m.setTipoMossa(TipoMossa.GIOCA_CARTA);
 			if(pescata.getColore()==Colore.NERO) {
 				pescata.setColore(Colore.scegliColoreCasuale());
 				m.setTipoMossa(TipoMossa.SCEGLI_COLORE);
 			}
 			rimuoveCarta(pescata);
-			partitaIF.giocaCarta(pescata);
+			partita.giocaCarta(pescata);
 		}
 		return m;
-		
+	}
+	
+	public Mossa scegliMossaAutomaticaSafe() throws Exception {
+		if (this != partita.getGiocatoreCorrente()) {
+			throw new Exception("Giocatore non valido");
+		}
+		return scegliMossaAutomatica();
 	}
 	
 	public String mostraCarteInMano() {

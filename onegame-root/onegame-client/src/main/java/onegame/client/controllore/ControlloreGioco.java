@@ -305,7 +305,7 @@ public class ControlloreGioco {
 	        } else {
 	            vg.stampaMessaggio(g.getNome() + " ha giocato la carta: " + m.getCartaScelta());
 	        }
-	        partita.eseguiUnTurno();
+	        partita.passaTurno();
 	        cp.salvaPartitaAutomatico(this);
 	        if(partitaAttiva)
 	        	eseguiTurno(); // turno successivo
@@ -337,7 +337,7 @@ public class ControlloreGioco {
 	            //importante--> se il giocatore ha già pescato di suo, non lo faccio pescare di nuovo (es se può giocare carta pescata)
 	            if(flagGiaPescato.getTipoMossa()!=TipoMossa.PESCA)
 	            	g.aggiungiCarta(partita.pescaCarta());
-	            partita.eseguiUnTurno();
+	            partita.passaTurno();
                 cp.salvaPartitaAutomatico(this);
                 if(partitaAttiva)
                 	eseguiTurno(); 
@@ -360,7 +360,7 @@ public class ControlloreGioco {
 	                	countdown.stop();
 	    	            timerTurno.stop();
 	    	            timerTurno.setOnFinished(null);
-	                    partita.eseguiUnTurno();
+	                    partita.passaTurno();
 	                    cp.salvaPartitaAutomatico(this);
 	                    if(partitaAttiva)
 	                    	eseguiTurno();
@@ -396,14 +396,14 @@ public class ControlloreGioco {
 		                        	            vg.stampaMessaggio(g.getNome()+" NON ha chiamato ONE in tempo -> pesca 2 carte");
 		                        	            g.getMano().aggiungiCarta(partita.getMazzo().pescaN(2));
 		                        	        }
-		                        	        partita.eseguiUnTurno();
+		                        	        partita.passaTurno();
 		                        	        cp.salvaPartitaAutomatico(this);
 		                        	        if (partitaAttiva)
 		                        	            eseguiTurno();
 	                                    });
 	                                } else {
 	                                    //condizione falsa -> eseguo subito le 4 righe
-	                                    partita.eseguiUnTurno();
+	                                    partita.passaTurno();
 	                                    cp.salvaPartitaAutomatico(this);
 	                                    if (partitaAttiva)
 	                                        eseguiTurno();
@@ -429,13 +429,13 @@ public class ControlloreGioco {
 	                        	            vg.stampaMessaggio(g.getNome()+" NON ha chiamato ONE in tempo -> pesca 2 carte");
 	                        	            g.getMano().aggiungiCarta(partita.getMazzo().pescaN(2));
 	                        	        }
-	                        	        partita.eseguiUnTurno();
+	                        	        partita.passaTurno();
 	                        	        cp.salvaPartitaAutomatico(this);
 	                        	        if (partitaAttiva)
 	                        	            eseguiTurno();
 	                        	    });
 	                        	} else {
-	                        	    partita.eseguiUnTurno();
+	                        	    partita.passaTurno();
 	                        	    cp.salvaPartitaAutomatico(this);
 	                        	    if (partitaAttiva)
 	                        	        eseguiTurno();
