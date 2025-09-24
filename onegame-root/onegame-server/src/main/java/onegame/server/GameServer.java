@@ -12,6 +12,7 @@ public class GameServer {
 		conf.setPort(port);
 		
 		server = new SocketIOServer(conf);//crea il server
+		registerEventHandlers();
 	}
 	
 	private void registerEventHandlers() {
