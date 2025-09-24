@@ -2,16 +2,18 @@ package onegame.server;
 
 import com.corundumstudio.socketio.SocketIOClient;
 
+import onegame.modello.carte.Carta;
+import onegame.modello.giocatori.Giocatore;
 
 public class PlayerConnection {
 	private final SocketIOClient client; //rappresenta la connessione attiva del giocatore
 	private final String playerID;
-	private String nickname;
+	private final Giocatore giocatore;
 	
-	public PlayerConnection(SocketIOClient client, String nickname, String playerID){
+	public PlayerConnection(SocketIOClient client, String playerID){
 		this.client = client;
-		this.nickname = nickname;
 		this.playerID = playerID;
+		this.giocatore = new Giocatore();
 	}
 	
 	public SocketIOClient getClient() {
@@ -22,19 +24,32 @@ public class PlayerConnection {
 		return playerID;
 	}
 	
-	public String getNickname() {
-		return nickname;
+	public Giocatore getGiocatore() {
+		return giocatore;
 	}
 	
-	public void setNickname(String nickname) {
-		this.nickname = nickname;
+	public void addCard(Carta carta) {
+		giocatore.aggiungiCarta(carta);
+	}
+	
+	public void removeCard(Carta carta) {
+		giocatore.rimuoveCarta(carta);
+	}
+	
+	public int getNumCarte() {
+		return giocatore.getMano().getNumCarte();
 	}
 	
 	public void sendEvent(String event, Object data) {
 		client.sendEvent(event, data);
 	}
+
+	@Override
+	public String toString() {
+		return "PlayerConnection [ getPlayerID()=" + getPlayerID() + ", getNumCarte()="
+				+ getNumCarte() + "]";
+	}
 	
 	//manca la stanza in cui sta giocando il player
-	//manca la mano del giocatore
-
+	
 }
