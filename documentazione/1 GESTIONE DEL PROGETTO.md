@@ -79,3 +79,4 @@ Esempio COMPLETO:
 - 23/09, Andrei, eliminazione classi inutili + migliore leggibilità classe Partita, continuazione gui;
 - 23/09, Fabio, (refactoring, aggiunta metodi per serializzare e deserializzare Partita), null;
 - 24/09, Andrei, (javadoc alcuni parti del modello), null;
+- 24/09 14:00-15:15, Giuseppe, piccola modifica alla classe GameServer e creazione della classe PlayerConnection (rappresenta il giocatore connesso al server)
