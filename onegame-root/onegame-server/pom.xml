@@ -9,12 +9,12 @@
   <artifactId>onegame-server</artifactId>
   
   <dependencies>
-    <!-- DTO, protocolli JSON e utilità comuni -->
-    <!--<dependency>
+	<!-- DTO, protocolli JSON e utilità comuni -->
+    <dependency>
       <groupId>onegame</groupId>
-      <artifactId>onegame-client</artifactId>
+      <artifactId>onegame-common</artifactId>
       <version>0.0.1-SNAPSHOT</version>
-    </dependency>-->
+    </dependency>
 
     <!-- Networking e Socket.IO -->
     <dependency>
@@ -40,13 +40,26 @@
     </dependency>
     
     <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-databind</artifactId>
-    </dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-core</artifactId>
+      </dependency>
+      <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-databind</artifactId>
+      </dependency>
+      <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-annotations</artifactId>
+      </dependency>
     
     <dependency>
   	  <groupId>com.h2database</groupId>
   	  <artifactId>h2</artifactId>
 	</dependency>
+	
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+    </dependency>
   </dependencies>
 </project>

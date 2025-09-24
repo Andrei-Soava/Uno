@@ -17,15 +17,29 @@
     <netty-socketio.version>1.7.17</netty-socketio.version>
     <junit.version>4.13.2</junit.version>
     <h2.version>2.1.214</h2.version>
+    <slf4j.version>1.7.36</slf4j.version>
+    <socketio.client.version>1.0.0</socketio.client.version>
   </properties>
 
   <dependencyManagement>
     <dependencies>
+      <!-- Jackson -->
+      <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-core</artifactId>
+        <version>${jackson.version}</version>
+      </dependency>
       <dependency>
         <groupId>com.fasterxml.jackson.core</groupId>
         <artifactId>jackson-databind</artifactId>
         <version>${jackson.version}</version>
       </dependency>
+      <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-annotations</artifactId>
+        <version>${jackson.version}</version>
+      </dependency>
+      
       <dependency>
         <groupId>org.apache.logging.log4j</groupId>
         <artifactId>log4j-api</artifactId>
@@ -57,6 +71,11 @@
         <version>${netty-socketio.version}</version>
       </dependency>
       <dependency>
+        <groupId>io.socket</groupId>
+        <artifactId>socket.io-client</artifactId>
+        <version>${socketio.client.version}</version>
+      </dependency>
+      <dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
         <version>${junit.version}</version>
@@ -66,6 +85,11 @@
   		<groupId>com.h2database</groupId>
   		<artifactId>h2</artifactId>
   		<version>${h2.version}</version>
+	  </dependency>
+	  <dependency>
+	    <groupId>org.slf4j</groupId>
+	    <artifactId>slf4j-simple</artifactId>
+	    <version>${slf4j.version}</version>
 	  </dependency>
     </dependencies>
   </dependencyManagement>
