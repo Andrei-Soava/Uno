@@ -1,46 +1,48 @@
 package onegame.modello.net;
 
 import java.time.Instant;
-import java.util.List;
 import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import onegame.modello.carte.Carta;
-import onegame.modello.giocatori.Mano;
+import onegame.modello.giocatori.Giocatore;
 import onegame.modello.giocatori.Statistica;
+import onegame.modello.PartitaIF;
 
 /**
- * Rappresenta un giocatore (registrato o anonimo) nel sistema.
+ * Rappresenta un giocatore nel sistema.
+ * Usabile sia per giocatori registrati sia per anonimi.
  */
-public class Giocatore {
+public class Utente {
     private String idGiocatore;
     private String username;
     private boolean anonimo;
     private String tokenSessione;
-    private Mano mano;
     private boolean connesso;
-    private long ultimoHeartbeat; // epoch millis
+    private long ultimoHeartbeat;
     private Statistica statistica;
+    private Giocatore giocatore;
 
-    // costruttore vuoto per Jackson
-    public Giocatore() {
+    public Utente(boolean anonimo) {
         this.idGiocatore = UUID.randomUUID().toString();
-        this.mano = new Mano();
-        this.anonimo = true;
+        this.username = "anonimo";
+        this.anonimo = anonimo;
+        this.tokenSessione = UUID.randomUUID().toString();
         this.connesso = true;
         this.ultimoHeartbeat = Instant.now().toEpochMilli();
         this.statistica = new Statistica();
-        this.tokenSessione = UUID.randomUUID().toString();
     }
 
-    public Giocatore(String username, boolean anonimo) {
-        this();
-        this.username = username;
-        this.anonimo = anonimo;
+    public Utente(String username, boolean anonimo) {
+        this(anonimo);
+        if (username != null && !username.isEmpty()) {
+            this.username = username;
+            this.anonimo = username.startsWith("anonimo-");
+        }
     }
 
+    @JsonProperty("idGiocatore")
     public String getIdGiocatore() {
         return idGiocatore;
     }
@@ -49,6 +51,7 @@ public class Giocatore {
         this.idGiocatore = idGiocatore;
     }
 
+    @JsonProperty("username")
     public String getUsername() {
         return username;
     }
@@ -65,6 +68,13 @@ public class Giocatore {
     public void setAnonimo(boolean anonimo) {
         this.anonimo = anonimo;
     }
+    
+    public PartitaIF getPartita() {
+		if (giocatore != null) {
+			return giocatore.getPartita();
+		}
+		return null;
+	}
 
     public String getTokenSessione() {
         return tokenSessione;
@@ -74,21 +84,13 @@ public class Giocatore {
         this.tokenSessione = tokenSessione;
     }
 
-    public Mano getMano() {
-        return mano;
-    }
-
-    public void setMano(Mano mano) {
-        this.mano = mano;
-    }
-
     public boolean isConnesso() {
         return connesso;
     }
 
     public void setConnesso(boolean connesso) {
         this.connesso = connesso;
-        if (connesso) this.ultimoHeartbeat = Instant.now().toEpochMilli();
+        if (connesso) aggiornaHeartbeat();
     }
 
     public long getUltimoHeartbeat() {
@@ -112,21 +114,8 @@ public class Giocatore {
         this.ultimoHeartbeat = Instant.now().toEpochMilli();
     }
 
-    public void aggiungiCarta(Carta c) {
-        this.mano.aggiungiCarta(c);
-    }
-
-    public void aggiungiCarta(List<Carta> carte) {
-        this.mano.aggiungiCarte(carte);
-    }
-
-    public void rimuoveCarta(Carta c) {
-        this.mano.rimuoviCarta(c);
-    }
-
     @Override
     public String toString() {
-        return "Giocatore[id=" + idGiocatore + ", username=" + username + ", anonimo=" + anonimo + ", connesso="
-                + connesso + "]";
+        return "Giocatore[id=" + idGiocatore + ", username=" + username + ", anonimo=" + anonimo + "]";
     }
 }

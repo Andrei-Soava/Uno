@@ -84,5 +84,6 @@ Esempio COMPLETO:
 - 24/09 9:00-14:00, Fabio, refactoring modello, null;
 - 24/09, Fabio, (refactoring modello, aggiunta metodi safe per server, corrette dipendenze, introdotta nuova libreria per il client, documentazione), eventuale continuazione refactoring;
 - 24/09 21:30-22:20, Giuseppe, modifica della classe PlayerConnection (uso anche delle classi di onegame-common)
-- 25/09, Giuseppe, rinomina classi ConnessioneGiocatore e AvvioServer;
-- 25/09 21:45, Giuseppe, creazione della clsse GestioneStanze, questa classe viene usata per gestire le diverse stanze all'interno delle quali sono presenti i giocatori connessi;
+- 25/09, Giuseppe, rinomina classi ConnessioneGiocatore e AvvioServer, null;
+- 25/09 21:45, Giuseppe, (creazione della classe GestioneStanze, usata per gestire le diverse stanze in cui sono presenti i giocatori connessi), null;
+- 25/09, Fabio, (creato ProtocolloMessaggi, Utente e GestoreConnessioni), continuo implementazione server;
