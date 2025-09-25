@@ -5,12 +5,12 @@ import com.corundumstudio.socketio.SocketIOClient;
 import onegame.modello.carte.Carta;
 import onegame.modello.giocatori.Giocatore;
 
-public class PlayerConnection {
+public class ConnessioneGiocatore {
 	private final SocketIOClient client; //rappresenta la connessione attiva del giocatore
 	private final String playerID;
 	private final Giocatore giocatore;
 	
-	public PlayerConnection(SocketIOClient client, String playerID){
+	public ConnessioneGiocatore(SocketIOClient client, String playerID){
 		this.client = client;
 		this.playerID = playerID;
 		this.giocatore = new Giocatore();
