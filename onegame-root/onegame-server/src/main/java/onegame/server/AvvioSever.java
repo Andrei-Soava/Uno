@@ -1,6 +1,6 @@
 package onegame.server;
 
-public class ServerLaunch {
+public class AvvioSever {
 	//usato per l'avvio del server
 	public static void main(String[] args) {
 		int port = 9092;//porta di rete
