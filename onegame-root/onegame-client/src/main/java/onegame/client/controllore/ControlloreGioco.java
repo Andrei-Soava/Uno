@@ -394,7 +394,7 @@ public class ControlloreGioco {
 		                        	            vg.stampaMessaggio(g.getNome()+" ha chiamato ONE");
 		                        	        } else {
 		                        	            vg.stampaMessaggio(g.getNome()+" NON ha chiamato ONE in tempo -> pesca 2 carte");
-		                        	            g.getMano().aggiungiCarta(partita.getMazzo().pescaN(2));
+		                        	            g.getMano().aggiungiCarte(partita.getMazzo().pescaN(2));
 		                        	        }
 		                        	        partita.passaTurno();
 		                        	        cp.salvaPartitaAutomatico(this);
@@ -427,7 +427,7 @@ public class ControlloreGioco {
 	                        	            vg.stampaMessaggio(g.getNome()+" ha chiamato ONE");
 	                        	        } else {
 	                        	            vg.stampaMessaggio(g.getNome()+" NON ha chiamato ONE in tempo -> pesca 2 carte");
-	                        	            g.getMano().aggiungiCarta(partita.getMazzo().pescaN(2));
+	                        	            g.getMano().aggiungiCarte(partita.getMazzo().pescaN(2));
 	                        	        }
 	                        	        partita.passaTurno();
 	                        	        cp.salvaPartitaAutomatico(this);

@@ -6,6 +6,7 @@ package onegame.modello.giocatori;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -42,11 +43,11 @@ public class Mano {
 	}
 	
 	/**
-	 * metodo di aggiunta di più carte (es pescaN)
+	 * metodo di aggiunta di più carte
 	 * 
 	 * @param c carte aggiunte
 	 */
-	public void aggiungiCarta(ArrayList<Carta> c) {
+	public void aggiungiCarte(List<Carta> c) {
 		carte.addAll(c);
 		Collections.sort(carte);
 	}
@@ -64,11 +65,41 @@ public class Mano {
 		return carte;
 	}
 
+	public boolean contieneCarta(Carta c) {
+        return carte.contains(c);
+    }
+	
+	/**
+     * Restituisce la prima carta giocabile (strategia semplice) oppure null se non esiste.
+     */
+    public Carta primaCartaGiocabile(Carta cartaCorrente) {
+        for (Carta c : carte) {
+            if (c.giocabileSu(cartaCorrente)) return c;
+        }
+        return null;
+    }
+    
+    /**
+     * Restituisce true se la mano contiene almeno una carta giocabile sulla carta corrente.
+     */
+    public boolean haCartaValida(Carta cartaCorrente) {
+        for (Carta c : carte) {
+            if (c.giocabileSu(cartaCorrente)) return true;
+        }
+        return false;
+    }
+	
 	public void setCarte(ArrayList<Carta> carte) {
 		this.carte = carte;
 	}
+	
 	@JsonIgnore
 	public int getNumCarte() {
 		return carte.size();
 	}
+	
+	@Override
+    public String toString() {
+        return "Mano[num=" + getNumCarte() + ", carte=" + carte + "]";
+    }
 }
