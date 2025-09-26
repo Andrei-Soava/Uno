@@ -1,4 +1,4 @@
-package onegame.client.vista;
+package onegame.client.vista.offline;
 
 
 import javafx.geometry.Insets;
@@ -13,11 +13,11 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import onegame.client.esecuzione.AppWithMaven;
 
-public class VistaIniziale {
+public class VistaMenuOffline {
 
     private Scene scene;
 
-    public VistaIniziale(AppWithMaven app) {
+    public VistaMenuOffline(AppWithMaven app) {
         BorderPane root = new BorderPane();
         
         Button homeBtn = new Button("← Home");
@@ -43,12 +43,15 @@ public class VistaIniziale {
 
     	root.setTop(topBar);
         
-        Button btnCarica = new Button("Carica Partita");
-        Button btnNuova = new Button("Nuova Partita");
-        btnCarica.setOnAction(e -> app.mostraVistaSalvataggi());
-        btnNuova.setOnAction(e -> app.mostraVistaConfigurazione());
+        Button nuovaBtn = new Button("Nuova partita");
+        nuovaBtn.setPrefWidth(200);
+        nuovaBtn.setOnAction(e -> app.mostraVistaConfigurazioneOffline());
         
-        VBox centro = new VBox(20, btnCarica, btnNuova);
+        Button caricaBtn = new Button("Carica partita");
+        caricaBtn.setPrefWidth(200);
+        caricaBtn.setOnAction(e -> app.mostraVistaSalvataggi());
+        
+        VBox centro = new VBox(20, nuovaBtn, caricaBtn);
     	centro.setAlignment(Pos.CENTER);
     	
     	root.setCenter(centro);

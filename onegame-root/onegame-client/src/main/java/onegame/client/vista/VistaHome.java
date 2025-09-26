@@ -32,10 +32,11 @@ public class VistaHome {
 		
 		giocaOnlineBtn = new Button("Gioca con amici");
 		giocaOnlineBtn.setPrefWidth(200);
+		giocaOnlineBtn.setOnAction(e -> app.mostraVistaMenuOnline());
 		
 		giocaOfflineBtn = new Button("Gioca contro computer");
 		giocaOfflineBtn.setPrefWidth(200);
-		giocaOfflineBtn.setOnAction(e -> app.mostraVistaIniziale());
+		giocaOfflineBtn.setOnAction(e -> app.mostraVistaMenuOffline());
 
 		statisticheBtn = new Button("Mostra statistiche");
 		statisticheBtn.setPrefWidth(200);

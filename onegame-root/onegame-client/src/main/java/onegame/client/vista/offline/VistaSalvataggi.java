@@ -1,4 +1,4 @@
-package onegame.client.vista;
+package onegame.client.vista.offline;
 
 
 import java.util.List;
@@ -18,9 +18,8 @@ public class VistaSalvataggi {
     public VistaSalvataggi(AppWithMaven app) {
     	BorderPane root = new BorderPane();
 
-    	// --- TopBar ---
-    	Button homeBtn = new Button("← Home");
-    	homeBtn.setOnAction(e -> app.mostraVistaIniziale());
+    	Button indietroBtn = new Button("Indietro");
+    	indietroBtn.setOnAction(e -> app.mostraVistaMenuOffline());
 
     	Label titolo = new Label("SALVATAGGI");
     	titolo.getStyleClass().add("titolo");
@@ -34,7 +33,7 @@ public class VistaSalvataggi {
     	HBox topBar = new HBox(10);
     	topBar.setPadding(new Insets(10));
     	topBar.setAlignment(Pos.CENTER_LEFT);
-    	topBar.getChildren().addAll(homeBtn, leftSpacer, titolo, rightSpacer);
+    	topBar.getChildren().addAll(indietroBtn, leftSpacer, titolo, rightSpacer);
 
     	VBox lista = new VBox(10);
     	lista.setAlignment(Pos.TOP_CENTER);
@@ -50,18 +49,18 @@ public class VistaSalvataggi {
     	    nome.setEllipsisString("...");
     	    nome.setTextOverrun(OverrunStyle.ELLIPSIS);
     	    // Pulsanti
-    	    Button btnGioca = new Button("Gioca");
-    	    btnGioca.setOnAction(e -> app.mostraVistaGiocoCaricato(s));
+    	    Button giocaBtn = new Button("Gioca");
+    	    giocaBtn.setOnAction(e -> app.mostraVistaGiocoCaricato(s));
 
-    	    Button btnRinomina = new Button("Rinomina");
-    	    btnRinomina.setOnAction(e -> {
+    	    Button rinominaBtn = new Button("Rinomina");
+    	    rinominaBtn.setOnAction(e -> {
     	        TextInputDialog dialog = new TextInputDialog(s);
     	        dialog.setTitle("Rinomina salvataggio");
     	        dialog.setHeaderText("Rinomina in:");
-    	        Button okButton = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
-    	        okButton.setDisable(true);
+    	        Button okBtn = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
+    	        okBtn.setDisable(true);
     	        dialog.getEditor().textProperty().addListener((obs, oldValue, newValue) -> {
-    	            okButton.setDisable(newValue.trim().isEmpty()
+    	            okBtn.setDisable(newValue.trim().isEmpty()
     	                || !ManagerPersistenza.verificaRinominaSalvataggio(s, newValue));
     	        });
     	        if (dialog.showAndWait().isPresent()) {
@@ -70,8 +69,8 @@ public class VistaSalvataggi {
     	        }
     	    });
 
-    	    Button btnElimina = new Button("Elimina");
-    	    btnElimina.setOnAction(e -> {
+    	    Button eliminaBtn = new Button("Elimina");
+    	    eliminaBtn.setOnAction(e -> {
     	        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
     	        alert.setTitle("Elimina salvataggio");
     	        alert.setHeaderText("Sei sicuro di voler eliminare?");
@@ -86,7 +85,7 @@ public class VistaSalvataggi {
     	    });
 
     	    // Riga con nome a sinistra e pulsanti a destra
-    	    HBox riga = new HBox(20, nome, btnGioca, btnRinomina, btnElimina);
+    	    HBox riga = new HBox(20, nome, giocaBtn, rinominaBtn, eliminaBtn);
     	    riga.setAlignment(Pos.CENTER_LEFT);
 
     	    lista.getChildren().add(riga);

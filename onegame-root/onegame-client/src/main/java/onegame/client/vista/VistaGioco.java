@@ -79,7 +79,7 @@ public class VistaGioco {
     	    alert.showAndWait().ifPresent(response -> {
     	        if (response == confermaBtn) {
     	        	cg.interrompiPartita();
-    	            app.mostraVistaIniziale();
+    	            app.mostraVistaMenuOffline();
     	        }
     	    });
     	});
@@ -350,7 +350,7 @@ public class VistaGioco {
             if (!result.isPresent() || result.get() == tornaMenuBtn) {
             	String salvataggio=cg.getCp().getSalvataggioCorrente();
             	ManagerPersistenza.eliminaSalvataggio(salvataggio);
-                app.mostraVistaIniziale();
+                app.mostraVistaMenuOffline();
             }
         });
     }
