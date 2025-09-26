@@ -14,7 +14,7 @@ import onegame.modello.Mossa;
 import onegame.modello.net.Utente;
 
 /**
- * ServerUno: punto di ingresso del server Socket.IO.
+ * ServerUno
  * - registra eventi di connessione/disconnessione
  * - instrada eventi di autenticazione e gestione stanze verso i gestori
  * - instrada eventi di gioco ("partita:mossa") verso la StanzaPartita corretta
@@ -45,7 +45,13 @@ public class ServerUno {
         // connessione
         server.addConnectListener(client -> {
             HandshakeData hd = client.getHandshakeData();
-            String addr = hd.getAddress();
+            String addr = "unknown";
+            try {
+                if (client.getRemoteAddress() != null) addr = client.getRemoteAddress().toString();
+                else if (hd != null && hd.getAddress() != null) addr = hd.getAddress().toString();
+            } catch (Exception ex) {
+                // fallback a "unknown"
+            }
             System.out.println("[SERVER] Nuova connessione da " + addr + " sessionId=" + client.getSessionId());
         });
 
@@ -86,7 +92,7 @@ public class ServerUno {
         server.addEventListener(ProtocolloMessaggi.EVENT_RICHIESTA_PARTITE_NON_CONCLUSE, Void.class,
                 (client, data, ack) -> gestoreConnessioni.handleRichiestaPartiteNonConcluse(client));
 
-        // evento partita:mossa -> payload: Mossa (client deve inviare insieme token nel contesto client.set("token",...))
+        // evento partita:mossa -> payload: Mossa
         server.addEventListener("partita:mossa", Mossa.class, (client, mossa, ack) -> {
             Object tokenObj = client.get("token");
             if (tokenObj == null) {
