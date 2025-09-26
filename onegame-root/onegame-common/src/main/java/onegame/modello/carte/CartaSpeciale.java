@@ -59,11 +59,11 @@ public class CartaSpeciale extends Carta {
 			switch (this.getTipo()) {
 			case PIU_DUE:
 				p.prossimoGiocatore();
-				p.getGiocatoreCorrente().getMano().aggiungiCarta((p.getMazzo().pescaN(2)));
+				p.getGiocatoreCorrente().getMano().aggiungiCarte((p.getMazzo().pescaN(2)));
 				break;
 			case PIU_QUATTRO:
 				p.prossimoGiocatore();
-				p.getGiocatoreCorrente().getMano().aggiungiCarta((p.getMazzo().pescaN(4)));
+				p.getGiocatoreCorrente().getMano().aggiungiCarte((p.getMazzo().pescaN(4)));
 				break;
 			case BLOCCA:
 				p.prossimoGiocatore();

@@ -227,7 +227,7 @@ public class Partita implements PartitaIF {
 	 */
 	public void eseguiPrePartita() {
 		for (Giocatore g : giocatori) {
-			g.getMano().aggiungiCarta(mazzo.pescaN(NUMERO_CARTE_INIZIALI));
+			g.getMano().aggiungiCarte(mazzo.pescaN(NUMERO_CARTE_INIZIALI));
 			// g.getMano().aggiungiCarta(new
 			// CartaSpeciale(Colore.NERO,TipoSpeciale.PIU_QUATTRO));
 			// g.getMano().aggiungiCarta(new

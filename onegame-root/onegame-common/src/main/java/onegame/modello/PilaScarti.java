@@ -20,7 +20,7 @@ import onegame.modello.carte.Carta;
  * mettiCarta()--> aggiunge una carta alla pila degli scarti
  */
 class PilaScarti {
-	private Stack<Carta> scarti;
+	private Stack<Carta> scarti = new Stack<>();
 	
 	public Stack<Carta> getScarti() {
 		return scarti;
