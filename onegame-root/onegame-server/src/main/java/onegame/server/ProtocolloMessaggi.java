@@ -23,7 +23,7 @@ public class ProtocolloMessaggi {
     public static final String EVENT_STANZA_FAIL = "stanza:fail";
 
     // Richiesta di login / register
-    public static class ReqAuth implements Serializable {
+    public static class ReqAuth {
         public String username;
         public String password;
 
@@ -37,7 +37,7 @@ public class ProtocolloMessaggi {
     }
 
 //     Risposta auth ok
-    public static class RespAuthOk implements Serializable {
+    public static class RespAuthOk {
         public String idGiocatore;
         public String token;
         public String messaggio;
@@ -53,7 +53,7 @@ public class ProtocolloMessaggi {
     }
 
 //     Risposta auth fail
-    public static class RespAuthFail implements Serializable {
+    public static class RespAuthFail {
         public String motivo;
 
         public RespAuthFail() {
@@ -65,7 +65,7 @@ public class ProtocolloMessaggi {
     }
 
 //     Crea stanza
-    public static class ReqCreaStanza implements Serializable {
+    public static class ReqCreaStanza {
         public String nomeStanza;
         public int maxGiocatori;
 
@@ -79,7 +79,7 @@ public class ProtocolloMessaggi {
     }
 
 //     Entra stanza
-    public static class ReqEntraStanza implements Serializable {
+    public static class ReqEntraStanza {
         public String idStanza;
 
         public ReqEntraStanza() {
@@ -91,7 +91,7 @@ public class ProtocolloMessaggi {
     }
 
 //     Stanza risposta semplice
-    public static class RespStanza implements Serializable {
+    public static class RespStanza {
         public String idStanza;
         public String stato;
         public String messaggio;
