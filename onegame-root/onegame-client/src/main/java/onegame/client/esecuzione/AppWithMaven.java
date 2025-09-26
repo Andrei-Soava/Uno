@@ -4,17 +4,10 @@ import org.apache.logging.log4j.*;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
-import onegame.client.controllore.ControlloreAccesso;
-import onegame.client.controllore.ControlloreGioco;
-import onegame.client.controllore.ControlloreHome;
-import onegame.client.controllore.ControlloreRegistrazione;
-import onegame.client.vista.VistaAccesso;
-import onegame.client.vista.VistaConfigurazione;
-import onegame.client.vista.VistaGioco;
-import onegame.client.vista.VistaHome;
-import onegame.client.vista.VistaIniziale;
-import onegame.client.vista.VistaRegistrazione;
-import onegame.client.vista.VistaSalvataggi;
+import onegame.client.controllore.*;
+import onegame.client.vista.*;
+import onegame.client.vista.offline.*;
+import onegame.client.vista.online.*;
 
 
 /**
@@ -80,9 +73,26 @@ public class AppWithMaven extends Application {
     	VistaHome vista=new VistaHome(this, ch);
     	primaryStage.setScene(vista.getScene());
     }
+    
+    public void mostraVistaMenuOnline() {
+    	VistaMenuOnline vista = new VistaMenuOnline(this);
+        primaryStage.setScene(vista.getScene());
+    }
+    
+    public void mostraVistaConfigurazioneOnline() {
+        VistaConfigurazioneOnline vista = new VistaConfigurazioneOnline(this);
+        primaryStage.setScene(vista.getScene());
+    }
+    
+    public void mostraVistaInserimentoCodice() {
+    	VistaInserimentoCodice vista= new VistaInserimentoCodice(this);
+    	ControlloreCodicePartita cc=new ControlloreCodicePartita(vista);
+    	primaryStage.setScene(vista.getScene());
+    	cc.eseguiAccesso();
+    }
 
-    public void mostraVistaIniziale() {
-        VistaIniziale vista = new VistaIniziale(this);
+    public void mostraVistaMenuOffline() {
+        VistaMenuOffline vista = new VistaMenuOffline(this);
         primaryStage.setScene(vista.getScene());
     }
 
@@ -91,8 +101,8 @@ public class AppWithMaven extends Application {
         primaryStage.setScene(vista.getScene());
     }
 
-    public void mostraVistaConfigurazione() {
-        VistaConfigurazione vista = new VistaConfigurazione(this);
+    public void mostraVistaConfigurazioneOffline() {
+        VistaConfigurazioneOffline vista = new VistaConfigurazioneOffline(this);
         primaryStage.setScene(vista.getScene());
     }
 

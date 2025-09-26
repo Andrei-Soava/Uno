@@ -1,4 +1,4 @@
-package onegame.client.vista;
+package onegame.client.vista.online;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -7,16 +7,16 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import onegame.client.esecuzione.AppWithMaven;
 
-public class VistaConfigurazione {
+public class VistaConfigurazioneOnline {
 
     private Scene scene;
 
-    public VistaConfigurazione(AppWithMaven app) {
+    public VistaConfigurazioneOnline(AppWithMaven app) {
 
     	BorderPane root = new BorderPane();
 
-    	Button homeBtn = new Button("← Home");
-    	homeBtn.setOnAction(e -> app.mostraVistaIniziale());
+    	Button indietroBtn = new Button("Indietro");
+    	indietroBtn.setOnAction(e -> app.mostraVistaMenuOnline());
 
     	Label titolo = new Label("CONFIGURA NUOVA PARTITA");
     	titolo.getStyleClass().add("titolo");
@@ -30,23 +30,24 @@ public class VistaConfigurazione {
     	HBox topBar = new HBox(10);
     	topBar.setPadding(new Insets(10));
     	topBar.setAlignment(Pos.CENTER_LEFT);
-    	topBar.getChildren().addAll(homeBtn, leftSpacer, titolo, rightSpacer);
+    	topBar.getChildren().addAll(indietroBtn, leftSpacer, titolo, rightSpacer);
 
     	root.setTop(topBar);
 
     	Label lblNumGiocatori = new Label("Numero Giocatori");
-
     	ComboBox<Integer> numGiocatori = new ComboBox<>();
     	numGiocatori.getItems().addAll(2, 3, 4);
     	numGiocatori.setValue(2);
 
-    	Button btnAnnulla = new Button("Annulla");
-    	btnAnnulla.setOnAction(e -> app.mostraVistaIniziale());
+    	//possibile scelta modalità alternative QUI
+    	
+    	Button annullaBtn = new Button("Annulla");
+    	annullaBtn.setOnAction(e -> app.mostraVistaMenuOnline());
 
-    	Button btnAvvia = new Button("Avvia Partita");
-    	btnAvvia.setOnAction(e -> app.mostraVistaGiocoNuovo(numGiocatori.getValue()));
+    	Button avviaBtn = new Button("Avvia Partita");
+    	//avviaBtn.setOnAction(e -> app.mostraVistaGiocoNuovo(numGiocatori.getValue()));
 
-    	HBox pulsanti = new HBox(10, btnAnnulla, btnAvvia);
+    	HBox pulsanti = new HBox(10, annullaBtn, avviaBtn);
     	pulsanti.setAlignment(Pos.CENTER);
 
     	VBox centro = new VBox(20, lblNumGiocatori, numGiocatori, pulsanti);
