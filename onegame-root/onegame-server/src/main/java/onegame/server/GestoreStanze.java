@@ -6,9 +6,11 @@ import java.util.Map;
 
 import com.corundumstudio.socketio.SocketIOServer;
 
+import onegame.modello.net.Utente;
+
 public class GestoreStanze {
 	private static GestoreStanze instance;
-	private final Map<String, ConnessioneGiocatore> connectedPlayer;
+	private final Map<String, Utente> connectedPlayer;
 	private final Map<String, StanzaPartita> stanze;
 	
 	private GestoreStanze() {
@@ -24,18 +26,18 @@ public class GestoreStanze {
 	}
 	
 	//aggiuge giocatori alla mappa dei giocatori connessi
-	public void registerPlayed(ConnessioneGiocatore giocatore) { 
-		connectedPlayer.put(giocatore.getPlayerID(), giocatore);
+	public void registerPlayed(Utente utente) { 
+		connectedPlayer.put(utente.getIdGiocatore(), utente);
 	}
 	
 	//rimuove il giocatore disconnesso
-	public void unRegisterPlayed(String playerID) {
-		connectedPlayer.remove(playerID);
+	public void unRegisterPlayed(String idGiocatore) {
+		connectedPlayer.remove(idGiocatore);
 	}
 	
 	//recupera il giocatore connesso al quell'ID
-	public ConnessioneGiocatore getPlayer(String playerID) {
-		return connectedPlayer.get(playerID);
+	public Utente getPlayer(String idGiocatore) {
+		return connectedPlayer.get(idGiocatore);
 	}
 	
 	//crea e registra una nuova stanza
