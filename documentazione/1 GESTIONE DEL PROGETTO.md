@@ -88,5 +88,6 @@ Esempio COMPLETO:
 - 25/09 21:45, Giuseppe, (creazione della classe GestioneStanze, usata per gestire le diverse stanze in cui sono presenti i giocatori connessi), null;
 - 25/09, Fabio, (creato ProtocolloMessaggi, Utente e GestoreConnessioni), continuo implementazione server;
 - 26/09 11:30-13:30, Andrei, (continuazione gui--> alcune viste per gioco online + controllore per inserimento codice), continuazione gui;
-- 26/09 15:00-15:45, Giuseppe, completamento della classe GestoreStanze
-- 26/09 18:45-19:20, Giuseppe, modifica alla classe GestoreStanze e cancellazione di vecchiae classi
+- 26/09 15:00-15:45, Giuseppe, completamento della classe GestoreStanze, null;
+- 26/09 18:45-19:20, Giuseppe, modifica alla classe GestoreStanze e cancellazione di vecchie classi, null;
+- 26/09, Fabio, (creazione di ClientSocket, classi dei messaggi e ServerUno, refactoring di StanzaPartita e gestori), continuazione server;
