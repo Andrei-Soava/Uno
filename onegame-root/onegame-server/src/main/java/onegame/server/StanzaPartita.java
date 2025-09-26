@@ -22,10 +22,10 @@ import onegame.modello.net.Utente;
  */
 public class StanzaPartita {
 
-    private final String idStanza;
-    private final String nomeStanza;
+    private final String idStanza; // identificativo univoco
+    private final String nomeStanza; // nome visualizzato
     private final int maxUtenti;
-    private final SocketIOServer server;
+    private final SocketIOServer server; 
     private final GestoreConnessioni gestoreConnessioni;
 
     // token -> Utente
