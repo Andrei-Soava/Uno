@@ -17,6 +17,9 @@ import onegame.server.ProtocolloMessaggi.ReqAuth;
 import onegame.server.ProtocolloMessaggi.RespAuthFail;
 import onegame.server.ProtocolloMessaggi.RespAuthOk;
 
+/**
+ * Gestore delle connessioni e dell'autenticazione degli utenti
+ */
 public class GestoreConnessioni {
 
     private final SocketIOServer server;
@@ -24,6 +27,12 @@ public class GestoreConnessioni {
     private final Map<String, String> utentiRegistrati; // username -> passwordHash
     private final SecureRandom random = new SecureRandom();
 
+    /**
+	 * Costruttore del gestore connessioni
+	 * 
+	 * @param server   Il server Socket.IO
+	 * @param sessioni La mappa delle sessioni attive (token -> Utente)
+	 */
     public GestoreConnessioni(SocketIOServer server, Map<String, Utente> sessioni) {
         this.server = server;
         this.sessioni = sessioni;
@@ -32,6 +41,11 @@ public class GestoreConnessioni {
         utentiRegistrati.put("test25", hashPassword("test25"));
     }
 
+    /**
+	 * Gestisce la richiesta di login di un utente
+	 * @param client Il client che effettua la richiesta
+	 * @param req La richiesta di autenticazione (username e password)
+	 */
     public void handleLogin(SocketIOClient client, ReqAuth req) {
         try {
             if (req == null || req.username == null || req.password == null) {
@@ -65,6 +79,11 @@ public class GestoreConnessioni {
         }
     }
 
+    /**
+	 * Gestisce la richiesta di registrazione di un nuovo utente
+	 * @param client Il client che effettua la richiesta
+	 * @param req La richiesta di autenticazione (username e password)
+	 */
     public void handleRegister(SocketIOClient client, ReqAuth req) {
         try {
             if (req == null || req.username == null || req.password == null) {
@@ -96,6 +115,10 @@ public class GestoreConnessioni {
         }
     }
 
+    /**
+	 * Gestisce la richiesta di accesso anonimo
+	 * @param client Il client che effettua la richiesta
+	 */
     public void handleAnonimo(SocketIOClient client) {
         try {
             String nomeAnonimo = "anonimo-" + randomString(6);
@@ -117,6 +140,10 @@ public class GestoreConnessioni {
         }
     }
 
+    /**
+	 * Gestisce la disconnessione di un client
+	 * @param client Il client che si disconnette
+	 */
     public void handleDisconnessione(SocketIOClient client) {
         try {
             Object tokenObj = client.get("token");
@@ -141,7 +168,10 @@ public class GestoreConnessioni {
         client.sendEvent(ProtocolloMessaggi.EVENT_STANZA_OK, resp);
     }
 
-
+    /** Restituisce l'utente associato al token di sessione
+     * @param token Il token di sessione
+     * @return L'utente corrispondente, o null se il token è invalido
+     */
     public Utente getUtenteDaToken(String token) {
         if (token == null) return null;
         return sessioni.get(token);
@@ -151,6 +181,10 @@ public class GestoreConnessioni {
         if (token != null) sessioni.remove(token);
     }
 
+    /** Hash della password con SHA-256
+	 * @param password La password in chiaro
+	 * @return Hash della password
+	 */
     private String hashPassword(String password) {
         try {
             byte[] salt = new byte[16];
@@ -166,7 +200,12 @@ public class GestoreConnessioni {
             throw new RuntimeException(e);
         }
     }
-
+    
+    /** Verifica la password confrontando l'hash
+     * @param password La password in chiaro
+     * @param stored L'hash memorizzato
+     * @return true se la password corrisponde, false altrimenti
+     */
     private boolean verificaPassword(String password, String stored) {
         try {
             byte[] combined = Base64.getDecoder().decode(stored);

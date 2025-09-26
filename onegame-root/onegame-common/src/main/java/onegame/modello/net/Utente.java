@@ -11,8 +11,8 @@ import onegame.modello.giocatori.Statistica;
 import onegame.modello.PartitaIF;
 
 /**
- * Rappresenta un giocatore nel sistema.
- * Usabile sia per giocatori registrati sia per anonimi.
+ * Rappresenta un utente connesso al sistema.
+ * Usabile sia per utenti registrati sia per anonimi.
  */
 public class Utente {
     private String idGiocatore;
@@ -92,7 +92,8 @@ public class Utente {
         this.connesso = connesso;
         if (connesso) aggiornaHeartbeat();
     }
-
+    
+    @JsonIgnore
     public long getUltimoHeartbeat() {
         return ultimoHeartbeat;
     }
@@ -108,6 +109,15 @@ public class Utente {
     public void setStatistica(Statistica statistica) {
         this.statistica = statistica;
     }
+    
+    @JsonIgnore
+    public Giocatore getGiocatore() {
+    	return giocatore;
+    }
+    
+    public void setGiocatore(Giocatore giocatore) {
+		this.giocatore = giocatore;
+	}
 
     @JsonIgnore
     public void aggiornaHeartbeat() {
