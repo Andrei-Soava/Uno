@@ -83,5 +83,8 @@ Esempio COMPLETO:
 - 24/09 15:00-20:00, Andrei, (aggiunta casi di test in Junit per il modello + aggiornamento documento 4 per fase 1 e 2), null;
 - 24/09 9:00-14:00, Fabio, refactoring modello, null;
 - 24/09, Fabio, (refactoring modello, aggiunta metodi safe per server, corrette dipendenze, introdotta nuova libreria per il client, documentazione), eventuale continuazione refactoring;
-- 24/09 21:30-22:20, Giuseppe, modifica della classe PlayerConnection (uso anche delle classi di onegame-common)
-- 25/09, Giuseppe, rinomina classi ConnessioneGiocatore e AvvioServer
+- 24/09 21:30-22:20, Giuseppe, modifica della classe PlayerConnection (uso anche delle classi di onegame-common), null;
+- 25/09, Giuseppe, rinomina classi ConnessioneGiocatore e AvvioServer, null;
+- 25/09 21:45, Giuseppe, (creazione della classe GestioneStanze, usata per gestire le diverse stanze in cui sono presenti i giocatori connessi), null;
+- 25/09, Fabio, (creato ProtocolloMessaggi, Utente e GestoreConnessioni), continuo implementazione server;
+- 26/09 11:30-13:30, Andrei, (continuazione gui--> alcune viste per gioco online + controllore per inserimento codice), continuazione gui;
