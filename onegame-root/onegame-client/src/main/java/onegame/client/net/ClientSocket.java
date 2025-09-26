@@ -1,4 +1,4 @@
-package onegame.client;
+package onegame.client.net;
 
 import java.net.URI;
 import java.util.concurrent.CountDownLatch;
@@ -35,8 +35,70 @@ public class ClientSocket {
      * Registra gli handler di base
      */
     private void registerBaseHandlers() {
+        socket.on(Socket.EVENT_CONNECT, args -> {
+            System.out.println("[client] connesso al server");
+            // se abbiamo token, notifichiamo il server (se implementa un handler "auth:setToken")
+            if (token != null) {
+                try {
+                    socket.emit("auth:setToken", mapper.writeValueAsString(token));
+                } catch (Exception e) { /* ignore */ }
+            }
+        });
+
+        socket.on(Socket.EVENT_DISCONNECT, args -> System.out.println("[client] disconnesso dal server"));
+        socket.on("connect_error", args -> System.out.println("[client] errore connessione: " + args[0]));
+
+        socket.on("stanza:aggiornamento", args -> System.out.println("[server][stanza:aggiornamento] " + args[0]));
+        socket.on("partita:inizia", args -> System.out.println("[server][partita:inizia] " + args[0]));
+        socket.on("partita:turno", args -> System.out.println("[server][partita:turno] " + args[0]));
+        socket.on("partita:mossa", args -> System.out.println("[server][partita:mossa] " + args[0]));
+        socket.on("partita:terminata", args -> System.out.println("[server][partita:terminata] " + args[0]));
+        socket.on("auth:ok", args -> handleAuthOk(args[0]));
+        socket.on("auth:fail", args -> System.out.println("[server][auth:fail] " + args[0]));
+        socket.on("stanza:ok", args -> System.out.println("[server][stanza:ok] " + args[0]));
+        socket.on("stanza:fail", args -> System.out.println("[server][stanza:fail] " + args[0]));
     }
 
+    private void handleAuthOk(Object payload) {
+        try {
+            AuthResponse resp = mapper.convertValue(payload, AuthResponse.class);
+            if (resp != null && resp.token != null) {
+                setToken(resp.token);
+                System.out.println("[server][auth:ok] token memorizzato: " + resp.token);
+            } else {
+                System.out.println("[server][auth:ok] " + payload);
+            }
+        } catch (Exception e) {
+            System.out.println("[server][auth:ok] (impossibile parsare payload) " + payload);
+        }
+    }
+
+    /**
+     * Avvia la connessione al server
+     */
+    public void connect() {
+        socket.connect();
+    }
+
+    /**
+	 * Disconnette dal server
+	 */
+    public void disconnect() {
+        socket.disconnect();
+    }
+
+    /**
+	 * Attende la connessione al server
+	 * @param seconds Numero di secondi da attendere
+	 * @return true se connesso, false se timeout
+	 * @throws InterruptedException
+	 */
+    public boolean waitForConnect(long seconds) throws InterruptedException {
+        CountDownLatch l = new CountDownLatch(1);
+        Emitter.Listener lconn = args -> l.countDown();
+        socket.once(Socket.EVENT_CONNECT, lconn);
+        return l.await(seconds, TimeUnit.SECONDS);
+    }
 
     /**
      * Invia il token di autenticazione al server
@@ -124,5 +186,14 @@ public class ClientSocket {
         } catch (Exception e) {
             if (callback != null) callback.call(e.getMessage());
         }
+    }
+
+    /**
+	 * Registra un nuovo handler
+	 * @param evento Nome dell'evento
+	 * @param handler Handler dell'evento
+	 */
+    public void on(String evento, Emitter.Listener handler) {
+        socket.on(evento, handler);
     }
 }

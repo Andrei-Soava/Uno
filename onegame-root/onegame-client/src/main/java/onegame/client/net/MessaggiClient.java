@@ -1,4 +1,4 @@
-package onegame.client;
+package onegame.client.net;
 
 import java.io.Serializable;
 /**
