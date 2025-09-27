@@ -52,8 +52,24 @@ public class GestoreDatabase {
 	public static void inizializzaDatabase() throws Exception {
 		Connection conn = getConnection();
 		Statement st = conn.createStatement();
-		st.executeUpdate("CREATE TABLE users (" + " id IDENTITY PRIMARY KEY," + " username VARCHAR(50) UNIQUE NOT NULL,"
-				+ " password VARCHAR(100) NOT NULL," + " created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP" + ")");
+		
+		//Tabella utente
+		st.executeUpdate("CREATE TABLE IF NOT EXISTS utente (" +
+                "id IDENTITY PRIMARY KEY," +
+                "username VARCHAR(50) UNIQUE NOT NULL," +
+                "password VARCHAR(200) NOT NULL," +
+                "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP" +
+                ")");
+		
+		//Tabella partita incompleta
+		st.executeUpdate("CREATE TABLE IF NOT EXISTS partita_incompleta("+
+				"id IDENTITY PRIMARY KEY,"+
+				"utente_id BIGINT NOT NULL,"+
+				"nome_salvataggio VARCHAR(100) NOT NULL,"+
+				"partita_serializzata CLOB NOT NULL,"+
+				"created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP," +
+				"FOREIGN KEY (utente_id) REFERENCES utente(id) ON DELETE CASCADE"+
+				")");
 	}
 
 	public static void main(String[] args) throws Exception {
