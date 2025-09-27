@@ -92,3 +92,4 @@ Esempio COMPLETO:
 - 26/09 18:45-19:20, Giuseppe, modifica alla classe GestoreStanze e cancellazione di vecchie classi, null;
 - 26/09, Fabio, (creazione di ClientSocket, classi dei messaggi e ServerUno, refactoring di StanzaPartita e gestori), continuazione server;
 - 27/09 0:00-1:00, Fabio, creazione file bat per eseguire server, null;
+- 27/09 15:00-18:00, Giuseppe, aggiornamento GestoreDatabase e creazione delle classi UtenteDb e PartitaIncompletaDb
