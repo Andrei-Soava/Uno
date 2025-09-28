@@ -17,13 +17,8 @@ public class VistaHome {
 	private Button giocaOfflineBtn;
 	private Button statisticheBtn;
 	private Button logoutBtn;
-	
-	private ControlloreHome ch;
 
-	public VistaHome(AppWithMaven app, ControlloreHome ch) {
-		this.ch=ch;
-		System.out.println(ch.getUtente());
-		
+	public VistaHome(AppWithMaven app) {		
 		Label titolo = new Label("Scegli modalità");
 		titolo.getStyleClass().add("titolo");
 		
@@ -40,16 +35,14 @@ public class VistaHome {
 
 		statisticheBtn = new Button("Mostra statistiche");
 		statisticheBtn.setPrefWidth(200);
-		if(ch.getUtente()==null) {
-			statisticheBtn.setDisable(true);
-			statisticheBtn.setOpacity(0.5);
-		}
-
+		
 		logoutBtn = new Button("Logout");
 		logoutBtn.setPrefWidth(200);
 		logoutBtn.getStyleClass().add("logout");
+		//orribile, sarebbe da fare dentro il controllore
 		logoutBtn.setOnAction(e -> {
-			ch.setUtente(null);
+			app.getCs().getUtente().setAnonimo(true);
+			app.getCs().getUtente().setUsername("anonimo");
 			app.mostraVistaAccesso();
 			});
 
@@ -65,6 +58,23 @@ public class VistaHome {
 
 	public Scene getScene() {
 		return scene;
+	}
+	
+	/**
+	 * da usare quando sono connesso come utente anonimo
+	 */
+	public void disableStatisticheBtn() {
+		statisticheBtn.setDisable(true);
+		statisticheBtn.setOpacity(0.5);
+	}
+	
+	/**
+	 * da usare quando non sono connesso al server
+	 */
+	public void disableOnlineBtns() {
+		giocaOnlineBtn.setDisable(true);
+		giocaOnlineBtn.setOpacity(0.5);
+		disableStatisticheBtn();
 	}
 
 }

@@ -14,6 +14,7 @@ import onegame.modello.net.ProtocolloMessaggi.ReqAuth;
 import onegame.modello.net.ProtocolloMessaggi.ReqCreaStanza;
 import onegame.modello.net.ProtocolloMessaggi.ReqEntraStanza;
 import onegame.modello.net.ProtocolloMessaggi.RespAuthOk;
+import onegame.modello.net.Utente;
 
 /**
  * ClientSocket
@@ -27,11 +28,13 @@ public class ClientSocket {
     private final Socket socket;
     private final ObjectMapper mapper = new ObjectMapper();
     private String token;
+    private Utente utente;
 
     public ClientSocket(String url) throws Exception {
         IO.Options opts = new IO.Options();
         opts.reconnection = true;
         this.socket = IO.socket(new URI(url), opts);
+        this.utente=new Utente(true);
         registerBaseHandlers();
     }
 
@@ -83,6 +86,26 @@ public class ClientSocket {
     public void connect() {
         socket.connect();
     }
+    
+    /**
+     * Verifica se il client è attualmente connesso al server
+     * @return true se connesso, false altrimenti
+     */
+    public boolean isConnected() {
+        if (socket != null && socket.connected()) {
+            return true;
+        }
+        // se non è connesso, prova a connettersi e attendi max 1 secondo
+        // TODO da rivedere (fare solo il primo if non è pratico visto che causa eccezioni socket.connect è asincrono))
+        try {
+            socket.connect();
+            return waitForConnect(1); // attende 1 secondo
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            return false;
+        }
+    }
+
 
     /**
 	 * Disconnette dal server
@@ -200,4 +223,22 @@ public class ClientSocket {
     public void on(String evento, Emitter.Listener handler) {
         socket.on(evento, handler);
     }
+
+    /**
+     * Ottieni utente dal socket (se c'è connessione al server)
+     * @return utente del socket
+     */
+	public Utente getUtente() {
+		return isConnected()? this.utente : null;
+	}
+
+	/**
+	 * Imposta utente del socket (potrebbe servire)
+	 * @param utente
+	 */
+	public void setUtente(Utente utente) {
+		this.utente = utente;
+	}
+    
+    
 }

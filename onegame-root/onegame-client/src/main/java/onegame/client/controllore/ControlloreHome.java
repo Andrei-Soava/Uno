@@ -1,17 +1,20 @@
 package onegame.client.controllore;
 
+import onegame.modello.net.Utente;
+
 public class ControlloreHome {
-	private String utente;
+	private Utente utente;
 	
-	public ControlloreHome() {
-		utente=null;
-	}
-	
-	public String getUtente() {
-		return this.utente;
-	}
-	
-	public void setUtente(String utente) {
+	public ControlloreHome(Utente utente) {
 		this.utente=utente;
 	}
+
+	public Utente getUtente() {
+		return utente;
+	}
+
+	public void setUtente(Utente utente) {
+		this.utente = utente;
+	}
+	
 }

@@ -22,6 +22,7 @@ public class VistaAccesso {
 	private Label erroreLabel;
 	private Button accediBtn;
 	private Button registratiBtn;
+	private Button ospiteBtn;
 
 	public VistaAccesso(AppWithMaven app) {
 		this.app=app;
@@ -63,10 +64,7 @@ public class VistaAccesso {
 		Label oppureLabel = new Label("oppure");
 
 		// bottone "Entra come ospite"
-		Button ospiteBtn = new Button("Entra come ospite");
-		ospiteBtn.setOnAction(e -> {
-			app.mostraVistaHomeOspite();
-			});
+		ospiteBtn = new Button("Entra come ospite");
 
 		// costruzione scena
 		VBox root = new VBox(15, titolo, spacer0, usernameField, passwordField, erroreLabel, bottoni, oppureLabel, ospiteBtn);
@@ -114,7 +112,10 @@ public class VistaAccesso {
 			String password = passwordField.getText();
 			callback.mandaDatiAccesso(username, password);
 		});
-
+		
+		ospiteBtn.setOnAction(e -> {
+			callback.mandaDatiAccesso(null, null);
+		});
 	}
 	
 	//fine sezione

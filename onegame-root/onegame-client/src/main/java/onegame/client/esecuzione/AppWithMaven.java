@@ -5,6 +5,7 @@ import org.apache.logging.log4j.*;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import onegame.client.controllore.*;
+import onegame.client.net.ClientSocket;
 import onegame.client.vista.*;
 import onegame.client.vista.offline.*;
 import onegame.client.vista.online.*;
@@ -22,13 +23,33 @@ public class AppWithMaven extends Application {
 	}
 	
 	private Stage primaryStage;
-	private ControlloreHome ch;
+	private ClientSocket cs;
+	//private ControlloreHome ch;
 	
 	
     @Override
     public void start(Stage stage) {
         this.primaryStage = stage;
-        this.ch=new ControlloreHome();
+        //this.ch=new ControlloreHome();
+        try {
+			cs=new ClientSocket("http://127.0.0.1:8080/");
+			cs.connect();
+			System.out.println("connessione avvenuta con successo");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+        
+        primaryStage.setOnCloseRequest(e->{
+        	if (cs != null) {
+                try {
+                    cs.disconnect();
+                    System.out.println("disconnessione avvenuta con successo");
+                } catch (Exception exc) {
+                    exc.printStackTrace();
+                }
+            }
+        	
+        });
         stage.setTitle("UNO - JavaFX");
         stage.setWidth(900);
         stage.setHeight(600);
@@ -43,11 +64,14 @@ public class AppWithMaven extends Application {
     	return this.primaryStage;
     }
     
+    public ClientSocket getCs() {
+    	return this.cs;
+    }
     
     public void mostraVistaAccesso(String username) {
     	VistaAccesso vista=new VistaAccesso(this);
     	vista.compilaUsername(username);
-    	ControlloreAccesso ca=new ControlloreAccesso(vista,ch);
+    	ControlloreAccesso ca=new ControlloreAccesso(vista,this.getCs().getUtente());
     	primaryStage.setScene(vista.getScene());
     	ca.eseguiAccesso();
     }
@@ -64,15 +88,18 @@ public class AppWithMaven extends Application {
     }
     
     public void mostraVistaHome() {
-    	VistaHome vista=new VistaHome(this, ch);
+    	VistaHome vista=new VistaHome(this);
+    	ControlloreHome ch=new ControlloreHome(this.getCs().getUtente());
+    	if(ch.getUtente().isAnonimo())
+    		vista.disableStatisticheBtn();
     	primaryStage.setScene(vista.getScene());
     }
     
-    public void mostraVistaHomeOspite() {
-    	ch.setUtente(null);
-    	VistaHome vista=new VistaHome(this, ch);
-    	primaryStage.setScene(vista.getScene());
-    }
+//    public void mostraVistaHomeOspite() {
+//    	ch.setUtente(null);
+//    	VistaHome vista=new VistaHome(this, ch);
+//    	primaryStage.setScene(vista.getScene());
+//    }
     
     public void mostraVistaMenuOnline() {
     	VistaMenuOnline vista = new VistaMenuOnline(this);
