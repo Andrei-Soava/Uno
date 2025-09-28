@@ -99,7 +99,7 @@ public class ClientSocket {
         // TODO da rivedere (fare solo il primo if non è pratico visto che causa eccezioni socket.connect è asincrono))
         try {
             socket.connect();
-            return waitForConnect(1); // attende 1 secondo
+            return waitForConnect(0); // attende 0 secondi
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             return false;

@@ -41,8 +41,10 @@ public class VistaHome {
 		logoutBtn.getStyleClass().add("logout");
 		//orribile, sarebbe da fare dentro il controllore
 		logoutBtn.setOnAction(e -> {
-			app.getCs().getUtente().setAnonimo(true);
-			app.getCs().getUtente().setUsername("anonimo");
+			if(app.getCs().getUtente()!=null) {
+				app.getCs().getUtente().setAnonimo(true);
+				app.getCs().getUtente().setUsername("anonimo");
+			}
 			app.mostraVistaAccesso();
 			});
 

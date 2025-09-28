@@ -1,25 +1,29 @@
 package onegame.client.controllore;
 
+import onegame.client.net.ClientSocket;
 import onegame.client.vista.VistaAccesso;
 import onegame.modello.net.Utente;
 
 public class ControlloreAccesso {
 	private VistaAccesso va;
-	private Utente utente;
+	private ClientSocket cs;
 	
-	public ControlloreAccesso(VistaAccesso va, Utente utente) {
+	public ControlloreAccesso(VistaAccesso va, ClientSocket cs) {
 		this.va=va;
-		this.utente=utente;
+		this.cs=cs;
 	}
 	
 	public void eseguiAccesso() {
 		va.ottieniDati((username,password)->{
 			System.out.println(username);
 			System.out.println(password);
-			
+			if(!cs.isConnected()) {
+				va.visualizzaHome();
+				return;
+			}
 			if(username==null && password==null) {
-				utente.setAnonimo(true);
-				utente.setUsername("anonimo");
+				cs.getUtente().setAnonimo(true);
+				cs.getUtente().setUsername("anonimo");
 				va.visualizzaHome();
 				return;
 			}
@@ -31,8 +35,8 @@ public class ControlloreAccesso {
 			
 			//condizionale (sarà dentro una send asincrona al server e se la response == true, si va alla vista successiva)
 			if(true) {
-				utente.setAnonimo(false);
-				utente.setUsername(username);
+				cs.getUtente().setAnonimo(false);
+				cs.getUtente().setUsername(username);
 				va.visualizzaHome();	
 			}
 			else {
