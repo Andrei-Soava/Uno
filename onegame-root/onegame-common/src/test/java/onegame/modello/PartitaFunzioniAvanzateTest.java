@@ -153,7 +153,7 @@ public class PartitaFunzioniAvanzateTest {
 		// inizializzo il pre partita (per fornire 7 carte ad ogni giocatore)
 		partita.eseguiPrePartita();
 		while(!partita.verificaFinePartita()) {
-			partita.getGiocatoreCorrente().scegliMossaAutomatica();
+			partita.scegliMossaAutomatica();
 			partita.passaTurno();
 		}
 		assertNotEquals("Non è presente un vincitore",null,partita.getVincitore());

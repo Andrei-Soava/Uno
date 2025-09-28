@@ -143,10 +143,6 @@ public class StanzaPartita {
                 lista.add(g);
             }
             partita = new Partita(lista);
-            // associa la partita ai giocatori
-            for (Giocatore g : lista) {
-                g.setPartita(partita);
-            }
             partita.eseguiPrePartita();
             broadcastPartitaIniziata();
             // inizia il ciclo dei turni
@@ -211,7 +207,7 @@ public class StanzaPartita {
                 return;
             }
             // eseguo scelta automatica usando la logica del Giocatore domain
-            Mossa mossa = corrente.scegliMossaAutomatica();
+            Mossa mossa = partita.scegliMossaAutomatica(corrente);
             broadcastMossa(tokenCorrente, corrente, mossa, true);
             partita.passaTurno();
             // verifica fine partita

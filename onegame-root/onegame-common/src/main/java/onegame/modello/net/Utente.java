@@ -68,13 +68,6 @@ public class Utente {
     public void setAnonimo(boolean anonimo) {
         this.anonimo = anonimo;
     }
-    
-    public PartitaIF getPartita() {
-		if (giocatore != null) {
-			return giocatore.getPartita();
-		}
-		return null;
-	}
 
     public String getTokenSessione() {
         return tokenSessione;

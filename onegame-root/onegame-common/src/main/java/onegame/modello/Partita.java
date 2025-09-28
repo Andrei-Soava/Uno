@@ -164,7 +164,6 @@ public class Partita implements PartitaIF {
 		this.giocatori = new ArrayList<>();
 		for (Giocatore g : giocatori) {
 			this.giocatori.add(g);
-			g.setPartita(this);
 		}
 	}
 
@@ -457,6 +456,44 @@ public class Partita implements PartitaIF {
 		}
 		setCartaCorrente(c);
 		effettoAttivato = false;
+	}
+	
+	public Mossa scegliMossaAutomatica() {
+		Giocatore g = this.getGiocatoreCorrente();
+		Mossa m;
+		for (Carta c : g.getMano().getCarte()) {
+			if (tentaGiocaCarta(c)) {
+				m = new Mossa(TipoMossa.GIOCA_CARTA, c);
+				if (c.getColore() == Colore.NERO) {
+					c.setColore(Colore.scegliColoreCasuale());
+					m.setTipoMossa(TipoMossa.SCEGLI_COLORE);
+				}
+				g.rimuoveCarta(c);
+				giocaCarta(c);
+				return m;
+			}
+		}
+		Carta pescata = pescaCarta();
+		g.aggiungiCarta(pescata);
+		m = new Mossa(TipoMossa.PESCA, pescata);
+		if (tentaGiocaCarta(pescata)) {
+			m.setTipoMossa(TipoMossa.GIOCA_CARTA);
+			if (pescata.getColore() == Colore.NERO) {
+				pescata.setColore(Colore.scegliColoreCasuale());
+				m.setTipoMossa(TipoMossa.SCEGLI_COLORE);
+			}
+			g.rimuoveCarta(pescata);
+			giocaCarta(pescata);
+		}
+		return m;
+	}
+	
+	public Mossa scegliMossaAutomatica(Giocatore giocatore) {
+		Giocatore g = this.getGiocatoreCorrente();
+		if (giocatore != g) {
+			return null;
+		}
+		return scegliMossaAutomatica();
 	}
 	// ------------------------------
 	

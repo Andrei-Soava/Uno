@@ -94,3 +94,4 @@ Esempio COMPLETO:
 - 27/09 0:00-1:00, Fabio, creazione file bat per eseguire server, null;
 - 27/09 15:00-18:00, Giuseppe, aggiornamento GestoreDatabase e creazione delle classi UtenteDb e PartitaIncompletaDb, null;
 - 28/09 19:00, Andrei, (collegamento client al server + testing base + piccole adattamenti a gui), continuazione gui;
+- 28/09, Fabio, (unificazione messaggi e refactoring Giocatore), null;

@@ -299,7 +299,7 @@ public class ControlloreGioco {
 	    ((VistaGioco)vg).stampaProssimoTurno(partita.vediProssimoGiocatore().getNome());
 	    if (g.isBot()) {
 	        //turno eventuale bot
-	        Mossa m = g.scegliMossaAutomatica();
+	        Mossa m = partita.scegliMossaAutomatica();
 	        if (m.getTipoMossa() == TipoMossa.PESCA) {
 	            vg.stampaMessaggio(g.getNome() + " ha pescato");
 	        } else {

@@ -50,8 +50,6 @@ public class Giocatore {
 	private String nome;
 	private Mano mano;
 	private boolean bot;
-	@JsonIgnore
-	private PartitaIF partita;
 
 	//costruttore vuoto per Jackson
 	public Giocatore() {}
@@ -59,7 +57,6 @@ public class Giocatore {
 	public Giocatore (String nome) {
 		this.nome = nome;
 		this.mano = new Mano();
-		this.partita = null;
 		this.bot = false;
 	}
 	
@@ -89,15 +86,6 @@ public class Giocatore {
 		return this.mano;
 	}
 	
-	@JsonIgnore
-	public PartitaIF getPartita() {
-		return partita;
-	}
-
-	public void setPartita(PartitaIF partita) {
-		this.partita = partita;
-	}
-	
 	/**
 	 * metodo che rende un giocatore umano un bot e viceversa
 	 * (utile per partite offline)
@@ -112,48 +100,6 @@ public class Giocatore {
 	 */
 	public boolean isBot() {
 		return bot;
-	}
-	
-	/**
-	 * metodo di scelta di mossa automatica con applicazione DIRETTA
-	 * sulla partita (applicaMossa() non serve qui)
-	 * 
-	 * @return mossa finale applicata (per gui)
-	 */
-	public Mossa scegliMossaAutomatica() {
-		Mossa m;
-		for(Carta c:this.getMano().getCarte()) {
-			if(partita.tentaGiocaCarta(c)) {
-				m=new Mossa(TipoMossa.GIOCA_CARTA,c);
-				if(c.getColore()==Colore.NERO) {
-					c.setColore(Colore.scegliColoreCasuale());
-					m.setTipoMossa(TipoMossa.SCEGLI_COLORE);
-				}
-				rimuoveCarta(c);
-				partita.giocaCarta(c);
-				return m;
-			}
-		}
-		Carta pescata=partita.pescaCarta();
-		aggiungiCarta(pescata);
-		m=new Mossa(TipoMossa.PESCA,pescata);
-		if(partita.tentaGiocaCarta(pescata)) {
-			m.setTipoMossa(TipoMossa.GIOCA_CARTA);
-			if(pescata.getColore()==Colore.NERO) {
-				pescata.setColore(Colore.scegliColoreCasuale());
-				m.setTipoMossa(TipoMossa.SCEGLI_COLORE);
-			}
-			rimuoveCarta(pescata);
-			partita.giocaCarta(pescata);
-		}
-		return m;
-	}
-	
-	public Mossa scegliMossaAutomaticaSafe() throws Exception {
-		if (this != partita.getGiocatoreCorrente()) {
-			throw new Exception("Giocatore non valido");
-		}
-		return scegliMossaAutomatica();
 	}
 	
 	public String mostraCarteInMano() {
