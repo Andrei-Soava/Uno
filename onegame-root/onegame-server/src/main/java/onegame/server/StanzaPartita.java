@@ -15,6 +15,7 @@ import com.corundumstudio.socketio.SocketIOServer;
 import onegame.modello.Partita;
 import onegame.modello.Mossa;
 import onegame.modello.giocatori.Giocatore;
+import onegame.modello.net.ProtocolloMessaggi;
 import onegame.modello.net.Utente;
 
 /**

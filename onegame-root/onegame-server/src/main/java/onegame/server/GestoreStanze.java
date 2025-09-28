@@ -7,6 +7,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.SocketIOServer;
 
+import onegame.modello.net.ProtocolloMessaggi;
+
 
 public class GestoreStanze {
 

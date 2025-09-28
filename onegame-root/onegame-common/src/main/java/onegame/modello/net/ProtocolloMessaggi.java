@@ -1,4 +1,4 @@
-package onegame.server;
+package onegame.modello.net;
 
 import java.io.Serializable;
 

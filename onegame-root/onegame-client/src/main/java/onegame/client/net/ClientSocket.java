@@ -10,6 +10,10 @@ import io.socket.client.Ack;
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
+import onegame.modello.net.ProtocolloMessaggi.ReqAuth;
+import onegame.modello.net.ProtocolloMessaggi.ReqCreaStanza;
+import onegame.modello.net.ProtocolloMessaggi.ReqEntraStanza;
+import onegame.modello.net.ProtocolloMessaggi.RespAuthOk;
 
 /**
  * ClientSocket
@@ -61,7 +65,7 @@ public class ClientSocket {
 
     private void handleAuthOk(Object payload) {
         try {
-            AuthResponse resp = mapper.convertValue(payload, AuthResponse.class);
+            RespAuthOk resp = mapper.convertValue(payload, RespAuthOk.class);
             if (resp != null && resp.token != null) {
                 setToken(resp.token);
                 System.out.println("[server][auth:ok] token memorizzato: " + resp.token);
@@ -119,7 +123,7 @@ public class ClientSocket {
      * @throws Exception
      */
     public void login(String username, String password, Ack callback) throws Exception {
-        MessaggiClient.ReqAuth r = new MessaggiClient.ReqAuth(username, password);
+        ReqAuth r = new ReqAuth(username, password);
         String json = mapper.writeValueAsString(r);
         socket.emit("auth:login", json, callback);
     }
@@ -132,7 +136,7 @@ public class ClientSocket {
      * @throws Exception
      */
     public void register(String username, String password, Ack callback) throws Exception {
-        MessaggiClient.ReqAuth r = new MessaggiClient.ReqAuth(username, password);
+        ReqAuth r = new ReqAuth(username, password);
         String json = mapper.writeValueAsString(r);
         socket.emit("auth:register", json, callback);
     }
@@ -153,7 +157,7 @@ public class ClientSocket {
 	 * @throws Exception
 	 */
     public void creaStanza(String nome, int maxGiocatori, Ack callback) throws Exception {
-        MessaggiClient.ReqCreaStanza r = new MessaggiClient.ReqCreaStanza(nome, maxGiocatori);
+        ReqCreaStanza r = new ReqCreaStanza(nome, maxGiocatori);
         String json = mapper.writeValueAsString(r);
         socket.emit("stanza:crea", json, callback);
     }
@@ -165,7 +169,7 @@ public class ClientSocket {
 	 * @throws Exception
 	 */
     public void entraStanza(String idStanza, Ack callback) throws Exception {
-        MessaggiClient.ReqEntraStanza r = new MessaggiClient.ReqEntraStanza(idStanza);
+        ReqEntraStanza r = new ReqEntraStanza(idStanza);
         String json = mapper.writeValueAsString(r);
         socket.emit("stanza:entra", json, callback);
     }

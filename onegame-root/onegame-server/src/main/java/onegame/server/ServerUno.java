@@ -11,6 +11,7 @@ import com.corundumstudio.socketio.SocketIOServer;
 import com.corundumstudio.socketio.listener.DataListener;
 
 import onegame.modello.Mossa;
+import onegame.modello.net.ProtocolloMessaggi;
 import onegame.modello.net.Utente;
 
 /**

@@ -12,10 +12,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.SocketIOServer;
 
+import onegame.modello.net.ProtocolloMessaggi;
 import onegame.modello.net.Utente;
-import onegame.server.ProtocolloMessaggi.ReqAuth;
-import onegame.server.ProtocolloMessaggi.RespAuthFail;
-import onegame.server.ProtocolloMessaggi.RespAuthOk;
+import onegame.modello.net.ProtocolloMessaggi.ReqAuth;
+import onegame.modello.net.ProtocolloMessaggi.RespAuthFail;
+import onegame.modello.net.ProtocolloMessaggi.RespAuthOk;
 
 /**
  * Gestore delle connessioni e dell'autenticazione degli utenti
