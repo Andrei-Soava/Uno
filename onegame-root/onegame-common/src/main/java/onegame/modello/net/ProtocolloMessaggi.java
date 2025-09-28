@@ -1,7 +1,5 @@
 package onegame.modello.net;
 
-import java.io.Serializable;
-
 public class ProtocolloMessaggi {
 
     // Eventi
