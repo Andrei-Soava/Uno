@@ -8,6 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
@@ -23,6 +24,7 @@ public class VistaAccesso {
 	private Button accediBtn;
 	private Button registratiBtn;
 	private Button ospiteBtn;
+	private Label statoConnessioneLabel;
 
 	public VistaAccesso(AppWithMaven app) {
 		this.app=app;
@@ -66,11 +68,19 @@ public class VistaAccesso {
 		// bottone "Entra come ospite"
 		ospiteBtn = new Button("Entra come ospite");
 
-		// costruzione scena
-		VBox root = new VBox(15, titolo, spacer0, usernameField, passwordField, erroreLabel, bottoni, oppureLabel, ospiteBtn);
-		root.setAlignment(Pos.CENTER);
-		root.setPadding(new Insets(20));
+		// costruzione scena centrale
+		VBox centro = new VBox(15, titolo, spacer0, usernameField, passwordField, erroreLabel, bottoni, oppureLabel, ospiteBtn);
+		centro.setAlignment(Pos.CENTER);
+		centro.setPadding(new Insets(20));
 
+		//label per stato connessione
+		statoConnessioneLabel=new Label();
+		statoConnessioneLabel.setPadding(new Insets(20));
+		
+		BorderPane root=new BorderPane();
+		root.setCenter(centro);
+		root.setBottom(statoConnessioneLabel);
+		
 		scene = new Scene(root);
 		scene.getStylesheets().add(getClass().getResource("/stile/base.css").toExternalForm());
 		Platform.runLater(() -> root.requestFocus());
@@ -80,12 +90,7 @@ public class VistaAccesso {
 		return scene;
 	}
 
-	public void svuotaCampi() {
-		usernameField.clear();
-		passwordField.clear();
-	}
-	
-	public void visualizzaHome() {
+	public void mostraHome() {
 		app.mostraVistaHome();
 	}
 	
@@ -97,6 +102,31 @@ public class VistaAccesso {
 		erroreLabel.setText(messaggio);
 		erroreLabel.setVisible(true);
 		erroreLabel.setManaged(true);
+	}
+	
+	public void svuotaCampi() {
+		usernameField.clear();
+		passwordField.clear();
+	}
+	
+	public void compilaStatoConnessione(boolean connected) {
+		Platform.runLater(() -> {
+            statoConnessioneLabel.setText(connected ? "Connesso ✅" : "Disconnesso ❌");
+        });
+	}
+	
+	public void disableOnlineBtns() {
+		accediBtn.setDisable(true);
+		accediBtn.setOpacity(0.5);
+		registratiBtn.setDisable(true);
+		registratiBtn.setOpacity(0.5);
+	}
+	
+	public void enableOnlineBtns() {
+		accediBtn.setDisable(false);
+		accediBtn.setOpacity(1);
+		registratiBtn.setDisable(false);
+		registratiBtn.setOpacity(1);
 	}
 	/**
 	 * sezione ottenimento dati da campo di login

@@ -3,7 +3,7 @@ package onegame.client.esecuzione;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import onegame.client.controllore.ControlloreGioco;
+import onegame.client.controllore.offline.ControlloreGioco;
 import onegame.client.vista.deprecato.VistaTemporanea;
 
 public class AppWithJava {

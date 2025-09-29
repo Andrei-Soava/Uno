@@ -3,6 +3,7 @@ package onegame.client.controllore;
 import java.io.IOException;
 import java.util.List;
 
+import onegame.client.controllore.offline.ControlloreGioco;
 import onegame.client.persistenza_temporanea.InterfacciaPersistenza;
 import onegame.client.persistenza_temporanea.ManagerPersistenza;
 import onegame.client.vista.VistaGioco;

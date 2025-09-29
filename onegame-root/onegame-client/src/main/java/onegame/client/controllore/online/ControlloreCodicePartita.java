@@ -1,4 +1,4 @@
-package onegame.client.controllore;
+package onegame.client.controllore.online;
 
 import onegame.client.vista.online.VistaInserimentoCodice;
 

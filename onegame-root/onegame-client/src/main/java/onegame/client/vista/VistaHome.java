@@ -1,5 +1,7 @@
 package onegame.client.vista;
 
+import java.util.concurrent.CompletableFuture;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -7,18 +9,20 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-import onegame.client.controllore.ControlloreHome;
 import onegame.client.esecuzione.AppWithMaven;
+import onegame.client.vista.accessori.GestoreCallbackBottoni;
 
 public class VistaHome {
 	private Scene scene;
+	private AppWithMaven app;
 	
 	private Button giocaOnlineBtn;
 	private Button giocaOfflineBtn;
 	private Button statisticheBtn;
 	private Button logoutBtn;
 
-	public VistaHome(AppWithMaven app) {		
+	public VistaHome(AppWithMaven app) {	
+		this.app=app;
 		Label titolo = new Label("Scegli modalità");
 		titolo.getStyleClass().add("titolo");
 		
@@ -40,13 +44,13 @@ public class VistaHome {
 		logoutBtn.setPrefWidth(200);
 		logoutBtn.getStyleClass().add("logout");
 		//orribile, sarebbe da fare dentro il controllore
-		logoutBtn.setOnAction(e -> {
-			if(app.getCs().getUtente()!=null) {
-				app.getCs().getUtente().setAnonimo(true);
-				app.getCs().getUtente().setUsername("anonimo");
-			}
-			app.mostraVistaAccesso();
-			});
+//		logoutBtn.setOnAction(e -> {
+//			if(app.getCs().getUtente()!=null) {
+//				app.getCs().getUtente().setAnonimo(true);
+//				app.getCs().getUtente().setUsername("anonimo");
+//			}
+//			app.mostraVistaAccesso();
+//			});
 
 		VBox root = new VBox(15, titolo, spacer0, giocaOnlineBtn, giocaOfflineBtn, statisticheBtn, logoutBtn);
 		root.setAlignment(Pos.CENTER);
@@ -60,6 +64,28 @@ public class VistaHome {
 
 	public Scene getScene() {
 		return scene;
+	}
+	
+	/**
+	 * funzione asincrona per gestione click logout btn
+	 * @return click sul bottone (qualora avvenisse)
+	 */
+	public CompletableFuture<Void> waitForLogoutBtnClick() {
+//        CompletableFuture<Void> future = new CompletableFuture<>();
+//        logoutBtn.setOnAction(e -> {
+//            if (!future.isDone()) {
+//                future.complete(null);
+//            }
+//        });
+//        return future;
+		return GestoreCallbackBottoni.waitForClick(logoutBtn);
+    }
+	
+	/**
+	 * metodo pubblico usato dal controlloreHome per passare alla vista successiva
+	 */
+	public void mostraAccesso() {
+		app.mostraVistaAccesso();
 	}
 	
 	/**

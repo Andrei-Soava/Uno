@@ -1,6 +1,8 @@
 package onegame.client.vista.offline;
 
 
+import java.util.concurrent.CompletableFuture;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -12,12 +14,16 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import onegame.client.esecuzione.AppWithMaven;
+import onegame.client.vista.accessori.GestoreCallbackBottoni;
 
 public class VistaMenuOffline {
 
     private Scene scene;
+    private AppWithMaven app;
+    private Button logoutBtn;
 
     public VistaMenuOffline(AppWithMaven app) {
+    	this.app=app;
         BorderPane root = new BorderPane();
         
         Button homeBtn = new Button("← Home");
@@ -32,9 +38,9 @@ public class VistaMenuOffline {
     	HBox.setHgrow(leftSpacer, Priority.ALWAYS);
     	HBox.setHgrow(rightSpacer, Priority.ALWAYS);
     	
-    	Button logoutBtn = new Button("Logout");
+    	logoutBtn = new Button("Logout");
     	logoutBtn.getStyleClass().add("logout");
-    	logoutBtn.setOnAction(e->app.mostraVistaAccesso());
+    	//logoutBtn.setOnAction(e->app.mostraVistaAccesso());
 
     	HBox topBar = new HBox(10);
     	topBar.setPadding(new Insets(10));
@@ -64,5 +70,13 @@ public class VistaMenuOffline {
 
     public Scene getScene() {
         return scene;
+    }
+    
+    public CompletableFuture<Void> waitForLogoutBtnClick() {
+		return GestoreCallbackBottoni.waitForClick(logoutBtn);
+    }
+    
+    public void mostraAccesso() {
+    	app.mostraVistaAccesso();
     }
 }

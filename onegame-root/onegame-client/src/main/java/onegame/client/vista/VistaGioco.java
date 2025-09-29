@@ -15,7 +15,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
-import onegame.client.controllore.ControlloreGioco;
+import onegame.client.controllore.offline.ControlloreGioco;
 import onegame.client.esecuzione.AppWithMaven;
 import onegame.client.persistenza_temporanea.ManagerPersistenza;
 import onegame.client.vista.accessori.GestoreGraficaCarta;

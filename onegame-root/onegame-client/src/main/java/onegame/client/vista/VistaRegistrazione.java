@@ -78,7 +78,7 @@ public class VistaRegistrazione {
 		return scene;
 	}
 	
-	public void visualizzaAccesso() {
+	public void mostraAccesso() {
 		app.mostraVistaAccesso(usernameField.getText());
 	}
 	

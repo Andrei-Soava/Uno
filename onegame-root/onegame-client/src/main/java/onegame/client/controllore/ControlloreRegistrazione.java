@@ -1,12 +1,15 @@
 package onegame.client.controllore;
 
+import onegame.client.net.ClientSocket;
 import onegame.client.vista.VistaRegistrazione;
 
 public class ControlloreRegistrazione {
 	private VistaRegistrazione vr;
+	private ClientSocket cs;
 	
-	public ControlloreRegistrazione(VistaRegistrazione vr) {
+	public ControlloreRegistrazione(VistaRegistrazione vr, ClientSocket cs) {
 		this.vr=vr;
+		this.cs=cs;
 	}
 	
 	public void eseguiRegistrazione() {
@@ -35,7 +38,7 @@ public class ControlloreRegistrazione {
 			
 			//condizionale (sarà dentro una send asincrona al server e se la response == true, si ritorna alla vista d'accesso)
 			if(true) {
-				vr.visualizzaAccesso();	
+				vr.mostraAccesso();	
 			}
 			else {
 				vr.compilaMessaggioErrore("Dati errati");

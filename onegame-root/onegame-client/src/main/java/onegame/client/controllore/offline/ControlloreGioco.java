@@ -1,4 +1,4 @@
-package onegame.client.controllore;
+package onegame.client.controllore.offline;
 
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -8,6 +8,7 @@ import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.util.Duration;
+import onegame.client.controllore.ControllorePersistenza;
 import onegame.client.vista.VistaGioco;
 import onegame.modello.Mossa;
 import onegame.modello.Partita;
