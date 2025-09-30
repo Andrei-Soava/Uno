@@ -96,3 +96,4 @@ Esempio COMPLETO:
 - 28/09 19:00, Andrei, (collegamento client al server + testing base + piccole adattamenti a gui), continuazione gui;
 - 28/09, Fabio, (unificazione messaggi e refactoring Giocatore), null;
 - 29/09 12:00, Andrei, (continuazione gui--> aggiunta gestione asincrona per bottoni logout con una classe accessoria + label per verifica connessione, per ora solo su VistaAccesso), continuazione gui;
+- 30/09 13:00, Andrei, (sperimentazione visualizzazione di stato connessione con strumenti javafx), continuazione gui;

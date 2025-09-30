@@ -3,6 +3,7 @@ package onegame.client.vista.offline;
 
 import java.util.concurrent.CompletableFuture;
 
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -20,7 +21,9 @@ public class VistaMenuOffline {
 
     private Scene scene;
     private AppWithMaven app;
+    private Button caricaBtn;
     private Button logoutBtn;
+    private Label statoConnessioneLabel;
 
     public VistaMenuOffline(AppWithMaven app) {
     	this.app=app;
@@ -53,7 +56,7 @@ public class VistaMenuOffline {
         nuovaBtn.setPrefWidth(200);
         nuovaBtn.setOnAction(e -> app.mostraVistaConfigurazioneOffline());
         
-        Button caricaBtn = new Button("Carica partita");
+        caricaBtn = new Button("Carica partita");
         caricaBtn.setPrefWidth(200);
         caricaBtn.setOnAction(e -> app.mostraVistaSalvataggi());
         
@@ -62,6 +65,9 @@ public class VistaMenuOffline {
     	
     	root.setCenter(centro);
         
+    	statoConnessioneLabel=new Label();
+    	root.setBottom(statoConnessioneLabel);
+    	
         scene = new Scene(root);
         scene.getStylesheets().add(
         	    getClass().getResource("/stile/base.css").toExternalForm()
@@ -79,4 +85,20 @@ public class VistaMenuOffline {
     public void mostraAccesso() {
     	app.mostraVistaAccesso();
     }
+    
+    public void compilaStatoConnessione(boolean connected) {
+		Platform.runLater(() -> {
+            statoConnessioneLabel.setText(connected ? "Connesso ✅" : "Disconnesso ❌");
+        });
+	}
+	
+	public void disableOnlineBtns() {
+		caricaBtn.setDisable(true);
+		caricaBtn.setOpacity(0.5);
+	}
+	
+	public void enableOnlineBtns() {
+		caricaBtn.setDisable(false);
+		caricaBtn.setOpacity(1);
+	}
 }

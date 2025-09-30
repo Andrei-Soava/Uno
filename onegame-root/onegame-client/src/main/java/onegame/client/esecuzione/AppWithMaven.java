@@ -3,6 +3,7 @@ package onegame.client.esecuzione;
 import org.apache.logging.log4j.*;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.stage.Stage;
 import onegame.client.controllore.*;
 import onegame.client.controllore.offline.ControlloreGioco;
@@ -47,6 +48,8 @@ public class AppWithMaven extends Application {
 				} catch (Exception exc) {
 					exc.printStackTrace();
 				}
+				Platform.exit();   // per JavaFX
+				System.exit(0);    // forza la chiusura della JVM
 			}
 
 		});
