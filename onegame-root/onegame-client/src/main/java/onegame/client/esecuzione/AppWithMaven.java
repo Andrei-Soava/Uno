@@ -11,6 +11,7 @@ import onegame.client.controllore.offline.ControlloreMenuOffline;
 import onegame.client.controllore.online.ControlloreCodicePartita;
 import onegame.client.controllore.online.ControlloreMenuOnline;
 import onegame.client.net.ClientSocket;
+import onegame.client.net.ConnectionMonitor;
 import onegame.client.vista.*;
 import onegame.client.vista.offline.*;
 import onegame.client.vista.online.*;
@@ -28,12 +29,14 @@ public class AppWithMaven extends Application {
 
 	private Stage primaryStage;
 	private ClientSocket cs;
+	private ConnectionMonitor cm;
 
 	@Override
 	public void start(Stage stage) {
 		this.primaryStage = stage;
 		try {
 			cs = new ClientSocket("http://127.0.0.1:8080/");
+			cm=new ConnectionMonitor(cs);
 			cs.connect();
 			System.out.println("connessione avvenuta con successo");
 		} catch (Exception e) {
@@ -45,6 +48,7 @@ public class AppWithMaven extends Application {
 				try {
 					cs.disconnect();
 					System.out.println("disconnessione avvenuta con successo");
+					cm.stop();
 				} catch (Exception exc) {
 					exc.printStackTrace();
 				}
@@ -74,7 +78,7 @@ public class AppWithMaven extends Application {
 	public void mostraVistaAccesso(String username) {
 		VistaAccesso vista = new VistaAccesso(this);
 		vista.compilaUsername(username);
-		ControlloreAccesso ca = new ControlloreAccesso(vista, cs);
+		ControlloreAccesso ca = new ControlloreAccesso(vista, cs,cm);
 		primaryStage.setScene(vista.getScene());
 		ca.eseguiAccesso();
 	}
@@ -85,27 +89,21 @@ public class AppWithMaven extends Application {
 
 	public void mostraVistaRegistrazione() {
 		VistaRegistrazione vista = new VistaRegistrazione(this);
-		ControlloreRegistrazione cr = new ControlloreRegistrazione(vista, cs);
+		ControlloreRegistrazione cr = new ControlloreRegistrazione(vista, cs, cm);
 		primaryStage.setScene(vista.getScene());
 		cr.eseguiRegistrazione();
 	}
 
 	public void mostraVistaHome() {
 		VistaHome vista = new VistaHome(this);
-		ControlloreHome ch = new ControlloreHome(vista, cs);
-		if (cs.getUtente() == null) {
-			vista.disableOnlineBtns();
-		} else {
-			if (cs.getUtente().isAnonimo())
-				vista.disableStatisticheBtn();
-		}
+		ControlloreHome ch = new ControlloreHome(vista, cs, cm);
 		primaryStage.setScene(vista.getScene());
 		ch.aspettaLogout();
 	}
 
 	public void mostraVistaMenuOnline() {
 		VistaMenuOnline vista = new VistaMenuOnline(this);
-		ControlloreMenuOnline cmo=new ControlloreMenuOnline(vista,cs);
+		ControlloreMenuOnline cmo=new ControlloreMenuOnline(vista, cs, cm);
 		primaryStage.setScene(vista.getScene());
 		cmo.aspettaLogout();
 	}
@@ -124,7 +122,7 @@ public class AppWithMaven extends Application {
 
 	public void mostraVistaMenuOffline() {
 		VistaMenuOffline vista = new VistaMenuOffline(this);
-		ControlloreMenuOffline cmo=new ControlloreMenuOffline(vista, cs);
+		ControlloreMenuOffline cmo=new ControlloreMenuOffline(vista, cs, cm);
 		primaryStage.setScene(vista.getScene());
 		cmo.aspettaLogout();
 	}

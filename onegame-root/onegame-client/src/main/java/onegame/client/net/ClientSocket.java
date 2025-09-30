@@ -224,11 +224,11 @@ public class ClientSocket {
     }
 
     /**
-     * Ottieni utente dal socket (se c'è connessione al server)
+     * Ottieni utente dal socket
      * @return utente del socket
      */
 	public Utente getUtente() {
-		return isConnected()? this.utente : null;
+		return this.utente;
 	}
 
 	/**

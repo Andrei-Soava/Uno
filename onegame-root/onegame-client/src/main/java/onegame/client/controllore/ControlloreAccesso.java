@@ -1,34 +1,19 @@
 package onegame.client.controllore;
 
 
-import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.util.Duration;
 import onegame.client.net.ClientSocket;
+import onegame.client.net.ConnectionMonitor;
 import onegame.client.vista.VistaAccesso;
 
 public class ControlloreAccesso {
 	private VistaAccesso va;
 	private ClientSocket cs;
 
-	public ControlloreAccesso(VistaAccesso va, ClientSocket cs) {
+	public ControlloreAccesso(VistaAccesso va, ClientSocket cs, ConnectionMonitor cm) {
 		this.va = va;
 		this.cs = cs;
 		
-		//sezione di verifica connessione
-		va.compilaStatoConnessione(false);
-		va.disableOnlineBtns();
-		Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(2), e -> {
-			boolean connected = cs.isConnected();
-			if (connected)
-				va.enableOnlineBtns();
-			else
-				va.disableOnlineBtns();
-			va.compilaStatoConnessione(connected);
-		}));
-		timeline.setCycleCount(Animation.INDEFINITE);
-		timeline.play();
+		va.aggiungiListener(cm);
 	}
 
 	public void eseguiAccesso() {

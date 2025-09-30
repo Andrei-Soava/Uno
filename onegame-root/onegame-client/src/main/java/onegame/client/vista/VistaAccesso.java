@@ -14,7 +14,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import onegame.client.esecuzione.AppWithMaven;
-import onegame.client.net.ClientSocket;
+import onegame.client.net.ConnectionMonitor;
 
 public class VistaAccesso {
 
@@ -111,25 +111,6 @@ public class VistaAccesso {
 		passwordField.clear();
 	}
 	
-	public void compilaStatoConnessione(boolean connected) {
-		Platform.runLater(() -> {
-            statoConnessioneLabel.setText(connected ? "Connesso ✅" : "Disconnesso ❌");
-        });
-	}
-	
-	public void disableOnlineBtns() {
-		accediBtn.setDisable(true);
-		accediBtn.setOpacity(0.5);
-		registratiBtn.setDisable(true);
-		registratiBtn.setOpacity(0.5);
-	}
-	
-	public void enableOnlineBtns() {
-		accediBtn.setDisable(false);
-		accediBtn.setOpacity(1);
-		registratiBtn.setDisable(false);
-		registratiBtn.setOpacity(1);
-	}
 	/**
 	 * sezione ottenimento dati da campo di login
 	 */
@@ -151,4 +132,31 @@ public class VistaAccesso {
 	}
 	
 	//fine sezione
+	
+	/**
+	 * metodo che attiva/disattiva i bottoni che funzionano solo con connessione
+	 * @param monitor oggetto che verifica se c'è connessione con il server
+	 * 	--> in base a questo modifica la disponibilità dei bottoni con binding
+	 */
+	public void aggiungiListener(ConnectionMonitor monitor) {
+	    accediBtn.disableProperty().bind(monitor.connectedProperty().not());
+	    accediBtn.opacityProperty().bind(
+	        Bindings.when(monitor.connectedProperty())
+	                .then(1.0)
+	                .otherwise(0.5)
+	    );
+	    
+	    registratiBtn.disableProperty().bind(monitor.connectedProperty().not());
+	    registratiBtn.opacityProperty().bind(
+	        Bindings.when(monitor.connectedProperty())
+	                .then(1.0)
+	                .otherwise(0.5)
+	    );
+	    statoConnessioneLabel.textProperty().bind(
+	        Bindings.when(monitor.connectedProperty())
+	                .then("Connesso ✅")
+	                .otherwise("Disconnesso ❌")
+	    );
+	}
+
 }

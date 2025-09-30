@@ -4,6 +4,8 @@ package onegame.client.vista.offline;
 import java.util.concurrent.CompletableFuture;
 
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -15,7 +17,9 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import onegame.client.esecuzione.AppWithMaven;
+import onegame.client.net.ConnectionMonitor;
 import onegame.client.vista.accessori.GestoreCallbackBottoni;
+import onegame.modello.net.Utente;
 
 public class VistaMenuOffline {
 
@@ -66,6 +70,7 @@ public class VistaMenuOffline {
     	root.setCenter(centro);
         
     	statoConnessioneLabel=new Label();
+    	statoConnessioneLabel.setPadding(new Insets(20));
     	root.setBottom(statoConnessioneLabel);
     	
         scene = new Scene(root);
@@ -100,5 +105,15 @@ public class VistaMenuOffline {
 	public void enableOnlineBtns() {
 		caricaBtn.setDisable(false);
 		caricaBtn.setOpacity(1);
+	}
+	
+	public void aggiungiListener(ConnectionMonitor monitor, Utente utente) {
+		boolean logged = !utente.isAnonimo();
+
+	    BooleanBinding abilitato = monitor.connectedProperty().and(Bindings.createBooleanBinding(() -> logged));
+		caricaBtn.disableProperty().bind(abilitato.not());
+		caricaBtn.opacityProperty().bind(Bindings.when(abilitato).then(1.0).otherwise(0.5));
+		statoConnessioneLabel.textProperty()
+				.bind(Bindings.when(monitor.connectedProperty()).then("Connesso ✅").otherwise("Disconnesso ❌"));
 	}
 }

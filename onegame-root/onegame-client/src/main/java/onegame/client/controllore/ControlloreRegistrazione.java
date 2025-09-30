@@ -1,15 +1,23 @@
 package onegame.client.controllore;
 
 import onegame.client.net.ClientSocket;
+import onegame.client.net.ConnectionMonitor;
 import onegame.client.vista.VistaRegistrazione;
 
 public class ControlloreRegistrazione {
 	private VistaRegistrazione vr;
 	private ClientSocket cs;
 	
-	public ControlloreRegistrazione(VistaRegistrazione vr, ClientSocket cs) {
+	public ControlloreRegistrazione(VistaRegistrazione vr, ClientSocket cs, ConnectionMonitor cm) {
 		this.vr=vr;
 		this.cs=cs;
+		
+		cm.connectedProperty().addListener((obs, oldVal, newVal) -> {
+	        if (Boolean.FALSE.equals(newVal)) {
+	            // siamo passati a disconnesso
+	            vr.mostraAccesso();
+	        }
+	    });
 	}
 	
 	public void eseguiRegistrazione() {

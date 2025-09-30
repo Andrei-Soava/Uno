@@ -2,7 +2,8 @@ package onegame.client.vista;
 
 import java.util.concurrent.CompletableFuture;
 
-import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -12,7 +13,9 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import onegame.client.esecuzione.AppWithMaven;
+import onegame.client.net.ConnectionMonitor;
 import onegame.client.vista.accessori.GestoreCallbackBottoni;
+import onegame.modello.net.Utente;
 
 public class VistaHome {
 	private Scene scene;
@@ -46,14 +49,6 @@ public class VistaHome {
 		logoutBtn = new Button("Logout");
 		logoutBtn.setPrefWidth(200);
 		logoutBtn.getStyleClass().add("logout");
-		// orribile, sarebbe da fare dentro il controllore
-//		logoutBtn.setOnAction(e -> {
-//			if(app.getCs().getUtente()!=null) {
-//				app.getCs().getUtente().setAnonimo(true);
-//				app.getCs().getUtente().setUsername("anonimo");
-//			}
-//			app.mostraVistaAccesso();
-//			});
 
 		VBox centro = new VBox(15, titolo, spacer0, giocaOnlineBtn, giocaOfflineBtn, statisticheBtn, logoutBtn);
 		centro.setAlignment(Pos.CENTER);
@@ -82,13 +77,6 @@ public class VistaHome {
 	 * @return click sul bottone (qualora avvenisse)
 	 */
 	public CompletableFuture<Void> waitForLogoutBtnClick() {
-//        CompletableFuture<Void> future = new CompletableFuture<>();
-//        logoutBtn.setOnAction(e -> {
-//            if (!future.isDone()) {
-//                future.complete(null);
-//            }
-//        });
-//        return future;
 		return GestoreCallbackBottoni.waitForClick(logoutBtn);
 	}
 
@@ -98,33 +86,23 @@ public class VistaHome {
 	public void mostraAccesso() {
 		app.mostraVistaAccesso();
 	}
-	
-	public void compilaStatoConnessione(boolean connected) {
-		Platform.runLater(() -> {
-            statoConnessioneLabel.setText(connected ? "Connesso ✅" : "Disconnesso ❌");
-        });
-	}
 
 	/**
-	 * da usare quando sono connesso come utente anonimo
+	 * metodo utilizzato per cambiare stato bottoni in base a:
+	 * 1) se c'è connessione con il server--> param monitor
+	 * 2) se si è entrati come utente anonimo--> param utente
 	 */
-	public void disableStatisticheBtn() {
-		statisticheBtn.setDisable(true);
-		statisticheBtn.setOpacity(0.5);
-	}
+	public void aggiungiListener(ConnectionMonitor monitor, Utente utente) {
+		boolean logged = !utente.isAnonimo();
 
-	/**
-	 * da usare quando non sono connesso al server
-	 */
-	public void disableOnlineBtns() {
-		giocaOnlineBtn.setDisable(true);
-		giocaOnlineBtn.setOpacity(0.5);
-		disableStatisticheBtn();
+	    BooleanBinding abilitato = monitor.connectedProperty().and(Bindings.createBooleanBinding(() -> logged));
+		giocaOnlineBtn.disableProperty().bind(monitor.connectedProperty().not());
+		giocaOnlineBtn.opacityProperty().bind(Bindings.when(monitor.connectedProperty()).then(1.0).otherwise(0.5));
+
+		statisticheBtn.disableProperty().bind(abilitato.not());
+		statisticheBtn.opacityProperty().bind(Bindings.when(abilitato).then(1.0).otherwise(0.5));
+		statoConnessioneLabel.textProperty()
+				.bind(Bindings.when(monitor.connectedProperty()).then("Connesso ✅").otherwise("Disconnesso ❌"));
 	}
 	
-	public void enableOnlineBtns() {
-		giocaOnlineBtn.setDisable(false);
-		giocaOnlineBtn.setOpacity(1);
-	}
-
 }

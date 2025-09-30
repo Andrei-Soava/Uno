@@ -1,34 +1,18 @@
 package onegame.client.controllore;
 
-
-import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.util.Duration;
 import onegame.client.net.ClientSocket;
+import onegame.client.net.ConnectionMonitor;
 import onegame.client.vista.VistaHome;
 
 public class ControlloreHome {
 	private ClientSocket cs;
 	private VistaHome vh;
 	
-	public ControlloreHome(VistaHome vh, ClientSocket cs) {
+	public ControlloreHome(VistaHome vh, ClientSocket cs, ConnectionMonitor cm) {
 		this.vh=vh;
 		this.cs=cs;
 		
-		//sezione di verifica connessione
-		vh.compilaStatoConnessione(false);
-		vh.disableOnlineBtns();
-		Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(2), e -> {
-			boolean connected = cs.isConnected();
-			if (connected)
-				vh.enableOnlineBtns();
-			else
-				vh.disableOnlineBtns();
-			vh.compilaStatoConnessione(connected);
-		}));
-		timeline.setCycleCount(Animation.INDEFINITE);
-		timeline.play();
+		vh.aggiungiListener(cm, cs.getUtente());
 	}
 	
 	public ClientSocket getCs() {
