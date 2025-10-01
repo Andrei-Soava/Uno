@@ -8,7 +8,9 @@ import javafx.stage.Stage;
 import onegame.client.controllore.*;
 import onegame.client.controllore.offline.ControlloreGioco;
 import onegame.client.controllore.offline.ControlloreMenuOffline;
+import onegame.client.controllore.offline.ControlloreSalvataggi;
 import onegame.client.controllore.online.ControlloreCodicePartita;
+import onegame.client.controllore.online.ControlloreConfigurazioneOnline;
 import onegame.client.controllore.online.ControlloreMenuOnline;
 import onegame.client.net.ClientSocket;
 import onegame.client.net.ConnectionMonitor;
@@ -110,12 +112,13 @@ public class AppWithMaven extends Application {
 
 	public void mostraVistaConfigurazioneOnline() {
 		VistaConfigurazioneOnline vista = new VistaConfigurazioneOnline(this);
+		ControlloreConfigurazioneOnline cco= new ControlloreConfigurazioneOnline(vista, cs, cm);
 		primaryStage.setScene(vista.getScene());
 	}
 
 	public void mostraVistaInserimentoCodice() {
 		VistaInserimentoCodice vista = new VistaInserimentoCodice(this);
-		ControlloreCodicePartita cc = new ControlloreCodicePartita(vista);
+		ControlloreCodicePartita cc = new ControlloreCodicePartita(vista, cs, cm);
 		primaryStage.setScene(vista.getScene());
 		cc.eseguiAccesso();
 	}
@@ -129,7 +132,9 @@ public class AppWithMaven extends Application {
 
 	public void mostraVistaSalvataggi() {
 		VistaSalvataggi vista = new VistaSalvataggi(this);
+		ControlloreSalvataggi cslv=new ControlloreSalvataggi(vista, cs, cm);
 		primaryStage.setScene(vista.getScene());
+		cslv.eseguiScelta();
 	}
 
 	public void mostraVistaConfigurazioneOffline() {

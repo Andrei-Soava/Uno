@@ -98,3 +98,4 @@ Esempio COMPLETO:
 - 29/09 12:00, Andrei, (continuazione gui--> aggiunta gestione asincrona per bottoni logout con una classe accessoria + label per verifica connessione, per ora solo su VistaAccesso), continuazione gui;
 - 30/09 13:00, Andrei, (sperimentazione visualizzazione di stato connessione con strumenti javafx), continuazione gui;
 - 30/09 16:00, Andrei, (ottimizzazione visualizzazione stato connessione mediante classe ConnectionMonitor--> utilizzato da classi interessate tramite appositi listener + gestione più pulita degli stati dei bottoni + piccole modifiche), continuazione gui;
+- 01/10 12:00, Andrei, (ControlloreSalvataggi--> VistaSalvataggi rivista in modo da separare responsabilità tra Controllore e Vista, per facilitare integrazione db + aggiunta classe di supporto EventoSalvataggio + piccoli miglioramenti in altre classi), continuazione gui;

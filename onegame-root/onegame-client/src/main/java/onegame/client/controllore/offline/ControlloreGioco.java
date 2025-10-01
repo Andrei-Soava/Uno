@@ -334,18 +334,19 @@ public class ControlloreGioco {
 	            
 	            ((VistaGioco) vg).chiudiFinestraAperta();
 	            
-	            vg.stampaMessaggio("Tempo scaduto: "+g.getNome()+" ha pescato SENZA possibilità di giocare");
-	            //importante--> se il giocatore ha già pescato di suo, non lo faccio pescare di nuovo (es se può giocare carta pescata)
-	            if(flagGiaPescato.getTipoMossa()!=TipoMossa.PESCA)
-	            	g.aggiungiCarta(partita.pescaCarta());
-	            partita.passaTurno();
-                cp.salvaPartitaAutomatico(this);
-                if(partitaAttiva)
+                if(partitaAttiva) {
+                	vg.stampaMessaggio("Tempo scaduto: "+g.getNome()+" ha pescato SENZA possibilità di giocare");
+                	//importante--> se il giocatore ha già pescato di suo, non lo faccio pescare di nuovo (es se può giocare carta pescata)
+                	if(flagGiaPescato.getTipoMossa()!=TipoMossa.PESCA)
+                		g.aggiungiCarta(partita.pescaCarta());
+                	partita.passaTurno();
+                	cp.salvaPartitaAutomatico(this);
                 	eseguiTurno(); 
+                }
 	        	}
 	        });
 	        //DA COMMENTARE SE GIOCO SI ROMPE
-	        timerTurno.play();
+	        //timerTurno.play();
 	    	
 	    	
 	    	//inizio turno vero e proprio (posso o pescare, o tentare di giocare una carta)

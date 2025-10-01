@@ -12,7 +12,6 @@ public class VistaConfigurazioneOffline {
     private Scene scene;
 
     public VistaConfigurazioneOffline(AppWithMaven app) {
-
     	BorderPane root = new BorderPane();
 
     	Button indietroBtn = new Button("Indietro");
@@ -65,4 +64,5 @@ public class VistaConfigurazioneOffline {
     public Scene getScene() {
         return scene;
     }
+    
 }

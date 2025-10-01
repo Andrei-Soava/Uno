@@ -1,12 +1,22 @@
 package onegame.client.controllore.online;
 
+import onegame.client.net.ClientSocket;
+import onegame.client.net.ConnectionMonitor;
 import onegame.client.vista.online.VistaInserimentoCodice;
 
 public class ControlloreCodicePartita {
 	private VistaInserimentoCodice vic;
+	private ClientSocket cs;
 	
-	public ControlloreCodicePartita(VistaInserimentoCodice vic) {
+	public ControlloreCodicePartita(VistaInserimentoCodice vic, ClientSocket cs, ConnectionMonitor cm) {
 		this.vic=vic;
+		
+		cm.connectedProperty().addListener((obs, oldVal, newVal) -> {
+	        if (Boolean.FALSE.equals(newVal)) {
+	            // siamo passati a disconnesso
+	            vic.mostraHome();
+	        }
+	    });
 	}
 	
 	public void eseguiAccesso() {
@@ -20,7 +30,7 @@ public class ControlloreCodicePartita {
 			
 			//condizionale (sarà dentro una send asincrona al gameserver e se la response == true, si va alla vista successiva)
 			if(true) {
-				vic.visualizzaStanza();	
+				vic.mostraStanza();	
 			}
 			else {
 				vic.compilaMessaggioErrore("Codice non valido. Riprovare");

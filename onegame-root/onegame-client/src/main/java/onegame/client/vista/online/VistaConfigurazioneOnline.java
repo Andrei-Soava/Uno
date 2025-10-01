@@ -10,9 +10,11 @@ import onegame.client.esecuzione.AppWithMaven;
 public class VistaConfigurazioneOnline {
 
     private Scene scene;
-
+    private AppWithMaven app;
+    
     public VistaConfigurazioneOnline(AppWithMaven app) {
-
+    	this.app=app;
+    	
     	BorderPane root = new BorderPane();
 
     	Button indietroBtn = new Button("Indietro");
@@ -64,5 +66,9 @@ public class VistaConfigurazioneOnline {
 
     public Scene getScene() {
         return scene;
+    }
+    
+    public void mostraHome() {
+    	app.mostraVistaHome();
     }
 }
