@@ -100,3 +100,4 @@ Esempio COMPLETO:
 - 30/09 16:00, Andrei, (ottimizzazione visualizzazione stato connessione mediante classe ConnectionMonitor--> utilizzato da classi interessate tramite appositi listener + gestione più pulita degli stati dei bottoni + piccole modifiche), continuazione gui;
 - 01/10 12:00, Andrei, (ControlloreSalvataggi--> VistaSalvataggi rivista in modo da separare responsabilità tra Controllore e Vista, per facilitare integrazione db + aggiunta classe di supporto EventoSalvataggio + piccoli miglioramenti in altre classi), continuazione gui;
 - 02/10 15:40, Giuseppe, (stesura del documento di manutenzione del progetto);
+- 03/10 09:50, Giuseppe, (aggiornameneto e correzione del documento di manutenzione del progetto);
