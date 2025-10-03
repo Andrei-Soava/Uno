@@ -50,7 +50,6 @@ public class AppWithMaven extends Application {
 				try {
 					cs.disconnect();
 					System.out.println("disconnessione avvenuta con successo");
-					cm.stop();
 				} catch (Exception exc) {
 					exc.printStackTrace();
 				}
