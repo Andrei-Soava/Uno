@@ -19,4 +19,12 @@ public class ControlloreConfigurazioneOnline {
 	        }
 	    });
 	}
+	
+	public void aspettaCreazioneStanza() {
+		vco.configuraPartita(numeroGiocatori->{
+			//richiesta codice della stanza con funzione asincrona
+			String codiceOttenuto="codice";
+			vco.mostraStanza(codiceOttenuto);
+		});
+	}
 }

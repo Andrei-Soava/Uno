@@ -30,7 +30,7 @@ public class ControlloreCodicePartita {
 			
 			//condizionale (sarà dentro una send asincrona al gameserver e se la response == true, si va alla vista successiva)
 			if(true) {
-				vic.mostraStanza();	
+				vic.mostraStanza(codice);	
 			}
 			else {
 				vic.compilaMessaggioErrore("Codice non valido. Riprovare");

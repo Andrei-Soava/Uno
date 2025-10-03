@@ -1,5 +1,8 @@
 package onegame.client.vista.offline;
 
+import java.util.function.Consumer;
+
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -10,8 +13,12 @@ import onegame.client.esecuzione.AppWithMaven;
 public class VistaConfigurazioneOffline {
 
     private Scene scene;
+    private AppWithMaven app;
+    private ComboBox<Integer> numGiocatori;
+    private Button avviaBtn;
 
     public VistaConfigurazioneOffline(AppWithMaven app) {
+    	this.app=app;
     	BorderPane root = new BorderPane();
 
     	Button indietroBtn = new Button("Indietro");
@@ -34,7 +41,7 @@ public class VistaConfigurazioneOffline {
     	root.setTop(topBar);
 
     	Label lblNumGiocatori = new Label("Numero Giocatori");
-    	ComboBox<Integer> numGiocatori = new ComboBox<>();
+    	numGiocatori = new ComboBox<>();
     	numGiocatori.getItems().addAll(2, 3, 4);
     	numGiocatori.setValue(2);
 
@@ -43,8 +50,8 @@ public class VistaConfigurazioneOffline {
     	Button annullaBtn = new Button("Annulla");
     	annullaBtn.setOnAction(e -> app.mostraVistaMenuOffline());
 
-    	Button avviaBtn = new Button("Avvia Partita");
-    	avviaBtn.setOnAction(e -> app.mostraVistaGiocoNuovo(numGiocatori.getValue()));
+    	avviaBtn = new Button("Avvia Partita");
+    	//avviaBtn.setOnAction(e -> app.mostraVistaGiocoNuovo(numGiocatori.getValue()));
 
     	HBox pulsanti = new HBox(10, annullaBtn, avviaBtn);
     	pulsanti.setAlignment(Pos.CENTER);
@@ -63,6 +70,18 @@ public class VistaConfigurazioneOffline {
 
     public Scene getScene() {
         return scene;
+    }
+    
+    public void configuraPartita(Consumer<Integer> callback) {
+    	Platform.runLater(()->{
+    		avviaBtn.setOnAction(e->{
+    			callback.accept(numGiocatori.getValue());
+    		});
+    	});
+    }
+    
+    public void mostraGiocoOffline(int numero) {
+    	app.mostraVistaGiocoNuovo(numero);
     }
     
 }

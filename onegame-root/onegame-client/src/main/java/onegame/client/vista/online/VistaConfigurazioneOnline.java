@@ -1,5 +1,8 @@
 package onegame.client.vista.online;
 
+import java.util.function.Consumer;
+
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -11,6 +14,8 @@ public class VistaConfigurazioneOnline {
 
     private Scene scene;
     private AppWithMaven app;
+    ComboBox<Integer> numGiocatori;
+    Button avviaBtn;
     
     public VistaConfigurazioneOnline(AppWithMaven app) {
     	this.app=app;
@@ -37,7 +42,7 @@ public class VistaConfigurazioneOnline {
     	root.setTop(topBar);
 
     	Label lblNumGiocatori = new Label("Numero Giocatori");
-    	ComboBox<Integer> numGiocatori = new ComboBox<>();
+    	numGiocatori = new ComboBox<>();
     	numGiocatori.getItems().addAll(2, 3, 4);
     	numGiocatori.setValue(2);
 
@@ -46,7 +51,7 @@ public class VistaConfigurazioneOnline {
     	Button annullaBtn = new Button("Annulla");
     	annullaBtn.setOnAction(e -> app.mostraVistaMenuOnline());
 
-    	Button avviaBtn = new Button("Avvia Partita");
+    	avviaBtn = new Button("Avvia Partita");
     	//avviaBtn.setOnAction(e -> app.mostraVistaGiocoNuovo(numGiocatori.getValue()));
 
     	HBox pulsanti = new HBox(10, annullaBtn, avviaBtn);
@@ -68,7 +73,19 @@ public class VistaConfigurazioneOnline {
         return scene;
     }
     
+    public void configuraPartita(Consumer<Integer> callback) {
+    	Platform.runLater(()->{
+    		avviaBtn.setOnAction(e->{
+    			callback.accept(numGiocatori.getValue());
+    		});
+    	});
+    }
+    
     public void mostraHome() {
     	app.mostraVistaHome();
+    }
+    
+    public void mostraStanza(String codiceStanza) {
+    	app.mostraVistaStanza(codiceStanza, true);
     }
 }

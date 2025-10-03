@@ -91,8 +91,8 @@ public class VistaInserimentoCodice {
 		codiceField.clear();
 	}
 	
-	public void mostraStanza() {
-		//app.mostraVistaHome();
+	public void mostraStanza(String codice) {
+		app.mostraVistaStanza(codice, false);
 	}
 	
 	public void mostraHome() {

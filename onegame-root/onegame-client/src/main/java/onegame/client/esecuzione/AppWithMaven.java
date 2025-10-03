@@ -6,12 +6,16 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 import onegame.client.controllore.*;
+import onegame.client.controllore.offline.ControlloreConfigurazioneOffline;
 import onegame.client.controllore.offline.ControlloreGioco;
 import onegame.client.controllore.offline.ControlloreMenuOffline;
 import onegame.client.controllore.offline.ControlloreSalvataggi;
 import onegame.client.controllore.online.ControlloreCodicePartita;
 import onegame.client.controllore.online.ControlloreConfigurazioneOnline;
 import onegame.client.controllore.online.ControlloreMenuOnline;
+import onegame.client.controllore.online.stanza.ControlloreStanza;
+import onegame.client.controllore.online.stanza.ControlloreStanzaHost;
+import onegame.client.controllore.online.stanza.ControlloreStanzaOspite;
 import onegame.client.net.ClientSocket;
 import onegame.client.net.ConnectionMonitor;
 import onegame.client.vista.*;
@@ -50,6 +54,7 @@ public class AppWithMaven extends Application {
 				try {
 					cs.disconnect();
 					System.out.println("disconnessione avvenuta con successo");
+					cm.stop();
 				} catch (Exception exc) {
 					exc.printStackTrace();
 				}
@@ -76,6 +81,7 @@ public class AppWithMaven extends Application {
 		return this.cs;
 	}
 
+	//SEZIONE VISTE PRINCIPALI
 	public void mostraVistaAccesso(String username) {
 		VistaAccesso vista = new VistaAccesso(this);
 		vista.compilaUsername(username);
@@ -102,6 +108,7 @@ public class AppWithMaven extends Application {
 		ch.aspettaLogout();
 	}
 
+	//SEZIONE VISTE GIOCO ONLINE
 	public void mostraVistaMenuOnline() {
 		VistaMenuOnline vista = new VistaMenuOnline(this);
 		ControlloreMenuOnline cmo=new ControlloreMenuOnline(vista, cs, cm);
@@ -113,6 +120,7 @@ public class AppWithMaven extends Application {
 		VistaConfigurazioneOnline vista = new VistaConfigurazioneOnline(this);
 		ControlloreConfigurazioneOnline cco= new ControlloreConfigurazioneOnline(vista, cs, cm);
 		primaryStage.setScene(vista.getScene());
+		cco.aspettaCreazioneStanza();
 	}
 
 	public void mostraVistaInserimentoCodice() {
@@ -121,7 +129,22 @@ public class AppWithMaven extends Application {
 		primaryStage.setScene(vista.getScene());
 		cc.eseguiAccesso();
 	}
+	
+	public void mostraVistaStanza(String codice, boolean host) {
+		VistaStanza vista=new VistaStanza(this);
+		vista.compilaCodicePartia(codice);
+		ControlloreStanza cv;
+		if(host) {
+			cv=new ControlloreStanzaHost(vista,cs,cm);
+		}
+		else {
+			cv=new ControlloreStanzaOspite(vista,cs,cm);
+		}
+		primaryStage.setScene(vista.getScene());
+		cv.attendiInizioPartita();
+	}
 
+	//SEZIONE VISTE GIOCO OFFLINE
 	public void mostraVistaMenuOffline() {
 		VistaMenuOffline vista = new VistaMenuOffline(this);
 		ControlloreMenuOffline cmo=new ControlloreMenuOffline(vista, cs, cm);
@@ -138,7 +161,9 @@ public class AppWithMaven extends Application {
 
 	public void mostraVistaConfigurazioneOffline() {
 		VistaConfigurazioneOffline vista = new VistaConfigurazioneOffline(this);
+		ControlloreConfigurazioneOffline ccoff=new ControlloreConfigurazioneOffline(vista);
 		primaryStage.setScene(vista.getScene());
+		ccoff.aspettaCreazionePartita();
 	}
 
 	public void mostraVistaGiocoCaricato(String salvataggio) {
