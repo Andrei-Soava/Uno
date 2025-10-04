@@ -37,4 +37,12 @@ public class ControlloreHome {
 		});
 	}
 	
+	public void aspettaStatistiche() {
+		if(!cs.getUtente().isAnonimo()) {
+			vh.waitForStatisticheBtnClick().thenRun(()->{
+				vh.compilaStatistiche(cs.getUtente().getUsername(), cs.getUtente().getStatistica());
+			});
+		}
+	}
+	
 }

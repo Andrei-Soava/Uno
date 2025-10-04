@@ -106,6 +106,7 @@ public class AppWithMaven extends Application {
 		ControlloreHome ch = new ControlloreHome(vista, cs, cm);
 		primaryStage.setScene(vista.getScene());
 		ch.aspettaLogout();
+		ch.aspettaStatistiche();
 	}
 
 	//SEZIONE VISTE GIOCO ONLINE

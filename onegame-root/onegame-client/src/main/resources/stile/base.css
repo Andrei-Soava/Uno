@@ -61,3 +61,13 @@
     -fx-scale-x: 0.98;
     -fx-scale-y: 0.98;
 }
+
+/*stile modale */
+.modale {
+	-fx-background-color: red;
+	-fx-background-radius: 8;
+	-fx-border-color: orange;
+	-fx-border-width: 2;
+	-fx-border-radius: 5;
+	-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 10, 0, 0, 4);
+}

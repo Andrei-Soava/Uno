@@ -103,3 +103,4 @@ Esempio COMPLETO:
 - 03/10 09:50, Giuseppe, (aggiornamento e correzione del documento di manutenzione del progetto), null;
 - 03/10, Fabio, refactoring ConnectionMonitor, null;
 - 03/10, Andrei, (refactoring configurazione partita sia online che offline + creazione VistaStanza con relativi controllori INCOMPLETI), continuazione gui;
+- 04/10, Andrei, aggiunta modale per statistiche dentro VistaHome + relativa gestione dentro ControlloreHome, continuazione gui;
