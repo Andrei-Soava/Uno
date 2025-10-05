@@ -1,4 +1,4 @@
-package onegame.client.vista;
+package onegame.client.vista.partita;
 
 import javafx.animation.AnimationTimer;
 import javafx.animation.FadeTransition;
@@ -33,9 +33,8 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 
-public class VistaGioco {
+public class VistaGioco extends VistaPartita {
 
-	private AppWithMaven app;
 	private Scene scene;
 	
 	public ControlloreGioco cg;
@@ -56,7 +55,8 @@ public class VistaGioco {
     private Pane overlay;
 
     public VistaGioco(AppWithMaven app) {
-    	this.app=app;
+    	super(app);
+    	//this.app=app;
     	this.cg=null;
     	BorderPane root = new BorderPane();
     	root.setPadding(new Insets(10));
@@ -105,17 +105,19 @@ public class VistaGioco {
     	//---------------------------------------------------------------------------------
     	//zona pescaggio (centrale a sinistra)
     	VBox sottoContenitoreSinistra = new VBox(10);
+    	Region spacerTop = new Region();
+    	spacerTop.setPrefHeight(50);
     	//sottoContenitoreSinistra.setStyle("-fx-border-color:black;");
-    	sottoContenitoreSinistra.setAlignment(Pos.CENTER);
+    	sottoContenitoreSinistra.setAlignment(Pos.TOP_CENTER);
     	StackPane sp=GestoreGraficaCarta.creaVistaCarta(new CartaSpeciale(Colore.NERO,null));
     	pescaBtn = new Button("Pesca");
-    	sottoContenitoreSinistra.getChildren().addAll(sp, pescaBtn);
+    	sottoContenitoreSinistra.getChildren().addAll(spacerTop, sp, pescaBtn);
     	
     	//
     	//zona carta corrente (centrale al centro)
     	VBox sottoContenitoreCentrale = new VBox(10);
     	//sottoContenitoreCentrale.setStyle("-fx-border-color:black;");
-    	sottoContenitoreCentrale.setAlignment(Pos.CENTER);
+    	sottoContenitoreCentrale.setAlignment(Pos.TOP_CENTER);
     	logAreaLbl = new Label(); // manteniamo il nome logArea
     	logAreaLbl.setStyle("-fx-background-color: rgba(0,0,0,0.8); -fx-text-fill: white; -fx-padding: 10px; -fx-background-radius: 5;");
     	logAreaLbl.setVisible(false);
@@ -191,6 +193,7 @@ public class VistaGioco {
         contenitoreManoPane.setPannable(false);
         contenitoreManoPane.setMinHeight(Region.USE_COMPUTED_SIZE);
         contenitoreInferiore.getChildren().add(contenitoreManoPane);
+        //contenitoreInferiore.setMinHeight(200);
         //imposto il contenitore inferiore sotto
         root.setBottom(contenitoreInferiore);
     	
@@ -248,6 +251,7 @@ public class VistaGioco {
     	
     }
 
+    @Override
     public Scene getScene() {
         return scene;
     }
@@ -533,6 +537,14 @@ public class VistaGioco {
     		callback.accept(new Mossa(TipoMossa.PESCA));
         });
     }
+
+	@Override
+	public void mostraVista() {
+		cartaCorrente.getChildren().clear();
+		mano.getChildren().clear();
+		super.mostraVista();
+	}
+
     
     
 }

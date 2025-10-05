@@ -9,7 +9,8 @@ import javafx.animation.Timeline;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.util.Duration;
 import onegame.client.controllore.ControllorePersistenza;
-import onegame.client.vista.VistaGioco;
+import onegame.client.vista.partita.VistaGioco;
+import onegame.client.vista.partita.VistaSpettatore;
 import onegame.modello.Mossa;
 import onegame.modello.Partita;
 import onegame.modello.Mossa.TipoMossa;
@@ -34,13 +35,15 @@ import onegame.modello.giocatori.Giocatore;
  */
 public class ControlloreGioco {
 	private VistaGioco vg;
+	private VistaSpettatore vsp;
 	private Partita partita;
 	private ControllorePersistenza cp;
 	private boolean partitaAttiva = false;
 
 
-	public ControlloreGioco(VistaGioco vg) {
+	public ControlloreGioco(VistaGioco vg, VistaSpettatore vsp) {
 		this.vg = vg;
+		this.vsp = vsp;
 		this.cp=new ControllorePersistenza(null);
 	}
 	
@@ -299,17 +302,44 @@ public class ControlloreGioco {
 	    ((VistaGioco)vg).stampaTurno(g.getNome());
 	    ((VistaGioco)vg).stampaProssimoTurno(partita.vediProssimoGiocatore().getNome());
 	    if (g.isBot()) {
-	        //turno eventuale bot
-	        Mossa m = partita.scegliMossaAutomatica();
-	        if (m.getTipoMossa() == TipoMossa.PESCA) {
-	            vg.stampaMessaggio(g.getNome() + " ha pescato");
-	        } else {
-	            vg.stampaMessaggio(g.getNome() + " ha giocato la carta: " + m.getCartaScelta());
-	        }
-	        partita.passaTurno();
-	        cp.salvaPartitaAutomatico(this);
-	        if(partitaAttiva)
-	        	eseguiTurno(); // turno successivo
+//	        //turno eventuale bot
+//	        Mossa m = partita.scegliMossaAutomatica();
+//	        if (m.getTipoMossa() == TipoMossa.PESCA) {
+//	            vg.stampaMessaggio(g.getNome() + " ha pescato");
+//	        } else {
+//	            vg.stampaMessaggio(g.getNome() + " ha giocato la carta: " + m.getCartaScelta());
+//	        }
+//	        partita.passaTurno();
+//	        cp.salvaPartitaAutomatico(this);
+//	        if(partitaAttiva)
+//	        	eseguiTurno(); // turno successivo
+	    	// primo delay di 3 secondi prima di scegliere la mossa
+	    	vsp.impostaTurnoSpettatore(g.getNome(), g.getMano().getNumCarte(), partita.getCartaCorrente());
+	    	vsp.mostraVista();
+	    	PauseTransition pausa1 = new PauseTransition(Duration.seconds(3));
+	    	pausa1.setOnFinished(ev1 -> {
+	    	    // eseguo la mossa automatica
+	    	    Mossa m = partita.scegliMossaAutomatica();
+	    	    if (m.getTipoMossa() == TipoMossa.PESCA) {
+	    	        vg.stampaMessaggio(g.getNome() + " ha pescato");
+	    	    } else {
+	    	        vg.stampaMessaggio(g.getNome() + " ha giocato la carta: " + m.getCartaScelta());
+	    	    }
+	    	    vsp.impostaTurnoSpettatore(g.getNome(), g.getMano().getNumCarte(), partita.getCartaCorrente());
+	    	    // seconda pausa di 3 secondi dopo aver mostrato il messaggio
+	    	    PauseTransition pausa2 = new PauseTransition(Duration.seconds(3));
+	    	    pausa2.setOnFinished(ev2 -> {
+	    	        partita.passaTurno();
+	    	        cp.salvaPartitaAutomatico(this);
+	    	        if (partitaAttiva) {
+	    	            eseguiTurno(); // turno successivo
+	    	        }
+	    	    });
+	    	    pausa2.play();
+	    	});
+
+	    	pausa1.play();
+
 	    } else {
 	    	System.out.println();
 	        //turno umano 
@@ -346,9 +376,9 @@ public class ControlloreGioco {
 	        	}
 	        });
 	        //DA COMMENTARE SE GIOCO SI ROMPE
-	        //timerTurno.play();
+	        timerTurno.play();
 	    	
-	    	
+	        vg.mostraVista();
 	    	//inizio turno vero e proprio (posso o pescare, o tentare di giocare una carta)
 	        ((VistaGioco) vg).scegliMossaAsync(partita.getCartaCorrente(), g, m -> {
 	        	System.out.println();

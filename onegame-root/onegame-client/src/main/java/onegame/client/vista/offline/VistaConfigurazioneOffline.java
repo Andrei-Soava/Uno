@@ -81,7 +81,7 @@ public class VistaConfigurazioneOffline {
     }
     
     public void mostraGiocoOffline(int numero) {
-    	app.mostraVistaGiocoNuovo(numero);
+    	app.mostraVistaPartitaNuova(numero);
     }
     
 }

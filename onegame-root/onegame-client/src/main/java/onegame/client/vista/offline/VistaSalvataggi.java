@@ -65,7 +65,7 @@ public class VistaSalvataggi {
 	}
 
 	public void mostraGiocoCaricato(String salvataggio) {
-		app.mostraVistaGiocoCaricato(salvataggio);
+		app.mostraVistaPartitaCaricata(salvataggio);
 	}
 
 	/**

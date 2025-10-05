@@ -21,6 +21,9 @@ import onegame.client.net.ConnectionMonitor;
 import onegame.client.vista.*;
 import onegame.client.vista.offline.*;
 import onegame.client.vista.online.*;
+import onegame.client.vista.partita.VistaGioco;
+import onegame.client.vista.partita.VistaPartita;
+import onegame.client.vista.partita.VistaSpettatore;
 
 /**
  * Hello world!
@@ -167,24 +170,29 @@ public class AppWithMaven extends Application {
 		ccoff.aspettaCreazionePartita();
 	}
 
-	public void mostraVistaGiocoCaricato(String salvataggio) {
+	public void mostraVistaPartitaCaricata(String salvataggio) {
 		VistaGioco vista = new VistaGioco(this);
-		ControlloreGioco controllore = new ControlloreGioco(vista); // Passo la vista al controller
+		ControlloreGioco controllore = new ControlloreGioco(vista, new VistaSpettatore(this)); // Passo la vista al controller
 		vista.cg = controllore;
 		controllore.caricaPartita(salvataggio);
-		primaryStage.setScene(vista.getScene());
+		//primaryStage.setScene(vista.getScene());
 		controllore.avviaPartita();
 	}
 
-	public void mostraVistaGiocoNuovo(int numGiocatori) {
+	public void mostraVistaPartitaNuova(int numGiocatori) {
 		VistaGioco vista = new VistaGioco(this);
-		ControlloreGioco controllore = new ControlloreGioco(vista); // passo la vista al controller (serve per
-																	// interrompere il gioco)
+		ControlloreGioco controllore = new ControlloreGioco(vista, new VistaSpettatore(this)); 
+		// passo la vista al controller (serve per interrompere il gioco)
 		vista.cg = controllore;
 		// se si vuole giocatori tra persone umane toglie il "vsBot"
 		controllore.configuraNuovaPartitaVsBot(numGiocatori);
-		primaryStage.setScene(vista.getScene());
+		//primaryStage.setScene(vista.getScene());
 		controllore.avviaPartita();
+	}
+	
+	//SEZIONE SET SCENA PARTITA (vale per vistaGioco e vistaSpettatore)
+	public void aggiornaVistaPartita(VistaPartita vp) {
+		primaryStage.setScene(vp.getScene());
 	}
 
 }
