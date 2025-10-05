@@ -1,5 +1,6 @@
 package onegame.client.vista.partita;
 
+import java.util.Map;
 import java.util.Optional;
 
 import javafx.animation.FadeTransition;
@@ -29,6 +30,7 @@ import onegame.client.controllore.offline.ControlloreGioco;
 import onegame.client.esecuzione.AppWithMaven;
 import onegame.client.persistenza_temporanea.ManagerPersistenza;
 import onegame.client.vista.accessori.GestoreGraficaCarta;
+import onegame.modello.Partita.StringWrapper;
 import onegame.modello.carte.Carta;
 import onegame.modello.carte.CartaSpeciale;
 import onegame.modello.carte.Colore;
@@ -128,7 +130,7 @@ public abstract class VistaPartita {
     	sottoContenitoreDestra.setPadding(new Insets(0));
     	//sottoContenitoreDestra.setStyle("-fx-border-color:black;");
     	prossimoTurnoLbl=new Label();
-    	prossimoTurnoLbl.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
+    	prossimoTurnoLbl.setStyle("-fx-font-size: 18px;");
     	timerBox=new HBox();
     	Region spacer = new Region();
     	VBox.setVgrow(spacer, Priority.ALWAYS);
@@ -221,17 +223,40 @@ public abstract class VistaPartita {
     	this.cartaCorrente.getChildren().add(GestoreGraficaCarta.creaVistaCarta(cartaCorrente));
     }
 
-    public void stampaTurno(String giocatore) {
+    public void stampaTurnoCorrente(String giocatore) {
         Platform.runLater(() -> {
         	turnoCorrenteLbl.setText("Turno di "+giocatore.toUpperCase());
         });
     }
     
-    public void stampaProssimoTurno(String giocatore) {
-    	Platform.runLater(() -> {
-        	prossimoTurnoLbl.setText("Prossimo: \n"+giocatore.toUpperCase());
-        });
+    /**
+     * metodo di aggiornamento del prossimoTurnoLbl:
+     * stampa l'ordine dei giocatori dopo il giocatore corrente
+     * ed il numero di carte di ciascuno
+     * 
+     * @param turnazione mappa<StringWrapper,Integer> con nomeGiocatore-numeroCarte
+     */
+    public void stampaTurnazione(Map<StringWrapper,Integer> turnazione) {
+    	Platform.runLater(()->{
+    		String s="TURNAZIONE:\n";
+    		int size=turnazione.size();
+    		for(Map.Entry<StringWrapper, Integer> entry : turnazione.entrySet()) {
+    			s += entry.getKey().getValue();
+    			s += "\n("+entry.getValue()+" carte)\n";
+    			size--;
+    			if(size!=0) {
+    				s+="    ↓\n";
+    			}
+    		}
+    		prossimoTurnoLbl.setText(s);
+    	});
     }
+    
+//    public void stampaProssimoTurno(String giocatore) {
+//    	Platform.runLater(() -> {
+//        	prossimoTurnoLbl.setText("Prossimo: \n"+giocatore.toUpperCase());
+//        });
+//    }
     
     public void setTimer(SimpleIntegerProperty secondsLeft) {
     	Label timerLabel = new Label();

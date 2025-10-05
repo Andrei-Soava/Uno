@@ -9,6 +9,7 @@ import javafx.animation.Timeline;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.util.Duration;
 import onegame.client.controllore.ControllorePersistenza;
+import onegame.client.net.ClientSocket;
 import onegame.client.vista.partita.VistaGioco;
 import onegame.client.vista.partita.VistaSpettatore;
 import onegame.modello.Mossa;
@@ -38,12 +39,14 @@ public class ControlloreGioco {
 	private VistaSpettatore vsp;
 	private Partita partita;
 	private ControllorePersistenza cp;
+	private ClientSocket cs;
 	private boolean partitaAttiva = false;
 
 
-	public ControlloreGioco(VistaGioco vg, VistaSpettatore vsp) {
+	public ControlloreGioco(VistaGioco vg, VistaSpettatore vsp, ClientSocket cs) {
 		this.vg = vg;
 		this.vsp = vsp;
+		this.cs = cs;
 		this.cp=new ControllorePersistenza(null);
 	}
 	
@@ -217,8 +220,10 @@ public class ControlloreGioco {
 	//versione con GUI javafx
 	public void configuraNuovaPartitaVsBot(int numeroGiocatori) {
 		ArrayList<Giocatore> giocatori = new ArrayList<>();
-		String s = vg.inserisciStringa("Scegli un nome per te:");
-		giocatori.add(new Giocatore(s));
+		//String s = vg.inserisciStringa("Scegli un nome per te:");
+		Giocatore giocatore=new Giocatore(cs.getUtente().getUsername());
+		giocatori.add(giocatore);
+		String s="";
 		for (int i = 0; i < (numeroGiocatori-1); i++) {
 			s="Bot"+(i+1);
 			Giocatore g=new Giocatore(s);
@@ -232,6 +237,7 @@ public class ControlloreGioco {
 		//salvataggioCorrente=getNomeDisponibile();
 	}
 	
+	@Deprecated
 	public void configuraNuovaPartita(int numero) {
 		ArrayList<Giocatore> giocatori = new ArrayList<>();
 		for (int i = 0; i < numero; i++) {
@@ -251,6 +257,8 @@ public class ControlloreGioco {
 	}
 	
 	public void avviaPartita() {
+		vsp.cg=this;
+		vg.cg=this;
 	    cp.salvaPartitaAutomatico(this);
 	    partitaAttiva=true;
 	    eseguiTurno();
@@ -268,9 +276,9 @@ public class ControlloreGioco {
 	            if (scelta == 1) {
 	                if (m.getCartaScelta().getColore() == Colore.NERO) {
 	                	((VistaGioco)vg).stampaColoriAsync(colore -> {
-	                		System.out.println();
+	                		;//breakpoint
 	                        m.setTipoMossa(TipoMossa.SCEGLI_COLORE);
-	                        System.out.println();
+	                        ;//breakpoint
 	                        vg.stampaMessaggio(g.getNome() + " ha cambiato il colore sul banco a " + colore.name());
 	                        m.getCartaScelta().setColore(colore);
 	                        partita.applicaMossa(g, m);
@@ -288,7 +296,7 @@ public class ControlloreGioco {
 	
 	private void eseguiTurno() {
 		if (!partitaAttiva) {
-	        System.out.println();
+			;//breakpoint
 	        return;
 	    }
 	    //fine partita?
@@ -299,49 +307,42 @@ public class ControlloreGioco {
 	    }
 
 	    Giocatore g = partita.getGiocatoreCorrente();
-	    ((VistaGioco)vg).stampaTurno(g.getNome());
-	    ((VistaGioco)vg).stampaProssimoTurno(partita.vediProssimoGiocatore().getNome());
+	    ((VistaGioco)vg).stampaTurnoCorrente(g.getNome());
+	    //((VistaGioco)vg).stampaProssimoTurno(partita.vediProssimoGiocatore().getNome());
 	    if (g.isBot()) {
-//	        //turno eventuale bot
-//	        Mossa m = partita.scegliMossaAutomatica();
-//	        if (m.getTipoMossa() == TipoMossa.PESCA) {
-//	            vg.stampaMessaggio(g.getNome() + " ha pescato");
-//	        } else {
-//	            vg.stampaMessaggio(g.getNome() + " ha giocato la carta: " + m.getCartaScelta());
-//	        }
-//	        partita.passaTurno();
-//	        cp.salvaPartitaAutomatico(this);
-//	        if(partitaAttiva)
-//	        	eseguiTurno(); // turno successivo
-	    	// primo delay di 3 secondi prima di scegliere la mossa
+	    	// primo delay di 5 secondi prima di scegliere la mossa
 	    	vsp.impostaTurnoSpettatore(g.getNome(), g.getMano().getNumCarte(), partita.getCartaCorrente());
+	    	vsp.stampaTurnazione(partita.getTurnazioneGiocatori());
 	    	vsp.mostraVista();
-	    	PauseTransition pausa1 = new PauseTransition(Duration.seconds(3));
-	    	pausa1.setOnFinished(ev1 -> {
-	    	    // eseguo la mossa automatica
-	    	    Mossa m = partita.scegliMossaAutomatica();
-	    	    if (m.getTipoMossa() == TipoMossa.PESCA) {
-	    	        vsp.stampaMessaggio(g.getNome() + " ha pescato");
-	    	    } else {
-	    	        vsp.stampaMessaggio(g.getNome() + " ha giocato la carta: " + m.getCartaScelta());
-	    	    }
-	    	    vsp.impostaTurnoSpettatore(g.getNome(), g.getMano().getNumCarte(), partita.getCartaCorrente());
-	    	    // seconda pausa di 3 secondi dopo aver mostrato il messaggio
-	    	    PauseTransition pausa2 = new PauseTransition(Duration.seconds(3));
-	    	    pausa2.setOnFinished(ev2 -> {
-	    	        partita.passaTurno();
-	    	        cp.salvaPartitaAutomatico(this);
-	    	        if (partitaAttiva) {
-	    	            eseguiTurno(); // turno successivo
-	    	        }
-	    	    });
-	    	    pausa2.play();
-	    	});
+	    	PauseTransition pausa1 = new PauseTransition(Duration.seconds(5));
+			pausa1.setOnFinished(ev1 -> {
+				if (partitaAttiva) {
+					// eseguo la mossa automatica
+					Mossa m = partita.scegliMossaAutomatica();
+					if (m.getTipoMossa() == TipoMossa.PESCA) {
+						vsp.stampaMessaggio(g.getNome() + " ha pescato");
+					} else {
+						vsp.stampaMessaggio(g.getNome() + " ha giocato la carta: " + m.getCartaScelta());
+					}
+					vsp.impostaTurnoSpettatore(g.getNome(), g.getMano().getNumCarte(), partita.getCartaCorrente());
+					vsp.stampaTurnazione(partita.getTurnazioneGiocatori());
+					partita.passaTurno();
+					cp.salvaPartitaAutomatico(this);
+					// seconda pausa di 3 secondi dopo aver mostrato il messaggio
+					PauseTransition pausa2 = new PauseTransition(Duration.seconds(3));
+					pausa2.setOnFinished(ev2 -> {
+						if (partitaAttiva) {
+							eseguiTurno(); // turno successivo
+						}
+					});
+					pausa2.play();
+				}
+			});
 
 	    	pausa1.play();
 
 	    } else {
-	    	System.out.println();
+	    	;//breakpoint
 	        //turno umano 
 	    	//setup timer e counter -> da mandare alla VistaGioco
 	    	AtomicBoolean mossaEffettuata = new AtomicBoolean(false);
@@ -377,17 +378,17 @@ public class ControlloreGioco {
 	        });
 	        //DA COMMENTARE SE GIOCO SI ROMPE
 	        timerTurno.play();
-	    	
+	        vg.stampaTurnazione(partita.getTurnazioneGiocatori());
 	        vg.mostraVista();
 	    	//inizio turno vero e proprio (posso o pescare, o tentare di giocare una carta)
 	        ((VistaGioco) vg).scegliMossaAsync(partita.getCartaCorrente(), g, m -> {
-	        	System.out.println();
+	        	;//breakpoint
 	            if (m.getTipoMossa() == TipoMossa.PESCA) {
 	            	//serve nel caso in cui esca fuori una carta giocabile-> non faccio pescare di nuovo
 	            	flagGiaPescato.setTipoMossa(TipoMossa.PESCA);
-		        	System.out.println();
+	            	;//breakpoint
 	                gestisciPescaggioInternoAsync(g, m, () -> {
-	                	System.out.println();
+	                	;//breakpoint
 	                	if (mossaEffettuata.compareAndSet(false, true)) {
 	                	countdown.stop();
 	    	            timerTurno.stop();
@@ -401,7 +402,6 @@ public class ControlloreGioco {
 	            } 
 	            else 
 	            {
-
 	                    // Applica la mossa e gestisci eventuale cambio colore
 	                    if (partita.applicaMossa(g, m) != null) {
 	                        vg.stampaMessaggio(g.getNome() + " ha giocato la carta: " + m.getCartaScelta());
@@ -409,7 +409,7 @@ public class ControlloreGioco {
 	                            m.setTipoMossa(TipoMossa.SCEGLI_COLORE);
 	                            
 	                            ((VistaGioco)vg).stampaColoriAsync(colore -> {
-	                	        	System.out.println();
+	                            	;//breakpoint
 
 	                                vg.stampaMessaggio(g.getNome() + " ha cambiato il colore sul banco a " + colore.name());
 	                                if (mossaEffettuata.compareAndSet(false, true)) {

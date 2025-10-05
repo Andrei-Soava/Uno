@@ -78,5 +78,32 @@ public class Navigatore<T> {
         if (index == -1) throw new IllegalArgumentException("Elemento non trovato");
         indiceCorrente = index;
     }
+    
+    public List<T> altriInOrdine(boolean direzione) {
+        if (items == null || items.isEmpty()) {
+            throw new IllegalStateException("La lista è vuota o non inizializzata");
+        }
+
+        List<T> result = new java.util.ArrayList<>();
+        int size = items.size();
+
+        if (size == 1) {
+            return result; // se c'è un solo elemento, non ci sono "altri"
+        }
+
+        int index = indiceCorrente;
+
+        for (int i = 1; i < size; i++) {
+            if (direzione) {
+                index = (index + 1) % size; // scansiona in avanti
+            } else {
+                index = (index - 1 + size) % size; // scansiona all’indietro
+            }
+            result.add(items.get(index));
+        }
+
+        return result;
+    }
+
 }
 

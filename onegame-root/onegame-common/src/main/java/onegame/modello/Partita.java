@@ -5,7 +5,9 @@
 package onegame.modello;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -165,6 +167,39 @@ public class Partita implements PartitaIF {
 		for (Giocatore g : giocatori) {
 			this.giocatori.add(g);
 		}
+	}
+	
+	/**
+	 * metodo che resituisce una mappa nomeGiocatore-numeroCarte
+	 * per tutti i giocatori TRANNE quello corrente (utile per gui)
+	 * 
+	 * @return mappa<StringWrapper,Integer> 
+	 */
+	@JsonIgnore
+	public Map<StringWrapper,Integer> getTurnazioneGiocatori(){
+		List<Giocatore> giocatoriSuccessivi = navigatore.altriInOrdine(direzione);
+		Map<StringWrapper,Integer> turnazione = new LinkedHashMap<>();
+		for(int i=0; i<giocatoriSuccessivi.size(); i++) {
+			turnazione.put(new StringWrapper(giocatoriSuccessivi.get(i).getNome(),i), giocatoriSuccessivi.get(i).getMano().getNumCarte());
+		}
+		return turnazione;
+	}
+	
+	/**
+	 * classe ausiliaria per eseguire mappe<String,Integer> quando String può contenere duplicati
+	 */
+	public class StringWrapper {
+	    private final String value;
+	    private final int id;
+
+	    private StringWrapper(String value, int id) {
+	        this.value = value;
+	        this.id = id;
+	    }
+	    
+	    public String getValue() {
+	    	return this.value;
+	    }
 	}
 
 	public Navigatore<Giocatore> getNavigatore() {

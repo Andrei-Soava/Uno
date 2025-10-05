@@ -60,7 +60,7 @@ public class ControllorePersistenza {
 		} while (true);
 		try {
 			ManagerPersistenza.salvaPartita(partita, nome);
-			tv.stampaMessaggio("Partita salvata come '" + nome + "'");
+			//tv.stampaMessaggio("Partita salvata come '" + nome + "'");
 			salvataggioCorrente = nome;
 		} catch (IOException e) {
 			tv.stampaMessaggio("Errore nel salvataggio: " + e.getMessage());
@@ -73,7 +73,7 @@ public class ControllorePersistenza {
 		//sarà da fare solo se giocatore è loggato
 		try {
 			ManagerPersistenza.salvaPartita(partita, salvataggioCorrente);
-			tv.stampaMessaggio("Partita salvata con successo!");
+			//tv.stampaMessaggio("Partita salvata con successo!");
 		} catch (IOException e) {
 			tv.stampaMessaggio("Errore nel salvataggio: " + e.getMessage());
 		}

@@ -106,3 +106,4 @@ Esempio COMPLETO:
 - 04/10 23:00, Andrei, aggiunta modale per statistiche dentro VistaHome + relativa gestione dentro ControlloreHome, continuazione gui;
 - 05/10 2:00, Andrei, aggiunta VistaSpettatore + modifiche ControlloreGioco per rendering parziale/incompleto dei turni degli altri giocatori + miglioramenti classi esistenti ed eliminazione classi inutili, continuazione gui;
 - 05/10 14:00, Andrei, refactoring VistaPartita in modo da includere parti comuni di VistaGioco e VistaSpettatore, continuazione gui;
+- 05/10 18:00, Andrei, miglioramento della visualizzazione della turnazione con modifiche dentro Navigatore e Partita + stampaTurnazione dentro VistaPartita, continuazione gui;

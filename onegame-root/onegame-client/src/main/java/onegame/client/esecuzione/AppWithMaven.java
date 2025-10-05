@@ -3,27 +3,16 @@ package onegame.client.esecuzione;
 import org.apache.logging.log4j.*;
 
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.stage.Stage;
 import onegame.client.controllore.*;
-import onegame.client.controllore.offline.ControlloreConfigurazioneOffline;
-import onegame.client.controllore.offline.ControlloreGioco;
-import onegame.client.controllore.offline.ControlloreMenuOffline;
-import onegame.client.controllore.offline.ControlloreSalvataggi;
-import onegame.client.controllore.online.ControlloreCodicePartita;
-import onegame.client.controllore.online.ControlloreConfigurazioneOnline;
-import onegame.client.controllore.online.ControlloreMenuOnline;
-import onegame.client.controllore.online.stanza.ControlloreStanza;
-import onegame.client.controllore.online.stanza.ControlloreStanzaHost;
-import onegame.client.controllore.online.stanza.ControlloreStanzaOspite;
-import onegame.client.net.ClientSocket;
-import onegame.client.net.ConnectionMonitor;
+import onegame.client.controllore.offline.*;
+import onegame.client.controllore.online.*;
+import onegame.client.controllore.online.stanza.*;
+import onegame.client.net.*;
 import onegame.client.vista.*;
 import onegame.client.vista.offline.*;
 import onegame.client.vista.online.*;
-import onegame.client.vista.partita.VistaGioco;
-import onegame.client.vista.partita.VistaPartita;
-import onegame.client.vista.partita.VistaSpettatore;
+import onegame.client.vista.partita.*;
 
 /**
  * Hello world!
@@ -52,20 +41,6 @@ public class AppWithMaven extends Application {
 			e.printStackTrace();
 		}
 
-		primaryStage.setOnCloseRequest(e -> {
-			if (cs != null) {
-				try {
-					cs.disconnect();
-					System.out.println("disconnessione avvenuta con successo");
-					cm.stop();
-				} catch (Exception exc) {
-					exc.printStackTrace();
-				}
-				Platform.exit();   // per JavaFX
-				System.exit(0);    // forza la chiusura della JVM
-			}
-
-		});
 		stage.setTitle("ONE");
 		stage.setWidth(900);
 		stage.setHeight(600);
@@ -75,6 +50,25 @@ public class AppWithMaven extends Application {
 
 		stage.show();
 	}
+	
+	
+
+	@Override
+	public void stop() throws Exception {
+		if (cs != null) {
+			try {
+				cs.disconnect();
+				System.out.println("disconnessione avvenuta con successo");
+				cm.stop();
+			} catch (Exception exc) {
+				exc.printStackTrace();
+			}
+			//Platform.exit();   // per JavaFX
+			System.exit(0);    // forza la chiusura della JVM
+		}
+	}
+
+
 
 	public Stage getPrimaryStage() {
 		return this.primaryStage;
@@ -172,8 +166,7 @@ public class AppWithMaven extends Application {
 
 	public void mostraVistaPartitaCaricata(String salvataggio) {
 		VistaGioco vista = new VistaGioco(this);
-		ControlloreGioco controllore = new ControlloreGioco(vista, new VistaSpettatore(this)); // Passo la vista al controller
-		vista.cg = controllore;
+		ControlloreGioco controllore = new ControlloreGioco(vista, new VistaSpettatore(this), cs); // Passo la vista al controller
 		controllore.caricaPartita(salvataggio);
 		//primaryStage.setScene(vista.getScene());
 		controllore.avviaPartita();
@@ -181,9 +174,7 @@ public class AppWithMaven extends Application {
 
 	public void mostraVistaPartitaNuova(int numGiocatori) {
 		VistaGioco vista = new VistaGioco(this);
-		ControlloreGioco controllore = new ControlloreGioco(vista, new VistaSpettatore(this)); 
-		// passo la vista al controller (serve per interrompere il gioco)
-		vista.cg = controllore;
+		ControlloreGioco controllore = new ControlloreGioco(vista, new VistaSpettatore(this), cs); 
 		// se si vuole giocatori tra persone umane toglie il "vsBot"
 		controllore.configuraNuovaPartitaVsBot(numGiocatori);
 		//primaryStage.setScene(vista.getScene());
