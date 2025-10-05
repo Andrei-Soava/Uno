@@ -321,9 +321,9 @@ public class ControlloreGioco {
 	    	    // eseguo la mossa automatica
 	    	    Mossa m = partita.scegliMossaAutomatica();
 	    	    if (m.getTipoMossa() == TipoMossa.PESCA) {
-	    	        vg.stampaMessaggio(g.getNome() + " ha pescato");
+	    	        vsp.stampaMessaggio(g.getNome() + " ha pescato");
 	    	    } else {
-	    	        vg.stampaMessaggio(g.getNome() + " ha giocato la carta: " + m.getCartaScelta());
+	    	        vsp.stampaMessaggio(g.getNome() + " ha giocato la carta: " + m.getCartaScelta());
 	    	    }
 	    	    vsp.impostaTurnoSpettatore(g.getNome(), g.getMano().getNumCarte(), partita.getCartaCorrente());
 	    	    // seconda pausa di 3 secondi dopo aver mostrato il messaggio

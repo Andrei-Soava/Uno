@@ -105,3 +105,4 @@ Esempio COMPLETO:
 - 03/10, Andrei, (refactoring configurazione partita sia online che offline + creazione VistaStanza con relativi controllori INCOMPLETI), continuazione gui;
 - 04/10 23:00, Andrei, aggiunta modale per statistiche dentro VistaHome + relativa gestione dentro ControlloreHome, continuazione gui;
 - 05/10 2:00, Andrei, aggiunta VistaSpettatore + modifiche ControlloreGioco per rendering parziale/incompleto dei turni degli altri giocatori + miglioramenti classi esistenti ed eliminazione classi inutili, continuazione gui;
+- 05/10 14:00, Andrei, refactoring VistaPartita in modo da includere parti comuni di VistaGioco e VistaSpettatore, continuazione gui;
