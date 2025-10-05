@@ -35,7 +35,7 @@ public class VistaSpettatore extends VistaPartita {
 	
 	public void impostaTurnoSpettatore(String giocatore, int numeroCarte, Carta cartaCorrente) {
 		this.stampaTurnoCorrente(giocatore);
-		this.impostaCartaCorrente(cartaCorrente);
+		this.stampaCartaCorrente(cartaCorrente);
 		numeroCarteLbl.setText("Numero carte in mano: "+numeroCarte);
 	}
 

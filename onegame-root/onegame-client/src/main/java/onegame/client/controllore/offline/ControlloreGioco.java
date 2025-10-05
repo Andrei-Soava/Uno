@@ -10,6 +10,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.util.Duration;
 import onegame.client.controllore.ControllorePersistenza;
 import onegame.client.net.ClientSocket;
+import onegame.client.persistenza_temporanea.ManagerPersistenza;
 import onegame.client.vista.partita.VistaGioco;
 import onegame.client.vista.partita.VistaSpettatore;
 import onegame.modello.Mossa;
@@ -301,7 +302,11 @@ public class ControlloreGioco {
 	    }
 	    //fine partita?
 	    if (partita.verificaFinePartita()) {
-	    	((VistaGioco)vg).stampaFinePartita(partita.getVincitore(), null);
+	    	((VistaGioco)vg).stampaFinePartita(partita.getVincitore().getNome(), ()->{
+	    		String salvataggio = getCp().getSalvataggioCorrente();
+	            ManagerPersistenza.eliminaSalvataggio(salvataggio);
+	            vg.mostraMenuOffline();
+	    	});
 	        interrompiPartita();
 	        return;
 	    }

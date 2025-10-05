@@ -107,3 +107,6 @@ Esempio COMPLETO:
 - 05/10 2:00, Andrei, aggiunta VistaSpettatore + modifiche ControlloreGioco per rendering parziale/incompleto dei turni degli altri giocatori + miglioramenti classi esistenti ed eliminazione classi inutili, continuazione gui;
 - 05/10 14:00, Andrei, refactoring VistaPartita in modo da includere parti comuni di VistaGioco e VistaSpettatore, continuazione gui;
 - 05/10 18:00, Andrei, miglioramento della visualizzazione della turnazione con modifiche dentro Navigatore e Partita + stampaTurnazione dentro VistaPartita, continuazione gui;
+- 05/10 19:00, Andrei e Fabio, aggiornamento ProjectPlan, null;
+- 05/10, **AVVISO**, Andrei e Fabio, (il project plan è stato finalizzato (si spera per davvero)--> NON aggiornare documento ProjectPlan);
+- 05/10 20:00, Andrei, (spostamento logica eliminazione della partita (dopo la sua conclusione) da VistaPartita a ControlloreGioco), null;

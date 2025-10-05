@@ -267,7 +267,7 @@ public class VistaGioco extends VistaPartita {
      */
     public void scegliMossaAsync(Carta cartaCorrente, Giocatore g, Consumer<Mossa> callback) {
     	Platform.runLater(() -> {
-    		impostaCartaCorrente(cartaCorrente);
+    		stampaCartaCorrente(cartaCorrente);
             mano.getChildren().clear();
             for (Carta c : g.getMano().getCarte()) {
             	StackPane carta=GestoreGraficaCarta.creaVistaCarta(c);

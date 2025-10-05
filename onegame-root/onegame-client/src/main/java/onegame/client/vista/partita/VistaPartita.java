@@ -192,6 +192,11 @@ public abstract class VistaPartita {
      * sezione stampa testo/carte/
      * 
      */
+	/**
+	 * metodo che stampa un messaggio nella logAreaLbl con fade-in/fade-out
+	 * 
+	 * @param s, stringa da stampare
+	 */
     public void stampaMessaggio(String s) {
         Platform.runLater(() -> {
             logAreaLbl.setText(s);
@@ -219,7 +224,7 @@ public abstract class VistaPartita {
     }
 
     
-    protected void impostaCartaCorrente(Carta cartaCorrente) {
+    protected void stampaCartaCorrente(Carta cartaCorrente) {
     	this.cartaCorrente.getChildren().add(GestoreGraficaCarta.creaVistaCarta(cartaCorrente));
     }
 
@@ -258,6 +263,12 @@ public abstract class VistaPartita {
 //        });
 //    }
     
+    /**
+     * metodo che imposta una label con un timer (da far partire dentro il controllore)
+     * NON gestisce la logica del timer, ma solo il lato grafico
+     * 
+     * @param secondsLeft
+     */
     public void setTimer(SimpleIntegerProperty secondsLeft) {
     	Label timerLabel = new Label();
 		timerLabel.setStyle("-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: red;");
@@ -266,12 +277,19 @@ public abstract class VistaPartita {
     	timerBox.getChildren().add(timerLabel);
     }
     
-    public void stampaFinePartita(Giocatore vincitore, Runnable azioneTornaMenu) {
+    /**
+     * metodo che fa uscire un pop-up alla fine della partita (se invocato da controllore)
+     * se utente preme X o pulsante "Torna al menù", allora viene avviato il runnable
+     * 
+     * @param vincitore, stringa con nome vincitore
+     * @param azioneTornaMenu, runnable su cui fare gestire il callback nel controllore
+     */
+    public void stampaFinePartita(String vincitore, Runnable azioneTornaMenu) {
         Platform.runLater(() -> {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Fine partita");
             alert.setHeaderText("La partita è terminata!");
-            alert.setContentText(vincitore.getNome()+" ha vinto!");
+            alert.setContentText(vincitore+" ha vinto!");
             alert.setGraphic(null);
 
             //creo un solo pulsante personalizzato
@@ -283,11 +301,15 @@ public abstract class VistaPartita {
 
             //se l'utente preme il pulsante o chiude con X/ESC -> 
             if (!result.isPresent() || result.get() == tornaMenuBtn) {
-            	String salvataggio=cg.getCp().getSalvataggioCorrente();
-            	ManagerPersistenza.eliminaSalvataggio(salvataggio);
-                app.mostraVistaMenuOffline();
+            	if (azioneTornaMenu != null) {
+                    azioneTornaMenu.run();
+                }
             }
         });
+    }
+    
+    public void mostraMenuOffline() {
+    	app.mostraVistaMenuOffline();
     }
 
 }
