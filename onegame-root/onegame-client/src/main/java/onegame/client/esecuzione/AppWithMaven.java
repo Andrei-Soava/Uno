@@ -105,6 +105,19 @@ public class AppWithMaven extends Application {
 		ch.aspettaLogout();
 		ch.aspettaStatistiche();
 	}
+	
+	public void mostraVistaTutorial() {
+		VistaTutorial vista = new VistaTutorial(this);
+		primaryStage.setScene(vista.getScene());
+	}
+	
+	public void mostraVistaImpostazioni() {
+		VistaImpostazioni vista = new VistaImpostazioni(this);
+		ControlloreImpostazioni ci = new ControlloreImpostazioni(vista,cs,cm);
+		primaryStage.setScene(vista.getScene());
+		ci.aspettaLogout();
+		ci.aspettaSelezione();
+	}
 
 	//SEZIONE VISTE GIOCO ONLINE
 	public void mostraVistaMenuOnline() {

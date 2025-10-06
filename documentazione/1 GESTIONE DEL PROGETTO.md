@@ -110,3 +110,5 @@ Esempio COMPLETO:
 - 05/10 19:00, Andrei e Fabio, aggiornamento ProjectPlan, null;
 - 05/10 20:00, Andrei, (spostamento logica eliminazione della partita (dopo la sua conclusione) da VistaPartita a ControlloreGioco), null;
 - 06/10, **AVVISO**, Andrei e Fabio, (il project plan è stato finalizzato (si spera per davvero)--> NON aggiornare documento ProjectPlan);
+- 06/10 11:00-21:00, Andrei, (creazione VistaTutorial semplice con slide + creazione VistaImpostazioni e ControlloreImpostazioni per futura gestione account + eliminazione classe inutili), null;
+- 06/10, **AVVISO**, Andrei, (la vista base ed i controllori base (fatta eccezione per il ControlloreMessaggiPartitaOnline, non ancora implementabile e ControllorePersistenza, non ancora aggiornato data l'assenza del database) sono stati completati--> futuri cambiamenti in queste sezioni saranno volti a migliorare parti esistenti (es. migliorare la grafica), collegare le parti alla logica del server (durante la partita o quando viene scomodata la persistenza) e adattare alle esigenza specifiche che sorgeranno);

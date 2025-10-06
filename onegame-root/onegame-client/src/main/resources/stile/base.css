@@ -9,11 +9,19 @@
     -fx-font-size: 14px;
 }
 
+/*stile titolo */
 .titolo {
     -fx-font-size: 24px;
     -fx-font-weight:bold;
 }
 
+/*stile lettere bold */
+.grassetto {
+	-fx-font-size: 15px;
+	-fx-font-weight: bold;
+}
+
+/*stile errore */
 .errore {
     -fx-text-fill: black;
     -fx-font-weight: bold;
@@ -70,4 +78,13 @@
 	-fx-border-width: 2;
 	-fx-border-radius: 5;
 	-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 10, 0, 0, 4);
+}
+
+/*stile contenitore generico */
+.contenitore {
+	-fx-border-color: white;
+	-fx-background-color: red;
+	-fx-background-radius: 5;
+	-fx-border-radius: 5; 
+	-fx-border-width: 2; 
 }

@@ -11,6 +11,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.OverrunStyle;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -28,6 +29,7 @@ public class VistaMenuOffline {
     private Button caricaBtn;
     private Button logoutBtn;
     private Label statoConnessioneLabel;
+    private Button utenteBtn;
 
     public VistaMenuOffline(AppWithMaven app) {
     	this.app=app;
@@ -47,7 +49,6 @@ public class VistaMenuOffline {
     	
     	logoutBtn = new Button("Logout");
     	logoutBtn.getStyleClass().add("logout");
-    	//logoutBtn.setOnAction(e->app.mostraVistaAccesso());
 
     	HBox topBar = new HBox(10);
     	topBar.setPadding(new Insets(10));
@@ -68,10 +69,26 @@ public class VistaMenuOffline {
     	centro.setAlignment(Pos.CENTER);
     	
     	root.setCenter(centro);
-        
-    	statoConnessioneLabel=new Label();
-    	statoConnessioneLabel.setPadding(new Insets(20));
-    	root.setBottom(statoConnessioneLabel);
+
+		// bottom bar per stato connessione e utente loggato
+		BorderPane bottomBar = new BorderPane();
+		bottomBar.setPadding(new Insets(20));
+
+		statoConnessioneLabel = new Label();
+		bottomBar.setLeft(statoConnessioneLabel);
+
+		utenteBtn = new Button();
+		utenteBtn.setDisable(true);
+		utenteBtn.setMaxWidth(200);
+		utenteBtn.setEllipsisString("...");
+		utenteBtn.setTextOverrun(OverrunStyle.ELLIPSIS);
+		utenteBtn.setPadding(new Insets(5));
+		utenteBtn.getStyleClass().add("logout");
+		utenteBtn.setOnAction(e -> {
+			app.mostraVistaImpostazioni();
+		});
+		bottomBar.setRight(utenteBtn);
+		root.setBottom(bottomBar);
     	
         scene = new Scene(root);
         scene.getStylesheets().add(
@@ -113,6 +130,11 @@ public class VistaMenuOffline {
 	    BooleanBinding abilitato = monitor.connectedProperty().and(Bindings.createBooleanBinding(() -> logged));
 		caricaBtn.disableProperty().bind(abilitato.not());
 		caricaBtn.opacityProperty().bind(Bindings.when(abilitato).then(1.0).otherwise(0.5));
+		
+		BooleanBinding loggatoBinding = (Bindings.createBooleanBinding(() -> logged));
+		utenteBtn.opacityProperty().bind(Bindings.when(loggatoBinding).then(1.0).otherwise(0.25));
+		utenteBtn.textProperty().bind(Bindings.when(loggatoBinding).then(utente.getUsername()).otherwise("Ospite"));
+		
 		statoConnessioneLabel.textProperty()
 				.bind(Bindings.when(monitor.connectedProperty()).then("Connesso ✅").otherwise("Disconnesso ❌"));
 	}

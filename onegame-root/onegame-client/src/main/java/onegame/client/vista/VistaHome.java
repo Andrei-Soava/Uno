@@ -33,6 +33,7 @@ public class VistaHome {
 	private Label contenutoStatisticheLabel;
 	private Button logoutBtn;
 	private Label statoConnessioneLabel;
+	private Button utenteBtn;
 
 	public VistaHome(AppWithMaven app) {
 		this.app = app;
@@ -50,6 +51,10 @@ public class VistaHome {
 		giocaOfflineBtn.setPrefWidth(200);
 		giocaOfflineBtn.setOnAction(e -> app.mostraVistaMenuOffline());
 
+		Button tutorialBtn = new Button("Mostra tutorial");
+		tutorialBtn.setPrefWidth(200);
+		tutorialBtn.setOnAction(e->app.mostraVistaTutorial());
+		
 		statisticheBtn = new Button("Mostra statistiche");
 		statisticheBtn.setPrefWidth(200);
 		titoloStatisticheLabel = new Label();
@@ -60,18 +65,30 @@ public class VistaHome {
 		logoutBtn.setPrefWidth(200);
 		logoutBtn.getStyleClass().add("logout");
 
-		VBox centro = new VBox(15, titolo, spacer0, giocaOnlineBtn, giocaOfflineBtn, statisticheBtn, logoutBtn);
+		VBox centro = new VBox(15, titolo, spacer0, giocaOnlineBtn, giocaOfflineBtn, tutorialBtn, statisticheBtn, logoutBtn);
 		centro.setAlignment(Pos.CENTER);
 		centro.setPadding(new Insets(20));
 
-		//label per stato connessione
+		//bottom bar per stato connessione e utente loggato
+		BorderPane bottomBar=new BorderPane();
+		bottomBar.setPadding(new Insets(20));
+		
 		statoConnessioneLabel = new Label();
-		statoConnessioneLabel.setPadding(new Insets(20));
+		bottomBar.setLeft(statoConnessioneLabel);
+		
+		utenteBtn = new Button();
+		utenteBtn.setMaxWidth(200);
+		utenteBtn.setEllipsisString("...");
+		utenteBtn.setTextOverrun(OverrunStyle.ELLIPSIS);
+		utenteBtn.setPadding(new Insets(5));
+		utenteBtn.getStyleClass().add("logout");
+		utenteBtn.setOnAction(e->{app.mostraVistaImpostazioni();});
+		bottomBar.setRight(utenteBtn);
 
 		//layout principale
 	    BorderPane layout = new BorderPane();
 	    layout.setCenter(centro);
-	    layout.setBottom(statoConnessioneLabel);
+	    layout.setBottom(bottomBar);
 
 	    //root come StackPane per supportare overlay
 	    StackPane root = new StackPane(layout);
@@ -175,6 +192,12 @@ public class VistaHome {
 
 		statisticheBtn.disableProperty().bind(abilitato.not());
 		statisticheBtn.opacityProperty().bind(Bindings.when(abilitato).then(1.0).otherwise(0.5));
+				
+		BooleanBinding loggatoBinding = (Bindings.createBooleanBinding(() -> logged));
+		utenteBtn.disableProperty().bind(abilitato.not());
+		utenteBtn.opacityProperty().bind(Bindings.when(abilitato).then(1.0).otherwise(0.25));
+		utenteBtn.textProperty().bind(Bindings.when(loggatoBinding).then("⛯ "+utente.getUsername()).otherwise("Ospite"));
+		
 		statoConnessioneLabel.textProperty()
 				.bind(Bindings.when(monitor.connectedProperty()).then("Connesso ✅").otherwise("Disconnesso ❌"));
 	}
