@@ -9,11 +9,13 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.corundumstudio.socketio.AckRequest;
 import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.SocketIOServer;
 
 import onegame.modello.net.ProtocolloMessaggi;
 import onegame.modello.net.Utente;
+import onegame.server.db.UtenteDb;
 import onegame.modello.net.ProtocolloMessaggi.ReqAuth;
 import onegame.modello.net.ProtocolloMessaggi.RespAuthFail;
 import onegame.modello.net.ProtocolloMessaggi.RespAuthOk;
@@ -25,8 +27,9 @@ public class GestoreConnessioni {
 
     private final SocketIOServer server;
     private final Map<String, Utente> sessioni; // token -> Utente
-    private final Map<String, String> utentiRegistrati; // username -> passwordHash
+    //private final Map<String, String> utentiRegistrati; // username -> passwordHash
     private final SecureRandom random = new SecureRandom();
+    private final UtenteDb utenteDb;
 
     /**
 	 * Costruttore del gestore connessioni
@@ -37,9 +40,10 @@ public class GestoreConnessioni {
     public GestoreConnessioni(SocketIOServer server, Map<String, Utente> sessioni) {
         this.server = server;
         this.sessioni = sessioni;
-        this.utentiRegistrati = new ConcurrentHashMap<>();
+        this.utenteDb = new UtenteDb();
+        //this.utentiRegistrati = new ConcurrentHashMap<>();
         
-        utentiRegistrati.put("test25", hashPassword("test25"));
+        //utentiRegistrati.put("test25", hashPassword("test25"));
     }
 
     /**
@@ -47,36 +51,54 @@ public class GestoreConnessioni {
 	 * @param client Il client che effettua la richiesta
 	 * @param req La richiesta di autenticazione (username e password)
 	 */
-    public void handleLogin(SocketIOClient client, ReqAuth req) {
+    public void handleLogin(SocketIOClient client, ProtocolloMessaggi.ReqAuth req, AckRequest ackRequest) {
         try {
-            if (req == null || req.username == null || req.password == null) {
-                client.sendEvent(ProtocolloMessaggi.EVENT_AUTH_FAIL, new RespAuthFail("Dati mancanti"));
-                return;
+            String username = req.getUsername();
+            String password = req.getPassword();
+            
+            String storedHash = utenteDb.getPasswordHash(username);
+            
+            if(storedHash == null) {
+            	if(ackRequest != null && ackRequest.isAckRequested()) {
+            		ackRequest.sendAckData("Utente non trovato");
+            	}else {
+            		client.sendEvent(ProtocolloMessaggi.EVENT_AUTH_FAIL, "Utente non trovato");
+            	}
+            	return;
             }
-            String stored = utentiRegistrati.get(req.username);
-            if (stored == null) {
-                client.sendEvent(ProtocolloMessaggi.EVENT_AUTH_FAIL, new RespAuthFail("Utente non trovato"));
-                return;
+            
+            if(!verificaPassword(password, storedHash)) {
+            	if(ackRequest != null && ackRequest.isAckRequested()) {
+            		ackRequest.sendAckData("Password errata");
+            	}else {
+            		client.sendEvent(ProtocolloMessaggi.EVENT_AUTH_FAIL, "Password errata");
+            	}
+            	return;
             }
-            if (!verificaPassword(req.password, stored)) {
-                client.sendEvent(ProtocolloMessaggi.EVENT_AUTH_FAIL, new RespAuthFail("Password errata"));
-                return;
+            
+            long id = utenteDb.getIdByUsername(username);
+            Utente utente = new Utente(username, false);
+            utente.setTokenSessione(UUID.randomUUID().toString());
+            utente.setConnesso(true);
+            
+            sessioni.put(utente.getTokenSessione(), utente);
+            client.set("token", utente.getTokenSessione());
+            
+            if (ackRequest != null && ackRequest.isAckRequested()) {
+                ackRequest.sendAckData("");
+            } else {
+                client.sendEvent(ProtocolloMessaggi.EVENT_AUTH_OK, "Login riuscito");
             }
-            Utente utente = new Utente(req.username, false);
-            String token = generaToken();
-            utente.setTokenSessione(token);
-            utente.setUltimoHeartbeat(Instant.now().toEpochMilli());
-            sessioni.put(token, utente);
-
-            client.set("token", token);
-            client.set("username", req.username);
-
-            RespAuthOk ok = new RespAuthOk(utente.getIdGiocatore(), token, "Login riuscito");
-            client.sendEvent(ProtocolloMessaggi.EVENT_AUTH_OK, ok);
-            System.out.println("[AUTH] Login OK: " + req.username + " token=" + token);
+        	
+        	
+            System.out.println("[Server] Utente loggato: " + username);
         } catch (Exception e) {
             e.printStackTrace();
-            client.sendEvent(ProtocolloMessaggi.EVENT_AUTH_FAIL, new RespAuthFail("Errore server"));
+            if (ackRequest != null && ackRequest.isAckRequested()) {
+                ackRequest.sendAckData("Errore nel database"); 
+            } else {
+                client.sendEvent(ProtocolloMessaggi.EVENT_AUTH_FAIL, "Errore nel database");
+            }
         }
     }
 
@@ -85,34 +107,36 @@ public class GestoreConnessioni {
 	 * @param client Il client che effettua la richiesta
 	 * @param req La richiesta di autenticazione (username e password)
 	 */
-    public void handleRegister(SocketIOClient client, ReqAuth req) {
+    public void handleRegister(SocketIOClient client, ProtocolloMessaggi.ReqAuth req, AckRequest ackRequest) {
         try {
-            if (req == null || req.username == null || req.password == null) {
-                client.sendEvent(ProtocolloMessaggi.EVENT_AUTH_FAIL, new RespAuthFail("Dati mancanti"));
-                return;
+            String username = req.getUsername();
+            String password = req.getPassword();
+            
+            if(utenteDb.esisteUtente(username)) {
+            	if(ackRequest != null && ackRequest.isAckRequested()) {
+            		ackRequest.sendAckData("Username già esistente");
+            	}else {
+            		client.sendEvent(ProtocolloMessaggi.EVENT_AUTH_FAIL, "Username già esistente");
+            	}
+            	System.out.println("[Server] Registrazione fallita - utente esistente: " + username);
+            	return;
             }
-            if (utentiRegistrati.containsKey(req.username)) {
-                client.sendEvent(ProtocolloMessaggi.EVENT_AUTH_FAIL, new RespAuthFail("Username già esistente"));
-                return;
+            String passwordHash = hashPassword(password);
+            utenteDb.registraUtente(username, passwordHash);
+            
+            if (ackRequest != null && ackRequest.isAckRequested()) {
+                ackRequest.sendAckData(""); 
+            } else {
+                client.sendEvent(ProtocolloMessaggi.EVENT_AUTH_OK, "Registrazione completata");
             }
-            String hash = hashPassword(req.password);
-            utentiRegistrati.put(req.username, hash);
-
-            Utente utente = new Utente(req.username, false);
-            String token = generaToken();
-            utente.setTokenSessione(token);
-            utente.setUltimoHeartbeat(Instant.now().toEpochMilli());
-            sessioni.put(token, utente);
-
-            client.set("token", token);
-            client.set("username", req.username);
-
-            RespAuthOk ok = new RespAuthOk(utente.getIdGiocatore(), token, "Registrazione e login riusciti");
-            client.sendEvent(ProtocolloMessaggi.EVENT_AUTH_OK, ok);
-            System.out.println("[AUTH] Registrazione OK: " + req.username + " token=" + token);
+            System.out.println("[Server] Nuovo utente registrato: " + username);
         } catch (Exception e) {
             e.printStackTrace();
-            client.sendEvent(ProtocolloMessaggi.EVENT_AUTH_FAIL, new RespAuthFail("Errore server"));
+            if (ackRequest != null && ackRequest.isAckRequested()) {
+                ackRequest.sendAckData("Errore nel database");
+            } else {
+                client.sendEvent(ProtocolloMessaggi.EVENT_AUTH_FAIL, "Errore nel database");
+            }
         }
     }
 
@@ -121,24 +145,11 @@ public class GestoreConnessioni {
 	 * @param client Il client che effettua la richiesta
 	 */
     public void handleAnonimo(SocketIOClient client) {
-        try {
-            String nomeAnonimo = "anonimo-" + randomString(6);
-            Utente utente = new Utente(nomeAnonimo, true);
-            String token = generaToken();
-            utente.setTokenSessione(token);
-            utente.setUltimoHeartbeat(Instant.now().toEpochMilli());
-            sessioni.put(token, utente);
-
-            client.set("token", token);
-            client.set("username", nomeAnonimo);
-
-            RespAuthOk ok = new RespAuthOk(utente.getIdGiocatore(), token, "Accesso anonimo riuscito");
-            client.sendEvent(ProtocolloMessaggi.EVENT_AUTH_OK, ok);
-            System.out.println("[AUTH] Anonimo creato: " + nomeAnonimo + " token=" + token);
-        } catch (Exception e) {
-            e.printStackTrace();
-            client.sendEvent(ProtocolloMessaggi.EVENT_AUTH_FAIL, new RespAuthFail("Errore server"));
-        }
+        Utente anonimo = new Utente(true);
+        sessioni.put(anonimo.getTokenSessione(), anonimo);
+        client.set("token",anonimo.getTokenSessione());
+        client.sendEvent(ProtocolloMessaggi.EVENT_AUTH_OK, "Accesso anonimo riuscito");
+        System.out.println("[Serrver] Utente anonimo connesso: " + anonimo.getIdGiocatore());
     }
 
     /**
@@ -146,20 +157,14 @@ public class GestoreConnessioni {
 	 * @param client Il client che si disconnette
 	 */
     public void handleDisconnessione(SocketIOClient client) {
-        try {
-            Object tokenObj = client.get("token");
-            if (tokenObj != null) {
-                String token = tokenObj.toString();
-                Utente u = sessioni.get(token);
-                if (u != null) {
-                    u.setConnesso(false);
-                    System.out.println("[CONNESSIONE] Utente disconnesso: " + u.getUsername() + " token=" + token);
-                }
-            } else {
-                System.out.println("[CONNESSIONE] Client sconosciuto disconnesso: sessionId=" + client.getSessionId());
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+    	Object tokenObj = client.get("token");
+        if (tokenObj == null) return;
+
+        String token = tokenObj.toString();
+        Utente u = sessioni.get(token);
+        if (u != null) {
+            u.setConnesso(false);
+            System.out.println("[SERVER] Utente disconnesso: " + u.getUsername());
         }
     }
 
@@ -198,7 +203,7 @@ public class GestoreConnessioni {
             System.arraycopy(hashed, 0, combined, salt.length, hashed.length);
             return Base64.getEncoder().encodeToString(combined);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+        	throw new RuntimeException("Errore nell'hash della password", e);
         }
     }
     
@@ -211,22 +216,24 @@ public class GestoreConnessioni {
         try {
             byte[] combined = Base64.getDecoder().decode(stored);
             byte[] salt = new byte[16];
-            System.arraycopy(combined, 0, salt, 0, salt.length);
+            byte[] hashFromDb = new byte[combined.length - 16];
+            System.arraycopy(combined, 0, salt, 0, 16);
+            System.arraycopy(combined, 16, hashFromDb, 0, hashFromDb.length);
             MessageDigest md = MessageDigest.getInstance("SHA-256");
             md.update(salt);
-            byte[] hashed = md.digest(password.getBytes(StandardCharsets.UTF_8));
-            byte[] recombined = new byte[salt.length + hashed.length];
-            System.arraycopy(salt, 0, recombined, 0, salt.length);
-            System.arraycopy(hashed, 0, recombined, salt.length, hashed.length);
-            return MessageDigest.isEqual(recombined, combined);
+            byte[] hashedInput = md.digest(password.getBytes(StandardCharsets.UTF_8));
+            return MessageDigest.isEqual(hashFromDb, hashedInput);
         } catch (Exception e) {
-            return false;
+        	throw new RuntimeException("Errore nella verifica della password", e);
         }
     }
-
-    private String generaToken() {
-        return UUID.randomUUID().toString();
+    
+ // RESTITUISCE UTENTE DAL TOKEN
+    public Utente getUtenteByToken(String token) {
+        return sessioni.get(token);
     }
+
+    
 
     private String randomString(int len) {
         byte[] buf = new byte[len];

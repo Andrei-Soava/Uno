@@ -1,6 +1,8 @@
 package onegame.client.net;
 
 import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
@@ -137,30 +139,23 @@ public class ClientSocket {
         } catch (Exception e) { }
     }
 
-    /**
-     * Invia la richiesta di login al server
-     * @param username Username dell'utente
-     * @param password Password dell'utente
-     * @param callback Callback per la risposta del server
-     * @throws Exception
-     */
-    public void login(String username, String password, Ack callback) throws Exception {
-        ReqAuth r = new ReqAuth(username, password);
-        String json = mapper.writeValueAsString(r);
-        socket.emit("auth:login", json, callback);
+    public void register(String username, String password, Ack callback) throws Exception {
+        // Usa una Map semplice invece dell'oggetto complesso
+        Map<String, String> data = new HashMap<>();
+        data.put("username", username);
+        data.put("password", password);
+        
+        System.out.println("[CLIENT] Invio Map: " + data);
+        socket.emit("auth:register", data, callback);
     }
 
-    /**
-     * Invia la richiesta di registrazione al server
-     * @param username Username dell'utente
-     * @param password Password dell'utente
-     * @param callback Callback per la risposta del server
-     * @throws Exception
-     */
-    public void register(String username, String password, Ack callback) throws Exception {
-        ReqAuth r = new ReqAuth(username, password);
-        String json = mapper.writeValueAsString(r);
-        socket.emit("auth:register", json, callback);
+    public void login(String username, String password, Ack callback) throws Exception {
+        Map<String, String> data = new HashMap<>();
+        data.put("username", username);
+        data.put("password", password);
+        
+        System.out.println("[CLIENT] Invio Map: " + data);
+        socket.emit("auth:login", data, callback);
     }
 
     /**
@@ -192,8 +187,8 @@ public class ClientSocket {
 	 */
     public void entraStanza(String idStanza, Ack callback) throws Exception {
         ReqEntraStanza r = new ReqEntraStanza(idStanza);
-        String json = mapper.writeValueAsString(r);
-        socket.emit("stanza:entra", json, callback);
+        // CORRETTO - oggetto direttamente, NO json string
+        socket.emit("stanza:entra", r, callback);
     }
 
     /**
@@ -203,12 +198,8 @@ public class ClientSocket {
 	 */
     public void inviaMossa(Object mossaObj, Ack callback) {
         try {
-            if (mossaObj instanceof String) {
-                socket.emit("partita:mossa", (String) mossaObj, callback);
-            } else {
-                String json = mapper.writeValueAsString(mossaObj);
-                socket.emit("partita:mossa", json, callback);
-            }
+            // CORRETTO - oggetto direttamente
+            socket.emit("partita:mossa", mossaObj, callback);
         } catch (Exception e) {
             if (callback != null) callback.call(e.getMessage());
         }

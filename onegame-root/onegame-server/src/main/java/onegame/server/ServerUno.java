@@ -9,6 +9,7 @@ import com.corundumstudio.socketio.HandshakeData;
 import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.SocketIOServer;
 import com.corundumstudio.socketio.listener.DataListener;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import onegame.modello.Mossa;
 import onegame.modello.net.ProtocolloMessaggi;
@@ -43,18 +44,28 @@ public class ServerUno {
     }
 
     private void registraEventi() {
-        // connessione
-        server.addConnectListener(client -> {
-            HandshakeData hd = client.getHandshakeData();
-            String addr = "unknown";
-            try {
-                if (client.getRemoteAddress() != null) addr = client.getRemoteAddress().toString();
-                else if (hd != null && hd.getAddress() != null) addr = hd.getAddress().toString();
-            } catch (Exception ex) {
-                // fallback a "unknown"
-            }
-            System.out.println("[SERVER] Nuova connessione da " + addr + " sessionId=" + client.getSessionId());
-        });
+    	server.addConnectListener(client -> {
+    	    HandshakeData hd = client.getHandshakeData();
+    	    String addr = "unknown";
+    	    try {
+    	        if (client.getRemoteAddress() != null) addr = client.getRemoteAddress().toString();
+    	        else if (hd != null && hd.getAddress() != null) addr = hd.getAddress().toString();
+    	    } catch (Exception ex) {}
+
+    	    System.out.println("[SERVER] Nuova connessione da " + addr + " sessionId=" + client.getSessionId());
+
+    	    //  Recupera token dal parametro della connessione (se presente)
+    	    String token = hd.getSingleUrlParam("token");
+    	    if (token != null && !token.isEmpty()) {
+    	        Utente u = gestoreConnessioni.getUtenteByToken(token);
+    	        if (u != null) {
+    	            u.setConnesso(true);
+    	            client.set("token", token);
+    	            System.out.println("[SERVER] Riconnesso utente: " + u.getUsername());
+    	        }
+    	    }
+
+    	});
 
         // disconnessione
         server.addDisconnectListener(client -> {
@@ -64,18 +75,94 @@ public class ServerUno {
         });
 
         // auth:login
-        server.addEventListener(ProtocolloMessaggi.EVENT_AUTH_LOGIN, ProtocolloMessaggi.ReqAuth.class,
-                new DataListener<ProtocolloMessaggi.ReqAuth>() {
+        server.addEventListener(ProtocolloMessaggi.EVENT_AUTH_LOGIN, Object.class,
+                new DataListener<Object>() {
                     @Override
-                    public void onData(SocketIOClient client, ProtocolloMessaggi.ReqAuth data, AckRequest ack)
-                            throws Exception {
-                        gestoreConnessioni.handleLogin(client, data);
+                    public void onData(SocketIOClient client, Object data, AckRequest ack) throws Exception {
+                        try {
+                            ProtocolloMessaggi.ReqAuth reqAuth;
+                            
+                            if (data instanceof ProtocolloMessaggi.ReqAuth) {
+                                reqAuth = (ProtocolloMessaggi.ReqAuth) data;
+                            } else if (data instanceof String) {
+                                String jsonString = (String) data;
+                                ObjectMapper mapper = new ObjectMapper();
+                                reqAuth = mapper.readValue(jsonString, ProtocolloMessaggi.ReqAuth.class);
+                            } else if (data instanceof Map) {
+                                Map<?, ?> map = (Map<?, ?>) data;
+                                reqAuth = new ProtocolloMessaggi.ReqAuth();
+                                reqAuth.username = (String) map.get("username");
+                                reqAuth.password = (String) map.get("password");
+                            } else {
+                            	if (ack != null && ack.isAckRequested()) {
+                                    ack.sendAckData("Formato dati non supportato");
+                                } else {
+                                    client.sendEvent(ProtocolloMessaggi.EVENT_AUTH_FAIL, "Formato dati non supportato");
+                                }
+                                return;
+                            }
+                            
+                            gestoreConnessioni.handleLogin(client, reqAuth, ack);
+                            
+                        } catch (Exception e) {
+                            System.out.println("[SERVER] Errore processing auth:login: " + e.getMessage());
+                            if (ack != null && ack.isAckRequested()) {
+                                ack.sendAckData("Errore nel processare la richiesta");
+                            } else {
+                                client.sendEvent(ProtocolloMessaggi.EVENT_AUTH_FAIL, "Errore nel processare la richiesta");
+                            }
+                        }
                     }
                 });
 
         // auth:register
-        server.addEventListener(ProtocolloMessaggi.EVENT_AUTH_REGISTER, ProtocolloMessaggi.ReqAuth.class,
-                (client, data, ack) -> gestoreConnessioni.handleRegister(client, data));
+        server.addEventListener(ProtocolloMessaggi.EVENT_AUTH_REGISTER, Object.class,
+                (client, data, ack) -> {
+                    try {
+                        ProtocolloMessaggi.ReqAuth reqAuth;
+                        
+                        if (data instanceof ProtocolloMessaggi.ReqAuth) {
+                            // Caso 1: Oggetto ricevuto direttamente
+                            reqAuth = (ProtocolloMessaggi.ReqAuth) data;
+                            System.out.println("[SERVER] Ricevuto ReqAuth come oggetto");
+                        } else if (data instanceof String) {
+                            // Caso 2: Stringa JSON ricevuta
+                            String jsonString = (String) data;
+                            System.out.println("[SERVER] Ricevuto JSON string: " + jsonString);
+                            
+                            // Prova a parsare la stringa JSON
+                            ObjectMapper mapper = new ObjectMapper();
+                            reqAuth = mapper.readValue(jsonString, ProtocolloMessaggi.ReqAuth.class);
+                            System.out.println("[SERVER] JSON parsato correttamente");
+                        } else if (data instanceof Map) {
+                            // Caso 3: Mappa ricevuta (alternativa)
+                            Map<?, ?> map = (Map<?, ?>) data;
+                            reqAuth = new ProtocolloMessaggi.ReqAuth();
+                            reqAuth.username = (String) map.get("username");
+                            reqAuth.password = (String) map.get("password");
+                            System.out.println("[SERVER] Ricevuto come Map per registrazione");
+                        } else {
+                            System.out.println("[SERVER] Tipo dati non supportato: " + data.getClass());
+                            if (ack != null && ack.isAckRequested()) {
+                                ack.sendAckData("Formato dati non supportato");
+                            } else {
+                                client.sendEvent(ProtocolloMessaggi.EVENT_AUTH_FAIL, "Formato dati non supportato");
+                            }
+                            return;
+                        }
+                        
+                        // Chiama il gestore
+                        gestoreConnessioni.handleRegister(client, reqAuth, ack);
+                        
+                    } catch (Exception e) {
+                        System.out.println("[SERVER] Errore processing auth:register: " + e.getMessage());
+                        if (ack != null && ack.isAckRequested()) {
+                            ack.sendAckData("Errore nel processare la richiesta");
+                        } else {
+                            client.sendEvent(ProtocolloMessaggi.EVENT_AUTH_FAIL, "Errore nel processare la richiesta");
+                        }
+                    }
+                });
 
         // auth:anonimo
         server.addEventListener(ProtocolloMessaggi.EVENT_AUTH_ANONIMO, Void.class,
