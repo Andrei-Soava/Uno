@@ -58,11 +58,9 @@ public class CartaSpeciale extends Carta {
 	public void applicaEffetto(Partita p) {
 			switch (this.getTipo()) {
 			case PIU_DUE:
-				p.prossimoGiocatore();
 				p.getGiocatoreCorrente().getMano().aggiungiCarte((p.getMazzo().pescaN(2)));
 				break;
 			case PIU_QUATTRO:
-				p.prossimoGiocatore();
 				p.getGiocatoreCorrente().getMano().aggiungiCarte((p.getMazzo().pescaN(4)));
 				break;
 			case BLOCCA:
@@ -72,7 +70,6 @@ public class CartaSpeciale extends Carta {
 				p.cambiaDirezione();
 				break;
 			default:
-				p.prossimoGiocatore();
 				break;
 			}
 	}
