@@ -19,6 +19,8 @@
     <h2.version>2.1.214</h2.version>
     <slf4j.version>1.7.36</slf4j.version>
     <socketio.client.version>1.0.0</socketio.client.version>
+    <jwt.version>4.4.0</jwt.version>
+    
   </properties>
 
   <dependencyManagement>
@@ -91,6 +93,12 @@
 	    <artifactId>slf4j-simple</artifactId>
 	    <version>${slf4j.version}</version>
 	  </dependency>
+	  <dependency>
+		<groupId>com.auth0</groupId>
+		<artifactId>java-jwt</artifactId>
+		<version>${jwt.version}</version>
+	  </dependency>
+
     </dependencies>
   </dependencyManagement>
 

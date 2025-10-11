@@ -19,21 +19,22 @@ public class ProtocolloMessaggi {
     public static final String EVENT_ELIMINA_PARTITA = "partita:elimina";
     public static final String EVENT_LISTA_PARTITE = "partita:lista";
     
-    //Risposte partite offline
-    public static final String EVENT_PARTITA_OK = "partita:ok";
-    public static final String EVENT_PARTITA_FAIL = "partita:fail";
+//    //Risposte partite offline
+//    public static final String EVENT_PARTITA_OK = "partita:ok";
+//    public static final String EVENT_PARTITA_FAIL = "partita:fail";
+//
+//    // Risposte
+//    public static final String EVENT_AUTH_OK = "auth:ok";
+//    public static final String EVENT_AUTH_FAIL = "auth:fail";
+//
+//    public static final String EVENT_STANZA_OK = "stanza:ok";
+//    public static final String EVENT_STANZA_FAIL = "stanza:fail";
 
-    // Risposte
-    public static final String EVENT_AUTH_OK = "auth:ok";
-    public static final String EVENT_AUTH_FAIL = "auth:fail";
-
-    public static final String EVENT_STANZA_OK = "stanza:ok";
-    public static final String EVENT_STANZA_FAIL = "stanza:fail";
-
+    
     // Richiesta di login / register
     public static class ReqAuth {
-        public String username;
-        public String password;
+        private String username;
+        private String password;
 
         public ReqAuth() {}
 
@@ -58,32 +59,21 @@ public class ProtocolloMessaggi {
         	this.password = password;
         }
     }
-
-//     Risposta auth ok
-    public static class RespAuthOk {
+    
+    public static class RespAuth {
+    	public boolean success;
         public String idGiocatore;
-        public String token;
+		public String token;
         public String messaggio;
+        
+        public RespAuth() {
+		}
 
-        public RespAuthOk() {
-        }
-
-        public RespAuthOk(String idGiocatore, String token, String messaggio) {
-            this.idGiocatore = idGiocatore;
-            this.token = token;
-            this.messaggio = messaggio;
-        }
-    }
-
-//     Risposta auth fail
-    public static class RespAuthFail {
-        public String motivo;
-
-        public RespAuthFail() {
-        }
-
-        public RespAuthFail(String motivo) {
-            this.motivo = motivo;
+		public RespAuth(boolean success, String idGiocatore, String token, String messaggio) {
+        	this.success = success;
+        	this.idGiocatore = idGiocatore;
+        	this.token = token;
+        	this.messaggio = messaggio;
         }
     }
 

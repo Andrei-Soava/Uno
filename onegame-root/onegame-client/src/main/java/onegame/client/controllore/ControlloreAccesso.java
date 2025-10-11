@@ -1,13 +1,24 @@
 package onegame.client.controllore;
 
 
+import javax.management.RuntimeErrorException;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import javafx.application.Platform;
 import onegame.client.net.ClientSocket;
 import onegame.client.net.ConnectionMonitor;
 import onegame.client.vista.VistaAccesso;
+import onegame.modello.net.ProtocolloMessaggi.RespAuth;
+import onegame.modello.net.Utente;
 
 public class ControlloreAccesso {
 	private VistaAccesso va;
 	private ClientSocket cs;
+	
+	private static final ObjectMapper mapper = new ObjectMapper();
 
 	public ControlloreAccesso(VistaAccesso va, ClientSocket cs, ConnectionMonitor cm) {
 		this.va = va;
@@ -25,8 +36,10 @@ public class ControlloreAccesso {
 				return;
 			}
 			if (username == null && password == null) {
-				cs.getUtente().setAnonimo(true);
-				cs.getUtente().setUsername("anonimo");
+//				cs.getUtente().setAnonimo(true);
+//				cs.getUtente().setUsername("anonimo");
+				cs.anonimo(null);
+				cs.setUtente(new Utente(true));
 				va.mostraHome();
 				return;
 			}
@@ -38,14 +51,37 @@ public class ControlloreAccesso {
 
 			// condizionale (sarà dentro una send asincrona al server e se la response ==
 			// true, si va alla vista successiva)
-			if (true) {
-				cs.getUtente().setAnonimo(false);
-				cs.getUtente().setUsername(username);
-				va.mostraHome();
-			} else {
-				va.compilaMessaggioErrore("Credenziali errate");
-				va.svuotaCampi();
-				eseguiAccesso();
+//			if (true) {
+//				cs.getUtente().setAnonimo(false);
+//				cs.getUtente().setUsername(username);
+//				va.mostraHome();
+//			} else {
+//				va.compilaMessaggioErrore("Credenziali errate");
+//				va.svuotaCampi();
+//				eseguiAccesso();
+//			}
+			try {
+				cs.login(username, password, args -> {
+					try {
+						String json = args[0].toString();
+						RespAuth auth = mapper.readValue(json, RespAuth.class);
+						
+						Platform.runLater(() -> {
+				            if (auth.success) {
+				                Utente utente = new Utente(username, false);
+				                cs.setUtente(utente);
+				                va.mostraHome();
+				            } else {
+				                va.compilaMessaggioErrore(auth.messaggio);
+				                eseguiAccesso();
+				            }
+				        });
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				});
+			} catch (Exception e) {
+				
 			}
 		});
 	}

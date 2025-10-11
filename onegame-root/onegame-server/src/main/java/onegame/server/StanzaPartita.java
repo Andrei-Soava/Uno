@@ -81,7 +81,6 @@ public class StanzaPartita {
             if (ut == null) {
                 // creazione minimale di Utente locale
                 ut = new Utente("guest-" + token.substring(0, Math.min(6, token.length())), true);
-                ut.setTokenSessione(token);
             }
             // se Utente non ha Giocatore domain, crealo e associa
             if (ut.getGiocatore() == null) {
