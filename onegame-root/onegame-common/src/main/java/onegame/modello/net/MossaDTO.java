@@ -1,5 +1,7 @@
 package onegame.modello.net;
 
+import onegame.modello.carte.Colore;
+
 public class MossaDTO {
     public enum TipoMossa {
         GIOCA_CARTA,
@@ -9,7 +11,7 @@ public class MossaDTO {
 
     public TipoMossa tipo;
     public CartaDTO carta;
-    public String coloreScelto;
+    public Colore coloreScelto;
 
     public MossaDTO() {}
 

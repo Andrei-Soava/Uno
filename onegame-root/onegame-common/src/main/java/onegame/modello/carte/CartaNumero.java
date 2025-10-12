@@ -4,7 +4,10 @@
 
 package onegame.modello.carte;
 
+import java.util.Objects;
+
 import onegame.modello.Partita;
+import onegame.modello.PartitaIF;
 
 /************************************************************/
 
@@ -32,7 +35,7 @@ public class CartaNumero extends Carta {
 	 * se la carta è una CartaNumero, non ci sono effetti
 	 */
 	@Override
-	public void applicaEffetto(Partita p) {
+	public void applicaEffetto(PartitaIF p) {
 		
 	}
 	
@@ -79,4 +82,16 @@ public class CartaNumero extends Carta {
 		}
 	}
 	
+	@Override
+	public boolean equals(Object obj) {
+	    if (this == obj) return true;
+	    if (!(obj instanceof CartaNumero)) return false;
+	    CartaNumero other = (CartaNumero) obj;
+	    return this.colore == other.colore && this.numero == other.numero;
+	}
+
+	@Override
+	public int hashCode() {
+	    return Objects.hash(colore, numero);
+	}
 }

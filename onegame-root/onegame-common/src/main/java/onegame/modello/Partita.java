@@ -12,12 +12,9 @@ import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.MapperFeature;
-import com.fasterxml.jackson.databind.jsontype.BasicPolymorphicTypeValidator;
 
 import onegame.modello.Mossa.TipoMossa;
 import onegame.modello.carte.*;
@@ -210,7 +207,7 @@ public class Partita implements PartitaIF {
 		this.navigatore = navigatore;
 	}
 
-	public boolean isDirezione() {
+	public boolean getDirezione() {
 		return direzione;
 	}
 
@@ -460,7 +457,6 @@ public class Partita implements PartitaIF {
 	 * metodo che restituisce la carta in cima al mazzo
 	 * senza contemplare le eventuali conseguenze
 	 */
-	@Override
 	public Carta pescaCarta() {
 		return mazzo.pesca();
 		// return new CartaSpeciale(Colore.NERO,TipoSpeciale.JOLLY);
@@ -470,7 +466,6 @@ public class Partita implements PartitaIF {
 	 *  metodo che controlla se è una carta giocata è compatibile con la carta
 	 *  corrente
 	 */
-	@Override
 	public boolean tentaGiocaCarta(Carta tentativo) {
 		return tentativo.giocabileSu(cartaCorrente);
 	}
@@ -479,7 +474,6 @@ public class Partita implements PartitaIF {
 	 *  metodo che imposta la nuova carta corrente, manda la vecchia carta corrente
 	 *  nella pila scarti e setta a false effettoAttivato
 	 */
-	@Override
 	public void giocaCarta(Carta c) {
 		if (cartaCorrente != null && cartaCorrente != c) {
 			if (cartaCorrente instanceof CartaSpeciale

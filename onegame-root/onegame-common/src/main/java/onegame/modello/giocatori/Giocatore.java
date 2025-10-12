@@ -102,6 +102,7 @@ public class Giocatore {
 		return bot;
 	}
 	
+	@Deprecated
 	public String mostraCarteInMano() {
 		String str="";
 		int i=0;

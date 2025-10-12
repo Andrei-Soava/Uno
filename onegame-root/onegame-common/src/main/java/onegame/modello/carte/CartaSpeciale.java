@@ -4,7 +4,10 @@
 
 package onegame.modello.carte;
 
+import java.util.Objects;
+
 import onegame.modello.Partita;
+import onegame.modello.PartitaIF;
 
 /************************************************************/
 /**
@@ -55,7 +58,7 @@ public class CartaSpeciale extends Carta {
 	 * di eseguiUnTurno), nel caso in cui si abbia una carta che fa saltare un turno  
 	 */
 	@Override
-	public void applicaEffetto(Partita p) {
+	public void applicaEffetto(PartitaIF p) {
 			switch (this.getTipo()) {
 			case PIU_DUE:
 				p.getGiocatoreCorrente().getMano().aggiungiCarte((p.getMazzo().pescaN(2)));
@@ -112,5 +115,19 @@ public class CartaSpeciale extends Carta {
 		}
 		}
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+	    if (this == obj) return true;
+	    if (!(obj instanceof CartaSpeciale)) return false;
+	    CartaSpeciale other = (CartaSpeciale) obj;
+	    return this.colore == other.colore && this.tipo == other.tipo;
+	}
+
+	@Override
+	public int hashCode() {
+	    return Objects.hash(colore, tipo);
+	}
+
 	
 }
