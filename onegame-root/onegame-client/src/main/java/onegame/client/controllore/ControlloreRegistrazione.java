@@ -6,12 +6,11 @@ import onegame.client.net.ClientSocket;
 import onegame.client.net.ConnectionMonitor;
 import onegame.client.vista.VistaRegistrazione;
 import onegame.modello.net.ProtocolloMessaggi.RespAuth;
+import onegame.modello.net.util.JsonHelper;
 
 public class ControlloreRegistrazione {
 	private VistaRegistrazione vr;
 	private ClientSocket cs;
-	
-	private static final ObjectMapper mapper = new ObjectMapper();
 	
 	public ControlloreRegistrazione(VistaRegistrazione vr, ClientSocket cs, ConnectionMonitor cm) {
 		this.vr=vr;
@@ -63,7 +62,7 @@ public class ControlloreRegistrazione {
 				cs.register(username, confermaPassword, args -> {
 					try {
 						String json = args[0].toString();
-						RespAuth auth = mapper.readValue(json, RespAuth.class);
+						RespAuth auth = JsonHelper.fromJson(json, RespAuth.class);
 						System.out.println(auth.token);
 					} catch (Exception e) {
 						e.printStackTrace();

@@ -12,13 +12,12 @@ import onegame.client.net.ClientSocket;
 import onegame.client.net.ConnectionMonitor;
 import onegame.client.vista.VistaAccesso;
 import onegame.modello.net.ProtocolloMessaggi.RespAuth;
+import onegame.modello.net.util.JsonHelper;
 import onegame.modello.net.Utente;
 
 public class ControlloreAccesso {
 	private VistaAccesso va;
 	private ClientSocket cs;
-	
-	private static final ObjectMapper mapper = new ObjectMapper();
 
 	public ControlloreAccesso(VistaAccesso va, ClientSocket cs, ConnectionMonitor cm) {
 		this.va = va;
@@ -64,7 +63,7 @@ public class ControlloreAccesso {
 				cs.login(username, password, args -> {
 					try {
 						String json = args[0].toString();
-						RespAuth auth = mapper.readValue(json, RespAuth.class);
+						RespAuth auth = JsonHelper.fromJson(json, RespAuth.class);
 						
 						Platform.runLater(() -> {
 				            if (auth.success) {

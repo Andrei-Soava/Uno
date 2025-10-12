@@ -21,6 +21,7 @@ import onegame.modello.net.ProtocolloMessaggi.ReqCreaStanza;
 import onegame.modello.net.ProtocolloMessaggi.ReqEntraStanza;
 import onegame.modello.net.ProtocolloMessaggi.RespAuth;
 import onegame.modello.net.Utente;
+import onegame.modello.net.util.JsonHelper;
 
 /**
  * ClientSocket
@@ -32,7 +33,6 @@ import onegame.modello.net.Utente;
 public class ClientSocket {
 
     private final Socket socket;
-    private final ObjectMapper mapper = new ObjectMapper();
     private String token;
     private Utente utente;
 
@@ -53,7 +53,7 @@ public class ClientSocket {
             // se abbiamo token, notifichiamo il server (se implementa un handler "auth:setToken")
             if (token != null) {
                 try {
-                    socket.emit("auth:setToken", mapper.writeValueAsString(token));
+                    socket.emit("auth:setToken", JsonHelper.toJson(token));
                 } catch (Exception e) { /* ignore */ }
             }
         });
@@ -128,20 +128,14 @@ public class ClientSocket {
 
     public void register(String username, String password, Ack callback) throws Exception {        
         ReqAuth req = new ReqAuth(username, password);
-        String json = mapper.writeValueAsString(req);
         System.out.println("[CLIENT] Invio richiesta registrazione di " + username);
-        socket.emit(ProtocolloMessaggi.EVENT_AUTH_REGISTER, json, callback);
+        socket.emit(ProtocolloMessaggi.EVENT_AUTH_REGISTER, JsonHelper.toJson(req), callback);
     }
 
-    public void login(String username, String password, Ack callback) throws Exception  { 
-//    	JSONObject obj = new JSONObject();
-//    	obj.put("username", username);
-//    	obj.put("password", password);
-    	
-    	ReqAuth r = new ReqAuth(username, password);
-        String json = mapper.writeValueAsString(r);
+    public void login(String username, String password, Ack callback) throws Exception  {
+    	ReqAuth req = new ReqAuth(username, password);
         System.out.println("[CLIENT] Invio richiesta login di " + username);
-        socket.emit(ProtocolloMessaggi.EVENT_AUTH_LOGIN, json, callback);
+        socket.emit(ProtocolloMessaggi.EVENT_AUTH_LOGIN, JsonHelper.toJson(req), callback);
     }
 
     /**
@@ -160,9 +154,9 @@ public class ClientSocket {
 	 * @throws Exception
 	 */
     public void creaStanza(String nome, int maxGiocatori, Ack callback) throws Exception {
-        ReqCreaStanza r = new ReqCreaStanza(nome, maxGiocatori);
-        String json = mapper.writeValueAsString(r);
-        socket.emit("stanza:crea", json, callback);
+        ReqCreaStanza req = new ReqCreaStanza(nome, maxGiocatori);
+        System.out.println("[CLIENT] Invio richiesta creazione stanza");
+        socket.emit("stanza:crea", JsonHelper.toJson(req), callback);
     }
 
     /**

@@ -19,6 +19,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import onegame.modello.net.ProtocolloMessaggi;
 import onegame.modello.net.Utente;
+import onegame.modello.net.util.JsonHelper;
 import onegame.server.db.UtenteDb;
 import onegame.modello.net.ProtocolloMessaggi.ReqAuth;
 import onegame.modello.net.ProtocolloMessaggi.RespAuth;
@@ -33,8 +34,6 @@ public class GestoreConnessioni {
     //private final Map<String, String> utentiRegistrati; // username -> passwordHash
     private final SecureRandom random = new SecureRandom();
     private final UtenteDb utenteDb;
-    
-    private final ObjectMapper mapper = new ObjectMapper();
 
     /**
 	 * Costruttore del gestore connessioni
@@ -58,7 +57,7 @@ public class GestoreConnessioni {
 	 */
     public void handleLogin(SocketIOClient client, String str, AckRequest ackRequest) {
         try {
-        	ReqAuth req = mapper.readValue(str, ReqAuth.class);
+        	ReqAuth req = JsonHelper.fromJson(str, ReqAuth.class);
             String username = req.getUsername();
             String password = req.getPassword();
             String storedHash = utenteDb.getPasswordHash(username);
@@ -99,7 +98,7 @@ public class GestoreConnessioni {
 	 */
     public void handleRegister(SocketIOClient client, String str, AckRequest ackRequest) {
         try {
-        	ReqAuth req = mapper.readValue(str, ReqAuth.class);
+        	ReqAuth req = JsonHelper.fromJson(str, ReqAuth.class);
             String username = req.getUsername();
             String password = req.getPassword();
             

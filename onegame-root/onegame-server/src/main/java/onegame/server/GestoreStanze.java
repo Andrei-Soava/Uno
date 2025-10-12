@@ -13,6 +13,7 @@ import onegame.modello.net.ProtocolloMessaggi;
 import onegame.modello.net.ProtocolloMessaggi.ReqAuth;
 import onegame.modello.net.ProtocolloMessaggi.ReqCreaStanza;
 import onegame.modello.net.ProtocolloMessaggi.ReqEntraStanza;
+import onegame.modello.net.util.JsonHelper;
 
 
 public class GestoreStanze {
@@ -23,8 +24,6 @@ public class GestoreStanze {
     private final Map<String, StanzaPartita> stanze = new ConcurrentHashMap<>();
     // Mappa tokenUtente -> idStanza
     private final Map<String, String> mappaTokenAStanza = new ConcurrentHashMap<>();
-    
-    private final ObjectMapper mapper = new ObjectMapper();
 
     public GestoreStanze(SocketIOServer server, GestoreConnessioni gestoreConnessioni) {
         this.server = server;
@@ -39,7 +38,7 @@ public class GestoreStanze {
      */
     public void handleCreaStanza(SocketIOClient client, String str, AckRequest ack) {
         try {
-        	ReqCreaStanza req = mapper.readValue(str, ReqCreaStanza.class);
+        	ReqCreaStanza req = JsonHelper.fromJson(str, ReqCreaStanza.class);
             Object tokenObj = client.get("token");
             if (tokenObj == null) {
             	ack.sendAckData(new ProtocolloMessaggi.RespStanza(null, "FAIL", "Non autenticato"));
@@ -71,7 +70,7 @@ public class GestoreStanze {
 	 */
     public void handleEntraStanza(SocketIOClient client, String str, AckRequest ack) {
         try {
-        	ReqEntraStanza req = mapper.readValue(str, ReqEntraStanza.class);
+        	ReqEntraStanza req = JsonHelper.fromJson(str, ReqEntraStanza.class);
         	Object tokenObj = client.get("token");
             if (tokenObj == null) {
             	ack.sendAckData(new ProtocolloMessaggi.RespStanza(null, "FAIL", "Non autenticato"));
