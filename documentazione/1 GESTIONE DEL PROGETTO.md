@@ -114,4 +114,5 @@ Esempio COMPLETO:
 - 06/10, **AVVISO**, Andrei, (la vista base ed i controllori base (fatta eccezione per il ControlloreMessaggiPartitaOnline, non ancora implementabile e ControllorePersistenza, non ancora aggiornato data l'assenza del database) sono stati completati--> futuri cambiamenti in queste sezioni saranno volti a migliorare parti esistenti (es. migliorare la grafica), collegare le parti alla logica del server (durante la partita o quando viene scomodata la persistenza) e adattare alle esigenza specifiche che sorgeranno);
 - 10/10, Giuseppe, collegamento del database con il server in modo da salvare le informazioni riguardanti il gioco all'interno del db, null;
 - 11/10, (Fabio e Andrei), (unificato il flusso di autenticazione con JSON e JWT. Snellita la comunicazione socket e rimosso codice obsoleto), null;
-- 12/10 12:00, Fabio, Refactoring serializzazione JSON con JsonHelper, null;
+- 12/10 12:00, Fabio, Refactoring serializzazione JSON con JsonHelper, continuazione server;
+- 12/10 23:00, Fabio, (creato PartitaNET, refactoring carte, corrette carte speciali), continuazione interfaccia client/server;

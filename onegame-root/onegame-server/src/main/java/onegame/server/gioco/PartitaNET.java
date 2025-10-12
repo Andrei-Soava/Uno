@@ -69,6 +69,13 @@ public final class PartitaNET implements PartitaIF {
 	public Colore getColoreCorrente() {
 		return coloreCorrente;
 	}
+	
+	
+
+	@Override
+	public int getNumeroGiocatori() {
+		return this.giocatori.size();
+	}
 
 	public void effettuaMossa(MossaDTO mossa, Giocatore giocatore) {
 		try {

@@ -1,6 +1,5 @@
 package onegame.modello;
 
-import onegame.modello.carte.Carta;
 import onegame.modello.giocatori.Giocatore;
 
 /**
@@ -12,4 +11,5 @@ public interface PartitaIF {
 	public abstract void cambiaDirezione();
 	public abstract void prossimoGiocatore();
 	public abstract boolean getDirezione();
+	public abstract int getNumeroGiocatori();
 }

@@ -166,6 +166,13 @@ public class Partita implements PartitaIF {
 		}
 	}
 	
+	
+	
+	@Override
+	public int getNumeroGiocatori() {
+		return this.giocatori.size();
+	}
+
 	/**
 	 * metodo che resituisce una mappa nomeGiocatore-numeroCarte
 	 * per tutti i giocatori TRANNE quello corrente (utile per gui)

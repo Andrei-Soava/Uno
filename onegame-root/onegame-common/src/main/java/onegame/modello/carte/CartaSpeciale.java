@@ -58,19 +58,25 @@ public class CartaSpeciale extends Carta {
 	 * di eseguiUnTurno), nel caso in cui si abbia una carta che fa saltare un turno  
 	 */
 	@Override
-	public void applicaEffetto(PartitaIF p) {
+	public void applicaEffetto(PartitaIF partita) {
 			switch (this.getTipo()) {
 			case PIU_DUE:
-				p.getGiocatoreCorrente().getMano().aggiungiCarte((p.getMazzo().pescaN(2)));
+				partita.prossimoGiocatore();
+				partita.getGiocatoreCorrente().getMano().aggiungiCarte((partita.getMazzo().pescaN(2)));
 				break;
 			case PIU_QUATTRO:
-				p.getGiocatoreCorrente().getMano().aggiungiCarte((p.getMazzo().pescaN(4)));
+				partita.prossimoGiocatore();
+				partita.getGiocatoreCorrente().getMano().aggiungiCarte((partita.getMazzo().pescaN(4)));
 				break;
 			case BLOCCA:
-				p.prossimoGiocatore();
+				partita.prossimoGiocatore();
 				break;
 			case INVERTI:
-				p.cambiaDirezione();
+				if (partita.getNumeroGiocatori() == 2) {
+					partita.prossimoGiocatore();
+				} else {
+					partita.cambiaDirezione();
+				}
 				break;
 			default:
 				break;
