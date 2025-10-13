@@ -8,6 +8,7 @@ import javafx.scene.text.TextAlignment;
 import onegame.client.esecuzione.AppWithMaven;
 import onegame.modello.carte.Carta;
 
+@Deprecated //per ora
 public class VistaSpettatore extends VistaPartita {
     private Label numeroCarteLbl;
 	

@@ -225,6 +225,7 @@ public class ControlloreGioco {
 		ArrayList<Giocatore> giocatori = new ArrayList<>();
 		//String s = vg.inserisciStringa("Scegli un nome per te:");
 		Giocatore giocatore=new Giocatore(cs.getUtente().getUsername());
+		cs.getUtente().setGiocatore(giocatore);
 		giocatori.add(giocatore);
 		String s="";
 		for (int i = 0; i < (numeroGiocatori-1); i++) {
@@ -259,11 +260,23 @@ public class ControlloreGioco {
 		cp.caricaPartita(this, salvataggio);
 	}
 	
+	private void recuperaGiocatoreNonBot() {
+		for(Giocatore g:partita.getGiocatori()) {
+			if(!g.isBot()) {
+				cs.getUtente().setGiocatore(g);
+				return;
+			}
+			
+		}
+	}
+	
 	public void avviaPartita() {
 		vsp.cg=this;
 		vg.cg=this;
 	    cp.salvaPartitaAutomatico(this);
 	    partitaAttiva=true;
+	    recuperaGiocatoreNonBot();
+	    vg.mostraVista();
 	    eseguiTurno();
 	}
 	
@@ -325,21 +338,25 @@ public class ControlloreGioco {
 	    //((VistaGioco)vg).stampaProssimoTurno(partita.vediProssimoGiocatore().getNome());
 	    if (g.isBot()) {
 	    	// primo delay di 5 secondi prima di scegliere la mossa
-	    	vsp.impostaTurnoSpettatore(g.getNome(), g.getMano().getNumCarte(), partita.getCartaCorrente());
-	    	vsp.stampaTurnazione(partita.getTurnazioneGiocatori());
-	    	vsp.mostraVista();
+	    	//vsp.impostaTurnoSpettatore(g.getNome(), g.getMano().getNumCarte(), partita.getCartaCorrente());
+	    	//vsp.stampaTurnazione(partita.getTurnazioneDalGiocatore(g), partita.getDirezione());
+	    	//vsp.mostraVista();
+	    	vg.stampaTurnazione(partita.getTurnazioneDalGiocatore(cs.getUtente().getGiocatore()), partita.getDirezione());
+	    	vg.stampaManoReadOnly(partita.getCartaCorrente(), cs.getUtente().getGiocatore());
 	    	PauseTransition pausa1 = new PauseTransition(Duration.seconds(5));
 			pausa1.setOnFinished(ev1 -> {
 				if (partitaAttiva) {
 					// eseguo la mossa automatica
 					Mossa m = partita.scegliMossaAutomatica();
 					if (m.getTipoMossa() == TipoMossa.PESCA) {
-						vsp.stampaMessaggio(g.getNome() + " ha pescato");
+						vg.stampaMessaggio(g.getNome() + " ha pescato");
 					} else {
-						vsp.stampaMessaggio(g.getNome() + " ha giocato la carta: " + m.getCartaScelta());
+						vg.stampaMessaggio(g.getNome() + " ha giocato la carta: " + m.getCartaScelta());
 					}
-					vsp.impostaTurnoSpettatore(g.getNome(), g.getMano().getNumCarte(), partita.getCartaCorrente());
-					vsp.stampaTurnazione(partita.getTurnazioneGiocatori());
+					//vsp.impostaTurnoSpettatore(g.getNome(), g.getMano().getNumCarte(), partita.getCartaCorrente());
+					//vsp.stampaTurnazione(partita.getTurnazioneDalGiocatore(g), partita.getDirezione());
+					vg.stampaTurnazione(partita.getTurnazioneDalGiocatore(cs.getUtente().getGiocatore()), partita.getDirezione());
+			    	vg.stampaManoReadOnly(partita.getCartaCorrente(), cs.getUtente().getGiocatore());
 					partita.passaTurno();
 					cp.salvaPartitaAutomatico(this);
 					// seconda pausa di 3 secondi dopo aver mostrato il messaggio
@@ -357,6 +374,7 @@ public class ControlloreGioco {
 
 	    } else {
 	    	;//breakpoint
+	    	vg.evidenziaTurnoCorrente();
 	        //turno umano 
 	    	//setup timer e counter -> da mandare alla VistaGioco
 	    	AtomicBoolean mossaEffettuata = new AtomicBoolean(false);
@@ -392,8 +410,8 @@ public class ControlloreGioco {
 	        });
 	        //DA COMMENTARE SE GIOCO SI ROMPE
 	        timerTurno.play();
-	        vg.stampaTurnazione(partita.getTurnazioneGiocatori());
-	        vg.mostraVista();
+	        vg.stampaTurnazione(partita.getTurnazioneDalGiocatore(g), partita.getDirezione());
+	        //vg.mostraVista();
 	    	//inizio turno vero e proprio (posso o pescare, o tentare di giocare una carta)
 	        ((VistaGioco) vg).scegliMossaAsync(partita.getCartaCorrente(), g, m -> {
 	        	;//breakpoint

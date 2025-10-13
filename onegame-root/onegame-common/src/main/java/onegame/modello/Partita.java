@@ -182,10 +182,32 @@ public class Partita implements PartitaIF {
 	 */
 	@JsonIgnore
 	public Map<StringWrapper,Integer> getTurnazioneGiocatori(){
-		List<Giocatore> giocatoriSuccessivi = navigatore.altriInOrdine(direzione);
+		List<Giocatore> giocatoriSuccessivi = navigatore.altriInOrdine();
 		Map<StringWrapper,Integer> turnazione = new LinkedHashMap<>();
 		for(int i=0; i<giocatoriSuccessivi.size(); i++) {
 			turnazione.put(new StringWrapper(giocatoriSuccessivi.get(i).getNome(),i), giocatoriSuccessivi.get(i).getMano().getNumCarte());
+		}
+		return turnazione;
+	}
+	
+	/**
+	 * anoalogo di quello sopra ma dal punto di vista di un giocatore
+	 * @param giocatore
+	 * @return
+	 */
+	@Deprecated
+	@JsonIgnore
+	public Map<StringWrapper,IntegerAndBooleanWrapper> getTurnazioneDalGiocatore(Giocatore giocatore){
+		List<Giocatore> giocatoriSuccessivi = navigatore.altriInSuccessione(giocatore);
+		Map<StringWrapper,IntegerAndBooleanWrapper> turnazione = new LinkedHashMap<>();
+		for(int i=0; i<giocatoriSuccessivi.size(); i++) {
+			boolean flag;
+			if(giocatoriSuccessivi.get(i).equals(getGiocatoreCorrente()))
+				flag=true;
+			else
+				flag=false;	
+			IntegerAndBooleanWrapper info=new IntegerAndBooleanWrapper(giocatoriSuccessivi.get(i).getMano().getNumCarte(),flag);
+			turnazione.put(new StringWrapper(giocatoriSuccessivi.get(i).getNome(),i), info);
 		}
 		return turnazione;
 	}
@@ -204,6 +226,27 @@ public class Partita implements PartitaIF {
 	    
 	    public String getValue() {
 	    	return this.value;
+	    }
+	}
+	
+	/**
+	 * classe ausiliaria per immagazzinare informazioni utili di un giocatore
+	 */
+	public class IntegerAndBooleanWrapper {
+	    private final int numero;
+	    private final boolean flag;
+
+	    private IntegerAndBooleanWrapper(int numero, boolean flag) {
+	        this.numero = numero;
+	        this.flag = flag;
+	    }
+
+	    public int getNumero() {
+	        return numero;
+	    }
+
+	    public boolean isFlag() {
+	        return flag;
 	    }
 	}
 
