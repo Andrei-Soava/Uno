@@ -15,6 +15,7 @@ import onegame.modello.Mossa;
 import onegame.modello.net.ProtocolloMessaggi;
 import onegame.modello.net.ProtocolloMessaggi.ReqAuth;
 import onegame.modello.net.Utente;
+import onegame.server.db.GestoreDatabase;
 
 /**
  * ServerUno - registra eventi di connessione/disconnessione - instrada eventi
@@ -133,6 +134,12 @@ public class ServerUno {
 	}
 
 	public static void main(String[] args) {
+		try {
+			GestoreDatabase.inizializzaDatabase();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
 		String host = "127.0.0.1";
 		int port = 8080;
 		ServerUno srv = new ServerUno(host, port);
