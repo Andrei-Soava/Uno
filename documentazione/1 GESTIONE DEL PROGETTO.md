@@ -117,3 +117,4 @@ Esempio COMPLETO:
 - 12/10 12:00, Fabio, Refactoring serializzazione JSON con JsonHelper, continuazione server;
 - 12/10 23:00, Fabio, (creato PartitaNET, refactoring carte, corrette carte speciali), continuazione interfaccia client/server;
 - 13/10 13:00, Andrei, (adozione regola +4 giocabile solo se non ci sono alternative--> funzione verificaPiuQuattroGiocabile in Partita + integrazione nel flusso di gioco); null;
+- 13/10 19:00, Fabio, stesura regolamento, null;
