@@ -49,7 +49,7 @@ public class GestoreDatabase {
      * @throws SQLException in caso di errori SQL durante l'esecuzione
      * @throws Exception in caso di errori generici
      */
-	public static void inizializzaDatabase() throws Exception {
+	public static void inizializzaDatabase() throws SQLException {
 		Connection conn = getConnection();
 		Statement st = conn.createStatement();
 		

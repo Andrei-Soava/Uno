@@ -69,8 +69,6 @@ public final class PartitaNET implements PartitaIF {
 	public Colore getColoreCorrente() {
 		return coloreCorrente;
 	}
-	
-	
 
 	@Override
 	public int getNumeroGiocatori() {
@@ -78,61 +76,75 @@ public final class PartitaNET implements PartitaIF {
 	}
 
 	public void effettuaMossa(MossaDTO mossa, Giocatore giocatore) {
-		try {
-			if (giocatore != giocatori.get(currentPlayerIndex))
-				return;
-
-			TipoMossa tipo = mossa.tipo;
-
-			switch (tipo) {
-			case GIOCA_CARTA: {
-				Carta cartaGiocata = convertiDTOinCarta(mossa.carta);
-				if (!giocatore.getMano().contieneCarta(cartaGiocata))
-					return;
-				Carta cartaTop = topCard();
-
-				if (!cartaGiocata.giocabileSu(cartaTop))
-					return;
-
-				// Rimuovi dalla mano e metti sulla pila
-				giocatore.getMano().rimuoviCarta(cartaGiocata);
-				pilaScarti.mettiCarta(cartaGiocata);
-
-				// Se è jolly, imposta colore scelto
-				if (cartaGiocata.getColore() == Colore.NERO && mossa.coloreScelto != null) {
-					this.coloreCorrente = mossa.coloreScelto;
-				} else {
-					this.coloreCorrente = cartaGiocata.getColore();
-				}
-
-				// Applica effetto
-				cartaGiocata.applicaEffetto(this);
-
-				// Controlla vittoria
-				checkWinCondition(giocatore);
-
-				// Passa turno
-				passaTurno(1);
-				break;
-			}
-
-			case PESCA: {
-				Carta pescata = mazzo.pesca();
-				giocatore.getMano().aggiungiCarta(pescata);
-				// Regola base: dopo pesca il turno finisce
-				passaTurno(1);
-				break;
-			}
-
-			case PASSA: {
-				// Nessuna azione, solo cambio turno
-				passaTurno(1);
-				break;
-			}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+//		try {
+//			if (!Objects.equals(giocatore, getCurrentPlayer()))
+//				return;
+//
+//			TipoMossa tipo = mossa.tipo;
+//
+//			switch (tipo) {
+//			case GIOCA_CARTA: {
+//				Carta cartaGiocata = convertiDTOinCarta(mossa.carta);
+//				if (!giocatore.getMano().contieneCarta(cartaGiocata))
+//					return;
+//
+//				Carta cartaTop = topCard();
+//
+//				// Regola del +4: può essere giocato solo se non si hanno carte valide
+//				if (cartaGiocata instanceof CartaSpeciale cs
+//						&& cs.getTipo() == CartaSpeciale.TipoSpeciale.PIU_QUATTRO) {
+//					boolean haAlternative = giocatore.getMano().getCarte().stream()
+//							.anyMatch(c -> c.giocabileSu(cartaTop) && !(c instanceof CartaSpeciale
+//									&& ((CartaSpeciale) c).getTipo() == CartaSpeciale.TipoSpeciale.PIU_QUATTRO));
+//					if (haAlternative)
+//						return;
+//				}
+//
+//				if (!cartaGiocata.giocabileSu(cartaTop))
+//					return;
+//
+//				giocatore.getMano().rimuoviCarta(cartaGiocata);
+//				pilaScarti.mettiCarta(cartaGiocata);
+//
+//				if (cartaGiocata.getColore() == Colore.NERO && mossa.coloreScelto != null) {
+//					this.coloreCorrente = mossa.coloreScelto;
+//				} else {
+//					this.coloreCorrente = cartaGiocata.getColore();
+//				}
+//
+//				cartaGiocata.applicaEffetto(this);
+//
+//				// Regola dell'UNO: se ha una sola carta, deve dichiarare UNO
+//				if (giocatore.getMano().getNumCarte() == 1 && !giocatore.haDichiaratoUNO()) {
+//					giocatore.getMano().aggiungiCarte(mazzo.pescaN(2)); // penalità
+//				}
+//
+//				checkWinCondition(giocatore);
+//				passaTurno(1);
+//				break;
+//			}
+//
+//			case PESCA: {
+//				Carta pescata = mazzo.pesca();
+//				giocatore.getMano().aggiungiCarta(pescata);
+//
+//				if (pescata.giocabileSu(topCard())) {
+//					// opzionale: permettere di giocarla subito
+//					// oppure lasciare al client la decisione
+//				} else {
+//					passaTurno(1);
+//				}
+//				break;
+//			}
+//
+//			case PASSA: {
+//				passaTurno(1);
+//				break;
+//			}
+//			}
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
 	}
 
 	private void passaTurno(int step) {

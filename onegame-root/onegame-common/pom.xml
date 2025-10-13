@@ -11,14 +11,7 @@
   <artifactId>onegame-common</artifactId>
   <packaging>jar</packaging>
 
-
   <name>onegame-common</name>
-
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>8</maven.compiler.source>
-    <maven.compiler.target>8</maven.compiler.target>
-  </properties>
 
   <dependencies>
 
@@ -35,5 +28,4 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
-
 </project>
