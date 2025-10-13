@@ -16,6 +16,8 @@ import onegame.client.vista.partita.VistaSpettatore;
 import onegame.modello.Mossa;
 import onegame.modello.Partita;
 import onegame.modello.Mossa.TipoMossa;
+import onegame.modello.carte.CartaSpeciale;
+import onegame.modello.carte.CartaSpeciale.TipoSpeciale;
 import onegame.modello.carte.Colore;
 import onegame.modello.giocatori.Giocatore;
 
@@ -272,6 +274,13 @@ public class ControlloreGioco {
 	    } 
 	    else 
 	    {
+	    	//impedisco che venga giocato un +4 pescato se avevo altre carte giocabili prima di pescare
+	    	if(m.getCartaScelta() instanceof CartaSpeciale && ((CartaSpeciale)m.getCartaScelta()).getTipo()==TipoSpeciale.PIU_QUATTRO) {
+	    		if(!partita.verificaPiuQuattroGiocabile(g)) {
+	    			fineTurno.run();
+	    			return;
+	    		}
+	    	}
 	    	//carta pescata giocabile -> scegliere se tenerla o giocarla
 	    	((VistaGioco)vg).stampaCartaPescataAsync(m.getCartaScelta(), scelta -> {
 	            if (scelta == 1) {
@@ -406,7 +415,14 @@ public class ControlloreGioco {
 	                });
 	            } 
 	            else 
-	            {
+	            {		
+	            		//verifico che +4 effettivamente giocabile
+		            	if(m.getCartaScelta() instanceof CartaSpeciale && ((CartaSpeciale)m.getCartaScelta()).getTipo()==TipoSpeciale.PIU_QUATTRO) {
+		    	    		if(!partita.verificaPiuQuattroGiocabile(g)) {
+		    	    			vg.stampaMessaggio("+4 giocabile solo se non hai altre opzioni!");
+		    	    			return;
+		    	    		}
+		    	    	}
 	                    // Applica la mossa e gestisci eventuale cambio colore
 	                    if (partita.applicaMossa(g, m) != null) {
 	                        vg.stampaMessaggio(g.getNome() + " ha giocato la carta: " + m.getCartaScelta());
@@ -487,7 +503,6 @@ public class ControlloreGioco {
 	        });
 	    }
 	}
-
-
+	
 	//fine
 }

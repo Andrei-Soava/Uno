@@ -116,3 +116,4 @@ Esempio COMPLETO:
 - 11/10, (Fabio e Andrei), (unificato il flusso di autenticazione con JSON e JWT. Snellita la comunicazione socket e rimosso codice obsoleto), null;
 - 12/10 12:00, Fabio, Refactoring serializzazione JSON con JsonHelper, continuazione server;
 - 12/10 23:00, Fabio, (creato PartitaNET, refactoring carte, corrette carte speciali), continuazione interfaccia client/server;
+- 13/10 13:00, Andrei, (adozione regola +4 giocabile solo se non ci sono alternative--> funzione verificaPiuQuattroGiocabile in Partita + integrazione nel flusso di gioco); null;

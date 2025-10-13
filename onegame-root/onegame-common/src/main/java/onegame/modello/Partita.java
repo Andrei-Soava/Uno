@@ -169,6 +169,7 @@ public class Partita implements PartitaIF {
 	
 	
 	@Override
+	@JsonIgnore
 	public int getNumeroGiocatori() {
 		return this.giocatori.size();
 	}
@@ -499,6 +500,11 @@ public class Partita implements PartitaIF {
 		Mossa m;
 		for (Carta c : g.getMano().getCarte()) {
 			if (tentaGiocaCarta(c)) {
+				//impedisco alla mossa automatica di giocare un +4 se ha altro da giocare
+				if(c instanceof CartaSpeciale && ((CartaSpeciale)c).getTipo()==TipoSpeciale.PIU_QUATTRO) {
+					if(!verificaPiuQuattroGiocabile(g))
+						continue;
+				}
 				m = new Mossa(TipoMossa.GIOCA_CARTA, c);
 				if (c.getColore() == Colore.NERO) {
 					c.setColore(Colore.scegliColoreCasuale());
@@ -530,6 +536,33 @@ public class Partita implements PartitaIF {
 			return null;
 		}
 		return scegliMossaAutomatica();
+	}
+	
+	/**
+	 * metodo di verifica su un +4 giocabile o meno
+	 * 
+	 * @param g, giocatore su cui si svolge la verifica
+	 * @return true se il +4 è lecito da giocare, false altrimenti
+	 */
+	public boolean verificaPiuQuattroGiocabile(Giocatore g) {
+		if(!giocatori.contains(g))
+			return false;
+		else {
+			//crea lista temporanea con tutte le carte in mano di un giocatore
+			ArrayList<Carta> carteInMano = new ArrayList<>();
+			carteInMano.addAll(g.getMano().getCarte());
+			//istruzione in cui vengono rimossi tutti i +4 dalla mano di una giocatore per fare controlli
+			carteInMano.removeIf(carta -> 
+			    carta instanceof CartaSpeciale && ((CartaSpeciale)carta).getTipo() == TipoSpeciale.PIU_QUATTRO
+			);
+			//ciclo di verifica possibilità di giocare altre carte oltre ai +4
+			for(Carta carta:carteInMano) {
+				if(carta.giocabileSu(cartaCorrente))
+					return false;
+			}
+			//si arriva qui solo se nessuna delle carte in mano OLTRE ai +4 è giocabile
+			return true;
+		}
 	}
 	// ------------------------------
 	
