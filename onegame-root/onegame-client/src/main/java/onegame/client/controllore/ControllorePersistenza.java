@@ -189,7 +189,7 @@ public class ControllorePersistenza {
 			partita.getMazzo().setPila(partita.getPilaScarti());
 			salvataggioCorrente = salvataggio;
 		} catch (IOException e) {
-			e.getMessage();
+			e.printStackTrace();
 		}
 
 	}

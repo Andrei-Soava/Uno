@@ -1,4 +1,6 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>onegame</groupId>
@@ -6,15 +8,15 @@
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   <artifactId>onegame-client</artifactId>
-  
+
   <dependencies>
-  	<!-- DTO, protocolli JSON e utilità comuni -->
+    <!-- DTO, protocolli JSON e utilità comuni -->
     <dependency>
       <groupId>onegame</groupId>
       <artifactId>onegame-common</artifactId>
       <version>0.0.1-SNAPSHOT</version>
     </dependency>
-    
+
     <!-- JSON DTO e serializzazione -->
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
@@ -27,7 +29,7 @@
       <artifactId>junit</artifactId>
       <scope>test</scope>
     </dependency>
-    
+
     <!-- JavaFX per GUI desktop -->
     <dependency>
       <groupId>org.openjfx</groupId>
@@ -41,7 +43,7 @@
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-fxml</artifactId>
     </dependency>
-    
+
     <!-- Logging lato server -->
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>
@@ -51,19 +53,19 @@
       <groupId>org.apache.logging.log4j</groupId>
       <artifactId>log4j-core</artifactId>
     </dependency>
-    
+
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-simple</artifactId>
     </dependency>
-    
+
     <dependency>
       <groupId>io.socket</groupId>
       <artifactId>socket.io-client</artifactId>
     </dependency>
-      
+
   </dependencies>
-  
+
   <build>
     <plugins>
       <plugin>

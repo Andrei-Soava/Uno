@@ -6,6 +6,8 @@ package onegame.modello;
 
 import java.util.Stack;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import onegame.modello.carte.Carta;
 
 /************************************************************/
@@ -19,7 +21,7 @@ import onegame.modello.carte.Carta;
  * metodi importanti:
  * mettiCarta()--> aggiunge una carta alla pila degli scarti
  */
-class PilaScarti {
+public class PilaScarti {
 	private Stack<Carta> scarti = new Stack<>();
 	
 	public Stack<Carta> getScarti() {
@@ -36,6 +38,11 @@ class PilaScarti {
 
 	public void mettiCarta(Carta c) {
 		scarti.add(c);
+	}
+	
+	@JsonIgnore
+	public Carta getTop() {
+		return scarti.firstElement();
 	}
 	
 	@Override

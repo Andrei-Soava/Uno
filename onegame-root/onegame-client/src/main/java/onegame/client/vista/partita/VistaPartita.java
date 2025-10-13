@@ -1,21 +1,35 @@
 package onegame.client.vista.partita;
 
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Optional;
 
+import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
 import javafx.animation.PauseTransition;
 import javafx.animation.SequentialTransition;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.image.Image;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -25,16 +39,17 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import onegame.client.controllore.offline.ControlloreGioco;
 import onegame.client.esecuzione.AppWithMaven;
 import onegame.client.persistenza_temporanea.ManagerPersistenza;
 import onegame.client.vista.accessori.GestoreGraficaCarta;
+import onegame.modello.Partita.IntegerAndBooleanWrapper;
 import onegame.modello.Partita.StringWrapper;
 import onegame.modello.carte.Carta;
 import onegame.modello.carte.CartaSpeciale;
 import onegame.modello.carte.Colore;
-import onegame.modello.giocatori.Giocatore;
 
 public abstract class VistaPartita {
 	protected Scene scene;
@@ -42,6 +57,8 @@ public abstract class VistaPartita {
 	protected BorderPane root;
 	protected Label turnoCorrenteLbl;
 	protected Label prossimoTurnoLbl;
+	protected ArrayList<Label> giocatoriLbl = new ArrayList<>();
+	protected BorderPane centroPane;
     protected HBox timerBox;
     protected Label logAreaLbl;
     protected StackPane cartaCorrente;
@@ -86,18 +103,95 @@ public abstract class VistaPartita {
     	rightSpacer.setPrefWidth(50);
     	HBox.setHgrow(leftSpacer, Priority.ALWAYS);
     	HBox.setHgrow(rightSpacer, Priority.ALWAYS);
-    	
+    	timerBox=new HBox();
     	//hbox che contiene tutti gli elementi che staranno in alto
-    	HBox contenitoreSuperiore = new HBox(10);
+    	BorderPane contenitoreSuperiore = new BorderPane();
     	contenitoreSuperiore.setPadding(new Insets(10));
-    	contenitoreSuperiore.setAlignment(Pos.CENTER_LEFT);
+    	//contenitoreSuperiore.setAlignment(Pos.CENTER_LEFT);
+    	contenitoreSuperiore.setLeft(abbandonaBtn);
+    	contenitoreSuperiore.setCenter(turnoCorrenteLbl);
+    	BorderPane.setAlignment(turnoCorrenteLbl, Pos.CENTER);
+    	turnoCorrenteLbl.setTranslateX(0);
+    	contenitoreSuperiore.setRight(timerBox);
+    	BorderPane.setAlignment(timerBox, Pos.CENTER_RIGHT);
     	//contenitoreSuperiore.setStyle("-fx-border-color:black;");
-    	contenitoreSuperiore.getChildren().addAll(abbandonaBtn, leftSpacer, turnoCorrenteLbl, rightSpacer);
+    	//contenitoreSuperiore.getChildren().addAll(abbandonaBtn, leftSpacer, turnoCorrenteLbl, rightSpacer, timerBox);
     	//imposto il contenitore superiore in alto
     	root.setTop(contenitoreSuperiore);
     	
-    	//---------------------------------------------------------------------------------
-    	//zona pescaggio (centrale a sinistra)
+    	//---------------------------------------------------------------------------------    	
+    	//center del root
+    	
+    	//gridPane centrale
+        GridPane grid = new GridPane();
+
+        //incoli proporzionali: 5 colonne, 4 righe
+        for (int i = 0; i < 5; i++) {
+            ColumnConstraints col = new ColumnConstraints();
+            col.setPercentWidth(100.0 / 5);
+            grid.getColumnConstraints().add(col);
+        }
+        for (int i = 0; i < 4; i++) {
+            RowConstraints row = new RowConstraints();
+            row.setPercentHeight(100.0 / 4);
+            grid.getRowConstraints().add(row);
+        }
+
+        //riga 1: celle A1–E1--> giocatoriLbl da 0 a 4
+        for (int col = 0; col < 5; col++) {
+            Label p = new Label("Cella "+(0+col));
+            p.getStyleClass().add("contenitore");
+            p.setVisible(false);
+            p.setPadding(new Insets(5));
+            giocatoriLbl.add(p);
+            GridPane.setHalignment(p, HPos.CENTER);
+            GridPane.setValignment(p, VPos.CENTER);
+            GridPane.setMargin(p, new Insets(0, 20, 0, 20));
+            grid.add(p, col, 0);
+        }
+
+        //colonna A (righe 2–4)--> giocatoriLbl da 5 a 7
+        for (int row = 1; row < 4; row++) {
+        	Label p = new Label("Cella "+(4+row));
+        	p.getStyleClass().add("contenitore");
+        	p.setVisible(false);
+        	p.setPadding(new Insets(5));
+        	giocatoriLbl.add(p);
+        	GridPane.setHalignment(p, HPos.CENTER);
+            GridPane.setValignment(p, VPos.CENTER);
+        	GridPane.setMargin(p, new Insets(0, 20, 0, 20));
+            grid.add(p, 0, row);
+        }
+
+        //colonna E (righe 2–4)--> giocatoriLbl da 8 a 10
+        for (int row = 1; row < 4; row++) {
+            Label p = new Label("Cella "+(7+row));
+            p.getStyleClass().add("contenitore");
+            p.setVisible(false);
+            p.setPadding(new Insets(5));
+            giocatoriLbl.add(p);
+            GridPane.setHalignment(p, HPos.CENTER);
+            GridPane.setValignment(p, VPos.CENTER);
+            GridPane.setMargin(p, new Insets(0, 20, 0, 20));
+            grid.add(p, 4, row);
+        }
+
+        //BLOCCO CENTRALE UNICO
+        centroPane = new BorderPane();
+
+        //centro sopra
+        logAreaLbl = new Label(); // manteniamo il nome logArea
+    	logAreaLbl.setStyle("-fx-background-color: rgba(0,0,0,0.8); -fx-text-fill: white; -fx-padding: 10px; -fx-background-radius: 5;");
+    	logAreaLbl.setVisible(false);
+        StackPane topWrapper = new StackPane(logAreaLbl);
+        topWrapper.setPadding(new Insets(10)); // padding interno
+        centroPane.setTop(topWrapper);
+        //centralPane.setTop(logAreaLbl);
+        BorderPane.setAlignment(logAreaLbl, Pos.CENTER); // centrato in alto
+
+        //CENTRO DEL PANE 3x3
+        
+        //centro sinistra
     	VBox sottoContenitoreSinistra = new VBox(10);
     	Region spacerTop = new Region();
     	spacerTop.setPrefHeight(50);
@@ -105,74 +199,36 @@ public abstract class VistaPartita {
     	sottoContenitoreSinistra.setAlignment(Pos.TOP_CENTER);
     	StackPane sp=GestoreGraficaCarta.creaVistaCarta(new CartaSpeciale(Colore.NERO,null));
     	pescaBtn = new Button("Pesca");
-    	sottoContenitoreSinistra.getChildren().addAll(spacerTop, sp, pescaBtn);
-    	
-    	//
-    	//zona carta corrente (centrale al centro)
-    	VBox sottoContenitoreCentrale = new VBox(10);
-    	//sottoContenitoreCentrale.setStyle("-fx-border-color:black;");
-    	sottoContenitoreCentrale.setAlignment(Pos.TOP_CENTER);
-    	logAreaLbl = new Label(); // manteniamo il nome logArea
-    	logAreaLbl.setStyle("-fx-background-color: rgba(0,0,0,0.8); -fx-text-fill: white; -fx-padding: 10px; -fx-background-radius: 5;");
-    	logAreaLbl.setVisible(false);
-    	Region spacer0 = new Region();
-    	spacer0.setPrefHeight(25);
-    	//VBox.setVgrow(spacer0, Priority.ALWAYS);
-    	Label cartaCorrenteLbl = new Label("Carta sul tavolo");
+    	Label mazzoLbl = new Label("Mazzo");
+    	mazzoLbl.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
+    	sottoContenitoreSinistra.getChildren().addAll(mazzoLbl, sp, pescaBtn);
+
+    	//centro destra
+        VBox sottoContenitoreDestra = new VBox(10);
+        Label cartaCorrenteLbl = new Label("Sul tavolo");
     	cartaCorrenteLbl.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
     	BorderPane.setAlignment(cartaCorrenteLbl, Pos.CENTER);
     	cartaCorrente=new StackPane();
-    	sottoContenitoreCentrale.getChildren().addAll(logAreaLbl,spacer0,cartaCorrenteLbl, cartaCorrente);
-    	
-    	//
-    	//zona prossimo turno e futuro pulsante ONE (centrale a destra)
-    	VBox sottoContenitoreDestra = new VBox(10);
-    	sottoContenitoreDestra.setPadding(new Insets(0));
-    	//sottoContenitoreDestra.setStyle("-fx-border-color:black;");
-    	prossimoTurnoLbl=new Label();
-    	prossimoTurnoLbl.setStyle("-fx-font-size: 18px;");
-    	timerBox=new HBox();
-    	Region spacer = new Region();
-    	VBox.setVgrow(spacer, Priority.ALWAYS);
-    	ONEBtn=new Button("ONE!");
+        sottoContenitoreDestra.getChildren().addAll(cartaCorrenteLbl, cartaCorrente);
+
+        //centro UNITO
+        HBox centerBox = new HBox(20, sottoContenitoreSinistra, sottoContenitoreDestra); // spaziatura orizzontale
+        centerBox.setAlignment(Pos.CENTER); // tutto centrato
+        centroPane.setCenter(centerBox);
+
+        //centro sotto
+        ONEBtn=new Button("ONE!");
     	ONEBtn.setVisible(false);
-    	sottoContenitoreDestra.getChildren().addAll(prossimoTurnoLbl,timerBox, spacer, ONEBtn);
+        centroPane.setBottom(ONEBtn);
+        BorderPane.setAlignment(ONEBtn, Pos.CENTER_RIGHT);
+     	BorderPane.setMargin(ONEBtn, new Insets(40, 40, 40, 40));
+     	
+     	
+        grid.add(centroPane, 1, 1, 3, 3); // col=1 (B), row=1 (riga2), span 3x3
+        //grid.setGridLinesVisible(true);
     	
-    	//
-    	//contenitore di tutti i sotto contenitori centrali
-    	GridPane contenitoreCentrale = new GridPane();
-    	//contenitoreCentrale.setStyle("-fx-border-color:black;");
-    	contenitoreCentrale.setPadding(new Insets(10));
-    	contenitoreCentrale.setAlignment(Pos.CENTER);
-    	contenitoreCentrale.add(sottoContenitoreSinistra, 0, 0);
-    	contenitoreCentrale.add(sottoContenitoreCentrale, 1, 0);
-    	contenitoreCentrale.add(sottoContenitoreDestra, 2, 0);
-    	//vincoli su quanto sono larghe le tabelle
-    	ColumnConstraints cc1 = new ColumnConstraints();
-    	cc1.setPercentWidth((150.0/900)*100);
-    	ColumnConstraints cc2 = new ColumnConstraints();
-    	cc2.setPercentWidth((600.0/900)*100);
-    	ColumnConstraints cc3 = new ColumnConstraints();
-    	cc3.setPercentWidth((150.0/900)*100);
-    	contenitoreCentrale.getColumnConstraints().addAll(cc1, cc2, cc3);
-    	
-    	//vincolo di altezza per la riga 0
-    	RowConstraints rc = new RowConstraints();
-    	rc.setVgrow(Priority.ALWAYS);     // fa crescere la riga
-    	rc.setPercentHeight(100);         // occupa il 100% dell'altezza disponibile
-    	contenitoreCentrale.getRowConstraints().add(rc);
-    	//dico ai figli di crescere verticalmente
-    	GridPane.setVgrow(sottoContenitoreSinistra, Priority.ALWAYS);
-    	GridPane.setVgrow(sottoContenitoreCentrale, Priority.ALWAYS);
-    	GridPane.setVgrow(sottoContenitoreDestra, Priority.ALWAYS);
-    	// (opzionale) se i figli sono VBox/HBox/Pane, abilita anche questo:
-    	sottoContenitoreSinistra.setMaxHeight(Double.MAX_VALUE);
-    	sottoContenitoreCentrale.setMaxHeight(Double.MAX_VALUE);
-    	sottoContenitoreDestra.setMaxHeight(Double.MAX_VALUE);
-    	
-    	
-    	//imposto il contenitore centrale al centro
-    	root.setCenter(contenitoreCentrale);
+    	//imposto il grid al centro
+    	root.setCenter(grid);
     }
 	
 	/**
@@ -228,10 +284,65 @@ public abstract class VistaPartita {
     	this.cartaCorrente.getChildren().add(GestoreGraficaCarta.creaVistaCarta(cartaCorrente));
     }
 
+    /**
+     * metodo che fa brillare la turnoCorrenteLbl
+     */
+    public void evidenziaTurnoCorrente() {
+    	Platform.runLater(()->{
+    		makeGlowingPulse(turnoCorrenteLbl);
+    	});
+    }
     public void stampaTurnoCorrente(String giocatore) {
         Platform.runLater(() -> {
+        	turnoCorrenteLbl.setEffect(null);
         	turnoCorrenteLbl.setText("Turno di "+giocatore.toUpperCase());
         });
+    }
+    
+    public static void makeGlowingPulse(Label label) {
+        DropShadow glow = new DropShadow();
+        Color color=Color.RED;
+        glow.setColor(color);
+        glow.setRadius(30);
+        glow.setSpread(0.8);
+        label.setEffect(glow);
+
+        Timeline pulse = new Timeline(
+            new KeyFrame(Duration.ZERO,
+                new KeyValue(glow.radiusProperty(), 10),
+                new KeyValue(glow.colorProperty(), color.deriveColor(1, 1, 1, 0.3))
+            ),
+            new KeyFrame(Duration.seconds(1),
+                new KeyValue(glow.radiusProperty(), 40),
+                new KeyValue(glow.colorProperty(), color.deriveColor(1, 1, 1, 1.0))
+            )
+        );
+
+        pulse.setAutoReverse(true);
+        pulse.setCycleCount(Animation.INDEFINITE);
+        pulse.play();
+    }
+
+    
+    /**
+     * metodo che imposta l'immagine che indica la direzione (orario/antiorario)
+     * @param direzione, true=orario, false=antiorario
+     */
+    private void stampaDirezione(boolean direzione) {
+    	String percorso="/immagini/";
+    	if(direzione)
+    		percorso+="orario.png";
+    	else
+    		percorso+="antiorario.png";	
+    	Image immagineDirezione = new Image(VistaPartita.class.getResourceAsStream(percorso)); // metti il path corretto
+     	BackgroundImage immagineSfondo = new BackgroundImage(
+     	    immagineDirezione,
+     	    BackgroundRepeat.NO_REPEAT,
+     	    BackgroundRepeat.NO_REPEAT,
+     	    BackgroundPosition.CENTER,
+     	    new BackgroundSize(350, 350, false, false, false, false)
+     	);
+     	centroPane.setBackground(new Background(immagineSfondo));
     }
     
     /**
@@ -241,27 +352,476 @@ public abstract class VistaPartita {
      * 
      * @param turnazione mappa<StringWrapper,Integer> con nomeGiocatore-numeroCarte
      */
-    public void stampaTurnazione(Map<StringWrapper,Integer> turnazione) {
+    public void stampaTurnazione(Map<StringWrapper,IntegerAndBooleanWrapper> turnazione, boolean direzione) {
     	Platform.runLater(()->{
-    		String s="TURNAZIONE:\n";
+    		for(Label l:giocatoriLbl)
+    			l.setEffect(null);
+    		stampaDirezione(direzione);
     		int size=turnazione.size();
-    		for(Map.Entry<StringWrapper, Integer> entry : turnazione.entrySet()) {
-    			s += entry.getKey().getValue();
-    			s += "\n("+entry.getValue()+" carte)\n";
-    			size--;
-    			if(size!=0) {
-    				s+="    ↓\n";
-    			}
+    		String campo="";
+    		int i=1;
+    		switch(size) {
+    		case 1:
+    			System.out.println("qui 2");
+    			for(Map.Entry<StringWrapper, IntegerAndBooleanWrapper> entry : turnazione.entrySet()) {
+    				System.out.println("qui 3");
+        			campo += entry.getKey().getValue();
+        			campo += "\n("+entry.getValue().getNumero()+" carte)\n";
+        			giocatoriLbl.get(2).setText(campo);
+        			giocatoriLbl.get(2).setVisible(true);
+        			if(entry.getValue().isFlag())
+        				makeGlowingPulse(giocatoriLbl.get(2));
+        		}
+    			break;
+    			
+    		case 2:
+    			for(Map.Entry<StringWrapper, IntegerAndBooleanWrapper> entry : turnazione.entrySet()) {
+    				campo="";
+    				if(i==1) {
+    					campo += entry.getKey().getValue();
+            			campo += "\n("+entry.getValue().getNumero()+" carte)\n";
+            			giocatoriLbl.get(5).setText(campo);
+            			giocatoriLbl.get(5).setVisible(true);
+            			if(entry.getValue().isFlag())
+            				makeGlowingPulse(giocatoriLbl.get(5));
+    				}
+    				
+    				if(i==2) {
+    					campo += entry.getKey().getValue();
+            			campo += "\n("+entry.getValue().getNumero()+" carte)\n";
+            			giocatoriLbl.get(8).setText(campo);
+            			giocatoriLbl.get(8).setVisible(true);
+            			if(entry.getValue().isFlag())
+            				makeGlowingPulse(giocatoriLbl.get(8));
+    				}
+    				i++;
+        		}
+    			break;
+    		
+    		case 3:
+    			for(Map.Entry<StringWrapper, IntegerAndBooleanWrapper> entry : turnazione.entrySet()) {
+    				campo="";
+    				if(i==1) {
+    					campo += entry.getKey().getValue();
+            			campo += "\n("+entry.getValue().getNumero()+" carte)\n";
+            			giocatoriLbl.get(6).setText(campo);
+            			giocatoriLbl.get(6).setVisible(true);
+            			if(entry.getValue().isFlag())
+            				makeGlowingPulse(giocatoriLbl.get(6));
+    				}
+    				
+    				if(i==2) {
+    					campo += entry.getKey().getValue();
+            			campo += "\n("+entry.getValue().getNumero()+" carte)\n";
+            			giocatoriLbl.get(2).setText(campo);
+            			giocatoriLbl.get(2).setVisible(true);
+            			if(entry.getValue().isFlag())
+            				makeGlowingPulse(giocatoriLbl.get(2));
+    				}
+    				
+    				if(i==3) {
+    					campo += entry.getKey().getValue();
+            			campo += "\n("+entry.getValue().getNumero()+" carte)\n";
+            			giocatoriLbl.get(9).setText(campo);
+            			giocatoriLbl.get(9).setVisible(true);
+            			if(entry.getValue().isFlag())
+            				makeGlowingPulse(giocatoriLbl.get(9));
+    				}
+    				i++;
+        		}
+    			break;
+    		
+    		case 4:
+    			for(Map.Entry<StringWrapper, IntegerAndBooleanWrapper> entry : turnazione.entrySet()) {
+    				campo="";
+    				if(i==1) {
+    					campo += entry.getKey().getValue();
+            			campo += "\n("+entry.getValue().getNumero()+" carte)\n";
+            			giocatoriLbl.get(6).setText(campo);
+            			giocatoriLbl.get(6).setVisible(true);
+            			if(entry.getValue().isFlag())
+            				makeGlowingPulse(giocatoriLbl.get(6));
+    				}
+    				
+    				if(i==2) {
+    					campo += entry.getKey().getValue();
+            			campo += "\n("+entry.getValue().getNumero()+" carte)\n";
+            			giocatoriLbl.get(1).setText(campo);
+            			giocatoriLbl.get(1).setVisible(true);
+            			if(entry.getValue().isFlag())
+            				makeGlowingPulse(giocatoriLbl.get(1));
+    				}
+    				
+    				if(i==3) {
+    					campo += entry.getKey().getValue();
+            			campo += "\n("+entry.getValue().getNumero()+" carte)\n";
+            			giocatoriLbl.get(3).setText(campo);
+            			giocatoriLbl.get(3).setVisible(true);
+            			if(entry.getValue().isFlag())
+            				makeGlowingPulse(giocatoriLbl.get(3));
+    				}
+    				
+    				if(i==4) {
+    					campo += entry.getKey().getValue();
+            			campo += "\n("+entry.getValue().getNumero()+" carte)\n";
+            			giocatoriLbl.get(9).setText(campo);
+            			giocatoriLbl.get(9).setVisible(true);
+            			if(entry.getValue().isFlag())
+            				makeGlowingPulse(giocatoriLbl.get(9));
+    				}
+    				i++;
+        		}
+    			break;
+    		
+    		case 5:
+    			for(Map.Entry<StringWrapper, IntegerAndBooleanWrapper> entry : turnazione.entrySet()) {
+    				campo="";
+    				if(i==1) {
+    					campo += entry.getKey().getValue();
+            			campo += "\n("+entry.getValue().getNumero()+" carte)\n";
+            			giocatoriLbl.get(7).setText(campo);
+            			giocatoriLbl.get(7).setVisible(true);
+            			if(entry.getValue().isFlag())
+            				makeGlowingPulse(giocatoriLbl.get(7));
+    				}
+    				
+    				if(i==2) {
+    					campo += entry.getKey().getValue();
+            			campo += "\n("+entry.getValue().getNumero()+" carte)\n";
+            			giocatoriLbl.get(5).setText(campo);
+            			giocatoriLbl.get(5).setVisible(true);
+            			if(entry.getValue().isFlag())
+            				makeGlowingPulse(giocatoriLbl.get(5));
+    				}
+    				
+    				if(i==3) {
+    					campo += entry.getKey().getValue();
+            			campo += "\n("+entry.getValue().getNumero()+" carte)\n";
+            			giocatoriLbl.get(2).setText(campo);
+            			giocatoriLbl.get(2).setVisible(true);
+            			if(entry.getValue().isFlag())
+            				makeGlowingPulse(giocatoriLbl.get(2));
+    				}
+    				
+    				if(i==4) {
+    					campo += entry.getKey().getValue();
+            			campo += "\n("+entry.getValue().getNumero()+" carte)\n";
+            			giocatoriLbl.get(8).setText(campo);
+            			giocatoriLbl.get(8).setVisible(true);
+            			if(entry.getValue().isFlag())
+            				makeGlowingPulse(giocatoriLbl.get(8));
+    				}
+    				
+    				if(i==5) {
+    					campo += entry.getKey().getValue();
+            			campo += "\n("+entry.getValue().getNumero()+" carte)\n";
+            			giocatoriLbl.get(10).setText(campo);
+            			giocatoriLbl.get(10).setVisible(true);
+            			if(entry.getValue().isFlag())
+            				makeGlowingPulse(giocatoriLbl.get(10));
+    				}
+    				i++;
+        		}
+    			break;
+    		
+    		case 6:
+    			for(Map.Entry<StringWrapper, IntegerAndBooleanWrapper> entry : turnazione.entrySet()) {
+    				campo="";
+    				if(i==1) {
+    					campo += entry.getKey().getValue();
+            			campo += "\n("+entry.getValue().getNumero()+" carte)\n";
+            			giocatoriLbl.get(7).setText(campo);
+            			giocatoriLbl.get(7).setVisible(true);
+            			if(entry.getValue().isFlag())
+            				makeGlowingPulse(giocatoriLbl.get(7));
+    				}
+    				
+    				if(i==2) {
+    					campo += entry.getKey().getValue();
+            			campo += "\n("+entry.getValue().getNumero()+" carte)\n";
+            			giocatoriLbl.get(5).setText(campo);
+            			giocatoriLbl.get(5).setVisible(true);
+            			if(entry.getValue().isFlag())
+            				makeGlowingPulse(giocatoriLbl.get(5));
+    				}
+    				
+    				if(i==3) {
+    					campo += entry.getKey().getValue();
+            			campo += "\n("+entry.getValue().getNumero()+" carte)\n";
+            			giocatoriLbl.get(1).setText(campo);
+            			giocatoriLbl.get(1).setVisible(true);
+            			if(entry.getValue().isFlag())
+            				makeGlowingPulse(giocatoriLbl.get(1));
+    				}
+    				
+    				if(i==4) {
+    					campo += entry.getKey().getValue();
+            			campo += "\n("+entry.getValue().getNumero()+" carte)\n";
+            			giocatoriLbl.get(3).setText(campo);
+            			giocatoriLbl.get(3).setVisible(true);
+            			if(entry.getValue().isFlag())
+            				makeGlowingPulse(giocatoriLbl.get(3));
+    				}
+    				
+    				if(i==5) {
+    					campo += entry.getKey().getValue();
+            			campo += "\n("+entry.getValue().getNumero()+" carte)\n";
+            			giocatoriLbl.get(8).setText(campo);
+            			giocatoriLbl.get(8).setVisible(true);
+            			if(entry.getValue().isFlag())
+            				makeGlowingPulse(giocatoriLbl.get(8));
+    				}
+    				
+    				if(i==6) {
+    					campo += entry.getKey().getValue();
+            			campo += "\n("+entry.getValue().getNumero()+" carte)\n";
+            			giocatoriLbl.get(10).setText(campo);
+            			giocatoriLbl.get(10).setVisible(true);
+            			if(entry.getValue().isFlag())
+            				makeGlowingPulse(giocatoriLbl.get(10));
+    				}
+    				i++;
+        		}
+    			break;
+    		
+    		case 7:
+    			for(Map.Entry<StringWrapper, IntegerAndBooleanWrapper> entry : turnazione.entrySet()) {
+    				campo="";
+    				if(i==1) {
+    					campo += entry.getKey().getValue();
+            			campo += "\n("+entry.getValue().getNumero()+" carte)\n";
+            			giocatoriLbl.get(7).setText(campo);
+            			giocatoriLbl.get(7).setVisible(true);
+            			if(entry.getValue().isFlag())
+            				makeGlowingPulse(giocatoriLbl.get(7));
+    				}
+    				
+    				if(i==2) {
+    					campo += entry.getKey().getValue();
+            			campo += "\n("+entry.getValue().getNumero()+" carte)\n";
+            			giocatoriLbl.get(6).setText(campo);
+            			giocatoriLbl.get(6).setVisible(true);
+            			if(entry.getValue().isFlag())
+            				makeGlowingPulse(giocatoriLbl.get(6));
+    				}
+    				
+    				if(i==3) {
+    					campo += entry.getKey().getValue();
+            			campo += "\n("+entry.getValue().getNumero()+" carte)\n";
+            			giocatoriLbl.get(5).setText(campo);
+            			giocatoriLbl.get(5).setVisible(true);
+            			if(entry.getValue().isFlag())
+            				makeGlowingPulse(giocatoriLbl.get(5));
+    				}
+    				
+    				if(i==4) {
+    					campo += entry.getKey().getValue();
+            			campo += "\n("+entry.getValue().getNumero()+" carte)\n";
+            			giocatoriLbl.get(2).setText(campo);
+            			giocatoriLbl.get(2).setVisible(true);
+            			if(entry.getValue().isFlag())
+            				makeGlowingPulse(giocatoriLbl.get(2));
+    				}
+    				
+    				if(i==5) {
+    					campo += entry.getKey().getValue();
+            			campo += "\n("+entry.getValue().getNumero()+" carte)\n";
+            			giocatoriLbl.get(8).setText(campo);
+            			giocatoriLbl.get(8).setVisible(true);
+            			if(entry.getValue().isFlag())
+            				makeGlowingPulse(giocatoriLbl.get(8));
+    				}
+    				
+    				if(i==6) {
+    					campo += entry.getKey().getValue();
+            			campo += "\n("+entry.getValue().getNumero()+" carte)\n";
+            			giocatoriLbl.get(9).setText(campo);
+            			giocatoriLbl.get(9).setVisible(true);
+            			if(entry.getValue().isFlag())
+            				makeGlowingPulse(giocatoriLbl.get(9));
+    				}
+    				
+    				if(i==7) {
+    					campo += entry.getKey().getValue();
+            			campo += "\n("+entry.getValue().getNumero()+" carte)\n";
+            			giocatoriLbl.get(10).setText(campo);
+            			giocatoriLbl.get(10).setVisible(true);
+            			if(entry.getValue().isFlag())
+            				makeGlowingPulse(giocatoriLbl.get(10));
+    				}
+    				i++;
+        		}
+    			break;
+    		
+    		case 8:
+    			for(Map.Entry<StringWrapper, IntegerAndBooleanWrapper> entry : turnazione.entrySet()) {
+    				campo="";
+    				if(i==1) {
+    					campo += entry.getKey().getValue();
+            			campo += "\n("+entry.getValue().getNumero()+" carte)\n";
+            			giocatoriLbl.get(7).setText(campo);
+            			giocatoriLbl.get(7).setVisible(true);
+            			if(entry.getValue().isFlag())
+            				makeGlowingPulse(giocatoriLbl.get(7));
+    				}
+    				
+    				if(i==2) {
+    					campo += entry.getKey().getValue();
+            			campo += "\n("+entry.getValue().getNumero()+" carte)\n";
+            			giocatoriLbl.get(6).setText(campo);
+            			giocatoriLbl.get(6).setVisible(true);
+            			if(entry.getValue().isFlag())
+            				makeGlowingPulse(giocatoriLbl.get(6));
+    				}
+    				
+    				if(i==3) {
+    					campo += entry.getKey().getValue();
+            			campo += "\n("+entry.getValue().getNumero()+" carte)\n";
+            			giocatoriLbl.get(5).setText(campo);
+            			giocatoriLbl.get(5).setVisible(true);
+            			if(entry.getValue().isFlag())
+            				makeGlowingPulse(giocatoriLbl.get(5));
+    				}
+    				
+    				if(i==4) {
+    					campo += entry.getKey().getValue();
+            			campo += "\n("+entry.getValue().getNumero()+" carte)\n";
+            			giocatoriLbl.get(1).setText(campo);
+            			giocatoriLbl.get(1).setVisible(true);
+            			if(entry.getValue().isFlag())
+            				makeGlowingPulse(giocatoriLbl.get(1));
+    				}
+    				
+    				if(i==5) {
+    					campo += entry.getKey().getValue();
+            			campo += "\n("+entry.getValue().getNumero()+" carte)\n";
+            			giocatoriLbl.get(3).setText(campo);
+            			giocatoriLbl.get(3).setVisible(true);
+            			if(entry.getValue().isFlag())
+            				makeGlowingPulse(giocatoriLbl.get(3));
+    				}
+    				
+    				if(i==6) {
+    					campo += entry.getKey().getValue();
+            			campo += "\n("+entry.getValue().getNumero()+" carte)\n";
+            			giocatoriLbl.get(8).setText(campo);
+            			giocatoriLbl.get(8).setVisible(true);
+            			if(entry.getValue().isFlag())
+            				makeGlowingPulse(giocatoriLbl.get(8));
+    				}
+    				
+    				if(i==7) {
+    					campo += entry.getKey().getValue();
+            			campo += "\n("+entry.getValue().getNumero()+" carte)\n";
+            			giocatoriLbl.get(9).setText(campo);
+            			giocatoriLbl.get(9).setVisible(true);
+            			if(entry.getValue().isFlag())
+            				makeGlowingPulse(giocatoriLbl.get(9));
+    				}
+    				
+    				if(i==8) {
+    					campo += entry.getKey().getValue();
+            			campo += "\n("+entry.getValue().getNumero()+" carte)\n";
+            			giocatoriLbl.get(10).setText(campo);
+            			giocatoriLbl.get(10).setVisible(true);
+            			if(entry.getValue().isFlag())
+            				makeGlowingPulse(giocatoriLbl.get(10));
+    				}
+    				i++;
+        		}
+    			
+    			break;
+    		
+    		case 9:
+    			for(Map.Entry<StringWrapper, IntegerAndBooleanWrapper> entry : turnazione.entrySet()) {
+    				campo="";
+    				if(i==1) {
+    					campo += entry.getKey().getValue();
+    					campo += "\n("+entry.getValue().getNumero()+" carte)\n";
+            			giocatoriLbl.get(7).setText(campo);
+            			giocatoriLbl.get(7).setVisible(true);
+            			if(entry.getValue().isFlag())
+            				makeGlowingPulse(giocatoriLbl.get(7));
+    				}
+    				
+    				if(i==2) {
+    					campo += entry.getKey().getValue();
+    					campo += "\n("+entry.getValue().getNumero()+" carte)\n";
+            			giocatoriLbl.get(6).setText(campo);
+            			giocatoriLbl.get(6).setVisible(true);
+            			if(entry.getValue().isFlag())
+            				makeGlowingPulse(giocatoriLbl.get(6));
+    				}
+    				
+    				if(i==3) {
+    					campo += entry.getKey().getValue();
+            			campo += "\n("+entry.getValue().getNumero()+" carte)\n";
+            			giocatoriLbl.get(5).setText(campo);
+            			giocatoriLbl.get(5).setVisible(true);
+            			if(entry.getValue().isFlag())
+            				makeGlowingPulse(giocatoriLbl.get(5));
+    				}
+    				
+    				if(i==4) {
+    					campo += entry.getKey().getValue();
+            			campo += "\n("+entry.getValue().getNumero()+" carte)\n";
+            			giocatoriLbl.get(1).setText(campo);
+            			giocatoriLbl.get(1).setVisible(true);
+            			if(entry.getValue().isFlag())
+            				makeGlowingPulse(giocatoriLbl.get(1));
+    				}
+    				
+    				if(i==5) {
+    					campo += entry.getKey().getValue();
+            			campo += "\n("+entry.getValue().getNumero()+" carte)\n";
+            			giocatoriLbl.get(2).setText(campo);
+            			giocatoriLbl.get(2).setVisible(true);
+            			if(entry.getValue().isFlag())
+            				makeGlowingPulse(giocatoriLbl.get(2));
+    				}
+    				
+    				if(i==6) {
+    					campo += entry.getKey().getValue();
+            			campo += "\n("+entry.getValue().getNumero()+" carte)\n";
+            			giocatoriLbl.get(3).setText(campo);
+            			giocatoriLbl.get(3).setVisible(true);
+            			if(entry.getValue().isFlag())
+            				makeGlowingPulse(giocatoriLbl.get(3));
+    				}
+    				
+    				if(i==7) {
+    					campo += entry.getKey().getValue();
+            			campo += "\n("+entry.getValue().getNumero()+" carte)\n";
+            			giocatoriLbl.get(8).setText(campo);
+            			giocatoriLbl.get(8).setVisible(true);
+            			if(entry.getValue().isFlag())
+            				makeGlowingPulse(giocatoriLbl.get(8));
+    				}
+    				
+    				if(i==8) {
+    					campo += entry.getKey().getValue();
+            			campo += "\n("+entry.getValue().getNumero()+" carte)\n";
+            			giocatoriLbl.get(9).setText(campo);
+            			giocatoriLbl.get(9).setVisible(true);
+            			if(entry.getValue().isFlag())
+            				makeGlowingPulse(giocatoriLbl.get(9));
+    				}
+    				
+    				if(i==9) {
+    					campo += entry.getKey().getValue();
+            			campo += "\n("+entry.getValue().getNumero()+" carte)\n";
+            			giocatoriLbl.get(10).setText(campo);
+            			giocatoriLbl.get(10).setVisible(true);
+            			if(entry.getValue().isFlag())
+            				makeGlowingPulse(giocatoriLbl.get(10));
+    				}
+    				i++;
+        		}
+    			break;
+    		
     		}
-    		prossimoTurnoLbl.setText(s);
     	});
     }
-    
-//    public void stampaProssimoTurno(String giocatore) {
-//    	Platform.runLater(() -> {
-//        	prossimoTurnoLbl.setText("Prossimo: \n"+giocatore.toUpperCase());
-//        });
-//    }
     
     /**
      * metodo che imposta una label con un timer (da far partire dentro il controllore)

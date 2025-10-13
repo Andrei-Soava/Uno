@@ -15,23 +15,17 @@ import onegame.modello.PartitaIF;
  * Usabile sia per utenti registrati sia per anonimi.
  */
 public class Utente {
-    private String idGiocatore;
     private String username;
     private boolean anonimo;
-    private String tokenSessione;
     private boolean connesso;
     private long ultimoHeartbeat;
-    private Statistica statistica;
     private Giocatore giocatore;
 
     public Utente(boolean anonimo) {
-        this.idGiocatore = UUID.randomUUID().toString();
         this.username = "anonimo";
         this.anonimo = anonimo;
-        this.tokenSessione = UUID.randomUUID().toString();
         this.connesso = true;
         this.ultimoHeartbeat = Instant.now().toEpochMilli();
-        this.statistica = new Statistica();
     }
 
     public Utente(String username, boolean anonimo) {
@@ -40,15 +34,6 @@ public class Utente {
             this.username = username;
             this.anonimo = username.startsWith("anonimo-");
         }
-    }
-
-    @JsonProperty("idGiocatore")
-    public String getIdGiocatore() {
-        return idGiocatore;
-    }
-
-    public void setIdGiocatore(String idGiocatore) {
-        this.idGiocatore = idGiocatore;
     }
 
     @JsonProperty("username")
@@ -69,14 +54,6 @@ public class Utente {
         this.anonimo = anonimo;
     }
 
-    public String getTokenSessione() {
-        return tokenSessione;
-    }
-
-    public void setTokenSessione(String tokenSessione) {
-        this.tokenSessione = tokenSessione;
-    }
-
     public boolean isConnesso() {
         return connesso;
     }
@@ -93,14 +70,6 @@ public class Utente {
 
     public void setUltimoHeartbeat(long ultimoHeartbeat) {
         this.ultimoHeartbeat = ultimoHeartbeat;
-    }
-
-    public Statistica getStatistica() {
-        return statistica;
-    }
-
-    public void setStatistica(Statistica statistica) {
-        this.statistica = statistica;
     }
     
     @JsonIgnore
@@ -119,6 +88,6 @@ public class Utente {
 
     @Override
     public String toString() {
-        return "Giocatore[id=" + idGiocatore + ", username=" + username + ", anonimo=" + anonimo + "]";
+        return "Giocatore[username=" + username + ", anonimo=" + anonimo + "]";
     }
 }

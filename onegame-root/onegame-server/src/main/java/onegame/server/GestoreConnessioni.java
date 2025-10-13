@@ -5,20 +5,24 @@ import java.security.MessageDigest;
 import java.security.SecureRandom;
 import java.time.Instant;
 import java.util.Base64;
+import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
 import com.corundumstudio.socketio.AckRequest;
 import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.SocketIOServer;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import onegame.modello.net.ProtocolloMessaggi;
 import onegame.modello.net.Utente;
+import onegame.modello.net.util.JsonHelper;
 import onegame.server.db.UtenteDb;
 import onegame.modello.net.ProtocolloMessaggi.ReqAuth;
-import onegame.modello.net.ProtocolloMessaggi.RespAuthFail;
-import onegame.modello.net.ProtocolloMessaggi.RespAuthOk;
+import onegame.modello.net.ProtocolloMessaggi.RespAuth;
 
 /**
  * Gestore delle connessioni e dell'autenticazione degli utenti
@@ -51,54 +55,39 @@ public class GestoreConnessioni {
 	 * @param client Il client che effettua la richiesta
 	 * @param req La richiesta di autenticazione (username e password)
 	 */
-    public void handleLogin(SocketIOClient client, ProtocolloMessaggi.ReqAuth req, AckRequest ackRequest) {
+    public void handleLogin(SocketIOClient client, String str, AckRequest ackRequest) {
         try {
+        	ReqAuth req = JsonHelper.fromJson(str, ReqAuth.class);
             String username = req.getUsername();
             String password = req.getPassword();
-            
             String storedHash = utenteDb.getPasswordHash(username);
             
             if(storedHash == null) {
-            	if(ackRequest != null && ackRequest.isAckRequested()) {
-            		ackRequest.sendAckData("Utente non trovato");
-            	}else {
-            		client.sendEvent(ProtocolloMessaggi.EVENT_AUTH_FAIL, "Utente non trovato");
-            	}
+        		ackRequest.sendAckData(new RespAuth(false, null, null, "Utente non trovato"));
             	return;
             }
             
             if(!verificaPassword(password, storedHash)) {
-            	if(ackRequest != null && ackRequest.isAckRequested()) {
-            		ackRequest.sendAckData("Password errata");
-            	}else {
-            		client.sendEvent(ProtocolloMessaggi.EVENT_AUTH_FAIL, "Password errata");
-            	}
+        		ackRequest.sendAckData(new RespAuth(false, null, null, "Password non valida"));
             	return;
             }
             
-            long id = utenteDb.getIdByUsername(username);
             Utente utente = new Utente(username, false);
-            utente.setTokenSessione(UUID.randomUUID().toString());
+            String token = JWT.create()
+            	    .withClaim("username", username)
+            	    .withExpiresAt(new Date(System.currentTimeMillis() + 36000_000))
+            	    .sign(Algorithm.HMAC256("u7$T9z!k@!#Lqa^mT2&b10pW"));
             utente.setConnesso(true);
             
-            sessioni.put(utente.getTokenSessione(), utente);
-            client.set("token", utente.getTokenSessione());
+            sessioni.put(token, utente);
+            client.set("token", token);
             
-            if (ackRequest != null && ackRequest.isAckRequested()) {
-                ackRequest.sendAckData("");
-            } else {
-                client.sendEvent(ProtocolloMessaggi.EVENT_AUTH_OK, "Login riuscito");
-            }
-        	
+            ackRequest.sendAckData(new RespAuth(true, null, token, "Login completato"));
         	
             System.out.println("[Server] Utente loggato: " + username);
         } catch (Exception e) {
             e.printStackTrace();
-            if (ackRequest != null && ackRequest.isAckRequested()) {
-                ackRequest.sendAckData("Errore nel database"); 
-            } else {
-                client.sendEvent(ProtocolloMessaggi.EVENT_AUTH_FAIL, "Errore nel database");
-            }
+            ackRequest.sendAckData(new RespAuth(false, null, null, "Errore"));
         }
     }
 
@@ -107,36 +96,35 @@ public class GestoreConnessioni {
 	 * @param client Il client che effettua la richiesta
 	 * @param req La richiesta di autenticazione (username e password)
 	 */
-    public void handleRegister(SocketIOClient client, ProtocolloMessaggi.ReqAuth req, AckRequest ackRequest) {
+    public void handleRegister(SocketIOClient client, String str, AckRequest ackRequest) {
         try {
+        	ReqAuth req = JsonHelper.fromJson(str, ReqAuth.class);
             String username = req.getUsername();
             String password = req.getPassword();
             
             if(utenteDb.esisteUtente(username)) {
-            	if(ackRequest != null && ackRequest.isAckRequested()) {
-            		ackRequest.sendAckData("Username già esistente");
-            	}else {
-            		client.sendEvent(ProtocolloMessaggi.EVENT_AUTH_FAIL, "Username già esistente");
-            	}
+            	ackRequest.sendAckData(new RespAuth(false, null, null, "Utente già esistente"));
             	System.out.println("[Server] Registrazione fallita - utente esistente: " + username);
             	return;
             }
             String passwordHash = hashPassword(password);
             utenteDb.registraUtente(username, passwordHash);
             
-            if (ackRequest != null && ackRequest.isAckRequested()) {
-                ackRequest.sendAckData(""); 
-            } else {
-                client.sendEvent(ProtocolloMessaggi.EVENT_AUTH_OK, "Registrazione completata");
-            }
+            Utente utente = new Utente(username, false);
+            String token = JWT.create()
+            	    .withClaim("username", username)
+            	    .withExpiresAt(new Date(System.currentTimeMillis() + 36000_000))
+            	    .sign(Algorithm.HMAC256("u7$T9z!k@!#Lqa^mT2&b10pW"));
+            utente.setConnesso(true);
+            
+            sessioni.put(token, utente);
+            client.set("token", token);
+            
+            ackRequest.sendAckData(new RespAuth(true, null, token, "Registrazione completata"));
             System.out.println("[Server] Nuovo utente registrato: " + username);
         } catch (Exception e) {
             e.printStackTrace();
-            if (ackRequest != null && ackRequest.isAckRequested()) {
-                ackRequest.sendAckData("Errore nel database");
-            } else {
-                client.sendEvent(ProtocolloMessaggi.EVENT_AUTH_FAIL, "Errore nel database");
-            }
+            ackRequest.sendAckData(new RespAuth(false, null, null, "Errore"));
         }
     }
 
@@ -144,12 +132,18 @@ public class GestoreConnessioni {
 	 * Gestisce la richiesta di accesso anonimo
 	 * @param client Il client che effettua la richiesta
 	 */
-    public void handleAnonimo(SocketIOClient client) {
-        Utente anonimo = new Utente(true);
-        sessioni.put(anonimo.getTokenSessione(), anonimo);
-        client.set("token",anonimo.getTokenSessione());
-        client.sendEvent(ProtocolloMessaggi.EVENT_AUTH_OK, "Accesso anonimo riuscito");
-        System.out.println("[Serrver] Utente anonimo connesso: " + anonimo.getIdGiocatore());
+    public void handleAnonimo(SocketIOClient client, String str, AckRequest ackRequest) {
+    	try {
+    		Utente utenteAnonimo = new Utente(true);
+            String token = UUID.randomUUID().toString();
+            
+            sessioni.put(token, utenteAnonimo);
+            client.set("token", token);
+            ackRequest.sendAckData(new RespAuth(true, null, token, "Accesso anonimo riuscito"));
+            System.out.println("[Server] Utente anonimo connesso: " + token);
+    	} catch (Exception e) {
+			e.printStackTrace();
+		}
     }
 
     /**
@@ -168,11 +162,11 @@ public class GestoreConnessioni {
         }
     }
 
-    public void handleRichiestaPartiteNonConcluse(SocketIOClient client) {
-        ProtocolloMessaggi.RespStanza resp = new ProtocolloMessaggi.RespStanza("", "NESSUNA",
-                "Funzionalità partite non concluse non ancora implementata");
-        client.sendEvent(ProtocolloMessaggi.EVENT_STANZA_OK, resp);
-    }
+//    public void handleRichiestaPartiteNonConcluse(SocketIOClient client) {
+//        ProtocolloMessaggi.RespStanza resp = new ProtocolloMessaggi.RespStanza("", "NESSUNA",
+//                "Funzionalità partite non concluse non ancora implementata");
+//        client.sendEvent(ProtocolloMessaggi.EVENT_STANZA_OK, resp);
+//    }
 
     /** Restituisce l'utente associato al token di sessione
      * @param token Il token di sessione

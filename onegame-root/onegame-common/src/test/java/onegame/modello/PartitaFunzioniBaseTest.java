@@ -52,9 +52,9 @@ public class PartitaFunzioniBaseTest {
 	
 	@Test //test1.11
 	public void testVerificaDirezione() {
-		assertTrue("Non è senso orario", partita.isDirezione());
+		assertTrue("Non è senso orario", partita.getDirezione());
 		partita.cambiaDirezione();
-		assertFalse("Non è senso antiorario", partita.isDirezione());
+		assertFalse("Non è senso antiorario", partita.getDirezione());
 	}
 	
 	@Test //test1.12

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>onegame</groupId>
@@ -7,9 +9,9 @@
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   <artifactId>onegame-server</artifactId>
-  
+
   <dependencies>
-	<!-- DTO, protocolli JSON e utilità comuni -->
+    <!-- DTO, protocolli JSON e utilità comuni -->
     <dependency>
       <groupId>onegame</groupId>
       <artifactId>onegame-common</artifactId>
@@ -38,89 +40,88 @@
       <artifactId>junit</artifactId>
       <scope>test</scope>
     </dependency>
-    
+
     <dependency>
-        <groupId>com.fasterxml.jackson.core</groupId>
-        <artifactId>jackson-core</artifactId>
-      </dependency>
-      <dependency>
-        <groupId>com.fasterxml.jackson.core</groupId>
-        <artifactId>jackson-databind</artifactId>
-      </dependency>
-      <dependency>
-        <groupId>com.fasterxml.jackson.core</groupId>
-        <artifactId>jackson-annotations</artifactId>
-      </dependency>
-    
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-core</artifactId>
+    </dependency>
     <dependency>
-  	  <groupId>com.h2database</groupId>
-  	  <artifactId>h2</artifactId>
-	</dependency>
-	
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-annotations</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
+    </dependency>
+
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-simple</artifactId>
     </dependency>
+
     <dependency>
-    	<groupId>onegame</groupId>
-    	<artifactId>onegame-client</artifactId>
-    	<version>0.0.1-SNAPSHOT</version>
+      <groupId>com.auth0</groupId>
+      <artifactId>java-jwt</artifactId>
     </dependency>
   </dependencies>
-  
-<build>
-  <plugins>
 
-    <!-- Plugin per eseguire direttamente la classe main -->
-    <plugin>
-      <groupId>org.codehaus.mojo</groupId>
-      <artifactId>exec-maven-plugin</artifactId>
-      <version>3.5.1</version>
-      <configuration>
-        <mainClass>onegame.server.ServerUno</mainClass>
-      </configuration>
-    </plugin>
+  <build>
+    <plugins>
 
-    <!-- Plugin per generare un JAR eseguibile con manifest -->
-    <plugin>
-      <groupId>org.apache.maven.plugins</groupId>
-      <artifactId>maven-jar-plugin</artifactId>
-      <version>3.2.2</version>
-      <configuration>
-        <archive>
-          <manifest>
-            <mainClass>onegame.server.ServerUno</mainClass>
-          </manifest>
-        </archive>
-      </configuration>
-    </plugin>
+      <!-- Plugin per eseguire direttamente la classe main -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>3.5.1</version>
+        <configuration>
+          <mainClass>onegame.server.ServerUno</mainClass>
+        </configuration>
+      </plugin>
 
-    <!-- Plugin per creare un fat jar con tutte le dipendenze -->
-    <plugin>
-      <groupId>org.apache.maven.plugins</groupId>
-      <artifactId>maven-shade-plugin</artifactId>
-      <version>3.4.1</version>
-      <executions>
-        <execution>
-          <phase>package</phase>
-          <goals>
-            <goal>shade</goal>
-          </goals>
-          <configuration>
-            <transformers>
-              <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                <mainClass>onegame.server.ServerUno</mainClass>
-              </transformer>
-            </transformers>
-          </configuration>
-        </execution>
-      </executions>
-    </plugin>
+      <!-- Plugin per generare un JAR eseguibile con manifest -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>3.2.2</version>
+        <configuration>
+          <archive>
+            <manifest>
+              <mainClass>onegame.server.ServerUno</mainClass>
+            </manifest>
+          </archive>
+        </configuration>
+      </plugin>
 
-  </plugins>
-</build>
+      <!-- Plugin per creare un fat jar con tutte le dipendenze -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>3.4.1</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <transformers>
+                <transformer
+                  implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                  <mainClass>onegame.server.ServerUno</mainClass>
+                </transformer>
+              </transformers>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
 
-
+    </plugins>
+  </build>
 
 
 </project>

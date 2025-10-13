@@ -31,6 +31,7 @@ package onegame.modello.carte;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import onegame.modello.Partita;
+import onegame.modello.PartitaIF;
 import onegame.modello.carte.CartaSpeciale.TipoSpeciale;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
@@ -109,7 +110,7 @@ public abstract class Carta implements Comparable<Carta> {
 	 * 
 	 * @param p la partita su cui applicare l'effetto
 	 */
-	public abstract void applicaEffetto(Partita p);
+	public abstract void applicaEffetto(PartitaIF p);
 
 	/**
 	 * Determina se la carta può essere giocata sopra la carta specificata.

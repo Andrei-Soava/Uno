@@ -226,9 +226,9 @@ public class VistaTutorial {
 
         Label descrizioneLbl = new Label("+2 → il giocatore successivo pesca due carte e salta il turno;\n"
         		+ "Inverti → cambia il senso di gioco;\n"
-        		+ "Salta → il giocatore successivo perde il turno;\n"
-        		+ "Jolly → fa scegliere il colore e fa perdere il turno al giocatore successivo;\n"
-        		+ "+4 → il giocatore successivo pesca quattro carte e salta il turno, ed inoltre chi gioca la carta sceglie il colore sul tavolo.");
+        		+ "Salta → il giocatore successivo salta il turno;\n"
+        		+ "Jolly → scegli il colore e fa perdere il turno al giocatore successivo;\n"
+        		+ "+4 → (utilizzabile solo se non si hanno altre opzioni) il giocatore successivo pesca quattro carte e salta il turno, puoi anche scegliere il colore (ﾉ◕ヮ◕)ﾉ*:･ﾟ✧");
         descrizioneLbl.setWrapText(true);
         descrizioneLbl.getStyleClass().add("grassetto");
         StackPane piu_due=GestoreGraficaCarta.creaVistaCarta(new CartaSpeciale(Colore.ROSSO,TipoSpeciale.PIU_DUE));

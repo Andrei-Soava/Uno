@@ -51,7 +51,7 @@ public class VistaHome {
 		giocaOfflineBtn.setPrefWidth(200);
 		giocaOfflineBtn.setOnAction(e -> app.mostraVistaMenuOffline());
 
-		Button tutorialBtn = new Button("Mostra tutorial");
+		Button tutorialBtn = new Button("Regolamento");
 		tutorialBtn.setPrefWidth(200);
 		tutorialBtn.setOnAction(e->app.mostraVistaTutorial());
 		

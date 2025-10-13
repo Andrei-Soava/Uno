@@ -267,6 +267,8 @@ public class VistaGioco extends VistaPartita {
      */
     public void scegliMossaAsync(Carta cartaCorrente, Giocatore g, Consumer<Mossa> callback) {
     	Platform.runLater(() -> {
+    		pescaBtn.setVisible(true);
+    		timerBox.setVisible(true);
     		stampaCartaCorrente(cartaCorrente);
             mano.getChildren().clear();
             for (Carta c : g.getMano().getCarte()) {
@@ -302,6 +304,27 @@ public class VistaGioco extends VistaPartita {
     	
     	pescaBtn.setOnAction(e -> {
     		callback.accept(new Mossa(TipoMossa.PESCA));
+        });
+    }
+    
+    public void stampaManoReadOnly(Carta cartaCorrente, Giocatore g) {
+    	Platform.runLater(() -> {
+    		pescaBtn.setVisible(false);
+    		timerBox.setVisible(false);
+    		stampaCartaCorrente(cartaCorrente);
+            mano.getChildren().clear();
+            for (Carta c : g.getMano().getCarte()) {
+            	StackPane carta=GestoreGraficaCarta.creaVistaCarta(c);
+                carta.setStyle(
+                		"-fx-cursor: hand;"+
+                		" -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 8, 0, 0, 2);"
+                		);
+                
+                //collega overlay su hover
+                GestoreHoverCarta.bindOverlay(carta, overlay, contenitoreManoPane, /*liftPx*/ 18);
+                
+                mano.getChildren().add(carta);
+            }
         });
     }
 

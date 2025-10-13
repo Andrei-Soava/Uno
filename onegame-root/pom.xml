@@ -1,15 +1,17 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>onegame</groupId>
   <artifactId>onegame-root</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>pom</packaging>
   <modules>
-  	<module>onegame-common</module>
-  	<module>onegame-server</module>
-  	<module>onegame-client</module>
+    <module>onegame-common</module>
+    <module>onegame-server</module>
+    <module>onegame-client</module>
   </modules>
-  
+
   <properties>
     <jackson.version>2.17.0</jackson.version>
     <log4j.version>2.23.1</log4j.version>
@@ -19,6 +21,8 @@
     <h2.version>2.1.214</h2.version>
     <slf4j.version>1.7.36</slf4j.version>
     <socketio.client.version>1.0.0</socketio.client.version>
+    <jwt.version>4.4.0</jwt.version>
+
   </properties>
 
   <dependencyManagement>
@@ -39,7 +43,7 @@
         <artifactId>jackson-annotations</artifactId>
         <version>${jackson.version}</version>
       </dependency>
-      
+
       <dependency>
         <groupId>org.apache.logging.log4j</groupId>
         <artifactId>log4j-api</artifactId>
@@ -82,15 +86,21 @@
         <scope>test</scope>
       </dependency>
       <dependency>
-  		<groupId>com.h2database</groupId>
-  		<artifactId>h2</artifactId>
-  		<version>${h2.version}</version>
-	  </dependency>
-	  <dependency>
-	    <groupId>org.slf4j</groupId>
-	    <artifactId>slf4j-simple</artifactId>
-	    <version>${slf4j.version}</version>
-	  </dependency>
+        <groupId>com.h2database</groupId>
+        <artifactId>h2</artifactId>
+        <version>${h2.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-simple</artifactId>
+        <version>${slf4j.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.auth0</groupId>
+        <artifactId>java-jwt</artifactId>
+        <version>${jwt.version}</version>
+      </dependency>
+
     </dependencies>
   </dependencyManagement>
 
@@ -114,7 +124,8 @@
           <artifactId>maven-project-info-reports-plugin</artifactId>
           <version>3.6.1</version>
         </plugin>
-        <!-- see http://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_jar_packaging -->
+        <!-- see
+        http://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_jar_packaging -->
         <plugin>
           <artifactId>maven-resources-plugin</artifactId>
           <version>3.3.1</version>
@@ -139,7 +150,7 @@
           <artifactId>maven-deploy-plugin</artifactId>
           <version>3.1.2</version>
         </plugin>
-      </plugins>      
+      </plugins>
     </pluginManagement>
   </build>
 </project>

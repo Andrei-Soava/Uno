@@ -12,12 +12,9 @@ import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.MapperFeature;
-import com.fasterxml.jackson.databind.jsontype.BasicPolymorphicTypeValidator;
 
 import onegame.modello.Mossa.TipoMossa;
 import onegame.modello.carte.*;
@@ -169,6 +166,14 @@ public class Partita implements PartitaIF {
 		}
 	}
 	
+	
+	
+	@Override
+	@JsonIgnore
+	public int getNumeroGiocatori() {
+		return this.giocatori.size();
+	}
+
 	/**
 	 * metodo che resituisce una mappa nomeGiocatore-numeroCarte
 	 * per tutti i giocatori TRANNE quello corrente (utile per gui)
@@ -177,10 +182,32 @@ public class Partita implements PartitaIF {
 	 */
 	@JsonIgnore
 	public Map<StringWrapper,Integer> getTurnazioneGiocatori(){
-		List<Giocatore> giocatoriSuccessivi = navigatore.altriInOrdine(direzione);
+		List<Giocatore> giocatoriSuccessivi = navigatore.altriInOrdine();
 		Map<StringWrapper,Integer> turnazione = new LinkedHashMap<>();
 		for(int i=0; i<giocatoriSuccessivi.size(); i++) {
 			turnazione.put(new StringWrapper(giocatoriSuccessivi.get(i).getNome(),i), giocatoriSuccessivi.get(i).getMano().getNumCarte());
+		}
+		return turnazione;
+	}
+	
+	/**
+	 * anoalogo di quello sopra ma dal punto di vista di un giocatore
+	 * @param giocatore
+	 * @return
+	 */
+	@Deprecated
+	@JsonIgnore
+	public Map<StringWrapper,IntegerAndBooleanWrapper> getTurnazioneDalGiocatore(Giocatore giocatore){
+		List<Giocatore> giocatoriSuccessivi = navigatore.altriInSuccessione(giocatore);
+		Map<StringWrapper,IntegerAndBooleanWrapper> turnazione = new LinkedHashMap<>();
+		for(int i=0; i<giocatoriSuccessivi.size(); i++) {
+			boolean flag;
+			if(giocatoriSuccessivi.get(i).equals(getGiocatoreCorrente()))
+				flag=true;
+			else
+				flag=false;	
+			IntegerAndBooleanWrapper info=new IntegerAndBooleanWrapper(giocatoriSuccessivi.get(i).getMano().getNumCarte(),flag);
+			turnazione.put(new StringWrapper(giocatoriSuccessivi.get(i).getNome(),i), info);
 		}
 		return turnazione;
 	}
@@ -201,6 +228,27 @@ public class Partita implements PartitaIF {
 	    	return this.value;
 	    }
 	}
+	
+	/**
+	 * classe ausiliaria per immagazzinare informazioni utili di un giocatore
+	 */
+	public class IntegerAndBooleanWrapper {
+	    private final int numero;
+	    private final boolean flag;
+
+	    private IntegerAndBooleanWrapper(int numero, boolean flag) {
+	        this.numero = numero;
+	        this.flag = flag;
+	    }
+
+	    public int getNumero() {
+	        return numero;
+	    }
+
+	    public boolean isFlag() {
+	        return flag;
+	    }
+	}
 
 	public Navigatore<Giocatore> getNavigatore() {
 		return navigatore;
@@ -210,7 +258,7 @@ public class Partita implements PartitaIF {
 		this.navigatore = navigatore;
 	}
 
-	public boolean isDirezione() {
+	public boolean getDirezione() {
 		return direzione;
 	}
 
@@ -460,7 +508,6 @@ public class Partita implements PartitaIF {
 	 * metodo che restituisce la carta in cima al mazzo
 	 * senza contemplare le eventuali conseguenze
 	 */
-	@Override
 	public Carta pescaCarta() {
 		return mazzo.pesca();
 		// return new CartaSpeciale(Colore.NERO,TipoSpeciale.JOLLY);
@@ -470,7 +517,6 @@ public class Partita implements PartitaIF {
 	 *  metodo che controlla se è una carta giocata è compatibile con la carta
 	 *  corrente
 	 */
-	@Override
 	public boolean tentaGiocaCarta(Carta tentativo) {
 		return tentativo.giocabileSu(cartaCorrente);
 	}
@@ -479,7 +525,6 @@ public class Partita implements PartitaIF {
 	 *  metodo che imposta la nuova carta corrente, manda la vecchia carta corrente
 	 *  nella pila scarti e setta a false effettoAttivato
 	 */
-	@Override
 	public void giocaCarta(Carta c) {
 		if (cartaCorrente != null && cartaCorrente != c) {
 			if (cartaCorrente instanceof CartaSpeciale
@@ -498,6 +543,11 @@ public class Partita implements PartitaIF {
 		Mossa m;
 		for (Carta c : g.getMano().getCarte()) {
 			if (tentaGiocaCarta(c)) {
+				//impedisco alla mossa automatica di giocare un +4 se ha altro da giocare
+				if(c instanceof CartaSpeciale && ((CartaSpeciale)c).getTipo()==TipoSpeciale.PIU_QUATTRO) {
+					if(!verificaPiuQuattroGiocabile(g))
+						continue;
+				}
 				m = new Mossa(TipoMossa.GIOCA_CARTA, c);
 				if (c.getColore() == Colore.NERO) {
 					c.setColore(Colore.scegliColoreCasuale());
@@ -529,6 +579,33 @@ public class Partita implements PartitaIF {
 			return null;
 		}
 		return scegliMossaAutomatica();
+	}
+	
+	/**
+	 * metodo di verifica su un +4 giocabile o meno
+	 * 
+	 * @param g, giocatore su cui si svolge la verifica
+	 * @return true se il +4 è lecito da giocare, false altrimenti
+	 */
+	public boolean verificaPiuQuattroGiocabile(Giocatore g) {
+		if(!giocatori.contains(g))
+			return false;
+		else {
+			//crea lista temporanea con tutte le carte in mano di un giocatore
+			ArrayList<Carta> carteInMano = new ArrayList<>();
+			carteInMano.addAll(g.getMano().getCarte());
+			//istruzione in cui vengono rimossi tutti i +4 dalla mano di una giocatore per fare controlli
+			carteInMano.removeIf(carta -> 
+			    carta instanceof CartaSpeciale && ((CartaSpeciale)carta).getTipo() == TipoSpeciale.PIU_QUATTRO
+			);
+			//ciclo di verifica possibilità di giocare altre carte oltre ai +4
+			for(Carta carta:carteInMano) {
+				if(carta.giocabileSu(cartaCorrente))
+					return false;
+			}
+			//si arriva qui solo se nessuna delle carte in mano OLTRE ai +4 è giocabile
+			return true;
+		}
 	}
 	// ------------------------------
 	

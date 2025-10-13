@@ -4,10 +4,16 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.corundumstudio.socketio.AckRequest;
 import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.SocketIOServer;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import onegame.modello.net.ProtocolloMessaggi;
+import onegame.modello.net.ProtocolloMessaggi.ReqAuth;
+import onegame.modello.net.ProtocolloMessaggi.ReqCreaStanza;
+import onegame.modello.net.ProtocolloMessaggi.ReqEntraStanza;
+import onegame.modello.net.util.JsonHelper;
 
 
 public class GestoreStanze {
@@ -30,29 +36,29 @@ public class GestoreStanze {
      * @param client client che ha fatto la richiesta
      * @param req richiesta di creazione stanza
      */
-    public void handleCreaStanza(SocketIOClient client, ProtocolloMessaggi.ReqCreaStanza req) {
+    public void handleCreaStanza(SocketIOClient client, String str, AckRequest ack) {
         try {
+        	ReqCreaStanza req = JsonHelper.fromJson(str, ReqCreaStanza.class);
             Object tokenObj = client.get("token");
             if (tokenObj == null) {
-                client.sendEvent(ProtocolloMessaggi.EVENT_STANZA_FAIL,
-                        new ProtocolloMessaggi.RespStanza("", "FAIL", "Non autenticato"));
+            	ack.sendAckData(new ProtocolloMessaggi.RespStanza(null, "FAIL", "Non autenticato"));
                 return;
             }
-            String token = tokenObj.toString();
+            
+            String tokenUtente = tokenObj.toString();
             String idStanza = UUID.randomUUID().toString();
             StanzaPartita stanza = new StanzaPartita(idStanza, req.nomeStanza, Math.max(2, req.maxGiocatori), server,
                     gestoreConnessioni);
+            
             stanze.put(idStanza, stanza);
-            mappaTokenAStanza.put(token, idStanza);
-            stanza.aggiungiUtente(token, client);
-            ProtocolloMessaggi.RespStanza resp = new ProtocolloMessaggi.RespStanza(idStanza, "CREATA",
-                    "Stanza creata con successo");
-            client.sendEvent(ProtocolloMessaggi.EVENT_STANZA_OK, resp);
-            System.out.println("[STANZA] Creata stanza " + idStanza + " da token=" + token);
+            mappaTokenAStanza.put(tokenUtente, idStanza);
+            stanza.aggiungiUtente(tokenUtente, client);
+            
+            ack.sendAckData(new ProtocolloMessaggi.RespStanza(idStanza, "CREATA", "Stanza creata con successo"));
+            System.out.println("[STANZA] Creata stanza " + idStanza + " da token=" + tokenUtente);
         } catch (Exception e) {
             e.printStackTrace();
-            client.sendEvent(ProtocolloMessaggi.EVENT_STANZA_FAIL,
-                    new ProtocolloMessaggi.RespStanza("", "ERROR", "Errore creazione stanza"));
+            ack.sendAckData(new ProtocolloMessaggi.RespStanza(null, "ERROR", "Errore creazione stanza"));
         }
     }
     
@@ -62,35 +68,32 @@ public class GestoreStanze {
 	 * @param client client che ha fatto la richiesta
 	 * @param req richiesta di ingresso in stanza
 	 */
-    public void handleEntraStanza(SocketIOClient client, ProtocolloMessaggi.ReqEntraStanza req) {
+    public void handleEntraStanza(SocketIOClient client, String str, AckRequest ack) {
         try {
-            Object tokenObj = client.get("token");
+        	ReqEntraStanza req = JsonHelper.fromJson(str, ReqEntraStanza.class);
+        	Object tokenObj = client.get("token");
             if (tokenObj == null) {
-                client.sendEvent(ProtocolloMessaggi.EVENT_STANZA_FAIL,
-                        new ProtocolloMessaggi.RespStanza("", "FAIL", "Non autenticato"));
+            	ack.sendAckData(new ProtocolloMessaggi.RespStanza(null, "FAIL", "Non autenticato"));
                 return;
             }
+            
             String token = tokenObj.toString();
             StanzaPartita stanza = stanze.get(req.idStanza);
             if (stanza == null) {
-                client.sendEvent(ProtocolloMessaggi.EVENT_STANZA_FAIL,
-                        new ProtocolloMessaggi.RespStanza("", "NO_STANZA", "Stanza non trovata"));
+            	ack.sendAckData(new ProtocolloMessaggi.RespStanza("", "NO_STANZA", "Stanza non trovata"));
                 return;
             }
             boolean ok = stanza.aggiungiUtente(token, client);
             if (!ok) {
-                client.sendEvent(ProtocolloMessaggi.EVENT_STANZA_FAIL,
-                        new ProtocolloMessaggi.RespStanza(req.idStanza, "FULL", "Stanza piena o partita iniziata"));
+            	ack.sendAckData(new ProtocolloMessaggi.RespStanza(req.idStanza, "FULL", "Stanza piena o partita iniziata"));
                 return;
             }
             mappaTokenAStanza.put(token, req.idStanza);
-            client.sendEvent(ProtocolloMessaggi.EVENT_STANZA_OK,
-                    new ProtocolloMessaggi.RespStanza(req.idStanza, "ENTRATO", "Ingresso nella stanza riuscito"));
+            ack.sendAckData(new ProtocolloMessaggi.RespStanza(req.idStanza, "ENTRATO", "Ingresso nella stanza riuscito"));
             System.out.println("[STANZA] Token " + token + " entrato in stanza " + req.idStanza);
         } catch (Exception e) {
             e.printStackTrace();
-            client.sendEvent(ProtocolloMessaggi.EVENT_STANZA_FAIL,
-                    new ProtocolloMessaggi.RespStanza(req.idStanza, "ERROR", "Errore ingresso stanza"));
+            ack.sendAckData(new ProtocolloMessaggi.RespStanza(null, "ERROR", "Errore ingresso stanza"));
         }
     }
     

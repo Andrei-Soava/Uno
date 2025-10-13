@@ -13,6 +13,7 @@ public class ControlloreHome {
 		this.cs=cs;
 		
 		vh.aggiungiListener(cm, cs.getUtente());
+		System.out.println(cs.getUtente().getUsername() + " è " + cs.getUtente().isAnonimo());
 	}
 	
 	public ClientSocket getCs() {
@@ -40,7 +41,7 @@ public class ControlloreHome {
 	public void aspettaStatistiche() {
 		if(!cs.getUtente().isAnonimo()) {
 			vh.waitForStatisticheBtnClick().thenRun(()->{
-				vh.compilaStatistiche(cs.getUtente().getUsername(), cs.getUtente().getStatistica());
+//				vh.compilaStatistiche(cs.getUtente().getUsername(), cs.getUtente().getStatistica());
 			});
 		}
 	}

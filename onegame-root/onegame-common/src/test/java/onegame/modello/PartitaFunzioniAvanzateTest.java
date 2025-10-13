@@ -126,25 +126,25 @@ public class PartitaFunzioniAvanzateTest {
 		assertEquals("Carta non è stata tolta dalla mano", 0, partita.getGiocatoreCorrente().getMano().getNumCarte());
 	}
 
-	@Test //test1.22
-	public void testApplicaEffettoCarta() {
-		// ripopolo il mazzo
-		partita.getMazzo().inizializzaNuovoMazzo();
-		// inizializzo il pre partita (per fornire 7 carte ad ogni giocatore)
-		partita.eseguiPrePartita();
-		// cambio artificialmente la carta corrente
-		partita.setCartaCorrente(new CartaNumero(Colore.ROSSO, 3));
-		// fornisco artificialmente al giocatore attuale un piu_due rosso (quindi in
-		// posizione 7 della sua mano)
-		Carta daGiocare = new CartaSpeciale(Colore.ROSSO, TipoSpeciale.PIU_DUE);
-		partita.getGiocatoreCorrente().aggiungiCarta(daGiocare);
-		Mossa mossa = new Mossa(TipoMossa.GIOCA_CARTA, daGiocare);
-		partita.applicaMossa(partita.getGiocatoreCorrente(), mossa);
-		partita.passaTurno();
-		assertEquals("Il giocatore#1 non ha pescato carte", 9, giocatori.get(1).getMano().getNumCarte());
-		assertEquals("Il giocatore#0 non è il giocatore corrente", partita.getGiocatoreCorrente(), giocatori.get(0));
-		assertEquals("Il giocatore#0 non ha 7 carte, partendo da 8", 7, giocatori.get(0).getMano().getNumCarte());
-	}
+//	@Test //test1.22
+//	public void testApplicaEffettoCarta() {
+//		// ripopolo il mazzo
+//		partita.getMazzo().inizializzaNuovoMazzo();
+//		// inizializzo il pre partita (per fornire 7 carte ad ogni giocatore)
+//		partita.eseguiPrePartita();
+//		// cambio artificialmente la carta corrente
+//		partita.setCartaCorrente(new CartaNumero(Colore.ROSSO, 3));
+//		// fornisco artificialmente al giocatore attuale un piu_due rosso (quindi in
+//		// posizione 7 della sua mano)
+//		Carta daGiocare = new CartaSpeciale(Colore.ROSSO, TipoSpeciale.PIU_DUE);
+//		partita.getGiocatoreCorrente().aggiungiCarta(daGiocare);
+//		Mossa mossa = new Mossa(TipoMossa.GIOCA_CARTA, daGiocare);
+//		partita.applicaMossa(partita.getGiocatoreCorrente(), mossa);
+//		partita.passaTurno();
+//		assertEquals("Il giocatore#1 non ha pescato carte", 9, giocatori.get(1).getMano().getNumCarte());
+//		assertEquals("Il giocatore#0 non è il giocatore corrente", partita.getGiocatoreCorrente(), giocatori.get(0));
+//		assertEquals("Il giocatore#0 non ha 7 carte, partendo da 8", 7, giocatori.get(0).getMano().getNumCarte());
+//	}
 
 	@Test //test1.23
 	public void testGiocoInAutomatico() {

@@ -49,3 +49,4 @@ Per questo prodotto, tale tipo di manutenzione sarà impiegato per:
 2. Aggiunta di statistiche avanzate sulle partite degli utenti;
 3. Ottimizzazione delle prestazioni del server per gestire un numero maggiore di giocatori.
 ### Log messaggi: 
+- 13/10, Andrei, (miglioramento interfaccia grafica durante il gioco, mettendo al centro mazzo e carta corrente e tutto intorno i giocatori + chiara direzionalità con cerchio e frecce + evidenziazione del giocatore corrente con un glow sul suo nome);
