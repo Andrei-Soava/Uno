@@ -2,12 +2,14 @@
 <launchConfiguration type="org.eclipse.m2e.Maven2LaunchConfigurationType">
     <intAttribute key="M2_COLORS" value="0"/>
     <booleanAttribute key="M2_DEBUG_OUTPUT" value="false"/>
-    <stringAttribute key="M2_GOALS" value="clean package"/>
+    <stringAttribute key="M2_GOALS" value="clean install"/>
     <booleanAttribute key="M2_NON_RECURSIVE" value="false"/>
     <booleanAttribute key="M2_OFFLINE" value="false"/>
     <stringAttribute key="M2_PROFILES" value=""/>
-    <listAttribute key="M2_PROPERTIES"/>
-    <stringAttribute key="M2_RUNTIME" value="EMBEDDED"/>
+    <listAttribute key="M2_PROPERTIES">
+        <listEntry value="--enable-native-access=ALL-UNNAMED"/>
+    </listAttribute>
+    <stringAttribute key="M2_RUNTIME" value="apache-maven-3.9.11"/>
     <booleanAttribute key="M2_SKIP_TESTS" value="false"/>
     <intAttribute key="M2_THREADS" value="1"/>
     <booleanAttribute key="M2_UPDATE_SNAPSHOTS" value="false"/>

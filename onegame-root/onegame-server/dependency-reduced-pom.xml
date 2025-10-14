@@ -15,6 +15,9 @@
         <version>3.5.1</version>
         <configuration>
           <mainClass>onegame.server.ServerUno</mainClass>
+          <arguments>
+            <argument>--enable-native-access=ALL-UNNAMED</argument>
+          </arguments>
         </configuration>
       </plugin>
       <plugin>
