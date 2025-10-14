@@ -6,7 +6,8 @@ public class MossaDTO {
     public enum TipoMossa {
         GIOCA_CARTA,
         PESCA,
-        PASSA
+        PASSA,
+        DICHIARA_UNO
     }
 
     public TipoMossa tipo;

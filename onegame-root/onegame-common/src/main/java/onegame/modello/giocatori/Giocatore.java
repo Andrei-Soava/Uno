@@ -50,6 +50,7 @@ public class Giocatore {
 	private String nome;
 	private Mano mano;
 	private boolean bot;
+	private boolean haDichiaratoUNO = false;
 
 	//costruttore vuoto per Jackson
 	public Giocatore() {}
@@ -58,6 +59,7 @@ public class Giocatore {
 		this.nome = nome;
 		this.mano = new Mano();
 		this.bot = false;
+		this.haDichiaratoUNO = false;
 	}
 	
 	/**
@@ -100,6 +102,28 @@ public class Giocatore {
 	 */
 	public boolean isBot() {
 		return bot;
+	}
+	/**
+	 * Verifica se il giocatore ha dichiarato UNO
+	 * @return
+	 */
+	public boolean haDichiaratoUNO() {
+		return haDichiaratoUNO;
+	}
+	/**
+	 * Imposta lo stato della dichiarazione UNO
+	 * @param haDichiarato
+	 */
+	public void setHaDichiaratoUNO(boolean haDichiarato) {
+		this.haDichiaratoUNO = haDichiarato;
+	}
+	/**
+	 * metodo per dichiarare UNO, usato quando il giocatore ha solo una carta
+	 */
+	public void dichiaraUNO() {
+		if(mano.getNumCarte() == 1) {
+			this.haDichiaratoUNO = true;
+		}
 	}
 	
 	@Deprecated
