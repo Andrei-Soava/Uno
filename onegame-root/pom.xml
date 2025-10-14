@@ -23,6 +23,10 @@
     <socketio.client.version>1.0.0</socketio.client.version>
     <jwt.version>4.4.0</jwt.version>
 
+    <!-- Versione Java -->
+    <maven.compiler.release>25</maven.compiler.release>
+
+    <!-- Codifica UTF-8 -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <project.build.outputEncoding>UTF-8</project.build.outputEncoding>
