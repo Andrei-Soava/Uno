@@ -89,9 +89,9 @@ public class GestoreConnessioni {
             
             ackRequest.sendAckData(new RespAuth(true, null, token, "Login completato"));
         	
-            System.out.println("[Server] Utente loggato: " + username);
+            logger.info("[Server] Utente connesso: {}", username);
         } catch (Exception e) {
-            e.printStackTrace();
+        	logger.error("[Server] Errore durante il login: {}", e.getMessage());
             ackRequest.sendAckData(new RespAuth(false, null, null, "Errore interno"));
         }
     }
@@ -115,7 +115,7 @@ public class GestoreConnessioni {
             
             if(utenteDb.esisteUtente(username)) {
             	ackRequest.sendAckData(new RespAuth(false, null, null, "Utente già esistente"));
-            	System.out.println("[Server] Registrazione fallita - utente esistente: " + username);
+            	logger.warn("[Server] Tentativo di registrazione con username già esistente: {}", username);
             	return;
             }
             
@@ -130,9 +130,9 @@ public class GestoreConnessioni {
             client.set("token", token);
             
             ackRequest.sendAckData(new RespAuth(true, null, token, "Registrazione completata"));
-            System.out.println("[Server] Nuovo utente registrato: " + username);
+            logger.info("[Server] Nuovo utente registrato: {}", username);
         } catch (Exception e) {
-            e.printStackTrace();
+        	logger.error("[Server] Errore durante la registrazione: {}", e.getMessage());
             ackRequest.sendAckData(new RespAuth(false, null, null, "Errore interno"));
         }
     }
@@ -150,9 +150,9 @@ public class GestoreConnessioni {
             sessioni.put(token, utenteAnonimo);
             client.set("token", token);
             ackRequest.sendAckData(new RespAuth(true, null, token, "Accesso anonimo riuscito"));
-            System.out.println("[Server] Accesso anonimo: " + token);
+            logger.info("[Server] Utente anonimo connesso");
     	} catch (Exception e) {
-			e.printStackTrace();
+    		logger.error("[Server] Errore durante l'accesso anonimo: {}", e.getMessage());
 			ackRequest.sendAckData(new RespAuth(false, null, null, "Errore interno"));
 		}
     }
@@ -162,14 +162,16 @@ public class GestoreConnessioni {
 	 * @param client Il client che si disconnette
 	 */
     public void handleDisconnessione(SocketIOClient client) {
-    	String token = client.get("token");
-        if (token == null) return;
-
-        Utente u = sessioni.get(token);
-        if (u != null) {
-            u.setConnesso(false);
-            System.out.println("[SERVER] Utente disconnesso: " + u.getUsername());
-        }
+//    	logger.error("Token " + client.get("token"));
+//    	logger.error("0");
+//    	String token = client.get("token");
+//        if (token == null) return;
+//        logger.error("1");
+//        Utente u = sessioni.get(token);
+//        if (u != null) {
+//            u.setConnesso(false);
+//            logger.info("[Server] Utente disconnesso: {}", u.isAnonimo() ? "Anonimo" : u.getUsername());
+//        }
     }
 
 //    public void handleRichiestaPartiteNonConcluse(SocketIOClient client) {

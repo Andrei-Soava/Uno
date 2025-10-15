@@ -8,6 +8,11 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import onegame.server.GestoreConnessioni;
+
 /**
  * Crea e gestisce la connessione a un database H2 in modalità embedded.
  */
@@ -17,6 +22,8 @@ public class GestoreDatabase {
 	private static final String PWD = "root";
 	private static final String DB_DIR = "./target/db";
 	private static final String DB_NAME = "uno-game-db";
+	
+	private static final Logger logger = LoggerFactory.getLogger(GestoreDatabase.class);
 
 	private static final String[] DDL = {
 
@@ -70,8 +77,7 @@ public class GestoreDatabase {
 					"FOREIGN KEY (utente_id) REFERENCES utente(id) ON DELETE CASCADE"+
 					")");
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Errore durante l'inizializzazione del database: {}", e.getMessage());
 		}
 	}
 

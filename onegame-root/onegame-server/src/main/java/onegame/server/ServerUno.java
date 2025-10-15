@@ -1,19 +1,16 @@
 package onegame.server;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.corundumstudio.socketio.AckRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.corundumstudio.socketio.Configuration;
 import com.corundumstudio.socketio.HandshakeData;
-import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.SocketIOServer;
-import com.corundumstudio.socketio.listener.DataListener;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import onegame.modello.Mossa;
 import onegame.modello.net.ProtocolloMessaggi;
-import onegame.modello.net.ProtocolloMessaggi.ReqAuth;
 import onegame.modello.net.Utente;
 import onegame.server.db.GestoreDatabase;
 
@@ -30,6 +27,9 @@ public class ServerUno {
 	private final GestorePartiteOffline gestorePartiteOffline;
 	// sessioni: token -> Utente
 	private final Map<String, Utente> sessioni = new ConcurrentHashMap<>();
+	
+	private static final Logger logger = LoggerFactory.getLogger(ServerUno.class);
+
 
 	public ServerUno(String host, int port) {
 		Configuration config = new Configuration();
@@ -37,7 +37,8 @@ public class ServerUno {
 		config.setPort(port);
 		config.setPingInterval(10000);
 		config.setPingTimeout(60000);
-
+		config.setExceptionListener(new ServerUnoExceptionListener());
+		
 		this.server = new SocketIOServer(config);
 		this.gestoreConnessioni = new GestoreConnessioni(sessioni);
 		this.gestoreStanze = new GestoreStanze(this.server, gestoreConnessioni);
@@ -58,7 +59,7 @@ public class ServerUno {
 			} catch (Exception ex) {
 			}
 
-			System.out.println("[SERVER] Nuova connessione da " + addr + " sessionId=" + client.getSessionId());
+			logger.info("[SERVER] Nuova connessione da {} sessionId={}", addr, client.getSessionId());
 
 			// Recupera token dal parametro della connessione (se presente)
 			String token = hd.getSingleUrlParam("token");
@@ -67,7 +68,7 @@ public class ServerUno {
 				if (u != null) {
 					u.setConnesso(true);
 					client.set("token", token);
-					System.out.println("[SERVER] Riconnesso utente: " + u.getUsername());
+					logger.info("[SERVER] Riconnesso utente: {} (token={})", u.getUsername(), token);
 				}
 			}
 
@@ -75,7 +76,7 @@ public class ServerUno {
 
 		// disconnessione
 		server.addDisconnectListener(client -> {
-			System.out.println("[SERVER] Disconnessione sessionId=" + client.getSessionId());
+			logger.info("[SERVER] Disconnessione client sessionId={}", client.getSessionId());
 			// delego a gestore connessioni per marcare Utente offline
 			gestoreConnessioni.handleDisconnessione(client);
 		});
@@ -122,7 +123,7 @@ public class ServerUno {
 			//stanza.riceviMossa(token, mossa);
 		});
 
-		System.out.println("[SERVER] Eventi registrati.");
+		logger.debug("Eventi registrati");
 		
 		server.addEventListener(ProtocolloMessaggi.EVENT_SALVA_PARTITA, String.class,
 				(client, data, ack) -> gestorePartiteOffline.handleSalvaPartita(client, data, ack));
@@ -130,20 +131,20 @@ public class ServerUno {
 
 	public void avvia() {
 		server.start();
-		System.out.println("[SERVER] Avviato su " + server.getConfiguration().getHostname() + ":"
-				+ server.getConfiguration().getPort());
+		logger.info("[SERVER] Avviato su {}:{}", server.getConfiguration().getHostname(),
+				server.getConfiguration().getPort());
 	}
 
 	public void stop() {
 		server.stop();
-		System.out.println("[SERVER] Arrestato");
+		logger.info("[SERVER] Arrestato.");
 	}
 
 	public static void main(String[] args) {
 		try {
 			GestoreDatabase.inizializzaDatabase();
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 			System.exit(1);
 		}
 		String host = "127.0.0.1";
@@ -152,7 +153,7 @@ public class ServerUno {
 		srv.avvia();
 
 		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-			System.out.println("[SERVER] Arresto in corso...");
+			logger.info("[SERVER] Arresto in corso...");
 			srv.stop();
 		}));
 	}
