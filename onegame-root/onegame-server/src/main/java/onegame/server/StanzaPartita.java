@@ -77,7 +77,7 @@ public class StanzaPartita {
         synchronized (this) {
             if (partitaIniziata) return false;
             if (utenti.size() >= maxUtenti) return false;
-            Utente ut = gestoreConnessioni.getUtenteDaToken(token);
+            Utente ut = gestoreConnessioni.getUtenteByToken(token);
             if (ut == null) {
                 // creazione minimale di Utente locale
                 ut = new Utente("guest-" + token.substring(0, Math.min(6, token.length())), true);

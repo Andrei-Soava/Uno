@@ -27,6 +27,7 @@ public class ServerUno {
 	private final SocketIOServer server;
 	private final GestoreConnessioni gestoreConnessioni;
 	private final GestoreStanze gestoreStanze;
+	private final GestorePartiteOffline gestorePartiteOffline;
 	// sessioni: token -> Utente
 	private final Map<String, Utente> sessioni = new ConcurrentHashMap<>();
 
@@ -38,8 +39,9 @@ public class ServerUno {
 		config.setPingTimeout(60000);
 
 		this.server = new SocketIOServer(config);
-		this.gestoreConnessioni = new GestoreConnessioni(this.server, sessioni);
+		this.gestoreConnessioni = new GestoreConnessioni(sessioni);
 		this.gestoreStanze = new GestoreStanze(this.server, gestoreConnessioni);
+		this.gestorePartiteOffline = new GestorePartiteOffline(gestoreConnessioni);
 
 		registraEventi();
 	}
@@ -88,7 +90,7 @@ public class ServerUno {
 
 		// auth:anonimo
 		server.addEventListener(ProtocolloMessaggi.EVENT_AUTH_ANONIMO, String.class,
-				(client, reqAuth, ack) -> gestoreConnessioni.handleAnonimo(client, reqAuth, ack));
+				(client, reqAuth, ack) -> gestoreConnessioni.handleAnonimo(client, ack));
 
 		// stanza:crea
 		server.addEventListener(ProtocolloMessaggi.EVENT_STANZA_CREA, String.class,
@@ -103,7 +105,8 @@ public class ServerUno {
 //				(client, data, ack) -> gestoreConnessioni.handleRichiestaPartiteNonConcluse(client));
 
 		// evento partita:mossa -> payload: Mossa
-		server.addEventListener("partita:mossa", Mossa.class, (client, mossa, ack) -> {
+		server.addEventListener(ProtocolloMessaggi.EVENT_GIOCO_MOSSA, String.class, (client, mossa, ack) -> {
+			// TO DO
 			Object tokenObj = client.get("token");
 			if (tokenObj == null) {
 				client.sendEvent("partita:invalid", "Non autenticato");
@@ -116,10 +119,13 @@ public class ServerUno {
 				client.sendEvent("partita:invalid", "Non sei in alcuna stanza");
 				return;
 			}
-			stanza.riceviMossa(token, mossa);
+			//stanza.riceviMossa(token, mossa);
 		});
 
 		System.out.println("[SERVER] Eventi registrati.");
+		
+		server.addEventListener(ProtocolloMessaggi.EVENT_SALVA_PARTITA, String.class,
+				(client, data, ack) -> gestorePartiteOffline.handleSalvaPartita(client, data, ack));
 	}
 
 	public void avvia() {
