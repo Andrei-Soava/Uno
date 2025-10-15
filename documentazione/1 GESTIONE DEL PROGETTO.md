@@ -120,3 +120,4 @@ Esempio COMPLETO:
 - 13/10 19:00, Fabio, stesura regolamento, null;
 - 13/10 14:00-22:00, Andrei, (restyling della VistaGioco + eliminazione temporanea VistaSpettatore), null;
 - 14/10, Giuseppe, (aggiornamento classe PartitaNET + sistemazione classe Giocatore e classe MossaDTO);
+- 15/10, Giuseppe, (aggiornamento classe PartitaNet, timer dichiarazione UNO)

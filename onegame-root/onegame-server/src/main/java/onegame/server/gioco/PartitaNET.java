@@ -2,6 +2,10 @@ package onegame.server.gioco;
 
 import java.time.Instant;
 import java.util.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 import onegame.modello.Mazzo;
 import onegame.modello.PartitaIF;
@@ -29,6 +33,12 @@ public final class PartitaNET implements PartitaIF {
 	// stato del turno corrente
     private boolean haPescatoNelTurno = false;
     private Carta cartaPescataCorrente = null;
+    
+    //gestione timer
+    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+    // Timer attivo
+    private ScheduledFuture<?> timerAttivo = null;
+
 
 	public PartitaNET(List<Giocatore> giocatori) {
 		this.giocatori.addAll(giocatori);
@@ -145,13 +155,11 @@ public final class PartitaNET implements PartitaIF {
 				cartaGiocata.applicaEffetto(this);
 
 				// Regola dell'UNO: se ha una sola carta, deve dichiarare UNO
-				if (giocatore.getMano().getNumCarte() == 1 && !giocatore.haDichiaratoUNO()) {
-					giocatore.getMano().aggiungiCarte(mazzo.pescaN(2)); // penalità
-					// reset della dichiarazione UNO per il prossimo giro
+				if(giocatore.getMano().getNumCarte() == 1) {
+					avviaTimer(giocatore);
+				}else {
 					giocatore.setHaDichiaratoUNO(false);
-				}else if(giocatore.getMano().getNumCarte()>1){
-					// reset della dichiarazione UNO per il prossimo giro
-					giocatore.setHaDichiaratoUNO(false);
+					cancellaTimer();
 				}
 
 				checkWinCondition(giocatore);
@@ -189,6 +197,9 @@ public final class PartitaNET implements PartitaIF {
 			case DICHIARA_UNO: {
 	              if (giocatore.getMano().getNumCarte() == 1) {
 	                    giocatore.setHaDichiaratoUNO(true);
+	                    cancellaTimer();
+	                    System.out.println("Il giocatore " + giocatore.getNome() + " ha detto UNO!");
+	                    
 	                }
 	                break;
 	            }
@@ -196,6 +207,24 @@ public final class PartitaNET implements PartitaIF {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	private void cancellaTimer() { // Interrompe il timer quando non è più necessario
+		if(timerAttivo != null) {
+			timerAttivo.cancel(false);
+			timerAttivo = null;
+		}
+		
+	}
+
+	private void avviaTimer(Giocatore giocatore) { 
+		cancellaTimer();
+		timerAttivo = scheduler.schedule(()->{
+			if(!giocatore.haDichiaratoUNO()) {
+				giocatore.getMano().aggiungiCarte(mazzo.pescaN(2));
+				System.out.println("Il giocatore " + giocatore.getNome() + " non ha detto UNO! Penalità: aggiungi due carte!");
+			}
+		}, 5, TimeUnit.SECONDS);
 	}
 
 	private void passaTurno(int step) {
