@@ -2,9 +2,11 @@ package onegame.client.controllore;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import javafx.application.Platform;
 import onegame.client.net.ClientSocket;
 import onegame.client.net.ConnectionMonitor;
 import onegame.client.vista.VistaRegistrazione;
+import onegame.modello.net.Utente;
 import onegame.modello.net.ProtocolloMessaggi.RespAuth;
 import onegame.modello.net.util.JsonHelper;
 
@@ -63,7 +65,17 @@ public class ControlloreRegistrazione {
 					try {
 						String json = args[0].toString();
 						RespAuth auth = JsonHelper.fromJson(json, RespAuth.class);
-						System.out.println(auth.token);
+						Platform.runLater(() -> {
+				            if (auth.success) {
+				                Utente utente = new Utente(username, false);
+				                cs.setUtente(utente);
+				                vr.mostraAccesso();
+				            } else {
+				                vr.compilaMessaggioErrore(auth.messaggio);
+				                vr.svuotaPassword();
+				                eseguiRegistrazione();
+				            }
+				        });
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
