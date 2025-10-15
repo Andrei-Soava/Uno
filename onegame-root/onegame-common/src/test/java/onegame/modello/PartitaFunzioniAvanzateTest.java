@@ -157,7 +157,6 @@ public class PartitaFunzioniAvanzateTest {
 			partita.passaTurno();
 		}
 		assertNotEquals("Non è presente un vincitore",null,partita.getVincitore());
-		System.out.println(partita.toJson());
 	}
 
 }

@@ -23,6 +23,10 @@
     <socketio.client.version>1.0.0</socketio.client.version>
     <jwt.version>4.4.0</jwt.version>
 
+    <!-- Versione Java -->
+    <maven.compiler.release>21</maven.compiler.release>
+
+    <!-- Codifica UTF-8 -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <project.build.outputEncoding>UTF-8</project.build.outputEncoding>
@@ -47,6 +51,19 @@
         <version>${jackson.version}</version>
       </dependency>
 
+      
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>2.0.9</version>
+      </dependency>
+      
+      <dependency>
+        <groupId>org.apache.logging.log4j</groupId>
+        <artifactId>log4j-slf4j2-impl</artifactId>
+        <version>2.23.1</version>
+      </dependency>
+      
       <dependency>
         <groupId>org.apache.logging.log4j</groupId>
         <artifactId>log4j-api</artifactId>
@@ -76,6 +93,12 @@
         <groupId>com.corundumstudio.socketio</groupId>
         <artifactId>netty-socketio</artifactId>
         <version>${netty-socketio.version}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+          </exclusion>
+        </exclusions>
       </dependency>
       <dependency>
         <groupId>io.socket</groupId>
@@ -92,11 +115,6 @@
         <groupId>com.h2database</groupId>
         <artifactId>h2</artifactId>
         <version>${h2.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.slf4j</groupId>
-        <artifactId>slf4j-simple</artifactId>
-        <version>${slf4j.version}</version>
       </dependency>
       <dependency>
         <groupId>com.auth0</groupId>
