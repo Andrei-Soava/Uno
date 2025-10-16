@@ -20,6 +20,9 @@ import onegame.modello.Mossa.TipoMossa;
 import onegame.modello.carte.*;
 import onegame.modello.carte.CartaSpeciale.TipoSpeciale;
 import onegame.modello.giocatori.Giocatore;
+import onegame.modello.util.Wrappers;
+import onegame.modello.util.Wrappers.IntegerAndBooleanWrapper;
+import onegame.modello.util.Wrappers.StringWrapper;
 
 /************************************************************/
 
@@ -180,22 +183,23 @@ public class Partita implements PartitaIF {
 	 * 
 	 * @return mappa<StringWrapper,Integer> 
 	 */
+	@Deprecated
 	@JsonIgnore
 	public Map<StringWrapper,Integer> getTurnazioneGiocatori(){
 		List<Giocatore> giocatoriSuccessivi = navigatore.altriInOrdine();
 		Map<StringWrapper,Integer> turnazione = new LinkedHashMap<>();
 		for(int i=0; i<giocatoriSuccessivi.size(); i++) {
-			turnazione.put(new StringWrapper(giocatoriSuccessivi.get(i).getNome(),i), giocatoriSuccessivi.get(i).getMano().getNumCarte());
+			Wrappers.StringWrapper sr=new Wrappers.StringWrapper(giocatoriSuccessivi.get(i).getNome(),i);
+			turnazione.put(sr, giocatoriSuccessivi.get(i).getMano().getNumCarte());
 		}
 		return turnazione;
 	}
 	
 	/**
-	 * anoalogo di quello sopra ma dal punto di vista di un giocatore
+	 * anoalogo di quello sopra ma dal punto di vista di un giocatore qualsiasi
 	 * @param giocatore
 	 * @return
 	 */
-	@Deprecated
 	@JsonIgnore
 	public Map<StringWrapper,IntegerAndBooleanWrapper> getTurnazioneDalGiocatore(Giocatore giocatore){
 		List<Giocatore> giocatoriSuccessivi = navigatore.altriInSuccessione(giocatore);
@@ -206,50 +210,13 @@ public class Partita implements PartitaIF {
 				flag=true;
 			else
 				flag=false;	
-			IntegerAndBooleanWrapper info=new IntegerAndBooleanWrapper(giocatoriSuccessivi.get(i).getMano().getNumCarte(),flag);
-			turnazione.put(new StringWrapper(giocatoriSuccessivi.get(i).getNome(),i), info);
+			Wrappers.StringWrapper sr=new Wrappers.StringWrapper(giocatoriSuccessivi.get(i).getNome(),i);
+			Wrappers.IntegerAndBooleanWrapper info=new Wrappers.IntegerAndBooleanWrapper(giocatoriSuccessivi.get(i).getMano().getNumCarte(),flag);
+			turnazione.put(sr, info);
 		}
 		return turnazione;
 	}
 	
-	/**
-	 * classe ausiliaria per eseguire mappe<String,Integer> quando String può contenere duplicati
-	 */
-	public class StringWrapper {
-	    private final String value;
-	    private final int id;
-
-	    private StringWrapper(String value, int id) {
-	        this.value = value;
-	        this.id = id;
-	    }
-	    
-	    public String getValue() {
-	    	return this.value;
-	    }
-	}
-	
-	/**
-	 * classe ausiliaria per immagazzinare informazioni utili di un giocatore
-	 */
-	public class IntegerAndBooleanWrapper {
-	    private final int numero;
-	    private final boolean flag;
-
-	    private IntegerAndBooleanWrapper(int numero, boolean flag) {
-	        this.numero = numero;
-	        this.flag = flag;
-	    }
-
-	    public int getNumero() {
-	        return numero;
-	    }
-
-	    public boolean isFlag() {
-	        return flag;
-	    }
-	}
-
 	public Navigatore<Giocatore> getNavigatore() {
 		return navigatore;
 	}
