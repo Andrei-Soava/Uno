@@ -1,90 +1,125 @@
-/*stile sfondo*/
+/* --- SFONDO --- */
 .root {
     -fx-background-color: linear-gradient(to bottom right, #ff7f50, #ff4500, #ffd700);
+    -fx-background-radius: 0;
+    -fx-font-family: "Orbitron", "Segoe UI", sans-serif;
 }
 
-/*stile label*/
+/* --- LABEL --- */
 .label {
     -fx-text-fill: white;
     -fx-font-size: 14px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.7), 3, 0.5, 0, 1);
 }
 
-/*stile titolo */
+/* --- TITOLO --- */
 .titolo {
-    -fx-font-size: 24px;
-    -fx-font-weight:bold;
-}
-
-/*stile lettere bold */
-.grassetto {
-	-fx-font-size: 15px;
-	-fx-font-weight: bold;
-}
-
-/*stile errore */
-.errore {
-    -fx-text-fill: black;
+    -fx-font-size: 28px;
     -fx-font-weight: bold;
+    -fx-text-fill: linear-gradient(to bottom, #ffd700, #ff7f50);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 6, 0.6, 0, 2);
+    -fx-letter-spacing: 1.5px;
 }
 
-/*stile campi input*/
+/* --- TESTO GRASSETTO --- */
+.grassetto {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ffd700;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.6), 3, 0.4, 0, 1);
+}
+
+/* --- ERRORE --- */
+.errore {
+    -fx-text-fill: #000000;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.7), 4, 0.5, 0, 1);
+}
+
+/* --- CAMPI INPUT --- */
 .text-field, .password-field {
-    -fx-background-color: #ffd700;
+    -fx-background-color: linear-gradient(to bottom, #ffd700, #ffb700);
     -fx-text-fill: #ff0000;
-    -fx-prompt-text-fill:  #ff0000;
-    -fx-background-radius: 5;
-    -fx-border-color: transparent;
-    -fx-padding: 5 10 5 10;
+    -fx-prompt-text-fill: rgba(255,0,0,0.7);
+    -fx-background-radius: 8;
+    -fx-border-color: #ff4500;
+    -fx-border-width: 2;
+    -fx-border-radius: 8;
+    -fx-padding: 6 12 6 12;
+    -fx-effect: innershadow(gaussian, rgba(0,0,0,0.4), 4, 0.4, 0, 1);
 }
 
-/*stile bottoni*/
+/* --- BOTTONI --- */
 .button {
-    -fx-background-color: #ff0000;
+    -fx-background-color: linear-gradient(to bottom, #ff0000, #b30000);
     -fx-text-fill: #ffd700;
     -fx-border-color: #ffd700;
     -fx-border-width: 2;
-    -fx-background-radius: 5;
-    -fx-border-radius: 5;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
     -fx-font-weight: bold;
     -fx-cursor: hand;
     -fx-scale-x: 1;
     -fx-scale-y: 1;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 8, 0.3, 0, 2);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.6), 10, 0.5, 0, 3);
+    -fx-padding: 8 16 8 16;
     -fx-transition: all 0.2s ease-in-out;
+    -fx-border-insets: 0;
+    -fx-background-insets: 0;
 }
 
 .logout {
-    -fx-background-color: #ff0000;
+    -fx-background-color: linear-gradient(to bottom, #ff0000, #660000);
     -fx-border-color: black; 
     -fx-text-fill: black;
+    -fx-background-radius: 8;
+	-fx-border-radius: 8;
+}
+
+.logout:hover {
+    -fx-background-color: linear-gradient(to bottom, #ff3333, #b30000);
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 12, 0.6, 0, 3);
 }
 
 .button:hover {
-    -fx-scale-x: 1.05;
-    -fx-scale-y: 1.05;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.6), 12, 0.4, 0, 3);
+    -fx-background-color: linear-gradient(to bottom, #ff4500, #ff0000);
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 14, 0.6, 0, 4);
 }
 
 .button:pressed {
-    -fx-scale-x: 0.98;
-    -fx-scale-y: 0.98;
+    -fx-scale-x: 0.95;
+    -fx-scale-y: 0.95;
+    -fx-background-color: linear-gradient(to bottom, #b30000, #660000);
 }
 
-/*stile modale */
+/* --- MODALE --- */
 .modale {
-	-fx-background-color: red;
-	-fx-background-radius: 8;
-	-fx-border-color: orange;
-	-fx-border-width: 2;
-	-fx-border-radius: 5;
-	-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 10, 0, 0, 4);
+    -fx-background-color: linear-gradient(to bottom, #ff0000, #b30000);
+    -fx-background-radius: 10;
+    -fx-border-color: #ff7f50;
+    -fx-border-width: 3;
+    -fx-border-radius: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 15, 0.6, 0, 5);
+    -fx-padding: 15;
 }
 
-/*stile contenitore generico */
+/* --- CONTENITORE GENERICO --- */
 .contenitore {
-	-fx-border-color: white;
-	-fx-background-color: red;
-	-fx-background-radius: 5;
-	-fx-border-radius: 5; 
-	-fx-border-width: 2; 
+    -fx-border-color: #ffd700;
+    -fx-background-color: linear-gradient(to bottom, #ff4500, #b30000);
+    -fx-background-radius: 8;
+    -fx-border-radius: 8; 
+    -fx-border-width: 2; 
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 8, 0.4, 0, 2);
+    -fx-padding: 10;
+}
+
+/* --- CONTENITORE TRASPARENTE (es. carte) --- */
+.contenitore-trasparente {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
 }

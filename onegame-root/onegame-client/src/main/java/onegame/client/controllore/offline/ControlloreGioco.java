@@ -338,6 +338,7 @@ public class ControlloreGioco {
 	                                
 	                                //QUI MOSTRA PULSANTE ONE (se hai appena giocato la penultima)
 	                                if (g.getMano().getNumCarte() == 1) { 
+	                                	vg.stampaManoReadOnly(m.getCartaScelta(), g);
 	                                    vg.mostraPulsanteONE(premuto -> {
 	                                    	if (premuto) {
 		                        	            vg.stampaMessaggio(g.getNome()+" ha chiamato ONE");
@@ -371,6 +372,7 @@ public class ControlloreGioco {
 	                        	
 	                        	//QUI MOSTRA PULSANTE ONE (se hai appena giocato la penultima carta)
 	                        	if (g.getMano().getNumCarte() == 1) { 
+	                        		vg.stampaManoReadOnly(m.getCartaScelta(), g);
 	                        	    vg.mostraPulsanteONE(premuto -> {
 	                        	        if (premuto) {
 	                        	            vg.stampaMessaggio(g.getNome()+" ha chiamato ONE");

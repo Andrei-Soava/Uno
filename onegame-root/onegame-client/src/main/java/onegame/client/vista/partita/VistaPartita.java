@@ -17,6 +17,7 @@ import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -43,6 +44,7 @@ import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import onegame.client.controllore.offline.ControlloreGioco;
 import onegame.client.esecuzione.AppWithMaven;
+import onegame.client.vista.accessori.GestoreEffettiGenerici;
 import onegame.client.vista.accessori.GestoreGraficaCarta;
 import onegame.client.vista.accessori.LayoutGiocatori;
 import onegame.modello.util.Wrappers.IntegerAndBooleanWrapper;
@@ -289,7 +291,7 @@ public abstract class VistaPartita {
      */
     public void evidenziaTurnoCorrente() {
     	Platform.runLater(()->{
-    		makeGlowingPulse(turnoCorrenteLbl);
+    		GestoreEffettiGenerici.assegnaPulsazioneColorata(turnoCorrenteLbl, Color.CRIMSON);
     	});
     }
     
@@ -304,29 +306,6 @@ public abstract class VistaPartita {
         });
     }
     
-    public static void makeGlowingPulse(Label label) {
-        DropShadow glow = new DropShadow();
-        Color color=Color.RED;
-        glow.setColor(color);
-        glow.setRadius(30);
-        glow.setSpread(0.8);
-        label.setEffect(glow);
-
-        Timeline pulse = new Timeline(
-            new KeyFrame(Duration.ZERO,
-                new KeyValue(glow.radiusProperty(), 10),
-                new KeyValue(glow.colorProperty(), color.deriveColor(1, 1, 1, 0.3))
-            ),
-            new KeyFrame(Duration.seconds(1),
-                new KeyValue(glow.radiusProperty(), 40),
-                new KeyValue(glow.colorProperty(), color.deriveColor(1, 1, 1, 1.0))
-            )
-        );
-
-        pulse.setAutoReverse(true);
-        pulse.setCycleCount(Animation.INDEFINITE);
-        pulse.play();
-    }
 
     
     /**
@@ -377,7 +356,7 @@ public abstract class VistaPartita {
         		giocatoriLbl.get(posizione).setText(campo);
         		giocatoriLbl.get(posizione).setVisible(true);
         		if(entry.getValue().isFlag())
-        			makeGlowingPulse(giocatoriLbl.get(posizione));
+        			GestoreEffettiGenerici.assegnaPulsazioneColorata(giocatoriLbl.get(posizione), Color.DARKRED);
         		i++;
     		}
     	});
