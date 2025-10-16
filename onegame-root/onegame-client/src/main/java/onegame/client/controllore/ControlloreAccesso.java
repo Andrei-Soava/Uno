@@ -80,7 +80,7 @@ public class ControlloreAccesso {
 					}
 				});
 			} catch (Exception e) {
-				
+				e.printStackTrace();
 			}
 		});
 	}

@@ -6,6 +6,9 @@ import onegame.client.net.ClientSocket;
 import onegame.client.net.ConnectionMonitor;
 import onegame.client.persistenza_temporanea.ManagerPersistenza;
 import onegame.client.vista.offline.VistaSalvataggi;
+import onegame.modello.net.ProtocolloMessaggi.RespEliminaPartita;
+import onegame.modello.net.ProtocolloMessaggi.RespListaPartite;
+import onegame.modello.net.util.JsonHelper;
 
 public class ControlloreSalvataggi {
 	private VistaSalvataggi vs;
@@ -46,5 +49,38 @@ public class ControlloreSalvataggi {
                 }
             }
         });
+	}
+	
+	public void eseguiSceltaWithDb() {
+		cs.listaPartite(args->{
+			String json = args[0].toString();
+			RespListaPartite risposta=JsonHelper.fromJson(json, RespListaPartite.class);
+			if(risposta.success) {
+				vs.scegliAzioneSalvataggiAsync(risposta.nomiSalvataggi, event->{
+					switch (event.getTipo()) {
+	                case GIOCA: { 
+	                	//probabilmente partita da ottenere qui, deserializzarla e lo passo alla appwithmaven che la carica
+	                	vs.mostraGiocoCaricato(event.getNomeOriginale());
+	                	break;
+	                }
+	                case RINOMINA: {
+	                	//serve un cs.rinomina visto che cs.salva di adesso prende solo nome e partita serializzata 
+	                    eseguiSceltaWithDb();
+	                    return;
+	                }
+	                case ELIMINA: {
+	                    cs.eliminaPartita(event.getNomeOriginale(), args2->{
+	                    	String json2 = args2[0].toString();
+	                    	RespEliminaPartita risposta2= JsonHelper.fromJson(json2, RespEliminaPartita.class);
+	                    	if(risposta2.success) {
+	                    		eseguiSceltaWithDb();
+	                    		return;
+	                    	}
+	                    });
+	                }
+	            }
+				});
+			}
+		});
 	}
 }

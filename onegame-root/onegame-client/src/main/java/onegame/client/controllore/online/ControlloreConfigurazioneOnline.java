@@ -3,6 +3,8 @@ package onegame.client.controllore.online;
 import onegame.client.net.ClientSocket;
 import onegame.client.net.ConnectionMonitor;
 import onegame.client.vista.online.VistaConfigurazioneOnline;
+import onegame.modello.net.ProtocolloMessaggi.RespCreaStanza;
+import onegame.modello.net.util.JsonHelper;
 
 public class ControlloreConfigurazioneOnline {
 	private VistaConfigurazioneOnline vco;
@@ -23,8 +25,19 @@ public class ControlloreConfigurazioneOnline {
 	public void aspettaCreazioneStanza() {
 		vco.configuraPartita(numeroGiocatori->{
 			//richiesta codice della stanza con funzione asincrona
-			String codiceOttenuto="codice";
-			vco.mostraStanza(codiceOttenuto);
+//			String codiceOttenuto="codice";
+//			vco.mostraStanza(codiceOttenuto);
+			
+			cs.creaStanza("Prova", numeroGiocatori, args->{
+				String json=args[0].toString();
+				RespCreaStanza risposta=JsonHelper.fromJson(json, RespCreaStanza.class);
+				if(risposta.success) {
+					vco.mostraStanza(Integer.toString(risposta.codiceStanza));
+				} else {
+					aspettaCreazioneStanza();
+					return;
+				}
+			});
 		});
 	}
 }

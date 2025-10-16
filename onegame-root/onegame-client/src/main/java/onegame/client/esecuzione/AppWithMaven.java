@@ -1,5 +1,7 @@
 package onegame.client.esecuzione;
 
+import java.util.List;
+
 import org.apache.logging.log4j.*;
 
 import javafx.application.Application;
@@ -147,6 +149,7 @@ public class AppWithMaven extends Application {
 		ControlloreStanza cv;
 		if(host) {
 			cv=new ControlloreStanzaHost(vista,cs,cm);
+			vista.aggiornaGiocatori(List.of(cs.getUtente().getGiocatore().getNome()));
 		}
 		else {
 			cv=new ControlloreStanzaOspite(vista,cs,cm);

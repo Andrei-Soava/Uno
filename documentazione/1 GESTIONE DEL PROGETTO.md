@@ -123,4 +123,4 @@ Esempio COMPLETO:
 - 14/10, Fabio, (migrazione del progetto a Java 21 e correzione delle dipendenze relative al logging), null;
 - 15/10, Giuseppe, (aggiornamento classe PartitaNet, timer dichiarazione UNO), null;
 - 15/10, Fabio, (completamento GestorePartiteOffline, configurazione del logger, modificate configurazioni del server, refactoring), completamento gestione salvataggio partite offline;
-- 16/10, Andrei, (refactoring stampaTurnazione, spostamento di alcune classi, miglioramento grafica durante il gioco e aggiornamento stile del css), null;
+- 16/10, Andrei, (refactoring stampaTurnazione, spostamento di alcune classi, miglioramento grafica durante il gioco e aggiornamento stile del css + collegamento parziale server-controllore), null;
