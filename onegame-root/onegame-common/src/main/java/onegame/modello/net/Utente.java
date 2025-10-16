@@ -18,14 +18,14 @@ public class Utente {
     private String username;
     private boolean anonimo;
     private boolean connesso;
-    private long ultimoHeartbeat;
+//    private long ultimoHeartbeat;
     private Giocatore giocatore;
 
     public Utente(boolean anonimo) {
         this.username = "anonimo";
         this.anonimo = anonimo;
         this.connesso = true;
-        this.ultimoHeartbeat = Instant.now().toEpochMilli();
+//        this.ultimoHeartbeat = Instant.now().toEpochMilli();
     }
 
     public Utente(String username, boolean anonimo) {
@@ -60,17 +60,17 @@ public class Utente {
 
     public void setConnesso(boolean connesso) {
         this.connesso = connesso;
-        if (connesso) aggiornaHeartbeat();
+//        if (connesso) aggiornaHeartbeat();
     }
     
-    @JsonIgnore
-    public long getUltimoHeartbeat() {
-        return ultimoHeartbeat;
-    }
-
-    public void setUltimoHeartbeat(long ultimoHeartbeat) {
-        this.ultimoHeartbeat = ultimoHeartbeat;
-    }
+//    @JsonIgnore
+//    public long getUltimoHeartbeat() {
+//        return ultimoHeartbeat;
+//    }
+//
+//    public void setUltimoHeartbeat(long ultimoHeartbeat) {
+//        this.ultimoHeartbeat = ultimoHeartbeat;
+//    }
     
     @JsonIgnore
     public Giocatore getGiocatore() {
@@ -81,10 +81,10 @@ public class Utente {
 		this.giocatore = giocatore;
 	}
 
-    @JsonIgnore
-    public void aggiornaHeartbeat() {
-        this.ultimoHeartbeat = Instant.now().toEpochMilli();
-    }
+//    @JsonIgnore
+//    public void aggiornaHeartbeat() {
+//        this.ultimoHeartbeat = Instant.now().toEpochMilli();
+//    }
 
     @Override
     public String toString() {

@@ -1,7 +1,6 @@
 package onegame.server;
 
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
@@ -11,9 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import com.corundumstudio.socketio.AckRequest;
 import com.corundumstudio.socketio.SocketIOClient;
-import com.corundumstudio.socketio.SocketIOServer;
 
-import onegame.modello.net.ProtocolloMessaggi;
 import onegame.modello.net.ProtocolloMessaggi.ReqCreaStanza;
 import onegame.modello.net.ProtocolloMessaggi.ReqEntraStanza;
 import onegame.modello.net.ProtocolloMessaggi.RespAbbandonaStanza;
@@ -28,7 +25,6 @@ import onegame.modello.net.util.JsonHelper;
  */
 public class GestoreStanze {
 
-	private final SocketIOServer server;
 	private final GestoreConnessioni gestoreConnessioni;
 
 	// Mappa idStanza → StanzaPartita
@@ -46,8 +42,7 @@ public class GestoreStanze {
 
 	private static final Logger logger = LoggerFactory.getLogger(GestoreStanze.class);
 
-	public GestoreStanze(SocketIOServer server, GestoreConnessioni gestoreConnessioni) {
-		this.server = server;
+	public GestoreStanze(GestoreConnessioni gestoreConnessioni) {
 		this.gestoreConnessioni = gestoreConnessioni;
 	}
 
@@ -67,13 +62,12 @@ public class GestoreStanze {
 			long idStanza = counterId.incrementAndGet();
 			int maxGiocatori = Math.max(2, req.maxGiocatori);
 
-			StanzaPartita stanza = new StanzaPartita(idStanza, req.nomeStanza, maxGiocatori, server,
-					gestoreConnessioni);
+			int codiceStanza = nextCodice();
+			StanzaPartita stanza = new StanzaPartita(codiceStanza, idStanza, req.nomeStanza, maxGiocatori, gestoreConnessioni);
 			stanze.put(idStanza, stanza);
 			mappaTokenUtenteAStanza.put(token, idStanza);
 			stanza.aggiungiUtente(token, client);
 
-			int codiceStanza = nextCodice();
 			mappaCodiceAIdStanza.put(codiceStanza, idStanza);
 			ack.sendAckData(new RespCreaStanza(true, "Stanza creata con successo", codiceStanza));
 			logger.info("[Stanza] Creata stanza {} da token {}", idStanza, token);

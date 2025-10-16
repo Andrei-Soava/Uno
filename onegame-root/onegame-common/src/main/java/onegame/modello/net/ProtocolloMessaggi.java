@@ -220,4 +220,15 @@ public class ProtocolloMessaggi {
 			this.messaggio = messaggio;
 		}
 	}
+	
+	public static class ReqEffettuaMossa {
+		public MossaDTO mossa;
+		
+		public ReqEffettuaMossa() {
+		}
+		
+		public ReqEffettuaMossa(MossaDTO mossa) {
+			this.mossa = mossa;
+		}
+	}
 }

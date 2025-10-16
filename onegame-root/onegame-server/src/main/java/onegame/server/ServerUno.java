@@ -25,6 +25,8 @@ public class ServerUno {
 	private final GestoreConnessioni gestoreConnessioni;
 	private final GestoreStanze gestoreStanze;
 	private final GestorePartiteOffline gestorePartiteOffline;
+	private final GestoreGioco gestoreGioco;
+	
 	// sessioni: token -> Utente
 	private final Map<String, Utente> sessioni = new ConcurrentHashMap<>();
 	
@@ -41,8 +43,9 @@ public class ServerUno {
 		
 		this.server = new SocketIOServer(config);
 		this.gestoreConnessioni = new GestoreConnessioni(sessioni);
-		this.gestoreStanze = new GestoreStanze(this.server, gestoreConnessioni);
+		this.gestoreStanze = new GestoreStanze(gestoreConnessioni);
 		this.gestorePartiteOffline = new GestorePartiteOffline(gestoreConnessioni);
+		this.gestoreGioco = new GestoreGioco(gestoreStanze);
 
 		registraEventi();
 	}
@@ -135,6 +138,9 @@ public class ServerUno {
 		
 		server.addEventListener(ProtocolloMessaggi.EVENT_ELIMINA_PARTITA, String.class,
 				(client, data, ack) -> gestorePartiteOffline.handleEliminaSalvataggio(client, data, ack));
+		
+		server.addEventListener(ProtocolloMessaggi.EVENT_GIOCO_MOSSA, String.class,
+				(client, data, ack) -> gestoreGioco.handleEffettuaMossa(client, data, ack));
 		
 		logger.debug("Eventi registrati");
 	}
