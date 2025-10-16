@@ -22,8 +22,8 @@ import onegame.modello.net.Utente;
  * StanzaPartita rappresenta una stanza di gioco
  */
 public class StanzaPartita {
-
-    private final String idStanza; // identificativo univoco
+	private int codice;
+    private final long idStanza; // identificativo univoco
     private final String nomeStanza; // nome visualizzato
     private final int maxUtenti;
     private final SocketIOServer server; 
@@ -55,7 +55,7 @@ public class StanzaPartita {
 	 * @param server           Riferimento al server
 	 * @param gestoreConnessioni Riferimento al gestore delle connessioni
 	 */
-    public StanzaPartita(String idStanza, String nomeStanza, int maxUtenti, SocketIOServer server,
+    public StanzaPartita(long idStanza, String nomeStanza, int maxUtenti, SocketIOServer server,
             GestoreConnessioni gestoreConnessioni) {
         this.idStanza = idStanza;
         this.nomeStanza = nomeStanza;
@@ -63,6 +63,14 @@ public class StanzaPartita {
         this.server = server;
         this.gestoreConnessioni = gestoreConnessioni;
     }
+    
+    public int getCodice() {
+    	return codice;
+    }
+    
+    public boolean isVuota() {
+    	return utenti.isEmpty();
+	}
 
    /** Aggiunge un utente alla stanza.
 	 * Restituisce true se l'utente è stato aggiunto con successo.
@@ -300,8 +308,10 @@ public class StanzaPartita {
      * Broadcast stato stanza (es. utente entrato/uscito)
      */
     private void broadcastStato(String stato, String messaggio) {
-        ProtocolloMessaggi.RespStanza msg = new ProtocolloMessaggi.RespStanza(idStanza, stato, messaggio);
-        clientConnessi.values().forEach(c -> c.sendEvent("stanza:aggiornamento", msg));
+    	throw new UnsupportedOperationException("StanzaPartita.broadcastStato() non implementato");
+		// notifica
+//        ProtocolloMessaggi.RespStanza msg = new ProtocolloMessaggi.RespStanza(idStanza, stato, messaggio);
+//        clientConnessi.values().forEach(c -> c.sendEvent("stanza:aggiornamento", msg));
     }
 
     /**
@@ -317,11 +327,12 @@ public class StanzaPartita {
      * Termina la partita, notifica i client e pulisce le strutture interne
      */
     private void terminaPartita(String motivo) {
+    	throw new UnsupportedOperationException("StanzaPartita.terminaPartita() non implementato");
         // notifica
-        ProtocolloMessaggi.RespStanza msg = new ProtocolloMessaggi.RespStanza(idStanza, "TERMINATA", motivo);
-        clientConnessi.values().forEach(c -> c.sendEvent("partita:terminata", msg));
+//        ProtocolloMessaggi.RespStanza msg = new ProtocolloMessaggi.RespStanza(idStanza, "TERMINATA", motivo);
+//        clientConnessi.values().forEach(c -> c.sendEvent("partita:terminata", msg));
         // pulizia
-        puliziaPartita();
+//        puliziaPartita();
     }
 
     private void puliziaPartita() {
@@ -335,7 +346,7 @@ public class StanzaPartita {
     }
 
     public String getIdStanza() {
-        return idStanza;
+    	throw new UnsupportedOperationException("StanzaPartita.getIdStanza() non implementato");
     }
 
     public String getNomeStanza() {

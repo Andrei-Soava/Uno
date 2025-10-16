@@ -73,30 +73,42 @@ public class ProtocolloMessaggi {
 		}
 	}
 
+	public static class RespCreaStanza {
+		public boolean success;
+		public String messaggio;
+		public int codiceStanza;
+
+		public RespCreaStanza() {
+		}
+
+		public RespCreaStanza(boolean success, String messaggio, int codiceStanza) {
+			this.success = success;
+			this.messaggio = messaggio;
+			this.codiceStanza = codiceStanza;
+		}
+	}
+
 //     Entra stanza
 	public static class ReqEntraStanza {
-		public String idStanza;
+		public int codiceStanza;
 
 		public ReqEntraStanza() {
 		}
 
-		public ReqEntraStanza(String idStanza) {
-			this.idStanza = idStanza;
+		public ReqEntraStanza(int codiceStanza) {
+			this.codiceStanza = codiceStanza;
 		}
 	}
-
-//     Stanza risposta semplice
-	public static class RespStanza {
-		public String idStanza;
-		public String stato;
+	
+	public static class RespEntraStanza {
+		public boolean success;
 		public String messaggio;
 
-		public RespStanza() {
+		public RespEntraStanza() {
 		}
 
-		public RespStanza(String idStanza, String stato, String messaggio) {
-			this.idStanza = idStanza;
-			this.stato = stato;
+		public RespEntraStanza(boolean success, String messaggio) {
+			this.success = success;
 			this.messaggio = messaggio;
 		}
 	}
@@ -127,6 +139,19 @@ public class ProtocolloMessaggi {
 			this.messaggio = messaggio;
 		}
 	}
+	
+	public static class RespAbbandonaStanza {
+		public boolean success;
+		public String messaggio;
+
+		public RespAbbandonaStanza() {
+		}
+
+		public RespAbbandonaStanza(boolean success, String messaggio) {
+			this.success = success;
+			this.messaggio = messaggio;
+		}
+	}
 
 	// Richiesta di caricamento
 	public static class ReqCaricaPartita {
@@ -134,7 +159,7 @@ public class ProtocolloMessaggi {
 
 		public ReqCaricaPartita() {
 		}
-		
+
 		public ReqCaricaPartita(String nomeSalvataggio) {
 			this.nomeSalvataggio = nomeSalvataggio;
 		}
@@ -166,7 +191,7 @@ public class ProtocolloMessaggi {
 			this.nomeSalvataggio = nomeSalvataggio;
 		}
 	}
-	
+
 	public static class RespEliminaPartita {
 		public boolean success;
 		public String messaggio;

@@ -177,9 +177,10 @@ public class ClientSocket {
 	 * @throws Exception
 	 */
     public void entraStanza(String idStanza, Ack callback) {
-        ReqEntraStanza r = new ReqEntraStanza(idStanza);
+//        ReqEntraStanza r = new ReqEntraStanza(idStanza);
         // CORRETTO - oggetto direttamente, NO json string
-        socket.emit("stanza:entra", r, callback);
+//        socket.emit("stanza:entra", r, callback);
+    	throw new UnsupportedOperationException("Non ancora implementato");
     }
 
     /**
