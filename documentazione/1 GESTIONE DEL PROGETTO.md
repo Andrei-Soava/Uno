@@ -119,5 +119,7 @@ Esempio COMPLETO:
 - 13/10 13:00, Andrei, (adozione regola +4 giocabile solo se non ci sono alternative--> funzione verificaPiuQuattroGiocabile in Partita + integrazione nel flusso di gioco); null;
 - 13/10 19:00, Fabio, stesura regolamento, null;
 - 13/10 14:00-22:00, Andrei, (restyling della VistaGioco + eliminazione temporanea VistaSpettatore), null;
-- 14/10, Giuseppe, (aggiornamento classe PartitaNET + sistemazione classe Giocatore e classe MossaDTO);
-- 15/10, Giuseppe, (aggiornamento classe PartitaNet, timer dichiarazione UNO)
+- 14/10, Giuseppe, (aggiornamento classe PartitaNET + sistemazione classe Giocatore e classe MossaDTO), null;
+- 14/10, Fabio, (migrazione del progetto a Java 21 e correzione delle dipendenze relative al logging), null;
+- 15/10, Giuseppe, (aggiornamento classe PartitaNet, timer dichiarazione UNO), null;
+- 15/10, Fabio, (completamento GestorePartiteOffline, configurazione del logger, modificate configurazioni del server, refactoring), completamento gestione salvataggio partite offline;
