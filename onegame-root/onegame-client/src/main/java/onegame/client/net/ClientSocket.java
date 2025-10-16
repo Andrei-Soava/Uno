@@ -1,15 +1,8 @@
 package onegame.client.net;
 
 import java.net.URI;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-
-import org.json.JSONObject;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.socket.client.Ack;
 import io.socket.client.IO;
@@ -17,9 +10,11 @@ import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 import onegame.modello.net.ProtocolloMessaggi;
 import onegame.modello.net.ProtocolloMessaggi.ReqAuth;
+import onegame.modello.net.ProtocolloMessaggi.ReqCaricaPartita;
 import onegame.modello.net.ProtocolloMessaggi.ReqCreaStanza;
+import onegame.modello.net.ProtocolloMessaggi.ReqEliminaPartita;
 import onegame.modello.net.ProtocolloMessaggi.ReqEntraStanza;
-import onegame.modello.net.ProtocolloMessaggi.RespAuth;
+import onegame.modello.net.ProtocolloMessaggi.ReqSalvaPartita;
 import onegame.modello.net.Utente;
 import onegame.modello.net.util.JsonHelper;
 
@@ -43,6 +38,22 @@ public class ClientSocket {
         this.utente=new Utente(true);
         registerBaseHandlers();
     }
+
+    /**
+     * Ottieni utente dal socket
+     * @return utente del socket
+     */
+	public Utente getUtente() {
+		return this.utente;
+	}
+
+	/**
+	 * Imposta utente del socket (potrebbe servire)
+	 * @param utente
+	 */
+	public void setUtente(Utente utente) {
+		this.utente = utente;
+	}
 
     /**
      * Registra gli handler di base
@@ -153,7 +164,7 @@ public class ClientSocket {
 	 * @param callback Callback per la risposta del server
 	 * @throws Exception
 	 */
-    public void creaStanza(String nome, int maxGiocatori, Ack callback) throws Exception {
+    public void creaStanza(String nome, int maxGiocatori, Ack callback) {
         ReqCreaStanza req = new ReqCreaStanza(nome, maxGiocatori);
         System.out.println("[CLIENT] Invio richiesta creazione stanza");
         socket.emit("stanza:crea", JsonHelper.toJson(req), callback);
@@ -165,7 +176,7 @@ public class ClientSocket {
 	 * @param callback Callback per la risposta del server
 	 * @throws Exception
 	 */
-    public void entraStanza(String idStanza, Ack callback) throws Exception {
+    public void entraStanza(String idStanza, Ack callback) {
         ReqEntraStanza r = new ReqEntraStanza(idStanza);
         // CORRETTO - oggetto direttamente, NO json string
         socket.emit("stanza:entra", r, callback);
@@ -177,12 +188,36 @@ public class ClientSocket {
 	 * @param callback Callback per la risposta del server
 	 */
     public void inviaMossa(Object mossaObj, Ack callback) {
+    	// TO DO
         try {
             // CORRETTO - oggetto direttamente
             socket.emit("partita:mossa", mossaObj, callback);
         } catch (Exception e) {
             if (callback != null) callback.call(e.getMessage());
         }
+    }
+    
+    public void listaPartite(Ack callback) {
+    	System.out.println("[CLIENT] Invio richiesta lista partite salvate");
+		socket.emit(ProtocolloMessaggi.EVENT_LISTA_PARTITE, null, callback);
+	}
+    
+    public void salvaPartita(String nomeSalvataggio, String partitaSerializzata, Ack callback) {
+    	ReqSalvaPartita req = new ReqSalvaPartita(nomeSalvataggio, partitaSerializzata);
+    	System.out.println("[CLIENT] Invio richiesta salvataggio partita: " + nomeSalvataggio);
+		socket.emit(ProtocolloMessaggi.EVENT_SALVA_PARTITA, JsonHelper.toJson(req), callback);
+	}
+    
+    public void caricaPartita(String nomeSalvataggio, Ack callback) {
+    	ReqCaricaPartita req = new ReqCaricaPartita(nomeSalvataggio);
+    	System.out.println("[CLIENT] Invio richiesta caricamento partita: " + nomeSalvataggio);
+		socket.emit(ProtocolloMessaggi.EVENT_CARICA_PARTITA, JsonHelper.toJson(req), callback);
+	}
+    
+    public void eliminaPartita(String nomeSalvataggio, Ack callback) {
+    	ReqEliminaPartita req = new ReqEliminaPartita(nomeSalvataggio);
+    	System.out.println("[CLIENT] Invio richiesta eliminazione partita: " + nomeSalvataggio);
+    	socket.emit(ProtocolloMessaggi.EVENT_ELIMINA_PARTITA, JsonHelper.toJson(req), callback);
     }
 
     /**
@@ -193,22 +228,6 @@ public class ClientSocket {
     public void on(String evento, Emitter.Listener handler) {
         socket.on(evento, handler);
     }
-
-    /**
-     * Ottieni utente dal socket
-     * @return utente del socket
-     */
-	public Utente getUtente() {
-		return this.utente;
-	}
-
-	/**
-	 * Imposta utente del socket (potrebbe servire)
-	 * @param utente
-	 */
-	public void setUtente(Utente utente) {
-		this.utente = utente;
-	}
     
     
 }

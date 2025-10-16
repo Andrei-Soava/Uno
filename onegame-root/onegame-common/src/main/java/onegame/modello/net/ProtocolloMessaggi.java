@@ -103,15 +103,13 @@ public class ProtocolloMessaggi {
 
 	// Richiesta di salvataggio
 	public static class ReqSalvaPartita {
-		public String token; // token utente (per sapere chi salva)
 		public String nomeSalvataggio;
 		public String partitaSerializzata;
 
 		public ReqSalvaPartita() {
 		}
 
-		public ReqSalvaPartita(String token, String nomeSalvataggio, String partitaSerializzata) {
-			this.token = token;
+		public ReqSalvaPartita(String nomeSalvataggio, String partitaSerializzata) {
 			this.nomeSalvataggio = nomeSalvataggio;
 			this.partitaSerializzata = partitaSerializzata;
 		}
@@ -132,14 +130,12 @@ public class ProtocolloMessaggi {
 
 	// Richiesta di caricamento
 	public static class ReqCaricaPartita {
-		public String token;
 		public String idSalvataggio;
 
 		public ReqCaricaPartita() {
 		}
 
-		public ReqCaricaPartita(String token, String idSalvataggio) {
-			this.token = token;
+		public ReqCaricaPartita(String idSalvataggio) {
 			this.idSalvataggio = idSalvataggio;
 		}
 	}
@@ -161,15 +157,26 @@ public class ProtocolloMessaggi {
 
 	// richiesta di eliminazione
 	public static class ReqEliminaPartita {
-		public String token;
-		public long idSalvataggio;
+		public String idSalvataggio;
 
 		public ReqEliminaPartita() {
 		}
 
-		public ReqEliminaPartita(String token, long idSalvataggio) {
-			this.token = token;
+		public ReqEliminaPartita(String idSalvataggio) {
 			this.idSalvataggio = idSalvataggio;
+		}
+	}
+	
+	public static class RespEliminaPartita {
+		public boolean success;
+		public String messaggio;
+
+		public RespEliminaPartita() {
+		}
+
+		public RespEliminaPartita(boolean success, String messaggio) {
+			this.success = success;
+			this.messaggio = messaggio;
 		}
 	}
 

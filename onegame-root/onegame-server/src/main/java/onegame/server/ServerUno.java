@@ -123,10 +123,20 @@ public class ServerUno {
 			//stanza.riceviMossa(token, mossa);
 		});
 
-		logger.debug("Eventi registrati");
 		
 		server.addEventListener(ProtocolloMessaggi.EVENT_SALVA_PARTITA, String.class,
 				(client, data, ack) -> gestorePartiteOffline.handleSalvaPartita(client, data, ack));
+		
+		server.addEventListener(ProtocolloMessaggi.EVENT_CARICA_PARTITA, String.class,
+				(client, data, ack) -> gestorePartiteOffline.handleCaricaPartita(client, data, ack));
+		
+		server.addEventListener(ProtocolloMessaggi.EVENT_LISTA_PARTITE, Void.class,
+				(client, data, ack) -> gestorePartiteOffline.handleListaSalvataggi(client, ack));
+		
+		server.addEventListener(ProtocolloMessaggi.EVENT_ELIMINA_PARTITA, String.class,
+				(client, data, ack) -> gestorePartiteOffline.handleEliminaSalvataggio(client, data, ack));
+		
+		logger.debug("Eventi registrati");
 	}
 
 	public void avvia() {

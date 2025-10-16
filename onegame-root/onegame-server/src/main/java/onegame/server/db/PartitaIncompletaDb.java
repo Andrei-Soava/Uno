@@ -7,6 +7,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Gestisce le operazioni sul database relative alle partite incomplete
+ * salvate dagli utenti registrati.
+ */
 public class PartitaIncompletaDb {
 	
 	//salva una nuova partita incompleta nel db

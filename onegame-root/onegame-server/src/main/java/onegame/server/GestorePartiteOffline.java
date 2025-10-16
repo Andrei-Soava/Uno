@@ -14,6 +14,7 @@ import onegame.modello.net.Utente;
 import onegame.modello.net.util.JsonHelper;
 import onegame.modello.net.ProtocolloMessaggi.ReqSalvaPartita;
 import onegame.modello.net.ProtocolloMessaggi.ReqCaricaPartita;
+import onegame.modello.net.ProtocolloMessaggi.ReqEliminaPartita;
 import onegame.server.db.PartitaIncompletaDb;
 
 /**
@@ -122,6 +123,25 @@ public class GestorePartiteOffline {
 		} catch (SQLException e) {
 			logger.error("[Server] Errore durante il recupero dei salvataggi per utente {}: {}", utente.getUsername(), e.getMessage());
 			ackRequest.sendAckData(new ProtocolloMessaggi.RespListaPartite(false, null, "Errore durante il recupero"));
+		}
+	}
+	
+	public void handleEliminaSalvataggio(SocketIOClient client, String str, AckRequest ackRequest) {
+		Utente utente = getUtenteAutenticato(client);
+		if (utente == null) {
+			ackRequest.sendAckData(new ProtocolloMessaggi.RespEliminaPartita(false, "Utente non valido"));
+			logger.warn("[Server] Accesso negato: token non valido o utente anonimo");
+			return;
+		}
+
+		try {
+			ReqEliminaPartita req = JsonHelper.fromJson(str, ReqEliminaPartita.class);
+			if (req.idSalvataggio == null || req.idSalvataggio.isBlank()) {
+				ackRequest.sendAckData(new ProtocolloMessaggi.RespEliminaPartita(false, "ID salvataggio mancante"));
+			}
+		} catch (Exception e) {
+			logger.error("[Server] Errore durante l'eliminazione del salvataggio per utente {}: {}", utente.getUsername(), e.getMessage());
+			ackRequest.sendAckData(new ProtocolloMessaggi.RespEliminaPartita(false, "Errore durante l'eliminazione"));
 		}
 	}
 
