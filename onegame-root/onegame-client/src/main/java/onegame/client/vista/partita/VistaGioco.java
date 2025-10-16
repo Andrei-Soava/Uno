@@ -2,10 +2,12 @@ package onegame.client.vista.partita;
 
 import javafx.animation.AnimationTimer;
 import javafx.animation.PauseTransition;
+import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
@@ -13,6 +15,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import onegame.client.esecuzione.AppWithMaven;
+import onegame.client.vista.accessori.GestoreEffettiGenerici;
 import onegame.client.vista.accessori.GestoreGraficaCarta;
 import onegame.client.vista.accessori.GestoreHoverCarta;
 import onegame.modello.Mossa;
@@ -27,7 +30,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 
 public class VistaGioco extends VistaPartita {
-    private HBox mano;
+    private Pane mano;
     private ScrollPane contenitoreManoPane;
     private Dialog<?> finestraAperta;
     private Pane overlay;
@@ -38,8 +41,13 @@ public class VistaGioco extends VistaPartita {
     	//contenitore inferiore
     	HBox contenitoreInferiore = new HBox(10);
     	contenitoreInferiore.setAlignment(Pos.CENTER);
-    	mano=new HBox();
+    	mano=new Pane();
+    	//mano.getStyleClass().add("contenitore-trasparente");
         contenitoreManoPane = new ScrollPane(mano);
+        contenitoreManoPane.setStyle(
+        	    "-fx-background-color: transparent;" +   
+        	    "-fx-background: transparent;");
+        ((Region) contenitoreManoPane.getContent()).setStyle("-fx-background-color: transparent;");
         contenitoreManoPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         contenitoreManoPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         contenitoreManoPane.setFitToWidth(false);
@@ -267,10 +275,19 @@ public class VistaGioco extends VistaPartita {
      */
     public void scegliMossaAsync(Carta cartaCorrente, Giocatore g, Consumer<Mossa> callback) {
     	Platform.runLater(() -> {
+    		overlay.getChildren().clear();
+    		for (Node c : mano.getChildren()) {
+    		    c.setOpacity(1);
+    		    c.getProperties().remove("overlayView");
+    		}
+    		contenitoreManoPane.setEffect(null);
+    		GestoreEffettiGenerici.assegnaPulsazioneColorata(contenitoreManoPane, Color.CRIMSON);
     		pescaBtn.setVisible(true);
     		timerBox.setVisible(true);
     		stampaCartaCorrente(cartaCorrente);
+    		GestoreEffettiGenerici.assegnaPulsazioneColorata(this.cartaCorrente, Color.AZURE);
             mano.getChildren().clear();
+            int i=0;
             for (Carta c : g.getMano().getCarte()) {
             	StackPane carta=GestoreGraficaCarta.creaVistaCarta(c);
             	//associazione click carta ad evento di callback
@@ -286,20 +303,27 @@ public class VistaGioco extends VistaPartita {
                 		);
                 
                 //scritta sopra il cursore
-                Tooltip tooltip = new Tooltip("Gioca questa carta");
-                tooltip.setStyle(""
-                		+ "-fx-background-color: rgba(0,0,0,0.5);" + // nero al 50% di opacità
-                	    "-fx-text-fill: white;" +
-                	    "-fx-padding: 4px;" +
-                	    "-fx-background-radius: 4;");
-                tooltip.setShowDelay(Duration.millis(10));
-                Tooltip.install(carta, tooltip);
+//                Tooltip tooltip = new Tooltip("Gioca questa carta");
+//                tooltip.setStyle(""
+//                		+ "-fx-background-color: rgba(0,0,0,0.5);" + // nero al 50% di opacità
+//                	    "-fx-text-fill: white;" +
+//                	    "-fx-padding: 4px;" +
+//                	    "-fx-background-radius: 4;");
+//                tooltip.setShowDelay(Duration.millis(10));
+//                Tooltip.install(carta, tooltip);
                 
                 //collega overlay su hover
-                GestoreHoverCarta.bindOverlay(carta, overlay, contenitoreManoPane, /*liftPx*/ 18);
+                //GestoreHoverCarta.bindOverlay(carta, overlay, contenitoreManoPane, /*liftPx*/ 18);
                 
+                //prove particolari
+                carta.setLayoutX(i * 65);
+                carta.setLayoutY(0);
+                i++;
+                
+                //fine prove particolari
                 mano.getChildren().add(carta);
             }
+            GestoreHoverCarta.bindOverlayNuovo(mano, overlay, contenitoreManoPane, 18, false);
         });
     	
     	pescaBtn.setOnAction(e -> {
@@ -309,6 +333,14 @@ public class VistaGioco extends VistaPartita {
     
     public void stampaManoReadOnly(Carta cartaCorrente, Giocatore g) {
     	Platform.runLater(() -> {
+    		overlay.getChildren().clear();
+    		for (Node c : mano.getChildren()) {
+    		    c.setOpacity(1);
+    		    c.getProperties().remove("overlayView");
+    		}
+    		contenitoreManoPane.setEffect(null);
+    		this.cartaCorrente.setEffect(null);
+    		int i=0;
     		pescaBtn.setVisible(false);
     		timerBox.setVisible(false);
     		stampaCartaCorrente(cartaCorrente);
@@ -321,10 +353,17 @@ public class VistaGioco extends VistaPartita {
                 		);
                 
                 //collega overlay su hover
-                GestoreHoverCarta.bindOverlay(carta, overlay, contenitoreManoPane, /*liftPx*/ 18);
+                //GestoreHoverCarta.bindOverlay(carta, overlay, contenitoreManoPane, /*liftPx*/ 18);
                 
+              //prove particolari
+                carta.setLayoutX(i * 65);
+                carta.setLayoutY(0);
+                i++;
+                
+                //fine prove particolari
                 mano.getChildren().add(carta);
             }
+            GestoreHoverCarta.bindOverlayNuovo(mano, overlay, contenitoreManoPane, 18, true);
         });
     }
 

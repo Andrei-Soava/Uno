@@ -69,158 +69,24 @@ public class ControlloreGioco {
 		this.partita = partita;
 	}
 	
+	/**
+	 * metodo per continuare la partita
+	 */
 	public void proseguiPartita() {
 		partitaAttiva=true;
 	}
 
+	/**
+	 * metodo per sospendere la partita (usato in VistaPartita)
+	 */
     public void interrompiPartita() {
         partitaAttiva = false;
     }
 
-
-    /*
-	public void configuraNuovaPartitaOriginale() {
-		int numero = vg.scegliTraN("Seleziona numero giocatori", 2, 4);
-		ArrayList<Giocatore> giocatori = new ArrayList<>();
-		for (int i = 0; i < numero; i++) {
-			String s = vg.inserisciStringa("Scegli un nome per il giocatore " + (i + 1) + ":");
-			giocatori.add(new GiocatoreAnonimo(s));
-		}
-		partita = new Partita(giocatori);
-		setPartitaIF(giocatori, partita);
-		partita.eseguiPrePartita();
-		//da fare solo se persona è loggata
-		cp.setSalvataggioCorrente();
-		//salvataggioCorrente=getNomeDisponibile();
-	}
-	
-	public void configuraNuovaPartitaVsBotOriginale() {
-		int numero = vg.scegliTraN("Seleziona numero giocatori", 2, 4);
-		ArrayList<Giocatore> giocatori = new ArrayList<>();
-		String s = vg.inserisciStringa("Scegli un nome per te: ");
-		giocatori.add(new GiocatoreAnonimo(s));
-		for (int i = 0; i < (numero-1); i++) {
-			s="Bot"+(i+1);
-			Giocatore g=new GiocatoreAnonimo(s);
-			g.cambiaModalita();
-			giocatori.add(g);
-		}
-		partita = new Partita(giocatori);
-		setPartitaIF(giocatori, partita);
-		partita.eseguiPrePartita();
-		//da fare solo se persona è loggata
-		cp.setSalvataggioCorrente();
-		//salvataggioCorrente=getNomeDisponibile();
-	}
-	
-	public void avviaPartitaOriginale() {
-		cp.salvaPartitaAutomatico(this);
-		try {
-			while (!partita.verificaFinePartita()) {
-				Giocatore g=partita.getGiocatoreCorrente();
-				//se giocatore è un bot--> gestisco le sue scelte E aggiunta/rimozione carte della mano dentro il giocatore (applicaEffetto non serve)
-				if(g.isBot()) {
-					Mossa m=g.scegliMossaAutomatica();
-					if(m.getTipoMossa()==TipoMossa.PESCA)
-						vg.stampaMessaggio(g.getNome()+" ha pescato");
-					else
-						vg.stampaMessaggio(g.getNome() + " ha giocato la carta: " + m.getCartaScelta());
-				}
-				else {
-					Mossa m = vg.scegliMossa(partita.getCartaCorrente(), g);
-					if (m.getTipoMossa() == TipoMossa.PESCA) 
-					{
-						gestisciPescaggioInternoOriginale(g,m);
-					} 
-					else 
-					{
-						m.setCartaScelta(vg.scegliCarta(partita.getCartaCorrente(), g));
-						do {
-							//se la carta selezionata non è giocabile--> o riprovo o pesco
-							
-							if (partita.applicaMossa(g, m) == null) 
-							{
-								//pesco (applico mossa) ed esco dal ciclo
-								if (vg.scegliTraDue("carta non compatibile", "riprova", "pesca") == 1) 
-								{
-									m.setTipoMossa(TipoMossa.PESCA);
-									//se pescaggio NON fornisce carta valida--> esco dal ciclo
-									//altrimenti--> la carta è giocabile quindi ulteriore ciclo
-									if(!gestisciPescaggioInternoOriginale(g, m));
-										break;
-								} 
-								//riprovo--> scelgo un'altra carta
-								else
-									m.setCartaScelta(vg.scegliCarta(partita.getCartaCorrente(), g));
-							} 
-							//la carta è giocabile--> verifico se colore è da cambiare o no
-							else 
-							{
-								vg.stampaMessaggio(g.getNome() + " ha giocato la carta: " + m.getCartaScelta());
-								//devo cambiare il colore
-								if (m.getCartaScelta().getColore() == Colore.NERO)
-								{
-									m.setTipoMossa(TipoMossa.SCEGLI_COLORE);
-									m.getCartaScelta().setColore(vg.scegliColore());
-									vg.stampaMessaggio(g.getNome() + " ha cambiato il colore sul banco a "
-											+ m.getCartaScelta().getColore().name());
-								} 
-								//non devo (più) cambiare il colore--> esco dal ciclo
-								partita.applicaMossa(g, m);
-								break;
-							}
-						} while (true);
-					}
-
-				}
-				partita.eseguiUnTurno();
-				cp.salvaPartitaAutomatico(this);
-			}
-			vg.stampaMessaggio("Ha vinto "+partita.getGiocatoreCorrente().getNome()+"!");
-		} catch (NullPointerException e) {
-			e.printStackTrace();
-			vg.stampaMessaggio("Non hai configurato una nuova partita!");
-		}
-	}
-
-	
-	private boolean gestisciPescaggioInternoOriginale(Giocatore g, Mossa m) {
-		//il pescaggio non ha ulteriori effetti (la carta pescata non è giocabile)
-		if (partita.applicaMossa(g, m) == null) {
-			return false;
-		} 
-		//il pescaggio ha restituito una carta giocabile--> posso scegliere cosa farne
-		else 
-		{
-			if (vg.scegliTraDue(
-					"Puoi giocare la carta che hai pescato:" + m.getCartaScelta() + " Scegli", "tienila",
-					"giocala") == 1) {
-				if (m.getCartaScelta().getColore() == Colore.NERO)
-				{
-					m.setTipoMossa(TipoMossa.SCEGLI_COLORE);
-					m.getCartaScelta().setColore(vg.scegliColore());
-					vg.stampaMessaggio(g.getNome() + " ha cambiato il colore sul banco a "
-							+ m.getCartaScelta().getColore().name());
-				} 
-				partita.applicaMossa(g, m);
-			}	
-			return true;
-		}
-	}
-		
-	
-	public void caricaPartitaOriginale() {
-		cp.caricaPartita(this);
-	}
-	*/
-    
-//	static void setPartitaIF(ArrayList<Giocatore> giocatori, Partita partita) {
-//		for(Giocatore g:giocatori) {
-//			g.setInterfacciaPartita(partita);
-//		}
-//	}
-	//---------------------------------------------------------------------------------
-	//versione con GUI javafx
+    /**
+     * metodo che crea una nuova partita contro bots (difatto l'unica opzione disponibile)
+     * @param numeroGiocatori
+     */
 	public void configuraNuovaPartitaVsBot(int numeroGiocatori) {
 		ArrayList<Giocatore> giocatori = new ArrayList<>();
 		//String s = vg.inserisciStringa("Scegli un nome per te:");
@@ -241,6 +107,10 @@ public class ControlloreGioco {
 		//salvataggioCorrente=getNomeDisponibile();
 	}
 	
+	/**
+	 * metodo che crea una partita di tutti giocatori senzienti (ma ti fatto inutile)
+	 * @param numero
+	 */
 	@Deprecated
 	public void configuraNuovaPartita(int numero) {
 		ArrayList<Giocatore> giocatori = new ArrayList<>();
@@ -260,6 +130,9 @@ public class ControlloreGioco {
 		cp.caricaPartita(this, salvataggio);
 	}
 	
+	/**
+	 * metodo che identifica l'unico giocatore effettivo che prende scelte nella partita offline
+	 */
 	private void recuperaGiocatoreNonBot() {
 		for(Giocatore g:partita.getGiocatori()) {
 			if(!g.isBot()) {
@@ -270,6 +143,9 @@ public class ControlloreGioco {
 		}
 	}
 	
+	/**
+	 * metodo richiamato ogni volta che viene avviata una partita (nuova o caricata)
+	 */
 	public void avviaPartita() {
 		vsp.cg=this;
 		vg.cg=this;
@@ -280,6 +156,12 @@ public class ControlloreGioco {
 	    eseguiTurno();
 	}
 	
+	/**
+	 * metodo per la gestione del pescaCarta volontaria + possibilità di giocare la carta pescata
+	 * @param g
+	 * @param m
+	 * @param fineTurno
+	 */
 	private void gestisciPescaggioInternoAsync(Giocatore g, Mossa m, Runnable fineTurno) {
 	    if (partita.applicaMossa(g, m) == null) {
 	        //carta pescata non giocabile -> fine turno
@@ -295,10 +177,10 @@ public class ControlloreGioco {
 	    		}
 	    	}
 	    	//carta pescata giocabile -> scegliere se tenerla o giocarla
-	    	((VistaGioco)vg).stampaCartaPescataAsync(m.getCartaScelta(), scelta -> {
+	    	vg.stampaCartaPescataAsync(m.getCartaScelta(), scelta -> {
 	            if (scelta == 1) {
 	                if (m.getCartaScelta().getColore() == Colore.NERO) {
-	                	((VistaGioco)vg).stampaColoriAsync(colore -> {
+	                	vg.stampaColoriAsync(colore -> {
 	                		;//breakpoint
 	                        m.setTipoMossa(TipoMossa.SCEGLI_COLORE);
 	                        ;//breakpoint
@@ -316,7 +198,10 @@ public class ControlloreGioco {
 	    }
 	}
 	
-	
+	/**
+	 * metodo centrale che gestisce il gameloop (si richiama da solo finchè non finisce la partita 
+	 * OPPURE se la partita viene sospesa)
+	 */
 	private void eseguiTurno() {
 		if (!partitaAttiva) {
 			;//breakpoint
@@ -324,7 +209,7 @@ public class ControlloreGioco {
 	    }
 	    //fine partita?
 	    if (partita.verificaFinePartita()) {
-	    	((VistaGioco)vg).stampaFinePartita(partita.getVincitore().getNome(), ()->{
+	    	vg.stampaFinePartita(partita.getVincitore().getNome(), ()->{
 	    		String salvataggio = getCp().getSalvataggioCorrente();
 	            ManagerPersistenza.eliminaSalvataggio(salvataggio);
 	            vg.mostraMenuOffline();
@@ -334,13 +219,9 @@ public class ControlloreGioco {
 	    }
 
 	    Giocatore g = partita.getGiocatoreCorrente();
-	    ((VistaGioco)vg).stampaTurnoCorrente(g.getNome());
-	    //((VistaGioco)vg).stampaProssimoTurno(partita.vediProssimoGiocatore().getNome());
+	    vg.stampaTurnoCorrente(g.getNome());
 	    if (g.isBot()) {
 	    	// primo delay di 5 secondi prima di scegliere la mossa
-	    	//vsp.impostaTurnoSpettatore(g.getNome(), g.getMano().getNumCarte(), partita.getCartaCorrente());
-	    	//vsp.stampaTurnazione(partita.getTurnazioneDalGiocatore(g), partita.getDirezione());
-	    	//vsp.mostraVista();
 	    	vg.stampaTurnazione(partita.getTurnazioneDalGiocatore(cs.getUtente().getGiocatore()), partita.getDirezione());
 	    	vg.stampaManoReadOnly(partita.getCartaCorrente(), cs.getUtente().getGiocatore());
 	    	PauseTransition pausa1 = new PauseTransition(Duration.seconds(5));
@@ -353,8 +234,6 @@ public class ControlloreGioco {
 					} else {
 						vg.stampaMessaggio(g.getNome() + " ha giocato la carta: " + m.getCartaScelta());
 					}
-					//vsp.impostaTurnoSpettatore(g.getNome(), g.getMano().getNumCarte(), partita.getCartaCorrente());
-					//vsp.stampaTurnazione(partita.getTurnazioneDalGiocatore(g), partita.getDirezione());
 					vg.stampaTurnazione(partita.getTurnazioneDalGiocatore(cs.getUtente().getGiocatore()), partita.getDirezione());
 			    	vg.stampaManoReadOnly(partita.getCartaCorrente(), cs.getUtente().getGiocatore());
 					partita.passaTurno();
@@ -385,7 +264,7 @@ public class ControlloreGioco {
 	    			new KeyFrame(Duration.seconds(1), e -> secondsLeft.set(secondsLeft.get() - 1))
 	    			);
 	        countdown.setCycleCount(30);
-	    	((VistaGioco)vg).setTimer(secondsLeft);
+	    	vg.setTimer(secondsLeft);
 	    	
 	    	//faccio partire timer e counter (30 secondi per fare la mossa)
 	    	countdown.play();
@@ -395,7 +274,7 @@ public class ControlloreGioco {
 	            timerTurno.stop();
 	            timerTurno.setOnFinished(null);
 	            
-	            ((VistaGioco) vg).chiudiFinestraAperta();
+	            vg.chiudiFinestraAperta();
 	            
                 if(partitaAttiva) {
                 	vg.stampaMessaggio("Tempo scaduto: "+g.getNome()+" ha pescato SENZA possibilità di giocare");
@@ -411,9 +290,8 @@ public class ControlloreGioco {
 	        //DA COMMENTARE SE GIOCO SI ROMPE
 	        timerTurno.play();
 	        vg.stampaTurnazione(partita.getTurnazioneDalGiocatore(g), partita.getDirezione());
-	        //vg.mostraVista();
 	    	//inizio turno vero e proprio (posso o pescare, o tentare di giocare una carta)
-	        ((VistaGioco) vg).scegliMossaAsync(partita.getCartaCorrente(), g, m -> {
+	        vg.scegliMossaAsync(partita.getCartaCorrente(), g, m -> {
 	        	;//breakpoint
 	            if (m.getTipoMossa() == TipoMossa.PESCA) {
 	            	//serve nel caso in cui esca fuori una carta giocabile-> non faccio pescare di nuovo
@@ -447,7 +325,7 @@ public class ControlloreGioco {
 	                        if (m.getCartaScelta().getColore() == Colore.NERO) {
 	                            m.setTipoMossa(TipoMossa.SCEGLI_COLORE);
 	                            
-	                            ((VistaGioco)vg).stampaColoriAsync(colore -> {
+	                            vg.stampaColoriAsync(colore -> {
 	                            	;//breakpoint
 
 	                                vg.stampaMessaggio(g.getNome() + " ha cambiato il colore sul banco a " + colore.name());
@@ -460,7 +338,8 @@ public class ControlloreGioco {
 	                                
 	                                //QUI MOSTRA PULSANTE ONE (se hai appena giocato la penultima)
 	                                if (g.getMano().getNumCarte() == 1) { 
-	                                    ((VistaGioco) vg).mostraPulsanteONE(premuto -> {
+	                                	vg.stampaManoReadOnly(m.getCartaScelta(), g);
+	                                    vg.mostraPulsanteONE(premuto -> {
 	                                    	if (premuto) {
 		                        	            vg.stampaMessaggio(g.getNome()+" ha chiamato ONE");
 		                        	        } else {
@@ -493,7 +372,8 @@ public class ControlloreGioco {
 	                        	
 	                        	//QUI MOSTRA PULSANTE ONE (se hai appena giocato la penultima carta)
 	                        	if (g.getMano().getNumCarte() == 1) { 
-	                        	    ((VistaGioco) vg).mostraPulsanteONE(premuto -> {
+	                        		vg.stampaManoReadOnly(m.getCartaScelta(), g);
+	                        	    vg.mostraPulsanteONE(premuto -> {
 	                        	        if (premuto) {
 	                        	            vg.stampaMessaggio(g.getNome()+" ha chiamato ONE");
 	                        	        } else {
@@ -521,6 +401,5 @@ public class ControlloreGioco {
 	        });
 	    }
 	}
-	
-	//fine
+
 }
