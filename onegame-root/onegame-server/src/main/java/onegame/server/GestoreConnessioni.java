@@ -3,10 +3,14 @@ package onegame.server;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.SecureRandom;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
+
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,6 +81,7 @@ public class GestoreConnessioni {
             String storedHash = utenteDb.getPasswordHash(username);
             if(storedHash == null || !verificaPassword(password, storedHash)) {
         		ackRequest.sendAckData(new RespAuth(false, null, null, "Credenziali non valide"));
+        		logger.warn("[Server] Tentativo di login fallito per username: {}", username);
             	return;
             }
             
@@ -184,46 +189,69 @@ public class GestoreConnessioni {
         if (token != null) sessioni.remove(token);
     }
 
-    /** Hash della password con SHA-256
+	/**
+	 * Genera un hash sicuro della password usando PBKDF2 con HMAC SHA-256.
 	 * @param password La password in chiaro
-	 * @return Hash della password
+	 * @return Stringa Base64 contenente salt + hash
 	 */
-    private String hashPassword(String password) {
-        try {
-            byte[] salt = new byte[16];
-            random.nextBytes(salt);
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
-            md.update(salt);
-            byte[] hashed = md.digest(password.getBytes(StandardCharsets.UTF_8));
-            byte[] combined = new byte[salt.length + hashed.length];
-            System.arraycopy(salt, 0, combined, 0, salt.length);
-            System.arraycopy(hashed, 0, combined, salt.length, hashed.length);
-            return Base64.getEncoder().encodeToString(combined);
-        } catch (Exception e) {
-        	throw new RuntimeException("Errore nell'hash della password", e);
-        }
-    }
-    
-    /** Verifica la password confrontando l'hash
-     * @param password La password in chiaro
-     * @param stored L'hash memorizzato
-     * @return true se la password corrisponde, false altrimenti
-     */
-    private boolean verificaPassword(String password, String stored) {
-        try {
-            byte[] combined = Base64.getDecoder().decode(stored);
-            byte[] salt = new byte[16];
-            byte[] hashFromDb = new byte[combined.length - 16];
-            System.arraycopy(combined, 0, salt, 0, 16);
-            System.arraycopy(combined, 16, hashFromDb, 0, hashFromDb.length);
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
-            md.update(salt);
-            byte[] hashedInput = md.digest(password.getBytes(StandardCharsets.UTF_8));
-            return MessageDigest.isEqual(hashFromDb, hashedInput);
-        } catch (Exception e) {
-        	throw new RuntimeException("Errore nella verifica della password", e);
-        }
-    }
+	private String hashPassword(String password) {
+		try {
+			// Salt casuale di 16 byte
+			byte[] salt = new byte[16];
+			SecureRandom random = new SecureRandom();
+			random.nextBytes(salt);
+
+			// Parametri PBKDF2
+			int iterations = 65536;
+			int keyLength = 256;
+
+			// Derivazione della chiave
+			PBEKeySpec spec = new PBEKeySpec(password.toCharArray(), salt, iterations, keyLength);
+			SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
+			byte[] hash = skf.generateSecret(spec).getEncoded();
+
+			// Combina salt + hash
+			byte[] combined = new byte[salt.length + hash.length];
+			System.arraycopy(salt, 0, combined, 0, salt.length);
+			System.arraycopy(hash, 0, combined, salt.length, hash.length);
+
+			// Codifica in Base64 per memorizzazione
+			return Base64.getEncoder().encodeToString(combined);
+		} catch (Exception e) {
+			throw new RuntimeException("Errore nell'hash della password", e);
+		}
+	}
+
+	/**
+	 * Verifica se la password in chiaro corrisponde all'hash memorizzato.
+	 * @param password La password in chiaro
+	 * @param stored L'hash memorizzato (Base64 salt + hash)
+	 * @return true se la password è corretta, false altrimenti
+	 */
+	private boolean verificaPassword(String password, String stored) {
+		try {
+			byte[] combined = Base64.getDecoder().decode(stored);
+
+			// Estrai salt e hash
+			byte[] salt = Arrays.copyOfRange(combined, 0, 16);
+			byte[] hashFromDb = Arrays.copyOfRange(combined, 16, combined.length);
+
+			// Parametri PBKDF2 (devono essere identici)
+			int iterations = 65536;
+			int keyLength = 256;
+
+			// Deriva hash dalla password fornita
+			PBEKeySpec spec = new PBEKeySpec(password.toCharArray(), salt, iterations, keyLength);
+			SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
+			byte[] hashedInput = skf.generateSecret(spec).getEncoded();
+
+			// Confronto sicuro
+			return MessageDigest.isEqual(hashFromDb, hashedInput);
+		} catch (Exception e) {
+			throw new RuntimeException("Errore nella verifica della password", e);
+		}
+	}
+
     
     /** Recupera l'utente associato a un token
 	 * @param token Il token di sessione
@@ -235,9 +263,9 @@ public class GestoreConnessioni {
 
     
 
-    private String randomString(int len) {
-        byte[] buf = new byte[len];
-        random.nextBytes(buf);
-        return Base64.getUrlEncoder().withoutPadding().encodeToString(buf).substring(0, len);
-    }
+//    private String randomString(int len) {
+//        byte[] buf = new byte[len];
+//        random.nextBytes(buf);
+//        return Base64.getUrlEncoder().withoutPadding().encodeToString(buf).substring(0, len);
+//    }
 }

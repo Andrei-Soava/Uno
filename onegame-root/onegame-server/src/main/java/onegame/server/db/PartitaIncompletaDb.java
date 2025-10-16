@@ -117,6 +117,7 @@ public class PartitaIncompletaDb {
 			ps.executeUpdate();
 		}
 	}
+	
 	/**
 	 * Elimina una partita incompleta di un utente dato il nome del salvataggio
 	 * @param utenteId ID dell'utente

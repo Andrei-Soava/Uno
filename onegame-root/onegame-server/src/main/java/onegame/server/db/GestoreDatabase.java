@@ -72,7 +72,8 @@ public class GestoreDatabase {
 	                    nome_salvataggio VARCHAR(100) NOT NULL,
 	                    partita_serializzata CLOB NOT NULL,
 	                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-	                    FOREIGN KEY (utente_id) REFERENCES utente(id) ON DELETE CASCADE
+	                    FOREIGN KEY (utente_id) REFERENCES utente(id) ON DELETE CASCADE,
+	                    UNIQUE (utente_id, nome_salvataggio)
 	                )
 	            """);
 			
