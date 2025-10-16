@@ -8,71 +8,128 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Gestisce le operazioni sul database relative alle partite incomplete
- * salvate dagli utenti registrati.
+ * Gestisce le operazioni sul database relative alle partite incomplete salvate
+ * dagli utenti registrati.
  */
 public class PartitaIncompletaDb {
-	
-	//salva una nuova partita incompleta nel db
-	public void createPartita(String utenteId, String nome, String partitaSerializzata) throws SQLException{
+
+	/**
+	 * Crea una nuova partita incompleta nel database
+	 * @param utenteId ID dell'utente che ha salvato la partita
+	 * @param nomeSalvataggio Nome del salvataggio
+	 * @param partitaSerializzata La partita serializzata in formato stringa
+	 * @throws SQLException
+	 */
+	public void createPartita(long utenteId, String nomeSalvataggio, String partitaSerializzata) throws SQLException {
 		String sql = "INSERT INTO partita_incompleta (utente_id, nome_salvataggio, partita_serializzata) VALUES (?, ?, ?)";
-		try(Connection conn = GestoreDatabase.getConnection();
-			PreparedStatement ps = conn.prepareStatement(sql)) {
-			ps.setString(1, utenteId);
-			ps.setString(2, nome);
+		try (Connection conn = GestoreDatabase.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+			ps.setLong(1, utenteId);
+			ps.setString(2, nomeSalvataggio);
 			ps.setString(3, partitaSerializzata);
 			ps.executeUpdate();
 		}
 	}
-	
-	//Recupera tutti i nomi dei salvataggi associati a un utente
-	public List<String> getPartiteByUtente(String string) throws SQLException{
-		String sql = "SELECT nome_salvataggio FROM partita_incompleta WHERE utente_id=?";
+
+	/**
+	 * Recupera la lista dei nomi dei salvataggi delle partite incomplete per un
+	 * dato utente
+	 * @param utenteId ID dell'utente
+	 * @return Lista dei nomi dei salvataggi
+	 * @throws SQLException
+	 */
+	public List<String> getPartiteByUtente(long utenteId) throws SQLException {
+		String sql = "SELECT nome_salvataggio FROM partita_incompleta WHERE utente_id = ?";
 		List<String> result = new ArrayList<>();
-		try(Connection conn = GestoreDatabase.getConnection();
-				PreparedStatement ps = conn.prepareStatement(sql)){
-			ps.setString(1, string);
-			ResultSet rs = ps.executeQuery();
-			while (rs.next()) {
-				result.add(rs.getString("nome_salvataggio"));
+		try (Connection conn = GestoreDatabase.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+			ps.setLong(1, utenteId);
+			try (ResultSet rs = ps.executeQuery()) {
+				while (rs.next()) {
+					result.add(rs.getString("nome_salvataggio"));
+				}
 			}
 		}
 		return result;
 	}
-	
-	//Recupera la partita serializzata usando l’ID del salvataggio
-	public String getPartitaById(String string) throws SQLException{
-		String sql = "SELECT partita_serializzata FROM partita_incompleta WHERE id=?";
-		try(Connection conn = GestoreDatabase.getConnection();
-				PreparedStatement ps = conn.prepareStatement(sql)){
-			ps.setString(1, string);
-			ResultSet rs = ps.executeQuery();
-			if(rs.next()) 
-				return rs.getString("partita_serializzata");
+
+	/**
+	 * Recupera la partita con il dato ID
+	 * @param partitaId ID della partita
+	 * @return La partita serializzata in formato stringa, o null se non trovata
+	 * @throws SQLException
+	 */
+	public String getPartitaById(long partitaId) throws SQLException {
+		String sql = "SELECT partita_serializzata FROM partita_incompleta WHERE id = ?";
+		try (Connection conn = GestoreDatabase.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+			ps.setLong(1, partitaId);
+			try (ResultSet rs = ps.executeQuery()) {
+				if (rs.next())
+					return rs.getString("partita_serializzata");
+			}
 		}
 		return null;
 	}
-	
-	//Aggiorna il nome del salvataggio per una partita incompleta
-	public void updateNomeSalvataggio(String id,String nuovoNome) throws SQLException{
-		String sql = "UPDATE partita_incompleta SET nome_salvataggio=? WHERE id=?";
-		try (Connection conn = GestoreDatabase.getConnection();
-	             PreparedStatement ps = conn.prepareStatement(sql)) {
-	          ps.setString(1, nuovoNome);
-	          ps.setString(2, id);
-	          ps.executeUpdate();
-	     }
+
+	/**
+	 * Recupera la partita di un utente dato il nome del salvataggio
+	 * @param utenteId ID dell'utente
+	 * @param nomeSalvataggio Nome del salvataggio
+	 * @return La partita serializzata in formato stringa, o null se non trovata
+	 * @throws SQLException
+	 */
+	public String getPartitaByUtenteAndNome(long utenteId, String nomeSalvataggio) throws SQLException {
+		String sql = "SELECT partita_serializzata FROM partita_incompleta WHERE utente_id = ? AND nome_salvataggio = ?";
+		try (Connection conn = GestoreDatabase.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+			ps.setLong(1, utenteId);
+			ps.setString(2, nomeSalvataggio);
+			try (ResultSet rs = ps.executeQuery()) {
+				if (rs.next())
+					return rs.getString("partita_serializzata");
+			}
+		}
+		return null;
 	}
-	
-	//Elimina una partita incompleta dal database
-	public void deletePartita(String id) throws SQLException{
-		String sql = "DELETE FROM partita_incompleta WHERE id=?";
-		try(Connection conn = GestoreDatabase.getConnection();
-				PreparedStatement ps = conn.prepareStatement(sql)){
-			ps.setString(1, id);
+
+	/**
+	 * Aggiorna il nome del salvataggio di una partita incompleta
+	 * @param partitaId ID della partita
+	 * @param nuovoNome Nuovo nome del salvataggio
+	 * @throws SQLException
+	 */
+	public void updateNomeSalvataggio(long partitaId, String nuovoNome) throws SQLException {
+		String sql = "UPDATE partita_incompleta SET nome_salvataggio = ? WHERE id = ?";
+		try (Connection conn = GestoreDatabase.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+			ps.setString(1, nuovoNome);
+			ps.setLong(2, partitaId);
+			ps.executeUpdate();
+		}
+	}
+
+	/**
+	 * Elimina una partita incompleta dal database
+	 * @param partitaId ID della partita da eliminare
+	 * @throws SQLException
+	 */
+	@Deprecated
+	public void deletePartita(long partitaId) throws SQLException {
+		String sql = "DELETE FROM partita_incompleta WHERE id = ?";
+		try (Connection conn = GestoreDatabase.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+			ps.setLong(1, partitaId);
+			ps.executeUpdate();
+		}
+	}
+	/**
+	 * Elimina una partita incompleta di un utente dato il nome del salvataggio
+	 * @param utenteId ID dell'utente
+	 * @param nomeSalvataggio Nome del salvataggio da eliminare
+	 * @throws SQLException
+	 */
+	public void deletePartitaByUtenteAndNome(long utenteId, String nomeSalvataggio) throws SQLException {
+		String sql = "DELETE FROM partita_incompleta WHERE utente_id = ? AND nome_salvataggio = ?";
+		try (Connection conn = GestoreDatabase.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+			ps.setLong(1, utenteId);
+			ps.setString(2, nomeSalvataggio);
 			ps.executeUpdate();
 		}
 	}
 
 }
- 

@@ -130,13 +130,13 @@ public class ProtocolloMessaggi {
 
 	// Richiesta di caricamento
 	public static class ReqCaricaPartita {
-		public String idSalvataggio;
+		public String nomeSalvataggio;
 
 		public ReqCaricaPartita() {
 		}
-
-		public ReqCaricaPartita(String idSalvataggio) {
-			this.idSalvataggio = idSalvataggio;
+		
+		public ReqCaricaPartita(String nomeSalvataggio) {
+			this.nomeSalvataggio = nomeSalvataggio;
 		}
 	}
 
@@ -157,13 +157,13 @@ public class ProtocolloMessaggi {
 
 	// richiesta di eliminazione
 	public static class ReqEliminaPartita {
-		public String idSalvataggio;
+		public String nomeSalvataggio;
 
 		public ReqEliminaPartita() {
 		}
 
-		public ReqEliminaPartita(String idSalvataggio) {
-			this.idSalvataggio = idSalvataggio;
+		public ReqEliminaPartita(String nomeSalvataggio) {
+			this.nomeSalvataggio = nomeSalvataggio;
 		}
 	}
 	
@@ -183,7 +183,7 @@ public class ProtocolloMessaggi {
 	// richiesta elenco partite
 	public static class RespListaPartite {
 		public boolean success;
-		public java.util.List<String> nomiSalvataggi;
+		public List<String> nomiSalvataggi;
 		public String messaggio;
 
 		public RespListaPartite() {
