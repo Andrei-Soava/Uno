@@ -8,14 +8,14 @@ Lo sviluppo dell'applicazione nasce dall’idea di creare una versione minimalis
 A tale scopo, si prevede di dedicare molto tempo nella definizione delle componenti responsabili durante l’esecuzione dell'applicazione, in modo da avere un’architettura modulare e facilmente estendibile.\
 L’idea alla base dell’applicazione è quella di poter iniziare una nuova partita, selezionando un numero variabile di giocatori, i quali avranno l’opportunità di compiere diverse azioni in base alle carte che hanno in mano, riproponendo quindi le regole tipiche di Uno. Il giocatore avrà la possibilità di giocare contro amici (modalità multigiocatore) oppure contro il computer (modalità offline). Infine il giocatore avrà la possibilità di registrarsi (in modo da tenere conto delle sue statistiche e eventuali partite in sospeso), anche se non è obbligatorio per poter giocare.\
 I responsabili per la realizzazione di suddetta applicazione, chiamata da qui in avanti come **One**,
-saranno Locatelli Fabio, Luisi Giuseppe e Soava Andrei.
+saranno Locatelli Fabio (matricola 1081940), Luisi Giuseppe (matricola 1073970) e Soava Andrei (matricola 1079636).
 
 
 ## 2. Modello di processo:
 Durante lo sviluppo di One si prevede di usufruire in parte di un modello di processo "tradizionale", come il modello *a cascata* (ad esempio per le fasi di ingegneria dei requisiti e di progettazione), ed in parte di un modello di processo agile, come *SCRUM* (ad esempio per le fasi d'implementazione di codice e testing).\
 Vista la dimensione ridotta dell’applicazione (perlomeno a priori) e del gruppo di sviluppo, si ritiene che questo approccio *ibrido* possa fornire un valido compromesso per lavorare in maniera efficiente sia in gruppo, che in autonomia.\
 In particolare, considerato il tempo di realizzazione del software (qualche mese) e la cadenza d’incontro dei responsabili di sviluppo (tutti i giorni, da remoto o in presenza), si ritiene adatta la presenza di sprint settimanali e di daily scrum ogni qualvolta fosse necessario.\
-Infine, considerando il numero ridotto di membri e l’elevata interazione tra essi, non verranno adottati meccanismi di Kanban boards per monitorare l’attività, bensì solo un log comune che farà da “cronologia di sviluppo” (vedi "1 GESTIONE DEL PROGETTO").\
+Infine, considerando il numero ridotto di membri e l’elevata interazione tra essi, non verranno adottati meccanismi di Kanban boards per monitorare l’attività, bensì solo un log comune che farà da “cronologia di sviluppo” (vedi "1 GESTIONE DEL PROGETTO").
 
 Requisiti di base individuati secondo il modello MoSCow:
 | Must have | Should have | Could have | Won't have |
@@ -36,7 +36,7 @@ Per lo sviluppo di One verrà utilizzato Eclipse come ambiente di sviluppo. In p
 - il linguaggio di programmazione sarà Java (con Maven);
 - Papyrus e JavaFX rispettivamente per la modellazione e lo sviluppo dell’interfaccia utente;
 - Websocket realizzato con librerie netty-socketio (lato server) e socket.io-client (lato client);
-- JUnit verrà utilizzato per il testing.\
+- JUnit verrà utilizzato per il testing.
 
 Come database embedded si utilizzerà H2, vista l'affinità con l'applicazione da realizzare.\
 Come piattaforma di condivisione del codice e della documentazione si userà GitHub. In particolare, per quanto riguarda la documentazione, gli standard di aggiornamento dei documenti verranno esplicitati (qualora fosse necessario) all'interno dei documenti stessi.\
