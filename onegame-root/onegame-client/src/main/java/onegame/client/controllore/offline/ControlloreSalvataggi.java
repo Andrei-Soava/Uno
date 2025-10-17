@@ -52,11 +52,9 @@ public class ControlloreSalvataggi {
 	}
 	
 	public void eseguiSceltaWithDb() {
-		cs.listaPartite(args->{
-			String json = args[0].toString();
-			RespListaPartite risposta=JsonHelper.fromJson(json, RespListaPartite.class);
-			if(risposta.success) {
-				vs.scegliAzioneSalvataggiAsync(risposta.nomiSalvataggi, event->{
+		cs.listaPartite(respListaPartite -> {
+			if(respListaPartite.success) {
+				vs.scegliAzioneSalvataggiAsync(respListaPartite.nomiSalvataggi, event->{
 					switch (event.getTipo()) {
 	                case GIOCA: { 
 	                	//probabilmente partita da ottenere qui, deserializzarla e lo passo alla appwithmaven che la carica
@@ -69,10 +67,8 @@ public class ControlloreSalvataggi {
 	                    return;
 	                }
 	                case ELIMINA: {
-	                    cs.eliminaPartita(event.getNomeOriginale(), args2->{
-	                    	String json2 = args2[0].toString();
-	                    	RespEliminaPartita risposta2= JsonHelper.fromJson(json2, RespEliminaPartita.class);
-	                    	if(risposta2.success) {
+	                    cs.eliminaPartita(event.getNomeOriginale(), respEliminaPartita -> {
+	                    	if (respEliminaPartita.success) {
 	                    		eseguiSceltaWithDb();
 	                    		return;
 	                    	}

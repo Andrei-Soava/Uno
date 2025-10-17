@@ -23,16 +23,14 @@ public class ControlloreConfigurazioneOnline {
 	}
 	
 	public void aspettaCreazioneStanza() {
-		vco.configuraPartita(numeroGiocatori->{
+		vco.configuraPartita(numeroGiocatori-> {
 			//richiesta codice della stanza con funzione asincrona
 //			String codiceOttenuto="codice";
 //			vco.mostraStanza(codiceOttenuto);
 			
-			cs.creaStanza("Prova", numeroGiocatori, args->{
-				String json=args[0].toString();
-				RespCreaStanza risposta=JsonHelper.fromJson(json, RespCreaStanza.class);
-				if(risposta.success) {
-					vco.mostraStanza(Integer.toString(risposta.codiceStanza));
+			cs.creaStanza("Prova", numeroGiocatori, respCreaStanza -> {
+				if(respCreaStanza.success) {
+					vco.mostraStanza(Integer.toString(respCreaStanza.codiceStanza));
 				} else {
 					aspettaCreazioneStanza();
 					return;

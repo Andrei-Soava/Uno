@@ -31,13 +31,11 @@ public class ControlloreCodicePartita {
 			}
 			
 			
-			cs.entraStanza(codice, args->{
-				String json=args[0].toString();
-				RespEntraStanza risposta=JsonHelper.fromJson(json, RespEntraStanza.class);
-				if(risposta.success) {
+			cs.entraStanza(codice, respEntraStanza -> {
+				if(respEntraStanza.success) {
 					vic.mostraStanza(codice);
 				} else {
-					vic.compilaMessaggioErrore(risposta.messaggio);
+					vic.compilaMessaggioErrore(respEntraStanza.messaggio);
 					vic.svuotaCampoCodice();
 					eseguiAccesso();
 					return;

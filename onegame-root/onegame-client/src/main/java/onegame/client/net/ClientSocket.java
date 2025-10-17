@@ -16,7 +16,14 @@ import onegame.modello.net.ProtocolloMessaggi.ReqEliminaPartita;
 import onegame.modello.net.ProtocolloMessaggi.ReqEntraStanza;
 import onegame.modello.net.ProtocolloMessaggi.ReqSalvaPartita;
 import onegame.modello.net.ProtocolloMessaggi.RespAuth;
+import onegame.modello.net.ProtocolloMessaggi.RespCaricaPartita;
+import onegame.modello.net.ProtocolloMessaggi.RespCreaStanza;
+import onegame.modello.net.ProtocolloMessaggi.RespEliminaPartita;
+import onegame.modello.net.ProtocolloMessaggi.RespEntraStanza;
+import onegame.modello.net.ProtocolloMessaggi.RespListaPartite;
+import onegame.modello.net.ProtocolloMessaggi.RespSalvaPartita;
 import onegame.modello.net.Utente;
+import onegame.modello.net.util.Callback;
 import onegame.modello.net.util.JsonHelper;
 
 /**
@@ -126,32 +133,44 @@ public class ClientSocket {
         return l.await(seconds, TimeUnit.SECONDS);
     }
 
-    /**
-     * Invia il token di autenticazione al server
-     * @param token Il token di autenticazione
-     */
-    @Deprecated
+//    /**
+//     * Invia il token di autenticazione al server
+//     * @param token Il token di autenticazione
+//     */
+//    @Deprecated
+//    public void setToken(String token) {
+//        this.token = token;
+//        try {
+//            socket.emit("auth:setToken", token);
+//        } catch (Exception e) { }
+//    }
+    
     public void setToken(String token) {
-        this.token = token;
-        try {
-            socket.emit("auth:setToken", token);
-        } catch (Exception e) { }
-    }
+		this.token = token;
+	}
 
-    public void register(String username, String password, Ack callback) throws Exception {        
+    public void register(String username, String password, Callback<RespAuth> callback) throws Exception {        
         ReqAuth req = new ReqAuth(username, password);
         System.out.println("[CLIENT] Invio richiesta registrazione di " + username);
-        socket.emit(ProtocolloMessaggi.EVENT_AUTH_REGISTER, JsonHelper.toJson(req), callback);
+        socket.emit(ProtocolloMessaggi.EVENT_AUTH_REGISTER, JsonHelper.toJson(req), (Ack)args -> {
+        	String json = args[0].toString();
+			RespAuth auth = JsonHelper.fromJson(json, RespAuth.class);
+			setToken(auth.token);
+			if (callback != null)
+        		callback.call(auth);
+        });
+
     }
 
-    public void login(String username, String password, Ack callback) throws Exception  {
+    public void login(String username, String password, Callback<RespAuth> callback) throws Exception  {
     	ReqAuth req = new ReqAuth(username, password);
         System.out.println("[CLIENT] Invio richiesta login di " + username);
         socket.emit(ProtocolloMessaggi.EVENT_AUTH_LOGIN, JsonHelper.toJson(req), (Ack)args -> {
         	String json = args[0].toString();
 			RespAuth auth = JsonHelper.fromJson(json, RespAuth.class);
-			this.token = auth.token;
-        	callback.call(auth);
+			setToken(auth.token);
+			if (callback != null)
+        		callback.call(auth);
         });
     }
 
@@ -159,8 +178,15 @@ public class ClientSocket {
      * Invia la richiesta di login anonimo al server
      * @param callback Callback per la risposta del server
      */
-    public void anonimo(Ack callback) {
-        socket.emit(ProtocolloMessaggi.EVENT_AUTH_ANONIMO, "", callback);
+    public void anonimo(Callback<RespAuth> callback) {
+    	System.out.println("[CLIENT] Invio richiesta login anonimo");
+        socket.emit(ProtocolloMessaggi.EVENT_AUTH_ANONIMO, "", (Ack)args -> {
+        	String json = args[0].toString();
+			RespAuth auth = JsonHelper.fromJson(json, RespAuth.class);
+			setToken(auth.token);
+        	if (callback != null)
+        		callback.call(auth);
+        });
     }
 
     /**
@@ -170,7 +196,7 @@ public class ClientSocket {
 	 * @param callback Callback per la risposta del server
 	 * @throws Exception
 	 */
-    public void creaStanza(String nome, int maxGiocatori, Ack callback) {
+    public void creaStanza(String nome, int maxGiocatori, Callback<RespCreaStanza> callback) {
         ReqCreaStanza req = new ReqCreaStanza(nome, maxGiocatori);
         System.out.println("[CLIENT] Invio richiesta creazione stanza");
         socket.emit("stanza:crea", JsonHelper.toJson(req), callback);
@@ -182,7 +208,7 @@ public class ClientSocket {
 	 * @param callback Callback per la risposta del server
 	 * @throws Exception
 	 */
-    public void entraStanza(String idStanza, Ack callback) {
+    public void entraStanza(String idStanza, Callback<RespEntraStanza> callback) {
 //        ReqEntraStanza r = new ReqEntraStanza(idStanza);
         // CORRETTO - oggetto direttamente, NO json string
 //        socket.emit("stanza:entra", r, callback);
@@ -204,24 +230,24 @@ public class ClientSocket {
         }
     }
     
-    public void listaPartite(Ack callback) {
+    public void listaPartite(Callback<RespListaPartite> callback) {
     	System.out.println("[CLIENT] Invio richiesta lista partite salvate");
 		socket.emit(ProtocolloMessaggi.EVENT_LISTA_PARTITE, null, callback);
 	}
     
-    public void salvaPartita(String nomeSalvataggio, String partitaSerializzata, Ack callback) {
+    public void salvaPartita(String nomeSalvataggio, String partitaSerializzata, Callback<RespSalvaPartita> callback) {
     	ReqSalvaPartita req = new ReqSalvaPartita(nomeSalvataggio, partitaSerializzata);
     	System.out.println("[CLIENT] Invio richiesta salvataggio partita: " + nomeSalvataggio);
 		socket.emit(ProtocolloMessaggi.EVENT_SALVA_PARTITA, JsonHelper.toJson(req), callback);
 	}
     
-    public void caricaPartita(String nomeSalvataggio, Ack callback) {
+    public void caricaPartita(String nomeSalvataggio, Callback<RespCaricaPartita> callback) {
     	ReqCaricaPartita req = new ReqCaricaPartita(nomeSalvataggio);
     	System.out.println("[CLIENT] Invio richiesta caricamento partita: " + nomeSalvataggio);
 		socket.emit(ProtocolloMessaggi.EVENT_CARICA_PARTITA, JsonHelper.toJson(req), callback);
 	}
     
-    public void eliminaPartita(String nomeSalvataggio, Ack callback) {
+    public void eliminaPartita(String nomeSalvataggio, Callback<RespEliminaPartita> callback) {
     	ReqEliminaPartita req = new ReqEliminaPartita(nomeSalvataggio);
     	System.out.println("[CLIENT] Invio richiesta eliminazione partita: " + nomeSalvataggio);
     	socket.emit(ProtocolloMessaggi.EVENT_ELIMINA_PARTITA, JsonHelper.toJson(req), callback);

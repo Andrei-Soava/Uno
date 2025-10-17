@@ -61,21 +61,19 @@ public class ControlloreRegistrazione {
 //			}
 			
 			try {
-				cs.register(username, confermaPassword, args -> {
+				cs.register(username, confermaPassword, respAuth -> {
 					try {
-						String json = args[0].toString();
-						RespAuth auth = JsonHelper.fromJson(json, RespAuth.class);
 						Platform.runLater(() -> {
-				            if (auth.success) {
-				                Utente utente = new Utente(username, false);
-				                cs.setUtente(utente);
-				                vr.mostraAccesso();
-				            } else {
-				                vr.compilaMessaggioErrore(auth.messaggio);
-				                vr.svuotaPassword();
-				                eseguiRegistrazione();
-				            }
-				        });
+						    if (respAuth.success) {
+						        Utente utente = new Utente(username, false);
+						        cs.setUtente(utente);
+						        vr.mostraAccesso();
+						    } else {
+						        vr.compilaMessaggioErrore(respAuth.messaggio);
+						        vr.svuotaPassword();
+						        eseguiRegistrazione();
+						    }
+						});
 					} catch (Exception e) {
 						e.printStackTrace();
 					}

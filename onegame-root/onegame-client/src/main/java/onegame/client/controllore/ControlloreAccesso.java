@@ -37,7 +37,7 @@ public class ControlloreAccesso {
 			if (username == null && password == null) {
 //				cs.getUtente().setAnonimo(true);
 //				cs.getUtente().setUsername("anonimo");
-				cs.anonimo(null);
+				cs.anonimo(args -> {});
 				cs.setUtente(new Utente(true));
 				va.mostraHome();
 				return;
@@ -60,20 +60,18 @@ public class ControlloreAccesso {
 //				eseguiAccesso();
 //			}
 			try {
-				cs.login(username, password, args -> {
+				cs.login(username, password, respAuth -> {
 					try {
-						if (args[0] instanceof RespAuth auth) {
-							Platform.runLater(() -> {
-					            if (auth.success) {
-					                Utente utente = new Utente(username, false);
-					                cs.setUtente(utente);
-					                va.mostraHome();
-					            } else {
-					                va.compilaMessaggioErrore(auth.messaggio);
-					                eseguiAccesso();
-					            }
-					        });
-						}
+						Platform.runLater(() -> {
+				            if (respAuth.success) {
+				                Utente utente = new Utente(username, false);
+				                cs.setUtente(utente);
+				                va.mostraHome();
+				            } else {
+				                va.compilaMessaggioErrore(respAuth.messaggio);
+				                eseguiAccesso();
+				            }
+				        });
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
