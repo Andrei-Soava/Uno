@@ -7,8 +7,10 @@ Con questo progetto si realizzerà un'applicazione fortemente ispirata al celebr
 Lo sviluppo dell'applicazione nasce dall’idea di creare una versione minimalista e digitale della sua controparte “fisica”, impiegando un'architettura *ibrida* model-view-controller/client-server. 
 A tale scopo, si prevede di dedicare molto tempo nella definizione delle componenti responsabili durante l’esecuzione dell'applicazione, in modo da avere un’architettura modulare e facilmente estendibile.\
 L’idea alla base dell’applicazione è quella di poter iniziare una nuova partita, selezionando un numero variabile di giocatori, i quali avranno l’opportunità di compiere diverse azioni in base alle carte che hanno in mano, riproponendo quindi le regole tipiche di Uno. Il giocatore avrà la possibilità di giocare contro amici (modalità multigiocatore) oppure contro il computer (modalità offline). Infine il giocatore avrà la possibilità di registrarsi (in modo da tenere conto delle sue statistiche e eventuali partite in sospeso), anche se non è obbligatorio per poter giocare.\
-I responsabili per la realizzazione di suddetta applicazione, chiamata da qui in avanti come **One**,
-saranno Locatelli Fabio (matricola 1081940), Luisi Giuseppe (matricola 1073970) e Soava Andrei (matricola 1079636).
+I responsabili per la realizzazione di suddetta applicazione, chiamata da qui in avanti come **One**, saranno:
+- Locatelli Fabio (matricola 1081940)
+- Luisi Giuseppe (matricola 1073970)
+- Soava Andrei (matricola 1079636)
 
 
 ## 2. Modello di processo:
