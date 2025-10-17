@@ -3,7 +3,7 @@
 ---
 
 ## 1. Introduzione:
-Con questo progetto si realizzerà un'applicazione fortemente ispirata al celebre gioco di carte *Uno*, le cui regole sono pressochè già universalmente conosciute.\
+Con questo progetto si realizzerà un'applicazione fortemente ispirata al celebre gioco di carte *Uno*, le cui regole sono pressoché già universalmente conosciute.\
 Lo sviluppo dell'applicazione nasce dall’idea di creare una versione minimalista e digitale della sua controparte “fisica”, impiegando un'architettura *ibrida* model-view-controller/client-server. 
 A tale scopo, si prevede di dedicare molto tempo nella definizione delle componenti responsabili durante l’esecuzione dell'applicazione, in modo da avere un’architettura modulare e facilmente estendibile.\
 L’idea alla base dell’applicazione è quella di poter iniziare una nuova partita, selezionando un numero variabile di giocatori, i quali avranno l’opportunità di compiere diverse azioni in base alle carte che hanno in mano, riproponendo quindi le regole tipiche di Uno. Il giocatore avrà la possibilità di giocare contro amici (modalità multigiocatore) oppure contro il computer (modalità offline). Infine il giocatore avrà la possibilità di registrarsi (in modo da tenere conto delle sue statistiche e eventuali partite in sospeso), anche se non è obbligatorio per poter giocare.\
@@ -72,10 +72,10 @@ La suddivisione delle attività volte allo sviluppo di One sarà esplicitata man
 ## 11. Budget e 12. Risorse:
 Il budget sarà esclusivamente in termine di tempo, da cui la necessità di pianificare in maniera attenta la ripartizione di ore-uomo per una parte del progetto (circa 50 ore per persona). 
 Ci si attende comunque un’enfasi sulla parte di modellizzazione, sulla parte di implementazione di codice e sul testing (in proporzioni ancora da definire). 
-In termine di risorse a disposizone del gruppo, verranno utilizzati:
+In termine di risorse a disposizione del gruppo, verranno utilizzati:
 - Eclipse, come IDE;
 -	Java con Maven;
--	Papyrus per diagrammmi UML;
+-	Papyrus per diagrammi UML;
 -	JavaFX per l'interfaccia grafica;
 -	Netty-socketio (libreria websocket lato server);
 -	Socket.io-client (libreria websocket lato client);
@@ -88,7 +88,7 @@ Nel documento "1 GESTIONE DEL PROGETTO" verrà eseguita una raccolta più dettag
 
 
 ## 13. Cambiamenti:
-Nonostante venga utlizzato (in parte) SCRUM come modello di processo, si considera comunque importante tenere conto **esplicitamente** di eventuali cambiamenti (o per meglio dire, la *storia*) durante lo sviluppo, che verranno quindi opportunamente registrati nei vari documenti del progetto.\
+Nonostante venga utilizzato (in parte) SCRUM come modello di processo, si considera comunque importante tenere conto **esplicitamente** di eventuali cambiamenti (o per meglio dire, la *storia*) durante lo sviluppo, che verranno quindi opportunamente registrati nei vari documenti del progetto.\
 Per quanto concerne le versioni dell’applicazione in cui cambia qualcosa di “importante”, verrà attuata la politica dei branch su GitHub, mentre eventuali miglioramenti (quali possibili espansioni di One, qualora ci fosse la possibilità di implementarle) verranno comunque evidenziati mediante degli appositi issue sempre su GitHub.
 
 
