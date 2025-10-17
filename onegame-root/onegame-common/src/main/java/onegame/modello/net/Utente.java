@@ -1,14 +1,9 @@
 package onegame.modello.net;
 
-import java.time.Instant;
-import java.util.UUID;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import onegame.modello.giocatori.Giocatore;
-import onegame.modello.giocatori.Statistica;
-import onegame.modello.PartitaIF;
 
 /**
  * Rappresenta un utente connesso al sistema.

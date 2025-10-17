@@ -7,7 +7,6 @@ import com.corundumstudio.socketio.SocketIOClient;
 
 import onegame.modello.giocatori.Giocatore;
 import onegame.modello.net.MossaDTO;
-import onegame.modello.net.Utente;
 import onegame.server.gioco.PartitaNET;
 
 /**
@@ -46,9 +45,10 @@ public class StanzaPartita {
         giocatori.put(token, g);
         clientPerToken.put(token, client);
 
-        if (utente != null) utente.setGiocatore(g);
+//        if (utente != null) utente.setGiocatore(g);
+        throw new UnsupportedOperationException("Not implemented yet");
 
-        return true;
+        //return true;
     }
 
     public void rimuoviUtente(String token) {

@@ -10,7 +10,6 @@ import com.corundumstudio.socketio.AckRequest;
 import com.corundumstudio.socketio.SocketIOClient;
 
 import onegame.modello.net.ProtocolloMessaggi;
-import onegame.modello.net.Utente;
 import onegame.modello.net.util.JsonHelper;
 import onegame.modello.net.ProtocolloMessaggi.ReqSalvaPartita;
 import onegame.modello.net.ProtocolloMessaggi.ReqCaricaPartita;

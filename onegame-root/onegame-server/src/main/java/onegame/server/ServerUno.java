@@ -11,7 +11,6 @@ import com.corundumstudio.socketio.Configuration;
 import com.corundumstudio.socketio.HandshakeData;
 import com.corundumstudio.socketio.SocketIOServer;
 import onegame.modello.net.ProtocolloMessaggi;
-import onegame.modello.net.Utente;
 import onegame.server.db.GestoreDatabase;
 
 /**
