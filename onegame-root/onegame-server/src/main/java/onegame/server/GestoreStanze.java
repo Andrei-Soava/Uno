@@ -53,7 +53,7 @@ public class GestoreStanze {
 		String token = getToken(client);
 		if (token == null) {
 			ack.sendAckData(new RespCreaStanza(false, "Utente non autenticato", -1));
-			logger.warn("[Stanza] Tentativo di creare stanza senza autenticazione");
+			logger.warn("Tentativo di creare stanza senza autenticazione");
 			return;
 		}
 
@@ -71,9 +71,9 @@ public class GestoreStanze {
 
 			mappaCodiceAIdStanza.put(codiceStanza, idStanza);
 			ack.sendAckData(new RespCreaStanza(true, "Stanza creata con successo", codiceStanza));
-			logger.info("[Stanza] Creata stanza {} da token {}", idStanza, token);
+			logger.info("Creata stanza {} da token {}", idStanza, token);
 		} catch (Exception e) {
-			logger.error("[Stanza] Errore creazione stanza: {}", e.getMessage());
+			logger.error("Errore creazione stanza: {}", e.getMessage());
 			ack.sendAckData(new RespCreaStanza(false, "Errore creazione stanza", -1));
 		}
 	}
@@ -85,7 +85,7 @@ public class GestoreStanze {
 		String token = getToken(client);
 		if (token == null) {
 			ack.sendAckData(new RespEntraStanza(false, "Utente non autenticato"));
-			logger.warn("[Stanza] Tentativo di ingresso in stanza senza autenticazione");
+			logger.warn("Tentativo di ingresso in stanza senza autenticazione");
 			return;
 		}
 
@@ -96,7 +96,7 @@ public class GestoreStanze {
 
 			if (stanza == null) {
 				ack.sendAckData(new RespEntraStanza(false, "Stanza non trovata"));
-				logger.warn("[Stanza] Tentativo di ingresso in stanza non esistente: codice {}", req.codiceStanza);
+				logger.warn("Tentativo di ingresso in stanza non esistente: codice {}", req.codiceStanza);
 				return;
 			}
 
@@ -108,9 +108,9 @@ public class GestoreStanze {
 
 			mappaTokenUtenteAStanza.put(token, idStanza);
 			ack.sendAckData(new RespEntraStanza(true, "Ingresso in stanza avvenuto con successo"));
-			logger.info("[Stanza] Token {} entrato in stanza {} con codice {}", token, idStanza, req.codiceStanza);
+			logger.info("Token {} entrato in stanza {} con codice {}", token, idStanza, req.codiceStanza);
 		} catch (Exception e) {
-			logger.error("[Stanza] Errore ingresso stanza: {}", e.getMessage());
+			logger.error("Errore ingresso stanza: {}", e.getMessage());
 			ack.sendAckData(new RespEntraStanza(false, "Errore ingresso stanza"));
 		}
 	}
@@ -126,11 +126,11 @@ public class GestoreStanze {
 				StanzaPartita stanza = stanze.get(id);
 				if (stanza != null) {
 					stanza.rimuoviUtente(tokenUtente);
-					logger.info("[Stanza] Utente {} rimosso da stanza {}", tokenUtente, id);
+					logger.info("Utente {} rimosso da stanza {}", tokenUtente, id);
 				}
 			}
 		} catch (Exception e) {
-			logger.error("[Stanza] Errore rimozione utente {} da stanza: {}", tokenUtente, e.getMessage());
+			logger.error("Errore rimozione utente {} da stanza: {}", tokenUtente, e.getMessage());
 		}
 	}
 
@@ -156,21 +156,21 @@ public class GestoreStanze {
 		String token = getToken(client);
 		if (token == null) {
 			ack.sendAckData(new RespAbbandonaStanza(false, "Utente non autenticato"));
-			logger.warn("[Stanza] Tentativo di abbandono stanza senza autenticazione");
+			logger.warn("Tentativo di abbandono stanza senza autenticazione");
 			return;
 		}
 
 		Long idStanza = mappaTokenUtenteAStanza.remove(token);
 		if (idStanza == null) {
 			ack.sendAckData(new RespAbbandonaStanza(false, "Utente in nessuna stanza"));
-			logger.warn("[Stanza] Utente {} non è in nessuna stanza", token);
+			logger.warn("Utente {} non è in nessuna stanza", token);
 			return;
 		}
 
 		StanzaPartita stanza = stanze.get(idStanza);
 		if (stanza == null) {
 			ack.sendAckData(new RespAbbandonaStanza(false, "Stanza non trovata"));
-			logger.warn("[Stanza] Stanza {} non trovata per utente {}", idStanza, token);
+			logger.warn("Stanza {} non trovata per utente {}", idStanza, token);
 			return;
 		}
 
@@ -178,11 +178,11 @@ public class GestoreStanze {
 		if (stanza.isVuota()) {
 			stanze.remove(idStanza);
 			mappaCodiceAIdStanza.remove(stanza.getCodice());
-			logger.info("[Stanza] Stanza {} rimossa perché vuota", idStanza);
+			logger.info("Stanza {} rimossa perché vuota", idStanza);
 		}
 
 		ack.sendAckData(new RespAbbandonaStanza(true, "Abbandono stanza avvenuto con successo"));
-		logger.info("[Stanza] Utente {} ha abbandonato la stanza {}", token, idStanza);
+		logger.info("Utente {} ha abbandonato la stanza {}", token, idStanza);
 	}
 
 	private String getToken(SocketIOClient client) {
@@ -200,10 +200,10 @@ public class GestoreStanze {
 //				}
 //				// Rimuovi il codice della stanza
 //				mappaCodiceAIdStanza.values().removeIf(id -> id == idStanza);
-//				logger.info("[Stanza] Stanza {} rimossa", idStanza);
+//				logger.info("Stanza {} rimossa", idStanza);
 //			}
 //		} catch (Exception e) {
-//			logger.error("[Stanza] Errore rimozione stanza {}: {}", idStanza, e.getMessage());
+//			logger.error("Errore rimozione stanza {}: {}", idStanza, e.getMessage());
 //		}
 //		
 //	}

@@ -36,7 +36,7 @@ public class GestoreGioco {
 //	        stanza.riceviMossa(token, mossa);
 //	        ack.sendAckData("OK");
 //	    } catch (Exception e) {
-//	        logger.error("[Server] Errore parsing mossa: {}", e.getMessage());
+//	        logger.error("Errore parsing mossa: {}", e.getMessage());
 //	        client.sendEvent("partita:invalid", "Formato mossa non valido");
 //	        ack.sendAckData("ERRORE");
 //	    }

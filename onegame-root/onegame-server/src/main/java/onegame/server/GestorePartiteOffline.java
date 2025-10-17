@@ -45,7 +45,7 @@ public class GestorePartiteOffline {
 		Utente utente = getUtenteAutenticato(client);
 		if (utente == null) {
 			ackRequest.sendAckData(new ProtocolloMessaggi.RespSalvaPartita(false, "Utente non valido"));
-			logger.warn("[Server] Accesso negato: token non valido o utente anonimo");
+			logger.warn("Accesso negato: token non valido o utente anonimo");
 			return;
 		}
 
@@ -60,9 +60,9 @@ public class GestorePartiteOffline {
 			long utenteId = utenteDb.getIdByUsername(utente.getUsername());
 			partitaDb.createPartita(utenteId, req.nomeSalvataggio, req.partitaSerializzata);
 			ackRequest.sendAckData(new ProtocolloMessaggi.RespSalvaPartita(true, "Salvataggio riuscito"));
-			logger.info("[Server] Partita salvata: {} per utente {}", req.nomeSalvataggio, utente.getUsername());
+			logger.info("Partita salvata: {} per utente {}", req.nomeSalvataggio, utente.getUsername());
 		} catch (Exception e) {
-			logger.error("[Server] Errore durante il salvataggio della partita: {}", e.getMessage());
+			logger.error("Errore durante il salvataggio della partita: {}", e.getMessage());
 			ackRequest.sendAckData(new ProtocolloMessaggi.RespSalvaPartita(false, "Errore durante il salvataggio"));
 		}
 	}
@@ -77,7 +77,7 @@ public class GestorePartiteOffline {
 		Utente utente = getUtenteAutenticato(client);
 		if (utente == null) {
 			ackRequest.sendAckData(new ProtocolloMessaggi.RespCaricaPartita(false, "", "Utente non valido"));
-			logger.warn("[Server] Accesso negato: token non valido o utente anonimo");
+			logger.warn("Accesso negato: token non valido o utente anonimo");
 			return;
 		}
 
@@ -93,14 +93,14 @@ public class GestorePartiteOffline {
 			String partitaJson = partitaDb.getPartitaByUtenteAndNome(utenteId, req.nomeSalvataggio);
 			if (partitaJson != null && !partitaJson.isBlank()) {
 				ackRequest.sendAckData(new ProtocolloMessaggi.RespCaricaPartita(true, partitaJson, "Partita caricata"));
-				logger.info("[Server] Partita caricata: {} per utente {}", req.nomeSalvataggio, utente.getUsername());
+				logger.info("Partita caricata: {} per utente {}", req.nomeSalvataggio, utente.getUsername());
 			} else {
 				ackRequest.sendAckData(new ProtocolloMessaggi.RespCaricaPartita(false, "", "Partita non trovata"));
-				logger.warn("[Server] Partita non trovata: {} per utente {}", req.nomeSalvataggio,
+				logger.warn("Partita non trovata: {} per utente {}", req.nomeSalvataggio,
 						utente.getUsername());
 			}
 		} catch (SQLException e) {
-			logger.error("[Server] Errore durante il caricamento per utente {}: {}", utente.getUsername(),
+			logger.error("Errore durante il caricamento per utente {}: {}", utente.getUsername(),
 					e.getMessage());
 			ackRequest
 					.sendAckData(new ProtocolloMessaggi.RespCaricaPartita(false, "", "Errore durante il caricamento"));
@@ -117,7 +117,7 @@ public class GestorePartiteOffline {
 		Utente utente = getUtenteAutenticato(client);
 		if (utente == null) {
 			ackRequest.sendAckData(new ProtocolloMessaggi.RespListaPartite(false, null, "Utente non valido"));
-			logger.warn("[Server] Accesso negato: token non valido o utente anonimo");
+			logger.warn("Accesso negato: token non valido o utente anonimo");
 			return;
 		}
 
@@ -125,9 +125,9 @@ public class GestorePartiteOffline {
 			long utenteId = utenteDb.getIdByUsername(utente.getUsername());
 			List<String> nomi = partitaDb.getPartiteByUtente(utenteId);
 			ackRequest.sendAckData(new ProtocolloMessaggi.RespListaPartite(true, nomi, "Lista recuperata"));
-			logger.info("[Server] Lista salvataggi inviata per utente {}", utente.getUsername());
+			logger.info("Lista salvataggi inviata per utente {}", utente.getUsername());
 		} catch (SQLException e) {
-			logger.error("[Server] Errore durante il recupero dei salvataggi per utente {}: {}", utente.getUsername(),
+			logger.error("Errore durante il recupero dei salvataggi per utente {}: {}", utente.getUsername(),
 					e.getMessage());
 			ackRequest.sendAckData(new ProtocolloMessaggi.RespListaPartite(false, null, "Errore durante il recupero"));
 		}
@@ -137,7 +137,7 @@ public class GestorePartiteOffline {
 		Utente utente = getUtenteAutenticato(client);
 		if (utente == null) {
 			ackRequest.sendAckData(new ProtocolloMessaggi.RespEliminaPartita(false, "Utente non valido"));
-			logger.warn("[Server] Accesso negato: token non valido o utente anonimo");
+			logger.warn("Accesso negato: token non valido o utente anonimo");
 			return;
 		}
 
@@ -149,7 +149,7 @@ public class GestorePartiteOffline {
 			long utenteId = utenteDb.getIdByUsername(utente.getUsername());
 			partitaDb.deletePartitaByUtenteAndNome(utenteId, req.nomeSalvataggio);
 		} catch (Exception e) {
-			logger.error("[Server] Errore durante l'eliminazione del salvataggio per utente {}: {}",
+			logger.error("Errore durante l'eliminazione del salvataggio per utente {}: {}",
 					utente.getUsername(), e.getMessage());
 			ackRequest.sendAckData(new ProtocolloMessaggi.RespEliminaPartita(false, "Errore durante l'eliminazione"));
 		}
@@ -165,7 +165,7 @@ public class GestorePartiteOffline {
 		Utente utente = gestoreConnessioni.getUtenteByToken(token);
 
 		if (utente == null || utente.isAnonimo()) {
-			logger.warn("[Server] Accesso negato: token non valido o utente anonimo");
+			logger.warn("Accesso negato: token non valido o utente anonimo");
 			return null;
 		}
 		return utente;

@@ -11,7 +11,7 @@ public class Utente {
 	private String nickname;
 	private boolean anonimo;
 	private boolean connesso;
-//    private long ultimoHeartbeat;
+	private long ultimoPing;
 
 	private Utente() {
 		this.connesso = true;
@@ -51,23 +51,15 @@ public class Utente {
 
 	public void setConnesso(boolean connesso) {
 		this.connesso = connesso;
-//        if (connesso) aggiornaHeartbeat();
 	}
 
-//    @JsonIgnore
-//    public long getUltimoHeartbeat() {
-//        return ultimoHeartbeat;
-//    }
-//
-//    public void setUltimoHeartbeat(long ultimoHeartbeat) {
-//        this.ultimoHeartbeat = ultimoHeartbeat;
-//    }
-//
-//
-//    @JsonIgnore
-//    public void aggiornaHeartbeat() {
-//        this.ultimoHeartbeat = Instant.now().toEpochMilli();
-//    }
+	public void aggiornaPing() {
+		this.ultimoPing = System.currentTimeMillis();
+	}
+
+	public long getUltimoPing() {
+		return ultimoPing;
+	}
 
 	@Override
 	public String toString() {

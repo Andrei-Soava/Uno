@@ -1,11 +1,14 @@
 package onegame.server;
 
+import java.util.ArrayList;
+
 public abstract class Stanza {
 	private final int codice;
 	private final long id;
 	private final String nome;
 	private final int maxUtenti;
 	private final GestoreConnessioni gestoreConnessioni;
+	private final ArrayList<Utente> utenti = new ArrayList<Utente>();
 
 	public Stanza(int codice, long id, String nome, int maxUtenti, GestoreConnessioni gestoreConnessioni) {
 		this.codice = codice;

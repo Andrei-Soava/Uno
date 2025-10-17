@@ -1,16 +1,12 @@
 package onegame.server;
 
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.SecureRandom;
-import java.util.Arrays;
-import java.util.Base64;
 import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
-
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.corundumstudio.socketio.AckRequest;
+import com.corundumstudio.socketio.HandshakeData;
 import com.corundumstudio.socketio.SocketIOClient;
 
 import onegame.modello.net.util.JsonHelper;
@@ -30,26 +27,16 @@ import onegame.modello.net.ProtocolloMessaggi.RespAuth;
  * Gestore delle connessioni e dell'autenticazione degli utenti
  */
 public class GestoreConnessioni {
-	private final Map<String, Utente> sessioni; // token -> Utente
-	// private final Map<String, String> utentiRegistrati; // username ->
-	// passwordHash
-	private final UtenteDb utenteDb;
+	private final GestoreSessioni gestoreSessioni;
+	private final UtenteDb utenteDb = new UtenteDb();
 
 	private static final String JWT_SECRET = "u7$T9z!k@!#Lqa^mT2&b10pW";
 	private static final long TOKEN_EXPIRATION_MS = 36000_000;
 
 	private static final Logger logger = LoggerFactory.getLogger(GestoreConnessioni.class);
 
-	/**
-	 * Costruttore del gestore connessioni
-	 * @param sessioni La mappa delle sessioni attive (token -> Utente)
-	 */
-	public GestoreConnessioni(Map<String, Utente> sessioni) {
-		this.sessioni = sessioni;
-		this.utenteDb = new UtenteDb();
-		// this.utentiRegistrati = new ConcurrentHashMap<>();
-
-		// utentiRegistrati.put("test25", hashPassword("test25"));
+	public GestoreConnessioni(GestoreSessioni gestoreSessioni) {
+		this.gestoreSessioni = gestoreSessioni;
 	}
 
 	/** Genera un token JWT per l'utente */
@@ -79,23 +66,19 @@ public class GestoreConnessioni {
 			String storedHash = utenteDb.getPasswordHash(username);
 			if (storedHash == null || !PasswordUtils.verificaPassword(password, storedHash)) {
 				ackRequest.sendAckData(new RespAuth(false, null, null, "Credenziali non valide"));
-				logger.warn("[Server] Tentativo di login fallito per username: {}", username);
+				logger.warn("Tentativo di login fallito per username: {}", username);
 				return;
 			}
 
 			Utente utente = Utente.createUtente(username);
-			utente.setConnesso(true);
 			String token = generaToken(username);
-
-			sessioni.put(token, utente);
-			client.set("token", token);
+			gestoreSessioni.associaToken(token, utente, client);
 
 			ackRequest.sendAckData(new RespAuth(true, null, token, "Login completato"));
-
-			logger.info("[Server] Nuovo utente loggato: username: {}, token: {}, session-id: {}", username, token,
+			logger.info("Login utente: username: {}, token: {}, session-id: {}", username, token,
 					client.getSessionId());
 		} catch (Exception e) {
-			logger.error("[Server] Errore durante il login: {}", e.getMessage());
+			logger.error("Errore durante il login: {}", e.getMessage());
 			ackRequest.sendAckData(new RespAuth(false, null, null, "Errore interno"));
 		}
 	}
@@ -118,14 +101,14 @@ public class GestoreConnessioni {
 			}
 
 			if (!isUsernameValido(username)) {
-				ackRequest.sendAckData(new RespAuth(false, null, null, "Username non valido"));
-				logger.warn("[Server] Tentativo di registrazione con username non valido: {}", username);
+				ackRequest.sendAckData(new RespAuth(false, null, null, "Username non disponibile"));
+				logger.warn("Tentativo di registrazione con username non valido: {}", username);
 				return;
 			}
 
 			if (utenteDb.esisteUtente(username)) {
-				ackRequest.sendAckData(new RespAuth(false, null, null, "Utente già esistente"));
-				logger.warn("[Server] Tentativo di registrazione con username già esistente: {}", username);
+				ackRequest.sendAckData(new RespAuth(false, null, null, "Username non disponibile"));
+				logger.warn("Tentativo di registrazione con username già esistente: {}", username);
 				return;
 			}
 
@@ -133,18 +116,14 @@ public class GestoreConnessioni {
 			utenteDb.registraUtente(username, passwordHash);
 
 			Utente utente = Utente.createUtente(username);
-			utente.setConnesso(true);
 			String token = generaToken(username);
-
-			sessioni.put(token, utente);
-			client.set("token", token);
+			gestoreSessioni.associaToken(token, utente, client);
 
 			ackRequest.sendAckData(new RespAuth(true, null, token, "Registrazione completata"));
-
-			logger.info("[Server] Nuovo utente registrato: username: {}, token: {}, session-id: {}", username, token,
+			logger.info("Registrazione utente: username: {}, token: {}, session-id: {}", username, token,
 					client.getSessionId());
 		} catch (Exception e) {
-			logger.error("[Server] Errore durante la registrazione: {}", e.getMessage());
+			logger.error("Errore durante la registrazione: {}", e.getMessage());
 			ackRequest.sendAckData(new RespAuth(false, null, null, "Errore interno"));
 		}
 	}
@@ -157,52 +136,49 @@ public class GestoreConnessioni {
 	public void handleAnonimo(SocketIOClient client, AckRequest ackRequest) {
 		try {
 			Utente utenteAnonimo = Utente.createUtenteAnonimo("Anonimo");
-			String token = UUID.randomUUID().toString();
+			String token;
+			do {
+				token = UUID.randomUUID().toString();
+			} while (gestoreSessioni.getUtente(token) != null);
 
-			sessioni.put(token, utenteAnonimo);
-			client.set("token", token);
+			gestoreSessioni.associaToken(token, utenteAnonimo, client);
+
 			ackRequest.sendAckData(new RespAuth(true, null, token, "Accesso anonimo riuscito"));
-			logger.info("[Server] Utente anonimo connesso");
+			logger.info("Accesso anonimo: token={} sessionId={}", token, client.getSessionId());
 		} catch (Exception e) {
-			logger.error("[Server] Errore durante l'accesso anonimo: {}", e.getMessage());
+			logger.error("Errore durante l'accesso anonimo: {}", e.getMessage());
 			ackRequest.sendAckData(new RespAuth(false, null, null, "Errore interno"));
 		}
 	}
 
-	/**
-	 * Gestisce la disconnessione di un client
-	 * @param client Il client che si disconnette
-	 */
-	public void handleDisconnessione(SocketIOClient client) {
-		String token = client.get("token");
-		if (token == null)
-			return;
-		Utente u = sessioni.get(token);
-		if (u != null) {
-			u.setConnesso(false);
-			logger.info("[Server] Disconnessione utente: {} sessionId={}", u.getNickname(),
-					client.getSessionId());
+	public void handleConnessione(SocketIOClient client) {
+		HandshakeData hd = client.getHandshakeData();
+		String addr = "unknown";
+		try {
+			if (client.getRemoteAddress() != null)
+				addr = client.getRemoteAddress().toString();
+			else if (hd != null && hd.getAddress() != null)
+				addr = hd.getAddress().toString();
+		} catch (Exception ex) {
+		}
+
+		logger.info("Nuova connessione da {} sessionId={}", addr, client.getSessionId());
+
+		// Recupera token dal parametro della connessione (se presente)
+		String token = hd.getSingleUrlParam("token");
+		if (token != null && !token.isEmpty()) {
+			Utente u = gestoreSessioni.getUtente(token);
+			if (u != null) {
+				u.setConnesso(true);
+				u.aggiornaPing();
+				client.set("token", token);
+				logger.info("Riconnesso utente: {} (token={})", u.getUsername(), token);
+			}
 		}
 	}
 
-//    public void handleRichiestaPartiteNonConcluse(SocketIOClient client) {
-//        ProtocolloMessaggi.RespStanza resp = new ProtocolloMessaggi.RespStanza("", "NESSUNA",
-//                "Funzionalità partite non concluse non ancora implementata");
-//        client.sendEvent(ProtocolloMessaggi.EVENT_STANZA_OK, resp);
-//    }
-
-	public void rimuoviSessione(String token) {
-		if (token != null)
-			sessioni.remove(token);
-	}
-
-	/**
-	 * Recupera l'utente associato a un token
-	 * @param token Il token di sessione
-	 * @return L'utente associato, o null se non trovato
-	 */
-	public Utente getUtenteByToken(String token) {
-		return sessioni.get(token);
+	public void handleDisconnessione(SocketIOClient client) {
+		gestoreSessioni.impostaUtenteDisconnesso(client);
 	}
 
 	private boolean isUsernameValido(String username) {
