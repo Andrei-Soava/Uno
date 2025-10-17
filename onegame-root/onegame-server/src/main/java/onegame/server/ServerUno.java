@@ -25,12 +25,11 @@ public class ServerUno {
 	private final GestoreStanze gestoreStanze;
 	private final GestorePartiteOffline gestorePartiteOffline;
 	private final GestoreGioco gestoreGioco;
-	
+
 	// sessioni: token -> Utente
 	private final Map<String, Utente> sessioni = new ConcurrentHashMap<>();
-	
-	private static final Logger logger = LoggerFactory.getLogger(ServerUno.class);
 
+	private static final Logger logger = LoggerFactory.getLogger(ServerUno.class);
 
 	public ServerUno(String host, int port) {
 		Configuration config = new Configuration();
@@ -39,7 +38,7 @@ public class ServerUno {
 		config.setPingInterval(10000);
 		config.setPingTimeout(60000);
 		config.setExceptionListener(new ServerUnoExceptionListener());
-		
+
 		this.server = new SocketIOServer(config);
 		this.gestoreConnessioni = new GestoreConnessioni(sessioni);
 		this.gestoreStanze = new GestoreStanze(gestoreConnessioni);
@@ -61,7 +60,7 @@ public class ServerUno {
 			} catch (Exception ex) {
 			}
 
-			logger.info("[SERVER] Nuova connessione da {} sessionId={}", addr, client.getSessionId());
+			logger.info("[Server] Nuova connessione da {} sessionId={}", addr, client.getSessionId());
 
 			// Recupera token dal parametro della connessione (se presente)
 			String token = hd.getSingleUrlParam("token");
@@ -70,7 +69,7 @@ public class ServerUno {
 				if (u != null) {
 					u.setConnesso(true);
 					client.set("token", token);
-					logger.info("[SERVER] Riconnesso utente: {} (token={})", u.getUsername(), token);
+					logger.info("[Server] Riconnesso utente: {} (token={})", u.getUsername(), token);
 				}
 			}
 
@@ -122,25 +121,24 @@ public class ServerUno {
 				client.sendEvent("partita:invalid", "Non sei in alcuna stanza");
 				return;
 			}
-			//stanza.riceviMossa(token, mossa);
+			// stanza.riceviMossa(token, mossa);
 		});
 
-		
 		server.addEventListener(ProtocolloMessaggi.EVENT_SALVA_PARTITA, String.class,
 				(client, data, ack) -> gestorePartiteOffline.handleSalvaPartita(client, data, ack));
-		
+
 		server.addEventListener(ProtocolloMessaggi.EVENT_CARICA_PARTITA, String.class,
 				(client, data, ack) -> gestorePartiteOffline.handleCaricaPartita(client, data, ack));
-		
+
 		server.addEventListener(ProtocolloMessaggi.EVENT_LISTA_PARTITE, Void.class,
 				(client, data, ack) -> gestorePartiteOffline.handleListaSalvataggi(client, ack));
-		
+
 		server.addEventListener(ProtocolloMessaggi.EVENT_ELIMINA_PARTITA, String.class,
 				(client, data, ack) -> gestorePartiteOffline.handleEliminaSalvataggio(client, data, ack));
-		
+
 		server.addEventListener(ProtocolloMessaggi.EVENT_GIOCO_MOSSA, String.class,
 				(client, data, ack) -> gestoreGioco.handleEffettuaMossa(client, data, ack));
-		
+
 		logger.debug("Eventi registrati");
 	}
 
@@ -152,7 +150,7 @@ public class ServerUno {
 
 	public void stop() {
 		server.stop();
-		logger.info("[SERVER] Arrestato.");
+		logger.info("[Server] Arrestato.");
 	}
 
 	public static void main(String[] args) {
@@ -168,7 +166,7 @@ public class ServerUno {
 		srv.avvia();
 
 		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-			logger.info("[SERVER] Arresto in corso...");
+			logger.info("[Server] Arresto in corso...");
 			srv.stop();
 		}));
 	}

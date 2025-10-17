@@ -62,19 +62,18 @@ public class ControlloreAccesso {
 			try {
 				cs.login(username, password, args -> {
 					try {
-						String json = args[0].toString();
-						RespAuth auth = JsonHelper.fromJson(json, RespAuth.class);
-						
-						Platform.runLater(() -> {
-				            if (auth.success) {
-				                Utente utente = new Utente(username, false);
-				                cs.setUtente(utente);
-				                va.mostraHome();
-				            } else {
-				                va.compilaMessaggioErrore(auth.messaggio);
-				                eseguiAccesso();
-				            }
-				        });
+						if (args[0] instanceof RespAuth auth) {
+							Platform.runLater(() -> {
+					            if (auth.success) {
+					                Utente utente = new Utente(username, false);
+					                cs.setUtente(utente);
+					                va.mostraHome();
+					            } else {
+					                va.compilaMessaggioErrore(auth.messaggio);
+					                eseguiAccesso();
+					            }
+					        });
+						}
 					} catch (Exception e) {
 						e.printStackTrace();
 					}

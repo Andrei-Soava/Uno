@@ -63,7 +63,8 @@ public class GestoreStanze {
 			int maxGiocatori = Math.max(2, req.maxGiocatori);
 
 			int codiceStanza = nextCodice();
-			StanzaPartita stanza = new StanzaPartita(codiceStanza, idStanza, req.nomeStanza, maxGiocatori, gestoreConnessioni);
+			StanzaPartita stanza = new StanzaPartita(codiceStanza, idStanza, req.nomeStanza, maxGiocatori,
+					gestoreConnessioni);
 			stanze.put(idStanza, stanza);
 			mappaTokenUtenteAStanza.put(token, idStanza);
 			stanza.aggiungiUtente(token, client);
@@ -145,45 +146,44 @@ public class GestoreStanze {
 			return null;
 		return stanze.get(idStanza);
 	}
-	
+
 	/**
 	 * Permette all'utente di abbandonare la stanza in cui si trova.
 	 * @param client Il client che invia la richiesta
 	 * @param ack L'oggetto per inviare l'acknowledgment
 	 */
 	public void handleAbbandonaStanza(SocketIOClient client, AckRequest ack) {
-	    String token = getToken(client);
-	    if (token == null) {
-	        ack.sendAckData(new RespAbbandonaStanza(false, "Utente non autenticato"));
-	        logger.warn("[Stanza] Tentativo di abbandono stanza senza autenticazione");
-	        return;
-	    }
+		String token = getToken(client);
+		if (token == null) {
+			ack.sendAckData(new RespAbbandonaStanza(false, "Utente non autenticato"));
+			logger.warn("[Stanza] Tentativo di abbandono stanza senza autenticazione");
+			return;
+		}
 
-	    Long idStanza = mappaTokenUtenteAStanza.remove(token);
-	    if (idStanza == null) {
-	        ack.sendAckData(new RespAbbandonaStanza(false, "Utente in nessuna stanza"));
-	        logger.warn("[Stanza] Utente {} non è in nessuna stanza", token);
-	        return;
-	    }
+		Long idStanza = mappaTokenUtenteAStanza.remove(token);
+		if (idStanza == null) {
+			ack.sendAckData(new RespAbbandonaStanza(false, "Utente in nessuna stanza"));
+			logger.warn("[Stanza] Utente {} non è in nessuna stanza", token);
+			return;
+		}
 
-	    StanzaPartita stanza = stanze.get(idStanza);
-	    if (stanza == null) {
-	        ack.sendAckData(new RespAbbandonaStanza(false, "Stanza non trovata"));
-	        logger.warn("[Stanza] Stanza {} non trovata per utente {}", idStanza, token);
-	        return;
-	    }
+		StanzaPartita stanza = stanze.get(idStanza);
+		if (stanza == null) {
+			ack.sendAckData(new RespAbbandonaStanza(false, "Stanza non trovata"));
+			logger.warn("[Stanza] Stanza {} non trovata per utente {}", idStanza, token);
+			return;
+		}
 
-	    stanza.rimuoviUtente(token);
-	    if (stanza.isVuota()) {
-	        stanze.remove(idStanza);
-	        mappaCodiceAIdStanza.remove(stanza.getCodice());
-	        logger.info("[Stanza] Stanza {} rimossa perché vuota", idStanza);
-	    }
+		stanza.rimuoviUtente(token);
+		if (stanza.isVuota()) {
+			stanze.remove(idStanza);
+			mappaCodiceAIdStanza.remove(stanza.getCodice());
+			logger.info("[Stanza] Stanza {} rimossa perché vuota", idStanza);
+		}
 
-	    ack.sendAckData(new RespAbbandonaStanza(true, "Abbandono stanza avvenuto con successo"));
-	    logger.info("[Stanza] Utente {} ha abbandonato la stanza {}", token, idStanza);
+		ack.sendAckData(new RespAbbandonaStanza(true, "Abbandono stanza avvenuto con successo"));
+		logger.info("[Stanza] Utente {} ha abbandonato la stanza {}", token, idStanza);
 	}
-
 
 	private String getToken(SocketIOClient client) {
 		Object tokenObj = client.get("token");

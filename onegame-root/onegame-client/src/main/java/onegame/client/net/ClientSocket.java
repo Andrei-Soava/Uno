@@ -15,6 +15,7 @@ import onegame.modello.net.ProtocolloMessaggi.ReqCreaStanza;
 import onegame.modello.net.ProtocolloMessaggi.ReqEliminaPartita;
 import onegame.modello.net.ProtocolloMessaggi.ReqEntraStanza;
 import onegame.modello.net.ProtocolloMessaggi.ReqSalvaPartita;
+import onegame.modello.net.ProtocolloMessaggi.RespAuth;
 import onegame.modello.net.Utente;
 import onegame.modello.net.util.JsonHelper;
 
@@ -146,7 +147,12 @@ public class ClientSocket {
     public void login(String username, String password, Ack callback) throws Exception  {
     	ReqAuth req = new ReqAuth(username, password);
         System.out.println("[CLIENT] Invio richiesta login di " + username);
-        socket.emit(ProtocolloMessaggi.EVENT_AUTH_LOGIN, JsonHelper.toJson(req), callback);
+        socket.emit(ProtocolloMessaggi.EVENT_AUTH_LOGIN, JsonHelper.toJson(req), (Ack)args -> {
+        	String json = args[0].toString();
+			RespAuth auth = JsonHelper.fromJson(json, RespAuth.class);
+			this.token = auth.token;
+        	callback.call(auth);
+        });
     }
 
     /**

@@ -92,7 +92,8 @@ public class GestoreConnessioni {
 
 			ackRequest.sendAckData(new RespAuth(true, null, token, "Login completato"));
 
-			logger.info("[Server] Utente {} loggato con token {}", username, token);
+			logger.info("[Server] Nuovo utente loggato: username: {}, token: {}, session-id: {}", username, token,
+					client.getSessionId());
 		} catch (Exception e) {
 			logger.error("[Server] Errore durante il login: {}", e.getMessage());
 			ackRequest.sendAckData(new RespAuth(false, null, null, "Errore interno"));
@@ -139,7 +140,9 @@ public class GestoreConnessioni {
 			client.set("token", token);
 
 			ackRequest.sendAckData(new RespAuth(true, null, token, "Registrazione completata"));
-			logger.info("[Server] Nuovo utente registrato: {}", username);
+
+			logger.info("[Server] Nuovo utente registrato: username: {}, token: {}, session-id: {}", username, token,
+					client.getSessionId());
 		} catch (Exception e) {
 			logger.error("[Server] Errore durante la registrazione: {}", e.getMessage());
 			ackRequest.sendAckData(new RespAuth(false, null, null, "Errore interno"));
@@ -171,16 +174,15 @@ public class GestoreConnessioni {
 	 * @param client Il client che si disconnette
 	 */
 	public void handleDisconnessione(SocketIOClient client) {
-//    	logger.error("Token " + client.get("token"));
-//    	logger.error("0");
-//    	String token = client.get("token");
-//        if (token == null) return;
-//        logger.error("1");
-//        Utente u = sessioni.get(token);
-//        if (u != null) {
-//            u.setConnesso(false);
-//            logger.info("[Server] Utente disconnesso: {}", u.isAnonimo() ? "Anonimo" : u.getUsername());
-//        }
+		String token = client.get("token");
+		if (token == null)
+			return;
+		Utente u = sessioni.get(token);
+		if (u != null) {
+			u.setConnesso(false);
+			logger.info("[Server] Disconnessione utente: {} sessionId={}", u.getNickname(),
+					client.getSessionId());
+		}
 	}
 
 //    public void handleRichiestaPartiteNonConcluse(SocketIOClient client) {
@@ -209,10 +211,4 @@ public class GestoreConnessioni {
 				&& !(str = username.toLowerCase()).startsWith("anonimo") && !str.startsWith("guest")
 				&& !str.startsWith("admin");
 	}
-
-//    private String randomString(int len) {
-//        byte[] buf = new byte[len];
-//        random.nextBytes(buf);
-//        return Base64.getUrlEncoder().withoutPadding().encodeToString(buf).substring(0, len);
-//    }
 }

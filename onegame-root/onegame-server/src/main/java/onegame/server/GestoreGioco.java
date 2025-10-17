@@ -12,11 +12,11 @@ import onegame.modello.net.util.JsonHelper;
 public class GestoreGioco {
 	private final static Logger logger = LoggerFactory.getLogger(GestoreGioco.class);
 	private final GestoreStanze gestoreStanze;
-	
+
 	public GestoreGioco(GestoreStanze gestoreStanze) {
 		this.gestoreStanze = gestoreStanze;
 	}
-	
+
 	public void handleEffettuaMossa(SocketIOClient client, String str, AckRequest ack) {
 //		Object tokenObj = client.get("token");
 //	    if (tokenObj == null) {
@@ -36,7 +36,7 @@ public class GestoreGioco {
 //	        stanza.riceviMossa(token, mossa);
 //	        ack.sendAckData("OK");
 //	    } catch (Exception e) {
-//	        logger.error("[SERVER] Errore parsing mossa: {}", e.getMessage());
+//	        logger.error("[Server] Errore parsing mossa: {}", e.getMessage());
 //	        client.sendEvent("partita:invalid", "Formato mossa non valido");
 //	        ack.sendAckData("ERRORE");
 //	    }

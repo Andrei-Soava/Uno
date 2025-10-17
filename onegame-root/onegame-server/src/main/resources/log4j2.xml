@@ -3,7 +3,7 @@
   <Appenders>
     <Console name="Console" target="SYSTEM_OUT">
       <PatternLayout
-        pattern="%d{HH:mm:ss} %highlight{%-5level} [%c{1}] - %msg%n"
+        pattern="%d{HH:mm:ss} %highlight{%-5level} [Server:%c{1}] - %msg%n"
         disableAnsi="false"
         noConsoleNoAnsi="false"
       />
@@ -11,12 +11,12 @@
   </Appenders>
 
   <Loggers>
-    <Logger name="onegame" level="debug" additivity="false">
-      <AppenderRef ref="Console"/>
+    <Logger name="onegame.server" level="debug" additivity="false">
+      <AppenderRef ref="Console" />
     </Logger>
 
     <Root level="info">
-      <AppenderRef ref="Console"/>
+      <AppenderRef ref="Console" />
     </Root>
   </Loggers>
 </Configuration>

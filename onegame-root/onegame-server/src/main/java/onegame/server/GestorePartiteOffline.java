@@ -26,16 +26,16 @@ public class GestorePartiteOffline {
 	private final PartitaIncompletaDb partitaDb;
 	private final UtenteDb utenteDb;
 	private final GestoreConnessioni gestoreConnessioni;
-	
-    private static final Logger logger = LoggerFactory.getLogger(GestorePartiteOffline.class);
+
+	private static final Logger logger = LoggerFactory.getLogger(GestorePartiteOffline.class);
 
 	public GestorePartiteOffline(GestoreConnessioni gestoreConnessioni) {
 		this.partitaDb = new PartitaIncompletaDb();
 		this.utenteDb = new UtenteDb();
 		this.gestoreConnessioni = gestoreConnessioni;
 	}
-	
-	/** 
+
+	/**
 	 * Salva la partita inviata dal client nel database
 	 * @param client Il client che invia la richiesta
 	 * @param str La richiesta
@@ -51,17 +51,16 @@ public class GestorePartiteOffline {
 
 		try {
 			ReqSalvaPartita req = JsonHelper.fromJson(str, ReqSalvaPartita.class);
-			if (req.nomeSalvataggio == null || req.partitaSerializzata == null ||
-					req.nomeSalvataggio.isEmpty() || req.partitaSerializzata.isEmpty()) {
+			if (req.nomeSalvataggio == null || req.partitaSerializzata == null || req.nomeSalvataggio.isEmpty()
+					|| req.partitaSerializzata.isEmpty()) {
 				ackRequest.sendAckData(new ProtocolloMessaggi.RespSalvaPartita(false, "Dati mancanti"));
 				return;
 			}
-			
+
 			long utenteId = utenteDb.getIdByUsername(utente.getUsername());
 			partitaDb.createPartita(utenteId, req.nomeSalvataggio, req.partitaSerializzata);
 			ackRequest.sendAckData(new ProtocolloMessaggi.RespSalvaPartita(true, "Salvataggio riuscito"));
-			logger.info(
-					"[Server] Partita salvata: {} per utente {}", req.nomeSalvataggio, utente.getUsername());
+			logger.info("[Server] Partita salvata: {} per utente {}", req.nomeSalvataggio, utente.getUsername());
 		} catch (Exception e) {
 			logger.error("[Server] Errore durante il salvataggio della partita: {}", e.getMessage());
 			ackRequest.sendAckData(new ProtocolloMessaggi.RespSalvaPartita(false, "Errore durante il salvataggio"));
@@ -85,24 +84,26 @@ public class GestorePartiteOffline {
 		try {
 			ReqCaricaPartita req = JsonHelper.fromJson(str, ReqCaricaPartita.class);
 			if (req.nomeSalvataggio == null || req.nomeSalvataggio.isBlank()) {
-				ackRequest.sendAckData(new ProtocolloMessaggi.RespCaricaPartita(false, "", "Nome salvataggio mancante"));
+				ackRequest
+						.sendAckData(new ProtocolloMessaggi.RespCaricaPartita(false, "", "Nome salvataggio mancante"));
 				return;
 			}
-			
+
 			long utenteId = utenteDb.getIdByUsername(utente.getUsername());
 			String partitaJson = partitaDb.getPartitaByUtenteAndNome(utenteId, req.nomeSalvataggio);
 			if (partitaJson != null && !partitaJson.isBlank()) {
 				ackRequest.sendAckData(new ProtocolloMessaggi.RespCaricaPartita(true, partitaJson, "Partita caricata"));
-				logger.info("[Server] Partita caricata: {} per utente {}", req.nomeSalvataggio,
-						utente.getUsername());
+				logger.info("[Server] Partita caricata: {} per utente {}", req.nomeSalvataggio, utente.getUsername());
 			} else {
 				ackRequest.sendAckData(new ProtocolloMessaggi.RespCaricaPartita(false, "", "Partita non trovata"));
 				logger.warn("[Server] Partita non trovata: {} per utente {}", req.nomeSalvataggio,
 						utente.getUsername());
 			}
 		} catch (SQLException e) {
-			 logger.error("[Server] Errore durante il caricamento per utente {}: {}", utente.getUsername(), e.getMessage());
-		     ackRequest.sendAckData(new ProtocolloMessaggi.RespCaricaPartita(false, "", "Errore durante il caricamento"));
+			logger.error("[Server] Errore durante il caricamento per utente {}: {}", utente.getUsername(),
+					e.getMessage());
+			ackRequest
+					.sendAckData(new ProtocolloMessaggi.RespCaricaPartita(false, "", "Errore durante il caricamento"));
 		}
 	}
 
@@ -126,11 +127,12 @@ public class GestorePartiteOffline {
 			ackRequest.sendAckData(new ProtocolloMessaggi.RespListaPartite(true, nomi, "Lista recuperata"));
 			logger.info("[Server] Lista salvataggi inviata per utente {}", utente.getUsername());
 		} catch (SQLException e) {
-			logger.error("[Server] Errore durante il recupero dei salvataggi per utente {}: {}", utente.getUsername(), e.getMessage());
+			logger.error("[Server] Errore durante il recupero dei salvataggi per utente {}: {}", utente.getUsername(),
+					e.getMessage());
 			ackRequest.sendAckData(new ProtocolloMessaggi.RespListaPartite(false, null, "Errore durante il recupero"));
 		}
 	}
-	
+
 	public void handleEliminaSalvataggio(SocketIOClient client, String str, AckRequest ackRequest) {
 		Utente utente = getUtenteAutenticato(client);
 		if (utente == null) {
@@ -147,7 +149,8 @@ public class GestorePartiteOffline {
 			long utenteId = utenteDb.getIdByUsername(utente.getUsername());
 			partitaDb.deletePartitaByUtenteAndNome(utenteId, req.nomeSalvataggio);
 		} catch (Exception e) {
-			logger.error("[Server] Errore durante l'eliminazione del salvataggio per utente {}: {}", utente.getUsername(), e.getMessage());
+			logger.error("[Server] Errore durante l'eliminazione del salvataggio per utente {}: {}",
+					utente.getUsername(), e.getMessage());
 			ackRequest.sendAckData(new ProtocolloMessaggi.RespEliminaPartita(false, "Errore durante l'eliminazione"));
 		}
 	}

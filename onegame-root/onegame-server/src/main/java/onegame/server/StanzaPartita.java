@@ -126,6 +126,6 @@ public class StanzaPartita {
     }
 
     public PartitaNET getPartita() {
-        return partita;
-    }
+		return partita;
+	}
 }
