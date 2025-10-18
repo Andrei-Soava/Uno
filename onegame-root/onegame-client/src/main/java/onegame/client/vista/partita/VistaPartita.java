@@ -3,6 +3,7 @@ package onegame.client.vista.partita;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
@@ -44,6 +45,7 @@ import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import onegame.client.controllore.offline.ControlloreGioco;
 import onegame.client.esecuzione.AppWithMaven;
+import onegame.client.vista.accessori.GestoreCallbackBottoni;
 import onegame.client.vista.accessori.GestoreEffettiGenerici;
 import onegame.client.vista.accessori.GestoreGraficaCarta;
 import onegame.client.vista.accessori.LayoutGiocatori;
@@ -57,6 +59,7 @@ public abstract class VistaPartita {
 	protected Scene scene;
 	protected AppWithMaven app;
 	protected BorderPane root;
+	protected Button abbandonaBtn;
 	protected Label turnoCorrenteLbl;
 	protected Label prossimoTurnoLbl;
 	protected ArrayList<Label> giocatoriLbl = new ArrayList<>();
@@ -66,7 +69,6 @@ public abstract class VistaPartita {
     protected StackPane cartaCorrente;
     protected Button ONEBtn;
     protected Button pescaBtn;
-    public ControlloreGioco cg;
 
     
 	protected VistaPartita(AppWithMaven app) {
@@ -77,25 +79,25 @@ public abstract class VistaPartita {
     	//---------------------------------------------------------------------------------
     	//barra superiore con pulsante Home & label per indicare il turno
     	//bottone per abbandonare
-    	Button abbandonaBtn = new Button("Abbandona");
+    	abbandonaBtn = new Button("Abbandona");
     	abbandonaBtn.getStyleClass().add("logout");
-    	abbandonaBtn.setOnAction(e -> {
-    	    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-    	    alert.setTitle("Conferma");
-    	    alert.setHeaderText("Vuoi davvero tornare alla Home?");
-    	    alert.setContentText("Eventuali progressi non salvati andranno persi.");
-
-    	    ButtonType confermaBtn = new ButtonType("Conferma", ButtonBar.ButtonData.OK_DONE);
-    	    ButtonType annullaBtn = new ButtonType("Annulla", ButtonBar.ButtonData.CANCEL_CLOSE);
-    	    alert.getButtonTypes().setAll(confermaBtn, annullaBtn);
-
-    	    alert.showAndWait().ifPresent(response -> {
-    	        if (response == confermaBtn) {
-    	        	cg.interrompiPartita();
-    	            app.mostraVistaMenuOffline();
-    	        }
-    	    });
-    	});
+//    	abbandonaBtn.setOnAction(e -> {
+//    	    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+//    	    alert.setTitle("Conferma");
+//    	    alert.setHeaderText("Vuoi davvero tornare alla Home?");
+//    	    alert.setContentText("Eventuali progressi non salvati andranno persi.");
+//
+//    	    ButtonType confermaBtn = new ButtonType("Conferma", ButtonBar.ButtonData.OK_DONE);
+//    	    ButtonType annullaBtn = new ButtonType("Annulla", ButtonBar.ButtonData.CANCEL_CLOSE);
+//    	    alert.getButtonTypes().setAll(confermaBtn, annullaBtn);
+//
+//    	    alert.showAndWait().ifPresent(response -> {
+//    	        if (response == confermaBtn) {
+//    	        	cg.interrompiPartita();
+//    	            app.mostraVistaMenuOffline();
+//    	        }
+//    	    });
+//    	});
     	//label con turno (aggiornato nel controllore)
     	turnoCorrenteLbl=new Label();
     	turnoCorrenteLbl.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
@@ -244,6 +246,50 @@ public abstract class VistaPartita {
 	public Scene getScene() {
 		return scene;
 	}
+	
+	//BEGIN test esotico
+	/**
+	 * funzione asincrona per gestione click abbandona btn
+	 * 
+	 * @return click sul bottone (qualora avvenisse)
+	 */
+	public CompletableFuture<Void> waitForAbbandonaBtnClick() {
+		return GestoreCallbackBottoni.waitForClick(abbandonaBtn);
+	}
+	
+	/**
+	 * metodo che mostra una alert NON bloccante sul javafx thread
+	 * per gestire eventuale abbandono da una partita
+	 * @return se è stato schiacciato o meno "conferma"
+	 */
+	public CompletableFuture<Boolean> mostraAbbandonaAlert() {
+		CompletableFuture<Boolean> risultato = new CompletableFuture<>();
+		Platform.runLater(() -> {
+	        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+	        alert.setTitle("Conferma");
+	        alert.setHeaderText("Vuoi davvero abbandonare la partita?");
+	        alert.setContentText("Eventuali progressi non salvati andranno persi.");
+
+	        // Modifica i ButtonType invece di cercare i bottoni
+	        ButtonType confermaBtn = new ButtonType("Conferma", ButtonBar.ButtonData.OK_DONE);
+	        ButtonType annullaBtn = new ButtonType("Annulla", ButtonBar.ButtonData.CANCEL_CLOSE);
+	        
+	        alert.getButtonTypes().setAll(confermaBtn, annullaBtn);
+	        
+	        alert.show();
+	        
+	        alert.resultProperty().addListener((observable, oldValue, newValue) -> {
+	            if (newValue == confermaBtn) {
+	                risultato.complete(true);
+	            } else {
+	                risultato.complete(false);
+	            }
+	        });
+	    });
+        
+        return risultato;
+	}
+	//END
 	
 	//---------------------------------------------------------------------------------
     /**
