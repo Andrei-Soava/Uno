@@ -57,7 +57,12 @@ public class ControlloreSalvataggi {
 					switch (event.getTipo()) {
 	                case GIOCA: { 
 	                	//probabilmente partita da ottenere qui, deserializzarla e lo passo alla appwithmaven che la carica
-	                	vs.mostraGiocoCaricato(event.getNomeOriginale());
+	                	//vs.mostraGiocoCaricato(event.getNomeOriginale());
+	                	cs.caricaPartita(event.getNomeOriginale(), respCaricaPartita ->{
+	                		if(respCaricaPartita.success) {
+	                			vs.mostraGiocoCaricatoWithDb(event.getNomeOriginale(), respCaricaPartita.partitaSerializzata);
+	                		}
+	                	});
 	                	break;
 	                }
 	                case RINOMINA: {

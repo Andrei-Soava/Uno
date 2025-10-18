@@ -25,11 +25,11 @@ import onegame.modello.Partita;
  * -rinominaSalvataggio--> permette di scegliere tra i salvataggi uno e rinominarlo
  */
 @Deprecated
-public class ControllorePersistenza {
+public class ControllorePersistenzaTEMP {
 	private String salvataggioCorrente;
 	private InterfacciaPersistenza persistenzaIF;
 
-	public ControllorePersistenza(InterfacciaPersistenza persitenzaIF) {
+	public ControllorePersistenzaTEMP(InterfacciaPersistenza persitenzaIF) {
 		// da utilizzare quando ci sarà un interfaccia con database per gestione delle partite--> al momento si usa ManagerPersistenza
 		this.persistenzaIF = persistenzaIF;
 	}

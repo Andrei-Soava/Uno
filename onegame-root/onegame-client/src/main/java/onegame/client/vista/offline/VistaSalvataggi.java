@@ -67,6 +67,10 @@ public class VistaSalvataggi {
 	public void mostraGiocoCaricato(String salvataggio) {
 		app.mostraVistaPartitaCaricata(salvataggio);
 	}
+	
+	public void mostraGiocoCaricatoWithDb(String nomeSalvataggio, String partitaSerializzata) {
+		app.mostraVistaPartitaCaricataWithDb(nomeSalvataggio, partitaSerializzata);
+	}
 
 	/**
 	 * Costruisce la lista e notifica al callback l'azione scelta dall'utente.

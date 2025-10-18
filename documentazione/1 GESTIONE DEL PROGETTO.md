@@ -128,3 +128,4 @@ Esempio COMPLETO:
 - 17/10, Fabio, (creato Utente nel server, iniziata disconnessione lato server, refactoring interfaccia di comunicazione lato client), continuazione server;
 - 18/10, Andrei, (refactoring generale dentro il Client per migliore gestione di tutti i timer durante il gioco + piccole migliorie grafiche del alert/dialog + campi input per username ospite e nome stanza), null;
 - 18/10, Fabio, migliorata gestione di sessioni e stanze lato server, completamento StanzaPartita e gioco;
+- 19/10, Andrei (creazione nuovo ControllorePersistenza, ma ancora incompleto), null;

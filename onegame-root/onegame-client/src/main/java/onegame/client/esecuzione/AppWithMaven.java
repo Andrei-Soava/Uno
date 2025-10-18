@@ -203,6 +203,15 @@ public class AppWithMaven extends Application {
 		//primaryStage.setScene(vista.getScene());
 		controllore.avviaPartita();
 	}
+	
+	public void mostraVistaPartitaCaricataWithDb(String nomeSalvataggio, String partitaSerializzata) {
+		VistaGioco vista = new VistaGioco(this);
+		@SuppressWarnings("deprecation")
+		ControlloreGioco controllore = new ControlloreGioco(vista, new VistaSpettatore(this), cs); // Passo la vista al controller
+		controllore.caricaPartitaWithDb(nomeSalvataggio, partitaSerializzata);
+		//primaryStage.setScene(vista.getScene());
+		controllore.avviaPartita();
+	}
 
 	public void mostraVistaPartitaNuova(int numGiocatori) {
 		VistaGioco vista = new VistaGioco(this);

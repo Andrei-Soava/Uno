@@ -10,7 +10,7 @@ import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.util.Duration;
-import onegame.client.controllore.ControllorePersistenza;
+import onegame.client.controllore.ControllorePersistenzaTEMP;
 import onegame.client.net.ClientSocket;
 import onegame.client.persistenza_temporanea.ManagerPersistenza;
 import onegame.client.vista.partita.VistaGioco;
@@ -43,7 +43,7 @@ public class ControlloreGioco {
 	private VistaGioco vg;
 	private VistaSpettatore vsp;
 	private Partita partita;
-	private ControllorePersistenza cp;
+	private ControllorePersistenzaTEMP cp;
 	private ClientSocket cs;
 	private boolean partitaAttiva = false;
 	private PauseTransition timerTurno;
@@ -60,7 +60,7 @@ public class ControlloreGioco {
 		this.vg = vg;
 		this.vsp = vsp;
 		this.cs = cs;
-		this.cp=new ControllorePersistenza(null);
+		this.cp=new ControllorePersistenzaTEMP(null);
 		creaTimers();
 		aspettaAbbandona();
 	}
@@ -73,7 +73,7 @@ public class ControlloreGioco {
 		return partita;
 	}
 
-	public ControllorePersistenza getCp() {
+	public ControllorePersistenzaTEMP getCp() {
 		return cp;
 	}
 	
@@ -195,6 +195,10 @@ public class ControlloreGioco {
 	
 	public void caricaPartita(String salvataggio) {
 		cp.caricaPartita(this, salvataggio);
+	}
+	
+	public void caricaPartitaWithDb(String nomeSalvataggio, String partitaSerializzata) {
+		//cp.caricaPartita(String nomeSalvataggio, String partitaSerializzata);
 	}
 	
 	/**
