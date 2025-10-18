@@ -196,7 +196,7 @@ public class VistaHome {
 		BooleanBinding loggatoBinding = (Bindings.createBooleanBinding(() -> logged));
 		utenteBtn.disableProperty().bind(abilitato.not());
 		utenteBtn.opacityProperty().bind(Bindings.when(abilitato).then(1.0).otherwise(0.25));
-		utenteBtn.textProperty().bind(Bindings.when(loggatoBinding).then("⛯ "+utente.getUsername()).otherwise("Ospite"));
+		utenteBtn.textProperty().bind(Bindings.when(loggatoBinding).then("⛯ "+utente.getUsername()).otherwise("guest-"+utente.getUsername()));
 		
 		statoConnessioneLabel.textProperty()
 				.bind(Bindings.when(monitor.connectedProperty()).then("Connesso ✅").otherwise("Disconnesso ❌"));

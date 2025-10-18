@@ -21,5 +21,5 @@ public abstract class ControlloreStanza {
 	    });
 	}
 	
-	public abstract void attendiInizioPartita();
+	public abstract void aspettaInizioPartita();
 }

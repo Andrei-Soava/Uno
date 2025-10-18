@@ -2,7 +2,6 @@ package onegame.client.vista.partita;
 
 import javafx.animation.AnimationTimer;
 import javafx.animation.PauseTransition;
-import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.geometry.Insets;
@@ -15,6 +14,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import onegame.client.esecuzione.AppWithMaven;
+import onegame.client.vista.accessori.GestoreCallbackBottoni;
 import onegame.client.vista.accessori.GestoreEffettiGenerici;
 import onegame.client.vista.accessori.GestoreGraficaCarta;
 import onegame.client.vista.accessori.GestoreHoverCarta;
@@ -26,6 +26,7 @@ import onegame.modello.giocatori.Giocatore;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 
@@ -165,7 +166,12 @@ public class VistaGioco extends VistaPartita {
      * -premere (o meno) pulsante ONE
      * 
      */
-    //mostra la carta pescata
+    
+    /**
+     * schermata di scelta azione su carta pescata giocabile
+     * @param pescata carta pescata
+     * @param callback azione su carta pescata
+     */
     public void stampaCartaPescataAsync(Carta pescata, Consumer<Integer> callback) {
         Platform.runLater(() -> {
             Alert alert = new Alert(Alert.AlertType.NONE);
@@ -185,11 +191,16 @@ public class VistaGioco extends VistaPartita {
                 callback.accept(scelta);
             });
             
+            DialogPane dialogPane = alert.getDialogPane();
+            dialogPane.getStylesheets().add(getClass().getResource("/stile/base.css").toExternalForm());
             alert.show();
         });
     }
 
-    //mostra la scelta colore
+    /**
+     * schermata di scelta di un colore
+     * @param callback colore scelto
+     */
     public void stampaColoriAsync(Consumer<Colore> callback) {
         Platform.runLater(() -> {
             List<Colore> colori = Arrays.asList(Colore.values()).subList(0, 4);
@@ -236,11 +247,14 @@ public class VistaGioco extends VistaPartita {
                 callback.accept(result);
             });
             
+            DialogPane dialogPane = dialog.getDialogPane();
+            dialogPane.getStylesheets().add(getClass().getResource("/stile/base.css").toExternalForm());
             dialog.show();
         });
     }
     
-    //mostra pulsante ONE
+    //mostra pulsante ONE + gestione timer incorporata 
+    @Deprecated //ad ora, visto che gestione timer dentro la vista potrebbe creare problemi nel gioco online
     public void mostraPulsanteONE(Consumer<Boolean> scelta) {
         AtomicBoolean premuto = new AtomicBoolean(false);
 
@@ -266,6 +280,22 @@ public class VistaGioco extends VistaPartita {
             });
             timer.play();
         });
+    }
+    
+    /**
+     * metodo che mostra bottone ONE e permette di premerlo
+     * @return
+     */
+    public CompletableFuture<Void> mostraONEBtn() {
+    	ONEBtn.setVisible(true);
+    	return GestoreCallbackBottoni.waitForClick(ONEBtn);
+    }
+    
+    /**
+     * metodo che nasconde bottone ONE
+     */
+    public void nascondiONEBtn() {
+    	ONEBtn.setVisible(false);
     }
 
 

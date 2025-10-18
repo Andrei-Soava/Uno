@@ -14,6 +14,9 @@ public class ControlloreHome {
 		
 		vh.aggiungiListener(cm, cs.getUtente());
 		System.out.println(cs.getUtente().getUsername() + " è " + cs.getUtente().isAnonimo());
+		
+		aspettaLogout();
+		aspettaStatistiche();
 	}
 	
 	public ClientSocket getCs() {

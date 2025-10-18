@@ -11,7 +11,7 @@ public class ControlloreStanzaHost extends ControlloreStanza {
 	}
 
 	@Override
-	public void attendiInizioPartita() {
+	public void aspettaInizioPartita() {
 		vs.mostraAvviaBtn();
 	}
 

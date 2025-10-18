@@ -11,6 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
+import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -173,6 +174,8 @@ public class VistaImpostazioni {
         dialog.setOnHidden(e -> {
             if (onClose != null) onClose.run();
         });
+        DialogPane dialogPane = dialog.getDialogPane();
+        dialogPane.getStylesheets().add(getClass().getResource("/stile/base.css").toExternalForm());
         dialog.show();
     }
 
@@ -263,6 +266,8 @@ public class VistaImpostazioni {
         dialog.setOnHidden(e -> {
             if (onClose != null) onClose.run();
         });
+        DialogPane dialogPane = dialog.getDialogPane();
+        dialogPane.getStylesheets().add(getClass().getResource("/stile/base.css").toExternalForm());
         dialog.show();
     }
 
@@ -318,6 +323,8 @@ public class VistaImpostazioni {
             if (onClose != null) onClose.run();
         });
 
+        DialogPane dialogPane = alert.getDialogPane();
+        dialogPane.getStylesheets().add(getClass().getResource("/stile/base.css").toExternalForm());
         alert.show();
     }
 

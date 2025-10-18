@@ -1,8 +1,5 @@
 package onegame.client.vista.online;
 
-import java.util.function.Consumer;
-
-import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -14,8 +11,9 @@ public class VistaConfigurazioneOnline {
 
     private Scene scene;
     private AppWithMaven app;
-    ComboBox<Integer> numGiocatori;
-    Button avviaBtn;
+    private ComboBox<Integer> numGiocatori;
+    private TextField nomeStanza;
+    private Button creaBtn;
     
     public VistaConfigurazioneOnline(AppWithMaven app) {
     	this.app=app;
@@ -40,7 +38,12 @@ public class VistaConfigurazioneOnline {
     	topBar.getChildren().addAll(indietroBtn, leftSpacer, titolo, rightSpacer);
 
     	root.setTop(topBar);
-
+    	
+    	Label lblNomeStanza = new Label("Nome Stanza");
+    	nomeStanza = new TextField();
+    	nomeStanza.setMaxWidth(200);
+    	nomeStanza.setPromptText("Inserisci il nome della partita");
+    	
     	Label lblNumGiocatori = new Label("Numero Giocatori");
     	numGiocatori = new ComboBox<>();
     	numGiocatori.getItems().addAll(2, 3, 4);
@@ -51,13 +54,13 @@ public class VistaConfigurazioneOnline {
     	Button annullaBtn = new Button("Annulla");
     	annullaBtn.setOnAction(e -> app.mostraVistaMenuOnline());
 
-    	avviaBtn = new Button("Avvia Partita");
+    	creaBtn = new Button("Crea stanza");
     	//avviaBtn.setOnAction(e -> app.mostraVistaGiocoNuovo(numGiocatori.getValue()));
 
-    	HBox pulsanti = new HBox(10, annullaBtn, avviaBtn);
+    	HBox pulsanti = new HBox(10, annullaBtn, creaBtn);
     	pulsanti.setAlignment(Pos.CENTER);
 
-    	VBox centro = new VBox(20, lblNumGiocatori, numGiocatori, pulsanti);
+    	VBox centro = new VBox(20, lblNomeStanza, nomeStanza, lblNumGiocatori, numGiocatori, pulsanti);
     	centro.setAlignment(Pos.CENTER);
 
     	root.setCenter(centro);
@@ -73,13 +76,31 @@ public class VistaConfigurazioneOnline {
         return scene;
     }
     
-    public void configuraPartita(Consumer<Integer> callback) {
-    	Platform.runLater(()->{
-    		avviaBtn.setOnAction(e->{
-    			callback.accept(numGiocatori.getValue());
-    		});
-    	});
+    @FunctionalInterface
+    public interface ConfiguraPartitaCallback {
+        void onConfigura(String nomePartita, int numGiocatori);
     }
+    
+    public void configuraPartita(ConfiguraPartitaCallback callback) {
+        // Recupero valori
+        String nomePartita = nomeStanza.getText();
+        if (nomePartita == null || nomePartita.isBlank()) {
+            nomePartita = "Partita senza nome"; // default
+        }
+
+        int giocatori = numGiocatori.getValue();
+
+        // Invoco la callback
+        callback.onConfigura(nomePartita, giocatori);
+    }
+    
+//    public void configuraPartita(Consumer<Integer> callback) {
+//    	Platform.runLater(()->{
+//    		avviaBtn.setOnAction(e->{
+//    			callback.accept(numGiocatori.getValue());
+//    		});
+//    	});
+//    }
     
     public void mostraHome() {
     	app.mostraVistaHome();

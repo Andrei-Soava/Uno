@@ -18,6 +18,7 @@ public class ControlloreMenuOnline {
 	        }
 	    });
 		
+	    aspettaLogout();
 	}
 
 	public void aspettaLogout() {

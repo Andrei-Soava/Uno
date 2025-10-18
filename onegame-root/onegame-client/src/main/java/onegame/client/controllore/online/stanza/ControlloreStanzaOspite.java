@@ -11,7 +11,7 @@ public class ControlloreStanzaOspite extends ControlloreStanza {
 	}
 
 	@Override
-	public void attendiInizioPartita() {
+	public void aspettaInizioPartita() {
 		
 	}
 

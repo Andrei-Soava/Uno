@@ -1,18 +1,10 @@
 package onegame.client.controllore;
 
 
-import javax.management.RuntimeErrorException;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import javafx.application.Platform;
 import onegame.client.net.ClientSocket;
 import onegame.client.net.ConnectionMonitor;
 import onegame.client.vista.VistaAccesso;
-import onegame.modello.net.ProtocolloMessaggi.RespAuth;
-import onegame.modello.net.util.JsonHelper;
 import onegame.modello.net.Utente;
 
 public class ControlloreAccesso {
@@ -24,6 +16,7 @@ public class ControlloreAccesso {
 		this.cs = cs;
 		
 		va.aggiungiListener(cm);
+		eseguiAccesso();
 	}
 
 	public void eseguiAccesso() {
@@ -35,11 +28,18 @@ public class ControlloreAccesso {
 				return;
 			}
 			if (username == null && password == null) {
-//				cs.getUtente().setAnonimo(true);
-//				cs.getUtente().setUsername("anonimo");
 				cs.anonimo(args -> {});
 				cs.setUtente(new Utente(true));
-				va.mostraHome();
+				va.inserisciNickname("Scegli un nome utente").thenAccept(nickname->{
+					//se viene cliccato annulla o X
+					if(nickname==null) {
+						eseguiAccesso();
+						return;
+					}
+					cs.getUtente().setUsername(nickname);
+					va.mostraHome();
+					return;
+				});
 				return;
 			}
 			if (username.length() == 0 || password.length() == 0) {
@@ -50,15 +50,6 @@ public class ControlloreAccesso {
 
 			// condizionale (sarà dentro una send asincrona al server e se la response ==
 			// true, si va alla vista successiva)
-//			if (true) {
-//				cs.getUtente().setAnonimo(false);
-//				cs.getUtente().setUsername(username);
-//				va.mostraHome();
-//			} else {
-//				va.compilaMessaggioErrore("Credenziali errate");
-//				va.svuotaCampi();
-//				eseguiAccesso();
-//			}
 			try {
 				cs.login(username, password, respAuth -> {
 					try {
