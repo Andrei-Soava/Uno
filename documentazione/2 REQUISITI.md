@@ -4,11 +4,27 @@
 
 ## 1. Introduzione
 
-Il presente documento descrive in modo esaustivo e strutturato i requisiti funzionali e non funzionali del videogioco di carte “UNO-like” basato su Java. Include dettagli sulle interfacce front-end, sulla logica di gioco, sulle componenti server, sul database e sui vincoli tecnologici, fornendo così una base condivisa per sviluppo, test e validazione.
+### 1.1 Scopo del documento
 
----
+Il presente documento descrive in modo esaustivo e strutturato i requisiti funzionali e non funzionali del videogioco di carte “UNO-like” basato su Java.  
+La specifica dei requisiti è redatta in conformità con lo standard IEEE 830 al fine di garantire una struttura chiara, tracciabile e comprensibile delle parti coinvolte.  
+Il presente documento rappresenta un riferimento ufficiale per tutte le fasi successive del ciclo di vita del software, includendo progettazione, implementazione, test, validazione e manutenzione. Esso mira a garantire una comprensione condivisa del sistema tra tutti gli stakeholder riducendo ambiguità e assicurando la tracciabilità dei requisiti.
 
-## 2. Scopo
+### 1.2 Scopo del gioco
+Il gioco “UNO-like” (ispirato al classico gioco di carte “UNO”) è stato progettato per offrire un’esperienza interattiva, fluida e accessibile a qualsiasi tipo di utente.
+Il sistema ha l’obiettivo di fornire una piattaforma modulare e scalabile, che permetta l’integrazione di nuove funzionalità in futuro senza compromettere la stabilità e le prestazioni del software.    
+
+   - ### 1.2.1 Svolgimento del gioco
+      Il gioco consente ai giocatori di partecipare a partite in modalità offline (contro dei bot) oppure in modalità multigiocatore online contro altri utenti.
+      I giocatori possono scegliere se registrarsi o partecipare come utenti anonimi. Tuttavia, la modalità anonima comporta alcune limitazioni: i giocatori non registrati non possono accedere alle statistiche delle partite né salvare le partite non ancora terminate prima di abbandonarle.
+   - ### 1.2.2 Definizioni, acronimi e abbreviazioni
+      - Bot: avversario controllato da un computer (cioè un computer imita le mosse che farebbe un umano);
+      - Utente registrato: utente che, dopo l'avvio del gioco, effettua una registrazione (nel caso non fosse registrato) oppure un login (nel caso fosse già registrato). Esso può controllare le statistiche delle sue partite e può accedere ai salvataggi delle partite non terminate (solo quelle lato offline);
+      - Utente anonimo: utente che non si è registrato prima di iniziare a giocare. Esso sarà identificato con un username dato del server (ad esempio: utente#754);
+
+
+
+### 1.2. Scopo 
 
 Definire tutti i requisiti utili a garantire:
 - Coerenza tra esigenze dell’utente e funzionalità implementate  
