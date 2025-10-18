@@ -19,6 +19,8 @@ public class ControlloreCodicePartita {
 	            vic.mostraHome();
 	        }
 	    });
+		
+		eseguiAccesso();
 	}
 	
 	public void eseguiAccesso() {

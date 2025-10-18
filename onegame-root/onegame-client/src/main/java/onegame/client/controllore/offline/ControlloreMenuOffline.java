@@ -19,19 +19,9 @@ public class ControlloreMenuOffline {
 		this.cs = cs;
 
 		// sezione di verifica connessione
-//		vmo.compilaStatoConnessione(false);
-//		vmo.disableOnlineBtns();
-//		Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(2), e -> {
-//			boolean connected = cs.isConnected();
-//			if (connected)
-//				vmo.enableOnlineBtns();
-//			else
-//				vmo.disableOnlineBtns();
-//			vmo.compilaStatoConnessione(connected);
-//		}));
-//		timeline.setCycleCount(Animation.INDEFINITE);
-//		timeline.play();
 		vmo.aggiungiListener(cm, cs.getUtente());
+		
+		aspettaLogout();
 	}
 	
 	

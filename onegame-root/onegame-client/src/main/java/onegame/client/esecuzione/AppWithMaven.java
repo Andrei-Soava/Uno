@@ -31,6 +31,9 @@ public class AppWithMaven extends Application {
 	private ClientSocket cs;
 	private ConnectionMonitor cm;
 
+	/**
+	 * metodo chiamato per aprire interfaccia grafica
+	 */
 	@Override
 	public void start(Stage stage) {
 		this.primaryStage = stage;
@@ -54,7 +57,9 @@ public class AppWithMaven extends Application {
 	}
 	
 	
-
+	/**
+	 * metodo per gestire chiusura applicazione
+	 */
 	@Override
 	public void stop() throws Exception {
 		if (cs != null) {
@@ -71,7 +76,7 @@ public class AppWithMaven extends Application {
 	}
 
 
-
+	//SEZIONE GETTER GLOBALI
 	public Stage getPrimaryStage() {
 		return this.primaryStage;
 	}
@@ -84,9 +89,10 @@ public class AppWithMaven extends Application {
 	public void mostraVistaAccesso(String username) {
 		VistaAccesso vista = new VistaAccesso(this);
 		vista.compilaUsername(username);
+		@SuppressWarnings("unused")
 		ControlloreAccesso ca = new ControlloreAccesso(vista, cs,cm);
 		primaryStage.setScene(vista.getScene());
-		ca.eseguiAccesso();
+		//ca.eseguiAccesso();
 	}
 
 	public void mostraVistaAccesso() {
@@ -95,17 +101,19 @@ public class AppWithMaven extends Application {
 
 	public void mostraVistaRegistrazione() {
 		VistaRegistrazione vista = new VistaRegistrazione(this);
+		@SuppressWarnings("unused")
 		ControlloreRegistrazione cr = new ControlloreRegistrazione(vista, cs, cm);
 		primaryStage.setScene(vista.getScene());
-		cr.eseguiRegistrazione();
+		//cr.eseguiRegistrazione();
 	}
 
 	public void mostraVistaHome() {
 		VistaHome vista = new VistaHome(this);
+		@SuppressWarnings("unused")
 		ControlloreHome ch = new ControlloreHome(vista, cs, cm);
 		primaryStage.setScene(vista.getScene());
-		ch.aspettaLogout();
-		ch.aspettaStatistiche();
+		//ch.aspettaLogout();
+		//ch.aspettaStatistiche();
 	}
 	
 	public void mostraVistaTutorial() {
@@ -115,32 +123,36 @@ public class AppWithMaven extends Application {
 	
 	public void mostraVistaImpostazioni() {
 		VistaImpostazioni vista = new VistaImpostazioni(this);
+		@SuppressWarnings("unused")
 		ControlloreImpostazioni ci = new ControlloreImpostazioni(vista,cs,cm);
 		primaryStage.setScene(vista.getScene());
-		ci.aspettaLogout();
-		ci.aspettaSelezione();
+		//ci.aspettaLogout();
+		//ci.aspettaSelezione();
 	}
 
 	//SEZIONE VISTE GIOCO ONLINE
 	public void mostraVistaMenuOnline() {
 		VistaMenuOnline vista = new VistaMenuOnline(this);
+		@SuppressWarnings("unused")
 		ControlloreMenuOnline cmo=new ControlloreMenuOnline(vista, cs, cm);
 		primaryStage.setScene(vista.getScene());
-		cmo.aspettaLogout();
+		//cmo.aspettaLogout();
 	}
 
 	public void mostraVistaConfigurazioneOnline() {
 		VistaConfigurazioneOnline vista = new VistaConfigurazioneOnline(this);
+		@SuppressWarnings("unused")
 		ControlloreConfigurazioneOnline cco= new ControlloreConfigurazioneOnline(vista, cs, cm);
 		primaryStage.setScene(vista.getScene());
-		cco.aspettaCreazioneStanza();
+		//cco.aspettaCreazioneStanza();
 	}
 
 	public void mostraVistaInserimentoCodice() {
 		VistaInserimentoCodice vista = new VistaInserimentoCodice(this);
+		@SuppressWarnings("unused")
 		ControlloreCodicePartita cc = new ControlloreCodicePartita(vista, cs, cm);
 		primaryStage.setScene(vista.getScene());
-		cc.eseguiAccesso();
+		//cc.eseguiAccesso();
 	}
 	
 	public void mostraVistaStanza(String codice, boolean host) {
@@ -155,33 +167,37 @@ public class AppWithMaven extends Application {
 			cv=new ControlloreStanzaOspite(vista,cs,cm);
 		}
 		primaryStage.setScene(vista.getScene());
-		cv.attendiInizioPartita();
+		cv.aspettaInizioPartita();
 	}
 
 	//SEZIONE VISTE GIOCO OFFLINE
 	public void mostraVistaMenuOffline() {
 		VistaMenuOffline vista = new VistaMenuOffline(this);
+		@SuppressWarnings("unused")
 		ControlloreMenuOffline cmo=new ControlloreMenuOffline(vista, cs, cm);
 		primaryStage.setScene(vista.getScene());
-		cmo.aspettaLogout();
+		//cmo.aspettaLogout();
 	}
 
 	public void mostraVistaSalvataggi() {
 		VistaSalvataggi vista = new VistaSalvataggi(this);
+		@SuppressWarnings("unused")
 		ControlloreSalvataggi cslv=new ControlloreSalvataggi(vista, cs, cm);
 		primaryStage.setScene(vista.getScene());
-		cslv.eseguiScelta();
+		//cslv.eseguiScelta();
 	}
 
 	public void mostraVistaConfigurazioneOffline() {
 		VistaConfigurazioneOffline vista = new VistaConfigurazioneOffline(this);
+		@SuppressWarnings("unused")
 		ControlloreConfigurazioneOffline ccoff=new ControlloreConfigurazioneOffline(vista);
 		primaryStage.setScene(vista.getScene());
-		ccoff.aspettaCreazionePartita();
+		//ccoff.aspettaCreazionePartita();
 	}
 
 	public void mostraVistaPartitaCaricata(String salvataggio) {
 		VistaGioco vista = new VistaGioco(this);
+		@SuppressWarnings("deprecation")
 		ControlloreGioco controllore = new ControlloreGioco(vista, new VistaSpettatore(this), cs); // Passo la vista al controller
 		controllore.caricaPartita(salvataggio);
 		//primaryStage.setScene(vista.getScene());
@@ -190,6 +206,7 @@ public class AppWithMaven extends Application {
 
 	public void mostraVistaPartitaNuova(int numGiocatori) {
 		VistaGioco vista = new VistaGioco(this);
+		@SuppressWarnings("deprecation")
 		ControlloreGioco controllore = new ControlloreGioco(vista, new VistaSpettatore(this), cs); 
 		// se si vuole giocatori tra persone umane toglie il "vsBot"
 		controllore.configuraNuovaPartitaVsBot(numGiocatori);

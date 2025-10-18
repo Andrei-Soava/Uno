@@ -5,27 +5,22 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
-import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
 import javafx.animation.PauseTransition;
 import javafx.animation.SequentialTransition;
-import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
@@ -43,7 +38,6 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
-import onegame.client.controllore.offline.ControlloreGioco;
 import onegame.client.esecuzione.AppWithMaven;
 import onegame.client.vista.accessori.GestoreCallbackBottoni;
 import onegame.client.vista.accessori.GestoreEffettiGenerici;
@@ -230,50 +224,6 @@ public abstract class VistaPartita {
 		return scene;
 	}
 	
-	//BEGIN test esotico
-	/**
-	 * funzione asincrona per gestione click abbandona btn
-	 * 
-	 * @return click sul bottone (qualora avvenisse)
-	 */
-	public CompletableFuture<Void> waitForAbbandonaBtnClick() {
-		return GestoreCallbackBottoni.waitForClick(abbandonaBtn);
-	}
-	
-	/**
-	 * metodo che mostra una alert NON bloccante sul javafx thread
-	 * per gestire eventuale abbandono da una partita
-	 * @return se è stato schiacciato o meno "conferma"
-	 */
-	public CompletableFuture<Boolean> mostraAbbandonaAlert() {
-		CompletableFuture<Boolean> risultato = new CompletableFuture<>();
-		Platform.runLater(() -> {
-	        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-	        alert.setTitle("Conferma");
-	        alert.setHeaderText("Vuoi davvero abbandonare la partita?");
-	        alert.setContentText("Eventuali progressi non salvati andranno persi.");
-
-	        // Modifica i ButtonType invece di cercare i bottoni
-	        ButtonType confermaBtn = new ButtonType("Conferma", ButtonBar.ButtonData.OK_DONE);
-	        ButtonType annullaBtn = new ButtonType("Annulla", ButtonBar.ButtonData.CANCEL_CLOSE);
-	        
-	        alert.getButtonTypes().setAll(confermaBtn, annullaBtn);
-	        
-	        alert.show();
-	        
-	        alert.resultProperty().addListener((observable, oldValue, newValue) -> {
-	            if (newValue == confermaBtn) {
-	                risultato.complete(true);
-	            } else {
-	                risultato.complete(false);
-	            }
-	        });
-	    });
-        
-        return risultato;
-	}
-	//END
-	
 	//---------------------------------------------------------------------------------
     /**
      * sezione stampa testo/carte/
@@ -398,7 +348,7 @@ public abstract class VistaPartita {
      * 
      * @param secondsLeft
      */
-    public void setTimer(SimpleIntegerProperty secondsLeft) {
+    public void stampaTimerTurno(SimpleIntegerProperty secondsLeft) {
     	Label timerLabel = new Label();
 		timerLabel.setStyle("-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: red;");
 		timerLabel.textProperty().bind(secondsLeft.asString("Tempo: %d s"));
@@ -420,12 +370,11 @@ public abstract class VistaPartita {
             alert.setHeaderText("La partita è terminata!");
             alert.setContentText(vincitore+" ha vinto!");
             alert.setGraphic(null);
-
-            //creo un solo pulsante personalizzato
             ButtonType tornaMenuBtn = new ButtonType("Torna al menu iniziale", ButtonBar.ButtonData.OK_DONE);
             alert.getButtonTypes().setAll(tornaMenuBtn);
 
-            //mostro la finestra e catturo il risultato
+            DialogPane dialogPane = alert.getDialogPane();
+            dialogPane.getStylesheets().add(getClass().getResource("/stile/base.css").toExternalForm());
             Optional<ButtonType> result = alert.showAndWait();
 
             //se l'utente preme il pulsante o chiude con X/ESC -> 
@@ -436,6 +385,51 @@ public abstract class VistaPartita {
             }
         });
     }
+    
+	/**
+	 * funzione asincrona per gestione click abbandona btn
+	 * 
+	 * @return click sul bottone (qualora avvenisse)
+	 */
+	public CompletableFuture<Void> waitForAbbandonaBtnClick() {
+		return GestoreCallbackBottoni.waitForClick(abbandonaBtn);
+	}
+	
+	/**
+	 * metodo che mostra una alert NON bloccante sul javafx thread
+	 * per gestire eventuale abbandono da una partita
+	 * @return se è stato schiacciato o meno "conferma"
+	 */
+	public CompletableFuture<Boolean> stampaAbbandonaAlert() {
+		CompletableFuture<Boolean> risultato = new CompletableFuture<>();
+		Platform.runLater(() -> {
+	        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+	        alert.setTitle("Conferma");
+	        alert.setHeaderText("Vuoi davvero abbandonare la partita?");
+	        alert.setGraphic(null);
+	        alert.setContentText("Eventuali progressi non salvati andranno persi.");
+
+	        // Modifica i ButtonType invece di cercare i bottoni
+	        ButtonType confermaBtn = new ButtonType("Conferma", ButtonBar.ButtonData.OK_DONE);
+	        ButtonType annullaBtn = new ButtonType("Annulla", ButtonBar.ButtonData.CANCEL_CLOSE);
+	        
+	        alert.getButtonTypes().setAll(confermaBtn, annullaBtn);
+	        
+	        DialogPane dialogPane = alert.getDialogPane();
+            dialogPane.getStylesheets().add(getClass().getResource("/stile/base.css").toExternalForm());
+	        alert.show();
+	        
+	        alert.resultProperty().addListener((observable, oldValue, newValue) -> {
+	            if (newValue == confermaBtn) {
+	                risultato.complete(true);
+	            } else {
+	                risultato.complete(false);
+	            }
+	        });
+	    });
+        
+        return risultato;
+	}
     
     public void mostraMenuOffline() {
     	app.mostraVistaMenuOffline();

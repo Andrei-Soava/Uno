@@ -7,6 +7,8 @@ public class ControlloreConfigurazioneOffline {
 	
 	public ControlloreConfigurazioneOffline(VistaConfigurazioneOffline vcoff) {
 		this.vcoff=vcoff;
+		
+		aspettaCreazionePartita();
 	}
 	
 	public void aspettaCreazionePartita() {

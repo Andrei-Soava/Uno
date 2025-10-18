@@ -1,14 +1,18 @@
 package onegame.client.vista;
 
+import java.util.concurrent.CompletableFuture;
+
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
@@ -110,6 +114,35 @@ public class VistaAccesso {
 		usernameField.clear();
 		passwordField.clear();
 	}
+	
+	/**
+     * metodo per inserire una stringa generica 
+     * 
+     */
+	public CompletableFuture<String> inserisciNickname(String message) {
+        CompletableFuture<String> future = new CompletableFuture<>();
+        Platform.runLater(() -> {
+            TextInputDialog dialog = new TextInputDialog();
+            dialog.setHeaderText(message);
+            dialog.setTitle(null);
+            dialog.setGraphic(null);
+            dialog.showingProperty().addListener((obs, oldVal, newVal) -> {
+                if (!newVal) {
+                    String result = dialog.getResult();
+                    if (result!=null && result.isBlank()) {
+                        result = "anonimo";
+                    }
+                    future.complete(result);
+                }
+            });
+
+            DialogPane dialogPane = dialog.getDialogPane();
+            dialogPane.getStylesheets().add(getClass().getResource("/stile/base.css").toExternalForm());
+            dialog.show();
+        });
+
+        return future;
+    }
 	
 	/**
 	 * sezione ottenimento dati da campo di login

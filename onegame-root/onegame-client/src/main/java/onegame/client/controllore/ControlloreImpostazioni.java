@@ -20,6 +20,9 @@ public class ControlloreImpostazioni {
 	            vi.mostraAccesso();
 	        }
 	    });
+		
+		aspettaLogout();
+		aspettaSelezione();
 	}
 
 	public void aspettaSelezione() {

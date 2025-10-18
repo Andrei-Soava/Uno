@@ -6,9 +6,6 @@ import onegame.client.net.ClientSocket;
 import onegame.client.net.ConnectionMonitor;
 import onegame.client.persistenza_temporanea.ManagerPersistenza;
 import onegame.client.vista.offline.VistaSalvataggi;
-import onegame.modello.net.ProtocolloMessaggi.RespEliminaPartita;
-import onegame.modello.net.ProtocolloMessaggi.RespListaPartite;
-import onegame.modello.net.util.JsonHelper;
 
 public class ControlloreSalvataggi {
 	private VistaSalvataggi vs;
@@ -24,6 +21,8 @@ public class ControlloreSalvataggi {
 	            vs.mostraMenuOffline();
 	        }
 	    });
+		
+		eseguiScelta();
 	}
 	
 	public void eseguiScelta() {

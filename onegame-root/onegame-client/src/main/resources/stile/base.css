@@ -123,3 +123,124 @@
     -fx-background-color: transparent;
     -fx-border-color: transparent;
 }
+
+/* --- DIALOG / ALERT --- */
+.dialog-pane {
+    -fx-background-color: linear-gradient(to bottom, #ff0000, #b30000);
+    -fx-border-color: #ffd700;
+    -fx-border-width: 3;
+    -fx-padding: 15;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.6), 15, 0.6, 0, 5);
+    -fx-font-family: "Orbitron", "Segoe UI", sans-serif;
+}
+
+/* Testo del contenuto */
+.dialog-pane > .content.label {
+    -fx-text-fill: #ffd700;
+    -fx-font-size: 14px;
+    -fx-wrap-text: true;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.7), 3, 0.5, 0, 1);
+}
+
+/* Header (titolo della dialog) */
+.dialog-pane > .header-panel {
+    -fx-background-color: transparent;
+    -fx-padding: 0 0 10 0;
+}
+
+.dialog-pane > .header-panel > .label {
+    -fx-text-fill: linear-gradient(to bottom, #ffd700, #ff7f50);
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 6, 0.6, 0, 2);
+}
+
+/* Bottoni della dialog */
+.dialog-pane .button {
+    -fx-background-color: linear-gradient(to bottom, #ff0000, #b30000);
+    -fx-text-fill: #ffd700;
+    -fx-border-color: #ffd700;
+    -fx-border-width: 2;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-scale-x: 1;
+    -fx-scale-y: 1;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.6), 10, 0.5, 0, 3);
+    -fx-padding: 6 14 6 14;
+    -fx-transition: all 0.2s ease-in-out;
+}
+
+.dialog-pane .button:hover {
+    -fx-background-color: linear-gradient(to bottom, #ff4500, #ff0000);
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 14, 0.6, 0, 4);
+}
+
+.dialog-pane .button:pressed {
+    -fx-scale-x: 0.95;
+    -fx-scale-y: 0.95;
+    -fx-background-color: linear-gradient(to bottom, #b30000, #660000);
+}
+
+/* --- COMBOBOX --- */
+.combo-box {
+    -fx-background-color: linear-gradient(to bottom, #ff0000, #b30000);
+    -fx-border-color: #ffd700;
+    -fx-border-width: 2;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-text-fill: #ffd700;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.6), 6, 0.5, 0, 2);
+}
+
+/* Testo selezionato */
+.combo-box .list-cell {
+    -fx-text-fill: #ffd700;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-alignment: center;
+}
+
+/* Popup della lista */
+.combo-box-popup .list-view {
+    -fx-background-color: linear-gradient(to bottom, #ff4500, #b30000);
+    -fx-background-radius: 8;
+    -fx-border-color: #ffd700;
+    -fx-border-radius: 8;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.7), 8, 0.5, 0, 3);
+}
+
+/* Celle della lista (opzioni) */
+.combo-box-popup .list-view .list-cell {
+    -fx-background-color: linear-gradient(to bottom, #ff4500, #b30000);
+    -fx-text-fill: #ffd700;
+    -fx-font-weight: bold;
+    -fx-alignment: center;
+}
+
+.combo-box-popup .list-view .list-cell:hover {
+    -fx-background-color: linear-gradient(to right, #ff7f50, #ff4500);
+    -fx-text-fill: black;
+    -fx-cursor: hand;
+}
+
+.combo-box-popup .list-view .list-cell:selected {
+    -fx-background-color: linear-gradient(to bottom, #ff0000, #660000);
+    -fx-text-fill: #ffd700;
+    -fx-font-weight: bold;
+}
+
+/* Pulsante freccia */
+.combo-box .arrow-button {
+    -fx-background-color: linear-gradient(to bottom, #ffd700, #ffb700);
+    -fx-background-radius: 0 8 8 0;
+    -fx-border-color: #ff4500;
+    -fx-border-radius: 0 8 8 0;
+}
+
+

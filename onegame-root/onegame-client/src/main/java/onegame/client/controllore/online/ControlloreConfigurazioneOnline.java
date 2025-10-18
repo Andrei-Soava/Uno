@@ -20,15 +20,17 @@ public class ControlloreConfigurazioneOnline {
 	            vco.mostraHome();
 	        }
 	    });
+		
+		aspettaCreazioneStanza();
 	}
 	
 	public void aspettaCreazioneStanza() {
-		vco.configuraPartita(numeroGiocatori-> {
+		vco.configuraPartita((nomeStanza,numeroGiocatori)-> {
 			//richiesta codice della stanza con funzione asincrona
 //			String codiceOttenuto="codice";
 //			vco.mostraStanza(codiceOttenuto);
 			
-			cs.creaStanza("Prova", numeroGiocatori, respCreaStanza -> {
+			cs.creaStanza(nomeStanza, numeroGiocatori, respCreaStanza -> {
 				if(respCreaStanza.success) {
 					vco.mostraStanza(Integer.toString(respCreaStanza.codiceStanza));
 				} else {

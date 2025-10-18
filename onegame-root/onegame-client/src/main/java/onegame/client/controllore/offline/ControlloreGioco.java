@@ -89,7 +89,7 @@ public class ControlloreGioco {
 		timerPostMossaBot = new PauseTransition(Duration.seconds(3));
 		timerONE = new PauseTransition(Duration.seconds(5));
 		countdownTurno.setCycleCount(30);
-		vg.setTimer(secondsLeft);
+		vg.stampaTimerTurno(secondsLeft);
 	}
 	
 	private void sospendiTimers() {
@@ -121,7 +121,7 @@ public class ControlloreGioco {
 	public void aspettaAbbandona() {
 		vg.waitForAbbandonaBtnClick().thenRun(()->{
 			sospendiTimers();
-			CompletableFuture<Boolean> scelta = vg.mostraAbbandonaAlert();
+			CompletableFuture<Boolean> scelta = vg.stampaAbbandonaAlert();
 	        
 	        // Gestisci il risultato in modo asincrono
 	        scelta.thenAccept(confermato -> {

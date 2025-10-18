@@ -24,6 +24,8 @@ public class ControlloreRegistrazione {
 	            vr.mostraAccesso();
 	        }
 	    });
+		
+		eseguiRegistrazione();
 	}
 	
 	public void eseguiRegistrazione() {

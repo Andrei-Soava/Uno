@@ -191,6 +191,8 @@ public class VistaGioco extends VistaPartita {
                 callback.accept(scelta);
             });
             
+            DialogPane dialogPane = alert.getDialogPane();
+            dialogPane.getStylesheets().add(getClass().getResource("/stile/base.css").toExternalForm());
             alert.show();
         });
     }
@@ -245,6 +247,8 @@ public class VistaGioco extends VistaPartita {
                 callback.accept(result);
             });
             
+            DialogPane dialogPane = dialog.getDialogPane();
+            dialogPane.getStylesheets().add(getClass().getResource("/stile/base.css").toExternalForm());
             dialog.show();
         });
     }

@@ -97,6 +97,8 @@ public class VistaSalvataggi {
 						okBtn.setDisable(newValue.trim().isEmpty()
 						/* || !ManagerPersistenza.verificaRinominaSalvataggio(s, newValue) */);
 					});
+					DialogPane dialogPane = dialog.getDialogPane();
+		            dialogPane.getStylesheets().add(getClass().getResource("/stile/base.css").toExternalForm());
 					dialog.showAndWait().ifPresent(newName -> {
 						callback.accept(new EventoSalvataggio(EventoSalvataggio.Tipo.RINOMINA, s, newName));
 					});
@@ -107,6 +109,8 @@ public class VistaSalvataggi {
 					Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 					alert.setTitle("Elimina salvataggio");
 					alert.setHeaderText("Sei sicuro di voler eliminare?");
+					DialogPane dialogPane = alert.getDialogPane();
+		            dialogPane.getStylesheets().add(getClass().getResource("/stile/base.css").toExternalForm());
 					alert.showAndWait().ifPresent(response -> {
 						if (response == ButtonType.OK) {
 							callback.accept(new EventoSalvataggio(EventoSalvataggio.Tipo.ELIMINA, s, null));
