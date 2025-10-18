@@ -42,8 +42,8 @@ public class GestorePartiteOffline {
 	 * @param ackRequest L'oggetto per inviare l'acknowledgment
 	 */
 	public void handleSalvaPartita(SocketIOClient client, String str, AckRequest ackRequest) {
-		Utente utente = getUtenteAutenticato(client);
-		if (utente == null) {
+		Sessione sessione = getSessioneAutenticato(client);
+		if (sessione == null) {
 			ackRequest.sendAckData(new ProtocolloMessaggi.RespSalvaPartita(false, "Utente non valido"));
 			logger.warn("Accesso negato: token non valido o utente anonimo");
 			return;
@@ -57,10 +57,10 @@ public class GestorePartiteOffline {
 				return;
 			}
 
-			long utenteId = utenteDb.getIdByUsername(utente.getUsername());
+			long utenteId = utenteDb.getIdByUsername(sessione.getUsername());
 			partitaDb.createPartita(utenteId, req.nomeSalvataggio, req.partitaSerializzata);
 			ackRequest.sendAckData(new ProtocolloMessaggi.RespSalvaPartita(true, "Salvataggio riuscito"));
-			logger.info("Partita salvata: {} per utente {}", req.nomeSalvataggio, utente.getUsername());
+			logger.info("Partita salvata: {} per utente {}", req.nomeSalvataggio, sessione.getUsername());
 		} catch (Exception e) {
 			logger.error("Errore durante il salvataggio della partita: {}", e.getMessage());
 			ackRequest.sendAckData(new ProtocolloMessaggi.RespSalvaPartita(false, "Errore durante il salvataggio"));
@@ -74,8 +74,8 @@ public class GestorePartiteOffline {
 	 * @param ackRequest L'oggetto per inviare l'acknowledgment
 	 */
 	public void handleCaricaPartita(SocketIOClient client, String str, AckRequest ackRequest) {
-		Utente utente = getUtenteAutenticato(client);
-		if (utente == null) {
+		Sessione sessione = getSessioneAutenticato(client);
+		if (sessione == null) {
 			ackRequest.sendAckData(new ProtocolloMessaggi.RespCaricaPartita(false, "", "Utente non valido"));
 			logger.warn("Accesso negato: token non valido o utente anonimo");
 			return;
@@ -89,19 +89,17 @@ public class GestorePartiteOffline {
 				return;
 			}
 
-			long utenteId = utenteDb.getIdByUsername(utente.getUsername());
+			long utenteId = utenteDb.getIdByUsername(sessione.getUsername());
 			String partitaJson = partitaDb.getPartitaByUtenteAndNome(utenteId, req.nomeSalvataggio);
 			if (partitaJson != null && !partitaJson.isBlank()) {
 				ackRequest.sendAckData(new ProtocolloMessaggi.RespCaricaPartita(true, partitaJson, "Partita caricata"));
-				logger.info("Partita caricata: {} per utente {}", req.nomeSalvataggio, utente.getUsername());
+				logger.info("Partita caricata: {} per utente {}", req.nomeSalvataggio, sessione.getUsername());
 			} else {
 				ackRequest.sendAckData(new ProtocolloMessaggi.RespCaricaPartita(false, "", "Partita non trovata"));
-				logger.warn("Partita non trovata: {} per utente {}", req.nomeSalvataggio,
-						utente.getUsername());
+				logger.warn("Partita non trovata: {} per utente {}", req.nomeSalvataggio, sessione.getUsername());
 			}
 		} catch (SQLException e) {
-			logger.error("Errore durante il caricamento per utente {}: {}", utente.getUsername(),
-					e.getMessage());
+			logger.error("Errore durante il caricamento per utente {}: {}", sessione.getUsername(), e.getMessage());
 			ackRequest
 					.sendAckData(new ProtocolloMessaggi.RespCaricaPartita(false, "", "Errore durante il caricamento"));
 		}
@@ -114,28 +112,28 @@ public class GestorePartiteOffline {
 	 * @param ackRequest L'oggetto per inviare l'acknowledgment
 	 */
 	public void handleListaSalvataggi(SocketIOClient client, AckRequest ackRequest) {
-		Utente utente = getUtenteAutenticato(client);
-		if (utente == null) {
+		Sessione sessione = getSessioneAutenticato(client);
+		if (sessione == null) {
 			ackRequest.sendAckData(new ProtocolloMessaggi.RespListaPartite(false, null, "Utente non valido"));
 			logger.warn("Accesso negato: token non valido o utente anonimo");
 			return;
 		}
 
 		try {
-			long utenteId = utenteDb.getIdByUsername(utente.getUsername());
+			long utenteId = utenteDb.getIdByUsername(sessione.getUsername());
 			List<String> nomi = partitaDb.getPartiteByUtente(utenteId);
 			ackRequest.sendAckData(new ProtocolloMessaggi.RespListaPartite(true, nomi, "Lista recuperata"));
-			logger.info("Lista salvataggi inviata per utente {}", utente.getUsername());
+			logger.info("Lista salvataggi inviata per utente {}", sessione.getUsername());
 		} catch (SQLException e) {
-			logger.error("Errore durante il recupero dei salvataggi per utente {}: {}", utente.getUsername(),
+			logger.error("Errore durante il recupero dei salvataggi per utente {}: {}", sessione.getUsername(),
 					e.getMessage());
 			ackRequest.sendAckData(new ProtocolloMessaggi.RespListaPartite(false, null, "Errore durante il recupero"));
 		}
 	}
 
 	public void handleEliminaSalvataggio(SocketIOClient client, String str, AckRequest ackRequest) {
-		Utente utente = getUtenteAutenticato(client);
-		if (utente == null) {
+		Sessione sessione = getSessioneAutenticato(client);
+		if (sessione == null) {
 			ackRequest.sendAckData(new ProtocolloMessaggi.RespEliminaPartita(false, "Utente non valido"));
 			logger.warn("Accesso negato: token non valido o utente anonimo");
 			return;
@@ -146,11 +144,11 @@ public class GestorePartiteOffline {
 			if (req.nomeSalvataggio == null || req.nomeSalvataggio.isBlank()) {
 				ackRequest.sendAckData(new ProtocolloMessaggi.RespEliminaPartita(false, "Nome salvataggio mancante"));
 			}
-			long utenteId = utenteDb.getIdByUsername(utente.getUsername());
+			long utenteId = utenteDb.getIdByUsername(sessione.getUsername());
 			partitaDb.deletePartitaByUtenteAndNome(utenteId, req.nomeSalvataggio);
 		} catch (Exception e) {
-			logger.error("Errore durante l'eliminazione del salvataggio per utente {}: {}",
-					utente.getUsername(), e.getMessage());
+			logger.error("Errore durante l'eliminazione del salvataggio per utente {}: {}", sessione.getUsername(),
+					e.getMessage());
 			ackRequest.sendAckData(new ProtocolloMessaggi.RespEliminaPartita(false, "Errore durante l'eliminazione"));
 		}
 	}
@@ -160,14 +158,14 @@ public class GestorePartiteOffline {
 	 * @param client Il client
 	 * @return L'utente autenticato o null se non valido
 	 */
-	private Utente getUtenteAutenticato(SocketIOClient client) {
+	private Sessione getSessioneAutenticato(SocketIOClient client) {
 		String token = client.get("token");
-		Utente utente = gestoreConnessioni.getUtenteByToken(token);
+		Sessione sessione = gestoreConnessioni.getSessioneByToken(token);
 
-		if (utente == null || utente.isAnonimo()) {
+		if (sessione == null || sessione.isAnonimo()) {
 			logger.warn("Accesso negato: token non valido o utente anonimo");
 			return null;
 		}
-		return utente;
+		return sessione;
 	}
 }

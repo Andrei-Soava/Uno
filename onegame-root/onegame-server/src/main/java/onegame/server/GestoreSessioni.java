@@ -1,5 +1,6 @@
 package onegame.server;
 
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
@@ -13,27 +14,28 @@ import com.corundumstudio.socketio.SocketIOClient;
 
 public class GestoreSessioni {
 	// token -> Utente
-	private final Map<String, Utente> sessioni = new ConcurrentHashMap<>();
+	private final Map<String, Sessione> sessioni = new ConcurrentHashMap<>();
 	private final Map<String, SocketIOClient> clientPerToken = new ConcurrentHashMap<>();
 
-	private static final long TIMEOUT_MS = 300_000;
 	private static final long SESSION_EXPIRATION_MS = 1000_000;
 
 	private static final Logger logger = LoggerFactory.getLogger(GestoreSessioni.class);
+
+	private final ArrayList<SessioneObserver> observers = new ArrayList<>();
 
 	public GestoreSessioni() {
 		avviaControlloTimeout();
 	}
 
-	public void associaToken(String token, Utente utente, SocketIOClient client) {
-		sessioni.put(token, utente);
+	public void associaToken(String token, Sessione sessione, SocketIOClient client) {
+		sessioni.put(token, sessione);
 		clientPerToken.put(token, client);
 		client.set("token", token);
-		utente.aggiornaPing();
-		utente.setConnesso(true);
+		sessione.aggiornaPing();
+		sessione.setConnesso(true);
 	}
 
-	public Utente getUtente(String token) {
+	public Sessione getSessione(String token) {
 		return sessioni.get(token);
 	}
 
@@ -42,9 +44,9 @@ public class GestoreSessioni {
 	}
 
 	public void aggiornaPing(String token) {
-		Utente u = getUtente(token);
-		if (u != null) {
-			u.aggiornaPing();
+		Sessione s = getSessione(token);
+		if (s != null) {
+			s.aggiornaPing();
 		}
 	}
 
@@ -52,42 +54,51 @@ public class GestoreSessioni {
 	 * Gestisce la disconnessione di un client
 	 * @param client Il client che si disconnette
 	 */
-	public void impostaUtenteDisconnesso(SocketIOClient client) {
+	public void marcaDisconnesso(SocketIOClient client) {
 		String token = client.get("token");
 		if (token == null)
 			return;
-		Utente u = sessioni.get(token);
-		if (u != null) {
-			u.setConnesso(false);
-			logger.info("Disconnessione utente: {} sessionId={}", u.getNickname(), client.getSessionId());
+		Sessione s = sessioni.get(token);
+		if (s != null) {
+			s.setConnesso(false);
+			logger.info("Disconnessione sessione: nickname={}, sessionId={}", s.getNickname(), client.getSessionId());
 		}
 	}
 
 	public void rimuoviSessione(String token) {
-		if (token != null)
+		if (token != null) {
 			sessioni.remove(token);
+			clientPerToken.remove(token);
+		}
 	}
 
 	private void avviaControlloTimeout() {
 		ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 		scheduler.scheduleAtFixedRate(() -> {
 			long now = System.currentTimeMillis();
-			for (Map.Entry<String, Utente> entry : sessioni.entrySet()) {
+			for (Map.Entry<String, Sessione> entry : sessioni.entrySet()) {
 				String token = entry.getKey();
-				Utente u = entry.getValue();
+				Sessione sessione = entry.getValue();
 
 				// Utente inattivo → non connesso
-				if (u.isConnesso() && now - u.getUltimoPing() > TIMEOUT_MS) {
-					u.setConnesso(false);
-					logger.info("Timeout utente: {}", u.getUsername());
+				if (sessione.isConnesso() && !sessione.isAttivo()) {
+					sessione.setConnesso(false);
+					logger.info("Timeout sessione: nickname={}, token={}", sessione.getNickname(), token);
+					for (SessioneObserver observer : observers) {
+						observer.onSessioneInattiva(sessione);
+					}
 				}
 
 //				// Utente disconnesso → rimozione sessione
 //				if (!u.isConnesso() && now - u.getUltimoPing() > SESSION_EXPIRATION_MS) {
-//					sessioni.remove(token);
-//					logger.info("Rimozione sessione utente inattivo: {}", u.getUsername());
+//					sessioni.remove(token)
+//					logger.info("Sessione rimossa per inattività: nickname={}, token={}", s.getNickname(), token);
 //				}
 			}
 		}, 0, 5, TimeUnit.MINUTES);
+	}
+
+	public void aggiungiObserver(SessioneObserver observer) {
+		observers.add(observer);
 	}
 }

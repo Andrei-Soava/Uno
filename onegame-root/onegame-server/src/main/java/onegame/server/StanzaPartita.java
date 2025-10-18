@@ -1,7 +1,6 @@
 package onegame.server;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 import com.corundumstudio.socketio.SocketIOClient;
 
@@ -9,123 +8,82 @@ import onegame.modello.giocatori.Giocatore;
 import onegame.modello.net.MossaDTO;
 import onegame.server.gioco.PartitaNET;
 
-/**
- * Rappresenta una stanza di gioco UNO. Gestisce i client e delega la logica a PartitaNET.
- */
-public class StanzaPartita {
+public class StanzaPartita extends Stanza {
 
-    private final int codice;
-    private final long id;
-    private final String nome;
-    private final int maxGiocatori;
-    private final GestoreConnessioni gestoreConnessioni;
+	private final Map<String, Giocatore> giocatori = new LinkedHashMap<>();
+	private PartitaNET partita;
+	private boolean partitaInCorso = false;
 
-    private final Map<String, SocketIOClient> clientPerToken = new ConcurrentHashMap<>();
-    private final Map<String, Giocatore> giocatori = new LinkedHashMap<>();
+	public StanzaPartita(int codice, long id, String nome, int maxUtenti, GestoreSessioni gestoreSessioni) {
+		super(codice, id, nome, maxUtenti, gestoreSessioni);
+	}
 
-    private PartitaNET partita;
-    private boolean partitaInCorso = false;
+	@Override
+	public boolean aggiungiUtente(String token) {
+		if (partitaInCorso || isPiena() || hasUtente(token))
+			return false;
 
-    public StanzaPartita(int codice, long id, String nome, int maxGiocatori, GestoreConnessioni gestoreConnessioni) {
-        this.codice = codice;
-        this.id = id;
-        this.nome = nome;
-        this.maxGiocatori = maxGiocatori;
-        this.gestoreConnessioni = gestoreConnessioni;
-    }
+		Sessione sessione = gestoreSessioni.getSessione(token);
+		String username = sessione != null ? sessione.getUsername() : "anonimo";
 
-    public boolean aggiungiUtente(String token, SocketIOClient client) {
-        if (partitaInCorso || giocatori.size() >= maxGiocatori) return false;
-        if (giocatori.containsKey(token)) return true;
+		Giocatore g = new Giocatore(username);
+		giocatori.put(token, g);
+		return super.aggiungiUtente(token);
+	}
 
-        Utente utente = gestoreConnessioni.getUtenteByToken(token);
-        String username = utente != null ? utente.getUsername() : "anonimo";
+	@Override
+	public boolean rimuoviUtente(String token) {
+		giocatori.remove(token);
+		return super.rimuoviUtente(token);
+	}
 
-        Giocatore g = null;//new Giocatore(username, token, client);
-        giocatori.put(token, g);
-        clientPerToken.put(token, client);
+	public void avviaPartita() {
+		if (partitaInCorso || !isPiena())
+			return;
 
-//        if (utente != null) utente.setGiocatore(g);
-        throw new UnsupportedOperationException("Not implemented yet");
+		List<Giocatore> lista = new ArrayList<>(giocatori.values());
+		this.partita = new PartitaNET(lista);
+		this.partitaInCorso = true;
 
-        //return true;
-    }
+		for (Map.Entry<String, Giocatore> entry : giocatori.entrySet()) {
+			SocketIOClient client = getClient(entry.getKey());
+			if (client != null) {
+			}
+		}
 
-    public void rimuoviUtente(String token) {
-        giocatori.remove(token);
-        clientPerToken.remove(token);
-    }
+		inviaTurnoCorrente();
+	}
 
-    public boolean isVuota() {
-        return giocatori.isEmpty();
-    }
+	public void riceviMossa(String token, MossaDTO mossa) {
+		if (partita == null || !giocatori.containsKey(token))
+			return;
 
-    public boolean isPiena() {
-        return giocatori.size() >= maxGiocatori;
-    }
+		Giocatore g = giocatori.get(token);
+		partita.effettuaMossa(mossa, g);
 
-    public void avviaPartita() {
-        if (partitaInCorso || !isPiena()) return;
+		if (partita.isFinished()) {
+			partitaInCorso = false;
+		} else {
+			inviaTurnoCorrente();
+		}
+	}
 
-        List<Giocatore> lista = new ArrayList<>(giocatori.values());
-        this.partita = new PartitaNET(lista);
-        this.partitaInCorso = true;
+	private void inviaTurnoCorrente() {
+		if (partita == null)
+			return;
 
-        broadcast("UNO_PARTITA_INIZIATA", partita.topCard());
+		Giocatore g = partita.getGiocatoreCorrente();
+	}
 
-        for (Giocatore g : lista) {
-            //g.getClient().sendEvent("UNO_MANO_INIZIALE", g.getMano().toDTO());
-        }
+	public boolean isPartitaInCorso() {
+		return partitaInCorso;
+	}
 
-        inviaTurnoCorrente();
-    }
-
-    public void riceviMossa(String token, MossaDTO mossa) {
-        if (partita == null || !giocatori.containsKey(token)) return;
-        Giocatore g = giocatori.get(token);
-        partita.effettuaMossa(mossa, g);
-
-        if (partita.isFinished()) {
-            broadcast("UNO_PARTITA_FINITA", g.getNome());
-            partitaInCorso = false;
-        } else {
-            inviaTurnoCorrente();
-        }
-    }
-
-    private void inviaTurnoCorrente() {
-        if (partita == null) return;
-        Giocatore g = partita.getGiocatoreCorrente();
-        //g.getClient().sendEvent("UNO_TOCCA_A_TE", partita.topCard());
-    }
-
-    public void broadcast(String evento, Object payload) {
-        for (SocketIOClient client : clientPerToken.values()) {
-            client.sendEvent(evento, payload);
-        }
-    }
-
-    public int getCodice() {
-        return codice;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public boolean isPartitaInCorso() {
-        return partitaInCorso;
-    }
-
-    public Set<String> getTokenUtenti() {
-        return giocatori.keySet();
-    }
-
-    public PartitaNET getPartita() {
+	public PartitaNET getPartita() {
 		return partita;
+	}
+
+	public Collection<Giocatore> getGiocatori() {
+		return Collections.unmodifiableCollection(giocatori.values());
 	}
 }

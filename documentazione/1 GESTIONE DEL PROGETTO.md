@@ -124,4 +124,7 @@ Esempio COMPLETO:
 - 15/10, Giuseppe, (aggiornamento classe PartitaNet, timer dichiarazione UNO), null;
 - 15/10, Fabio, (completamento GestorePartiteOffline, configurazione del logger, modificate configurazioni del server, refactoring), completamento gestione salvataggio partite offline;
 - 16/10, Andrei, (refactoring stampaTurnazione, spostamento di alcune classi, miglioramento grafica durante il gioco e aggiornamento stile del css + collegamento parziale server-controllore), null;
+- 16/10, Fabio, refactoring e modifiche nel server, continuazione server;
+- 17/10, Fabio, (creato Utente nel server, iniziata disconnessione lato server, refactoring interfaccia di comunicazione lato client), continuazione server;
 - 18/10, Andrei, (refactoring generale dentro il Client per migliore gestione di tutti i timer durante il gioco + piccole migliorie grafiche del alert/dialog + campi input per username ospite e nome stanza), null;
+- 18/10, Fabio, migliorata gestione di sessioni e stanze lato server, completamento StanzaPartita e gioco;

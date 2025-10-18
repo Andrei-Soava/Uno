@@ -70,9 +70,9 @@ public class GestoreConnessioni {
 				return;
 			}
 
-			Utente utente = Utente.createUtente(username);
 			String token = generaToken(username);
-			gestoreSessioni.associaToken(token, utente, client);
+			Sessione sessione = Sessione.createSessione(username, token);
+			gestoreSessioni.associaToken(token, sessione, client);
 
 			ackRequest.sendAckData(new RespAuth(true, null, token, "Login completato"));
 			logger.info("Login utente: username: {}, token: {}, session-id: {}", username, token,
@@ -115,9 +115,9 @@ public class GestoreConnessioni {
 			String passwordHash = PasswordUtils.hashPassword(password);
 			utenteDb.registraUtente(username, passwordHash);
 
-			Utente utente = Utente.createUtente(username);
 			String token = generaToken(username);
-			gestoreSessioni.associaToken(token, utente, client);
+			Sessione sessione = Sessione.createSessione(username, token);
+			gestoreSessioni.associaToken(token, sessione, client);
 
 			ackRequest.sendAckData(new RespAuth(true, null, token, "Registrazione completata"));
 			logger.info("Registrazione utente: username: {}, token: {}, session-id: {}", username, token,
@@ -135,13 +135,13 @@ public class GestoreConnessioni {
 	 */
 	public void handleAnonimo(SocketIOClient client, AckRequest ackRequest) {
 		try {
-			Utente utenteAnonimo = Utente.createUtenteAnonimo("Anonimo");
 			String token;
 			do {
 				token = UUID.randomUUID().toString();
-			} while (gestoreSessioni.getUtente(token) != null);
+			} while (gestoreSessioni.getSessione(token) != null);
 
-			gestoreSessioni.associaToken(token, utenteAnonimo, client);
+			Sessione sessione = Sessione.createSessioneAnonimo("Anonimo", token);
+			gestoreSessioni.associaToken(token, sessione, client);
 
 			ackRequest.sendAckData(new RespAuth(true, null, token, "Accesso anonimo riuscito"));
 			logger.info("Accesso anonimo: token={} sessionId={}", token, client.getSessionId());
@@ -167,18 +167,22 @@ public class GestoreConnessioni {
 		// Recupera token dal parametro della connessione (se presente)
 		String token = hd.getSingleUrlParam("token");
 		if (token != null && !token.isEmpty()) {
-			Utente u = gestoreSessioni.getUtente(token);
-			if (u != null) {
-				u.setConnesso(true);
-				u.aggiornaPing();
+			Sessione s = gestoreSessioni.getSessione(token);
+			if (s != null) {
+				s.setConnesso(true);
+				s.aggiornaPing();
 				client.set("token", token);
-				logger.info("Riconnesso utente: {} (token={})", u.getUsername(), token);
+				logger.info("Riconnesso utente: {} (token={})", s.getUsername(), token);
 			}
 		}
 	}
 
 	public void handleDisconnessione(SocketIOClient client) {
-		gestoreSessioni.impostaUtenteDisconnesso(client);
+		gestoreSessioni.marcaDisconnesso(client);
+	}
+
+	public Sessione getSessioneByToken(String token) {
+		return gestoreSessioni.getSessione(token);
 	}
 
 	private boolean isUsernameValido(String username) {

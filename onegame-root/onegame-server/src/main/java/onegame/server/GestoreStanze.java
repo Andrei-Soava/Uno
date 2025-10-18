@@ -23,14 +23,14 @@ import onegame.modello.net.util.JsonHelper;
  * rappresentata da un'istanza di StanzaPartita. Ogni stanza ha un id univoco
  * (long) e un codice (int).
  */
-public class GestoreStanze {
+public abstract class GestoreStanze<Stanzz extends Stanza> implements SessioneObserver {
 
-	private final GestoreConnessioni gestoreConnessioni;
+	private final GestoreSessioni gestoreSessioni;
 
-	// Mappa idStanza → StanzaPartita
-	private final Map<Long, StanzaPartita> stanze = new ConcurrentHashMap<>();
+	// Mappa idStanza → Stanza
+	protected final Map<Long, Stanzz> stanze = new ConcurrentHashMap<>();
 	// Mappa tokenUtente → idStanza
-	private final Map<String, Long> mappaTokenUtenteAStanza = new ConcurrentHashMap<>();
+	protected final Map<String, Long> mappaTokenUtenteAStanza = new ConcurrentHashMap<>();
 	// Mappa codiceStanza → idStanza
 	private final Map<Integer, Long> mappaCodiceAIdStanza = new ConcurrentHashMap<>();
 
@@ -42,8 +42,8 @@ public class GestoreStanze {
 
 	private static final Logger logger = LoggerFactory.getLogger(GestoreStanze.class);
 
-	public GestoreStanze(GestoreConnessioni gestoreConnessioni) {
-		this.gestoreConnessioni = gestoreConnessioni;
+	public GestoreStanze(GestoreSessioni gestoreSessioni) {
+		this.gestoreSessioni = gestoreSessioni;
 	}
 
 	/**
@@ -63,11 +63,17 @@ public class GestoreStanze {
 			int maxGiocatori = Math.max(2, req.maxGiocatori);
 
 			int codiceStanza = nextCodice();
-			StanzaPartita stanza = new StanzaPartita(codiceStanza, idStanza, req.nomeStanza, maxGiocatori,
-					gestoreConnessioni);
+			Stanzz stanza = creaStanza(codiceStanza, idStanza, req.nomeStanza, maxGiocatori, gestoreSessioni);
+
+			if (stanza == null) {
+				ack.sendAckData(new RespCreaStanza(false, "Errore creazione stanza", -1));
+				logger.error("Creazione stanza fallita per token {}", token);
+				return;
+			}
+
 			stanze.put(idStanza, stanza);
 			mappaTokenUtenteAStanza.put(token, idStanza);
-			stanza.aggiungiUtente(token, client);
+			stanza.aggiungiUtente(token);
 
 			mappaCodiceAIdStanza.put(codiceStanza, idStanza);
 			ack.sendAckData(new RespCreaStanza(true, "Stanza creata con successo", codiceStanza));
@@ -92,7 +98,7 @@ public class GestoreStanze {
 		try {
 			ReqEntraStanza req = JsonHelper.fromJson(str, ReqEntraStanza.class);
 			Long idStanza = mappaCodiceAIdStanza.get(req.codiceStanza);
-			StanzaPartita stanza = stanze.get(idStanza);
+			Stanzz stanza = stanze.get(idStanza);
 
 			if (stanza == null) {
 				ack.sendAckData(new RespEntraStanza(false, "Stanza non trovata"));
@@ -100,7 +106,7 @@ public class GestoreStanze {
 				return;
 			}
 
-			boolean ok = stanza.aggiungiUtente(token, client);
+			boolean ok = stanza.aggiungiUtente(token);
 			if (!ok) {
 				ack.sendAckData(new RespEntraStanza(false, "Impossibile entrare in stanza (piena o già in gioco)"));
 				return;
@@ -115,30 +121,31 @@ public class GestoreStanze {
 		}
 	}
 
-	/**
-	 * Rimuove l'utente dalla stanza in cui si trova, se presente.
-	 */
-	@Deprecated
-	private void rimuoviUtenteDaStanza(String tokenUtente) {
-		try {
-			Long id = mappaTokenUtenteAStanza.remove(tokenUtente);
-			if (id != null) {
-				StanzaPartita stanza = stanze.get(id);
-				if (stanza != null) {
-					stanza.rimuoviUtente(tokenUtente);
-					logger.info("Utente {} rimosso da stanza {}", tokenUtente, id);
-				}
-			}
-		} catch (Exception e) {
-			logger.error("Errore rimozione utente {} da stanza: {}", tokenUtente, e.getMessage());
+	public void rimuoviUtenteDaSistema(String token) {
+		Long idStanza = mappaTokenUtenteAStanza.remove(token);
+		if (idStanza == null)
+			return;
+
+		Stanzz stanza = stanze.get(idStanza);
+		if (stanza == null)
+			return;
+
+		if (stanza.rimuoviUtente(token)) {
+			logger.info("Utente {} rimosso da stanza {}", token, idStanza);
+		}
+
+		if (stanza.isVuota()) {
+			stanze.remove(idStanza);
+			mappaCodiceAIdStanza.remove(stanza.getCodice());
+			logger.info("Stanza {} rimossa perché vuota", idStanza);
 		}
 	}
 
-	public StanzaPartita getStanza(long idStanza) {
+	public Stanzz getStanza(long idStanza) {
 		return stanze.get(idStanza);
 	}
 
-	public StanzaPartita getStanzaPerToken(String token) {
+	public Stanzz getStanzaPerToken(String token) {
 		if (token == null)
 			return null;
 		Long idStanza = mappaTokenUtenteAStanza.get(token);
@@ -160,29 +167,14 @@ public class GestoreStanze {
 			return;
 		}
 
-		Long idStanza = mappaTokenUtenteAStanza.remove(token);
-		if (idStanza == null) {
+		if (!mappaTokenUtenteAStanza.containsKey(token)) {
 			ack.sendAckData(new RespAbbandonaStanza(false, "Utente in nessuna stanza"));
 			logger.warn("Utente {} non è in nessuna stanza", token);
 			return;
 		}
 
-		StanzaPartita stanza = stanze.get(idStanza);
-		if (stanza == null) {
-			ack.sendAckData(new RespAbbandonaStanza(false, "Stanza non trovata"));
-			logger.warn("Stanza {} non trovata per utente {}", idStanza, token);
-			return;
-		}
-
-		stanza.rimuoviUtente(token);
-		if (stanza.isVuota()) {
-			stanze.remove(idStanza);
-			mappaCodiceAIdStanza.remove(stanza.getCodice());
-			logger.info("Stanza {} rimossa perché vuota", idStanza);
-		}
-
+		rimuoviUtenteDaSistema(token);
 		ack.sendAckData(new RespAbbandonaStanza(true, "Abbandono stanza avvenuto con successo"));
-		logger.info("Utente {} ha abbandonato la stanza {}", token, idStanza);
 	}
 
 	private String getToken(SocketIOClient client) {
@@ -190,23 +182,12 @@ public class GestoreStanze {
 		return tokenObj != null ? tokenObj.toString() : null;
 	}
 
-//	private void removeStanza(long idStanza) {
-//		try {
-//			StanzaPartita stanza = stanze.remove(idStanza);
-//			if (stanza != null) {
-//				// Rimuovi tutti i token degli utenti nella stanza
-//				for (String token : stanza.getUtenti()) {
-//					mappaTokenUtenteAStanza.remove(token);
-//				}
-//				// Rimuovi il codice della stanza
-//				mappaCodiceAIdStanza.values().removeIf(id -> id == idStanza);
-//				logger.info("Stanza {} rimossa", idStanza);
-//			}
-//		} catch (Exception e) {
-//			logger.error("Errore rimozione stanza {}: {}", idStanza, e.getMessage());
-//		}
-//		
-//	}
+	@Override
+	public void onSessioneInattiva(Sessione sessione) {
+		rimuoviUtenteDaSistema(sessione.getToken());
+	}
+
+	protected abstract Stanzz creaStanza(int codice, long id, String nome, int maxUtenti, GestoreSessioni gestoreSessioni);
 
 	private synchronized int nextCodice() {
 		int codice;

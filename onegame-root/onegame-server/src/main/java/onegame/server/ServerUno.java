@@ -8,10 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.corundumstudio.socketio.Configuration;
-import com.corundumstudio.socketio.HandshakeData;
 import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.SocketIOServer;
-import com.corundumstudio.socketio.listener.ConnectListener;
 
 import onegame.modello.net.ProtocolloMessaggi;
 import onegame.server.db.GestoreDatabase;
@@ -25,13 +23,10 @@ public class ServerUno {
 
 	private final SocketIOServer server;
 	private final GestoreConnessioni gestoreConnessioni;
-	private final GestoreStanze gestoreStanze;
+	private final GestoreStanzePartita gestoreStanze;
 	private final GestorePartiteOffline gestorePartiteOffline;
 	private final GestoreGioco gestoreGioco;
 	private final GestoreSessioni gestoreSessioni;
-
-	// sessioni: token -> Utente
-	private final Map<String, Utente> sessioni = new ConcurrentHashMap<>();
 
 	private static final Logger logger = LoggerFactory.getLogger(ServerUno.class);
 
@@ -46,9 +41,11 @@ public class ServerUno {
 		this.server = new SocketIOServer(config);
 		this.gestoreSessioni = new GestoreSessioni();
 		this.gestoreConnessioni = new GestoreConnessioni(gestoreSessioni);
-		this.gestoreStanze = new GestoreStanze(gestoreConnessioni);
+		this.gestoreStanze = new GestoreStanzePartita(gestoreSessioni);
 		this.gestorePartiteOffline = new GestorePartiteOffline(gestoreConnessioni);
 		this.gestoreGioco = new GestoreGioco(gestoreStanze);
+
+		this.gestoreSessioni.aggiungiObserver(gestoreStanze);
 
 		registraEventi();
 	}
@@ -116,7 +113,7 @@ public class ServerUno {
 
 		server.addEventListener(ProtocolloMessaggi.EVENT_GIOCO_MOSSA, String.class,
 				(client, data, ack) -> gestoreGioco.handleEffettuaMossa(client, data, ack));
-		
+
 		// Test
 		server.addEventListener("test", String.class, (client, data, ack) -> {
 			boolean tmp = ServerUno.testClient == client;
@@ -126,14 +123,13 @@ public class ServerUno {
 
 		logger.debug("Eventi registrati");
 	}
-	
+
 	// Test
 	private static SocketIOClient testClient;
 
 	public void avvia() {
 		server.start();
-		logger.info("Avviato su {}:{}", server.getConfiguration().getHostname(),
-				server.getConfiguration().getPort());
+		logger.info("Avviato su {}:{}", server.getConfiguration().getHostname(), server.getConfiguration().getPort());
 	}
 
 	public void stop() {
