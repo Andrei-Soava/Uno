@@ -81,23 +81,6 @@ public abstract class VistaPartita {
     	//bottone per abbandonare
     	abbandonaBtn = new Button("Abbandona");
     	abbandonaBtn.getStyleClass().add("logout");
-//    	abbandonaBtn.setOnAction(e -> {
-//    	    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-//    	    alert.setTitle("Conferma");
-//    	    alert.setHeaderText("Vuoi davvero tornare alla Home?");
-//    	    alert.setContentText("Eventuali progressi non salvati andranno persi.");
-//
-//    	    ButtonType confermaBtn = new ButtonType("Conferma", ButtonBar.ButtonData.OK_DONE);
-//    	    ButtonType annullaBtn = new ButtonType("Annulla", ButtonBar.ButtonData.CANCEL_CLOSE);
-//    	    alert.getButtonTypes().setAll(confermaBtn, annullaBtn);
-//
-//    	    alert.showAndWait().ifPresent(response -> {
-//    	        if (response == confermaBtn) {
-//    	        	cg.interrompiPartita();
-//    	            app.mostraVistaMenuOffline();
-//    	        }
-//    	    });
-//    	});
     	//label con turno (aggiornato nel controllore)
     	turnoCorrenteLbl=new Label();
     	turnoCorrenteLbl.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
@@ -296,6 +279,7 @@ public abstract class VistaPartita {
      * sezione stampa testo/carte/
      * 
      */
+	
 	/**
 	 * metodo che stampa un messaggio nella logAreaLbl con fade-in/fade-out
 	 * 

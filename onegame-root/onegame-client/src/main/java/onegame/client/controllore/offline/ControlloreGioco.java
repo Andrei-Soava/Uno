@@ -47,10 +47,11 @@ public class ControlloreGioco {
 	private ClientSocket cs;
 	private boolean partitaAttiva = false;
 	private PauseTransition timerTurno;
-	private PauseTransition pausa1;
-	private PauseTransition pausa2;
+	private PauseTransition timerPreMossaBot;
+	private PauseTransition timerPostMossaBot;
+	private PauseTransition timerONE;
 	private SimpleIntegerProperty secondsLeft = new SimpleIntegerProperty(30);
-	private Timeline countdown = new Timeline(
+	private Timeline countdownTurno = new Timeline(
 			new KeyFrame(Duration.seconds(1), e -> secondsLeft.set(secondsLeft.get() - 1))
 			);
 
@@ -84,28 +85,32 @@ public class ControlloreGioco {
 	
 	private void creaTimers() {
 		timerTurno = new PauseTransition(Duration.seconds(30));
-		pausa1 = new PauseTransition(Duration.seconds(5));
-		pausa2 = new PauseTransition(Duration.seconds(3));
-		countdown.setCycleCount(30);
+		timerPreMossaBot = new PauseTransition(Duration.seconds(5));
+		timerPostMossaBot = new PauseTransition(Duration.seconds(3));
+		timerONE = new PauseTransition(Duration.seconds(5));
+		countdownTurno.setCycleCount(30);
 		vg.setTimer(secondsLeft);
 	}
 	
 	private void sospendiTimers() {
 		timerTurno.pause();
-		pausa1.pause();
-		pausa2.pause();
-		countdown.pause();
+		timerPreMossaBot.pause();
+		timerPostMossaBot.pause();
+		timerONE.pause(); //da valutare
+		countdownTurno.pause();
 	}
 	
 	private void riprendiTimers() {
 		if(timerTurno.getStatus()==Animation.Status.PAUSED) {
 			timerTurno.play();
-			countdown.play();
+			countdownTurno.play();
 		}
-		if(pausa1.getStatus()==Animation.Status.PAUSED)
-			pausa1.play();
-		if(pausa2.getStatus()==Animation.Status.PAUSED)
-			pausa2.play();
+		if(timerPreMossaBot.getStatus()==Animation.Status.PAUSED)
+			timerPreMossaBot.play();
+		if(timerPostMossaBot.getStatus()==Animation.Status.PAUSED)
+			timerPostMossaBot.play();
+		if(timerONE.getStatus()==Animation.Status.PAUSED)
+			timerONE.play(); //da valutare
 	}
 	
 	
@@ -122,6 +127,11 @@ public class ControlloreGioco {
 	        scelta.thenAccept(confermato -> {
 	            if (confermato) {
 	            	System.out.println("utente vuole abbandonare la partita");
+	            	//se abbandono mentre devo chiamare ONE, pesco due carte
+	            	if(timerONE.getStatus()==Animation.Status.PAUSED) {
+	            		cs.getUtente().getGiocatore().getMano().aggiungiCarte(partita.getMazzo().pescaN(2));
+	            		partita.passaTurno(); //al rientro, sarà già turno del successivo
+	            	}
 	                cp.salvaPartitaAutomatico(this);
 	                partitaAttiva=false;
 	            	vg.mostraMenuOffline();
@@ -279,7 +289,7 @@ public class ControlloreGioco {
 	    	// primo delay di 5 secondi prima di scegliere la mossa
 	    	vg.stampaTurnazione(partita.getTurnazioneDalGiocatore(cs.getUtente().getGiocatore()), partita.getDirezione());
 	    	vg.stampaManoReadOnly(partita.getCartaCorrente(), cs.getUtente().getGiocatore());
-			pausa1.setOnFinished(ev1 -> {
+			timerPreMossaBot.setOnFinished(ev1 -> {
 				if (partitaAttiva) {
 					// eseguo la mossa automatica
 					Mossa m = partita.scegliMossaAutomatica();
@@ -293,16 +303,16 @@ public class ControlloreGioco {
 					partita.passaTurno();
 					cp.salvaPartitaAutomatico(this);
 					// seconda pausa di 3 secondi dopo aver mostrato il messaggio
-					pausa2.setOnFinished(ev2 -> {
+					timerPostMossaBot.setOnFinished(ev2 -> {
 						if (partitaAttiva) {
 							eseguiTurno(); // turno successivo
 						}
 					});
-					pausa2.play();
+					timerPostMossaBot.play();
 				}
 			});
 
-	    	pausa1.play();
+	    	timerPreMossaBot.play();
 
 	    } else {
 	    	;//breakpoint
@@ -314,10 +324,10 @@ public class ControlloreGioco {
 	    	
 	    	//ricarico il countdown
 	    	secondsLeft.set(30);
-	    	countdown.play();
+	    	countdownTurno.play();
 	        timerTurno.setOnFinished(e -> {
 	        	if (mossaEffettuata.compareAndSet(false, true)) {
-	            countdown.stop();
+	            countdownTurno.stop();
 	            timerTurno.stop();
 	            timerTurno.setOnFinished(null);
 	            
@@ -347,7 +357,7 @@ public class ControlloreGioco {
 	                gestisciPescaggioInternoAsync(g, m, () -> {
 	                	;//breakpoint
 	                	if (mossaEffettuata.compareAndSet(false, true)) {
-	                	countdown.stop();
+	                	countdownTurno.stop();
 	    	            timerTurno.stop();
 	    	            timerTurno.setOnFinished(null);
 	                    partita.passaTurno();
@@ -378,33 +388,64 @@ public class ControlloreGioco {
 	                                vg.stampaMessaggio(g.getNome() + " ha cambiato il colore sul banco a " + colore.name());
 	                                if (mossaEffettuata.compareAndSet(false, true)) {
 	                                	m.getCartaScelta().setColore(colore);
-	                                countdown.stop();
+	                                countdownTurno.stop();
 	                	            timerTurno.stop();
 	                	            timerTurno.setOnFinished(null);
 	                                partita.applicaMossa(g, m);
 	                                
 	                                //QUI MOSTRA PULSANTE ONE (se hai appena giocato la penultima)
+//	                                if (g.getMano().getNumCarte() == 1) { 
+//	                                	vg.stampaManoReadOnly(m.getCartaScelta(), g);
+//	                                    vg.mostraPulsanteONE(premuto -> {
+//	                                    	if (premuto) {
+//		                        	            vg.stampaMessaggio(g.getNome()+" ha chiamato ONE");
+//		                        	        } else {
+//		                        	            vg.stampaMessaggio(g.getNome()+" NON ha chiamato ONE in tempo -> pesca 2 carte");
+//		                        	            g.getMano().aggiungiCarte(partita.getMazzo().pescaN(2));
+//		                        	        }
+//		                        	        partita.passaTurno();
+//		                        	        cp.salvaPartitaAutomatico(this);
+//		                        	        if (partitaAttiva)
+//		                        	            eseguiTurno();
+//	                                    });
+//	                                } else {
+//	                                    //condizione falsa -> eseguo subito le 4 righe
+//	                                    partita.passaTurno();
+//	                                    cp.salvaPartitaAutomatico(this);
+//	                                    if (partitaAttiva)
+//	                                        eseguiTurno();
+//	                                }
+//	                                
+	                                //seconda versione per gestione chiamata ONE (timer gestito internamente)
 	                                if (g.getMano().getNumCarte() == 1) { 
 	                                	vg.stampaManoReadOnly(m.getCartaScelta(), g);
-	                                    vg.mostraPulsanteONE(premuto -> {
-	                                    	if (premuto) {
-		                        	            vg.stampaMessaggio(g.getNome()+" ha chiamato ONE");
-		                        	        } else {
-		                        	            vg.stampaMessaggio(g.getNome()+" NON ha chiamato ONE in tempo -> pesca 2 carte");
-		                        	            g.getMano().aggiungiCarte(partita.getMazzo().pescaN(2));
-		                        	        }
-		                        	        partita.passaTurno();
+	                                	timerONE.setOnFinished(event->{
+	                                		vg.nascondiONEBtn();
+	                                		vg.stampaMessaggio(g.getNome()+" NON ha chiamato ONE in tempo -> pesca 2 carte");
+	                        	            g.getMano().aggiungiCarte(partita.getMazzo().pescaN(2));
+	                        	            partita.passaTurno();
 		                        	        cp.salvaPartitaAutomatico(this);
 		                        	        if (partitaAttiva)
 		                        	            eseguiTurno();
-	                                    });
+	                                	});
+	                                	timerONE.playFromStart();
+	                                	vg.mostraONEBtn().thenRun(()->{
+	                                		timerONE.stop();
+	                                		vg.nascondiONEBtn();
+	                                		vg.stampaMessaggio(g.getNome()+" ha chiamato ONE");
+	                                		partita.passaTurno();
+		                                    cp.salvaPartitaAutomatico(this);
+		                                    if (partitaAttiva)
+		                                        eseguiTurno();
+	                                	});
+	                                	
 	                                } else {
-	                                    //condizione falsa -> eseguo subito le 4 righe
 	                                    partita.passaTurno();
 	                                    cp.salvaPartitaAutomatico(this);
 	                                    if (partitaAttiva)
 	                                        eseguiTurno();
 	                                }
+	                                
 	                                
 	                                }
 	                            });
@@ -412,32 +453,62 @@ public class ControlloreGioco {
 	                            return;
 	                        }
 	                        if (mossaEffettuata.compareAndSet(false, true)) {
-	                        	countdown.stop();
+	                        	countdownTurno.stop();
 	                        	timerTurno.stop();
 	                        	timerTurno.setOnFinished(null);
 	                        	partita.applicaMossa(g, m);
 	                        	
 	                        	//QUI MOSTRA PULSANTE ONE (se hai appena giocato la penultima carta)
-	                        	if (g.getMano().getNumCarte() == 1) { 
-	                        		vg.stampaManoReadOnly(m.getCartaScelta(), g);
-	                        	    vg.mostraPulsanteONE(premuto -> {
-	                        	        if (premuto) {
-	                        	            vg.stampaMessaggio(g.getNome()+" ha chiamato ONE");
-	                        	        } else {
-	                        	            vg.stampaMessaggio(g.getNome()+" NON ha chiamato ONE in tempo -> pesca 2 carte");
-	                        	            g.getMano().aggiungiCarte(partita.getMazzo().pescaN(2));
-	                        	        }
-	                        	        partita.passaTurno();
+//	                        	if (g.getMano().getNumCarte() == 1) { 
+//	                        		vg.stampaManoReadOnly(m.getCartaScelta(), g);
+//	                        	    vg.mostraPulsanteONE(premuto -> {
+//	                        	        if (premuto) {
+//	                        	            vg.stampaMessaggio(g.getNome()+" ha chiamato ONE");
+//	                        	        } else {
+//	                        	            vg.stampaMessaggio(g.getNome()+" NON ha chiamato ONE in tempo -> pesca 2 carte");
+//	                        	            g.getMano().aggiungiCarte(partita.getMazzo().pescaN(2));
+//	                        	        }
+//	                        	        partita.passaTurno();
+//	                        	        cp.salvaPartitaAutomatico(this);
+//	                        	        if (partitaAttiva)
+//	                        	            eseguiTurno();
+//	                        	    });
+//	                        	} else {
+//	                        	    partita.passaTurno();
+//	                        	    cp.salvaPartitaAutomatico(this);
+//	                        	    if (partitaAttiva)
+//	                        	        eseguiTurno();
+//	                        	}
+	                        	
+	                        	//seconda versione per gestione chiamata ONE (timer gestito internamente)
+                                if (g.getMano().getNumCarte() == 1) { 
+                                	vg.stampaManoReadOnly(m.getCartaScelta(), g);
+                                	timerONE.setOnFinished(event->{
+                                		vg.nascondiONEBtn();
+                                		vg.stampaMessaggio(g.getNome()+" NON ha chiamato ONE in tempo -> pesca 2 carte");
+                        	            g.getMano().aggiungiCarte(partita.getMazzo().pescaN(2));
+                        	            partita.passaTurno();
 	                        	        cp.salvaPartitaAutomatico(this);
 	                        	        if (partitaAttiva)
 	                        	            eseguiTurno();
-	                        	    });
-	                        	} else {
-	                        	    partita.passaTurno();
-	                        	    cp.salvaPartitaAutomatico(this);
-	                        	    if (partitaAttiva)
-	                        	        eseguiTurno();
-	                        	}
+                                	});
+                                	timerONE.playFromStart();
+                                	vg.mostraONEBtn().thenRun(()->{
+                                		timerONE.stop();
+                                		vg.nascondiONEBtn();
+                                		vg.stampaMessaggio(g.getNome()+" ha chiamato ONE");
+                                		partita.passaTurno();
+	                                    cp.salvaPartitaAutomatico(this);
+	                                    if (partitaAttiva)
+	                                        eseguiTurno();
+                                	});
+                                	
+                                } else {
+                                    partita.passaTurno();
+                                    cp.salvaPartitaAutomatico(this);
+                                    if (partitaAttiva)
+                                        eseguiTurno();
+                                }
 	                        	
 	                        }
 	                    } else {
