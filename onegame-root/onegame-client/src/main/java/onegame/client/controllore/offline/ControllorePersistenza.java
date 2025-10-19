@@ -26,7 +26,7 @@ class ControllorePersistenza {
 	 */
 	void salvaPartita(String nuovoSalvataggio, Partita partita) {
 		if(!cs.getUtente().isAnonimo() && cm.connectedProperty().get()) {
-			cs.salvaPartita(nuovoSalvataggio, partita.toJson(), null);
+			cs.salvaPartita(nuovoSalvataggio, JsonHelper.toJson(partita), null);
 		}
 	}
 	

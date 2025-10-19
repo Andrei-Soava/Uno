@@ -76,7 +76,7 @@ public final class PartitaNET implements PartitaIF {
 		return giocatori.get(currentPlayerIndex);
 	}
 
-	public Carta topCard() {
+	public Carta getCartaCorrente() {
 		return pilaScarti.getTop();
 	}
 
@@ -118,7 +118,7 @@ public final class PartitaNET implements PartitaIF {
                         && !cartaGiocata.equals(cartaPescataCorrente))
                     return;
 				
-				Carta cartaTop = topCard();
+				Carta cartaTop = getCartaCorrente();
 
 				// Regola del +4: può essere giocato solo se non si hanno carte valide
 				if (cartaGiocata instanceof CartaSpeciale cs
@@ -276,5 +276,4 @@ public final class PartitaNET implements PartitaIF {
 	public boolean getDirezione() {
 		return sensoOrario;
 	}
-
 }

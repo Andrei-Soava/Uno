@@ -56,7 +56,6 @@ import onegame.modello.util.Wrappers.StringWrapper;
  */
 public class Partita implements PartitaIF {
 	private final static int NUMERO_CARTE_INIZIALI = 7;
-	public static final JsonMapper MAPPER = createMapper();
 
 	private ArrayList<Giocatore> giocatori;
 	private Mazzo mazzo;
@@ -388,7 +387,7 @@ public class Partita implements PartitaIF {
 			Carta pescata = pescaCarta();
 			g.aggiungiCarta(pescata);
 			// verifico se posso giocare carta pescata--> Mossa modificata in GIOCA_CARTA
-			if (tentaGiocaCarta(pescata)) {
+			if (isCartaGiocabile(pescata)) {
 				mossa.setCartaScelta(pescata);
 				mossa.setTipoMossa(TipoMossa.GIOCA_CARTA);
 				return mossa;
@@ -401,7 +400,7 @@ public class Partita implements PartitaIF {
 		// caso 2:devo giocare carta
 		else if (mossa.getTipoMossa() == TipoMossa.GIOCA_CARTA || mossa.getTipoMossa() == TipoMossa.SCEGLI_COLORE) {
 			// verifico se posso giocare carta
-			if (tentaGiocaCarta(mossa.getCartaScelta()) || (mossa.getTipoMossa() == TipoMossa.SCEGLI_COLORE)) {
+			if (isCartaGiocabile(mossa.getCartaScelta()) || (mossa.getTipoMossa() == TipoMossa.SCEGLI_COLORE)) {
 				// verifico se la carta che gioco è NERA--> da cambiare il colore
 				if (mossa.getCartaScelta().getColore() == Colore.NERO) {
 					return mossa;
@@ -480,13 +479,6 @@ public class Partita implements PartitaIF {
 		// return new CartaSpeciale(Colore.NERO,TipoSpeciale.JOLLY);
 	}
 
-	/**
-	 *  metodo che controlla se è una carta giocata è compatibile con la carta
-	 *  corrente
-	 */
-	public boolean tentaGiocaCarta(Carta tentativo) {
-		return tentativo.giocabileSu(cartaCorrente);
-	}
 
 	/**
 	 *  metodo che imposta la nuova carta corrente, manda la vecchia carta corrente
@@ -509,12 +501,7 @@ public class Partita implements PartitaIF {
 		Giocatore g = this.getGiocatoreCorrente();
 		Mossa m;
 		for (Carta c : g.getMano().getCarte()) {
-			if (tentaGiocaCarta(c)) {
-				//impedisco alla mossa automatica di giocare un +4 se ha altro da giocare
-				if(c instanceof CartaSpeciale && ((CartaSpeciale)c).getTipo()==TipoSpeciale.PIU_QUATTRO) {
-					if(!verificaPiuQuattroGiocabile(g))
-						continue;
-				}
+			if (isCartaGiocabile(c)) {
 				m = new Mossa(TipoMossa.GIOCA_CARTA, c);
 				if (c.getColore() == Colore.NERO) {
 					c.setColore(Colore.scegliColoreCasuale());
@@ -528,7 +515,7 @@ public class Partita implements PartitaIF {
 		Carta pescata = pescaCarta();
 		g.aggiungiCarta(pescata);
 		m = new Mossa(TipoMossa.PESCA, pescata);
-		if (tentaGiocaCarta(pescata)) {
+		if (isCartaGiocabile(pescata)) {
 			m.setTipoMossa(TipoMossa.GIOCA_CARTA);
 			if (pescata.getColore() == Colore.NERO) {
 				pescata.setColore(Colore.scegliColoreCasuale());
@@ -547,62 +534,5 @@ public class Partita implements PartitaIF {
 		}
 		return scegliMossaAutomatica();
 	}
-	
-	/**
-	 * metodo di verifica su un +4 giocabile o meno
-	 * 
-	 * @param g, giocatore su cui si svolge la verifica
-	 * @return true se il +4 è lecito da giocare, false altrimenti
-	 */
-	public boolean verificaPiuQuattroGiocabile(Giocatore g) {
-		if(!giocatori.contains(g))
-			return false;
-		else {
-			//crea lista temporanea con tutte le carte in mano di un giocatore
-			ArrayList<Carta> carteInMano = new ArrayList<>();
-			carteInMano.addAll(g.getMano().getCarte());
-			//istruzione in cui vengono rimossi tutti i +4 dalla mano di una giocatore per fare controlli
-			carteInMano.removeIf(carta -> 
-			    carta instanceof CartaSpeciale && ((CartaSpeciale)carta).getTipo() == TipoSpeciale.PIU_QUATTRO
-			);
-			//ciclo di verifica possibilità di giocare altre carte oltre ai +4
-			for(Carta carta:carteInMano) {
-				if(carta.giocabileSu(cartaCorrente))
-					return false;
-			}
-			//si arriva qui solo se nessuna delle carte in mano OLTRE ai +4 è giocabile
-			return true;
-		}
-	}
-	// ------------------------------
-	
-	//SEZIONE serializzazione/deserializzazione
-	
-	private static JsonMapper createMapper() {
-		JsonMapper mapper = new JsonMapper();
-		mapper.enable(SerializationFeature.INDENT_OUTPUT);
-		mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-		return mapper;
-	}
 
-	public String toJson() {
-		try {
-			return MAPPER.writeValueAsString(this);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	public static Partita fromJson(String json) {
-		try {
-			Partita p = MAPPER.readValue(json, Partita.class);
-			p.getMazzo().setPila(p.getPilaScarti());
-			return p;
-		} catch (JsonProcessingException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-	// ------------------------------
 }

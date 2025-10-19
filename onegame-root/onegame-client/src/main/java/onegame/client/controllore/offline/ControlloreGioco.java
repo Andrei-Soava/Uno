@@ -240,7 +240,7 @@ public class ControlloreGioco {
 	    {
 	    	//impedisco che venga giocato un +4 pescato se avevo altre carte giocabili prima di pescare
 	    	if(m.getCartaScelta() instanceof CartaSpeciale && ((CartaSpeciale)m.getCartaScelta()).getTipo()==TipoSpeciale.PIU_QUATTRO) {
-	    		if(!partita.verificaPiuQuattroGiocabile(g)) {
+	    		if(!partita.verificaPiuQuattroGiocabile()) {
 	    			fineTurno.run();
 	    			return;
 	    		}
@@ -375,7 +375,7 @@ public class ControlloreGioco {
 	            {		
 	            		//verifico che +4 effettivamente giocabile
 		            	if(m.getCartaScelta() instanceof CartaSpeciale && ((CartaSpeciale)m.getCartaScelta()).getTipo()==TipoSpeciale.PIU_QUATTRO) {
-		    	    		if(!partita.verificaPiuQuattroGiocabile(g)) {
+		    	    		if(!partita.verificaPiuQuattroGiocabile()) {
 		    	    			vg.stampaMessaggio("+4 giocabile solo se non hai altre opzioni!");
 		    	    			return;
 		    	    		}

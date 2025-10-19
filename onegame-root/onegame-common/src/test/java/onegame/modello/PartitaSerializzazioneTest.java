@@ -11,6 +11,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import onegame.modello.giocatori.Giocatore;
+import onegame.modello.net.util.JsonHelper;
 
 public class PartitaSerializzazioneTest {
 	private Partita partita;
@@ -43,8 +44,8 @@ public class PartitaSerializzazioneTest {
 				break;
 			}
 		}
-		String str = partita.toJson();
-		Partita partita2 = partita.fromJson(str);
+		String str = JsonHelper.toJson(partita);
+		Partita partita2 = JsonHelper.fromJson(str, Partita.class);
 		
 	}
 
