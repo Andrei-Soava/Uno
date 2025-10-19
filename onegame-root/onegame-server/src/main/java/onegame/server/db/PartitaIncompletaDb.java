@@ -37,9 +37,9 @@ public class PartitaIncompletaDb {
 	 * @return Lista dei nomi dei salvataggi
 	 * @throws SQLException
 	 */
-	public List<String> getPartiteByUtente(long utenteId) throws SQLException {
+	public ArrayList<String> getPartiteByUtente(long utenteId) throws SQLException {
 		String sql = "SELECT nome_salvataggio FROM partita_incompleta WHERE utente_id = ?";
-		List<String> result = new ArrayList<>();
+		ArrayList<String> result = new ArrayList<>();
 		try (Connection conn = GestoreDatabase.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
 			ps.setLong(1, utenteId);
 			try (ResultSet rs = ps.executeQuery()) {

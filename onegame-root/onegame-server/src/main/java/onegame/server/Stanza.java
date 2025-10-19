@@ -1,6 +1,7 @@
 package onegame.server;
 
 import java.util.*;
+import java.util.concurrent.locks.ReentrantLock;
 
 import com.corundumstudio.socketio.SocketIOClient;
 
@@ -13,10 +14,13 @@ public abstract class Stanza {
 	protected final int codice;
 	protected final long id;
 	protected final String nome;
-	protected final int maxUtenti;
+	protected int maxUtenti;
 	protected final GestoreSessioni gestoreSessioni;
+	protected boolean isAperta = true;
 
-	protected final Set<String> tokenUtenti = Collections.synchronizedSet(new LinkedHashSet<>());
+	protected final ReentrantLock lock = new ReentrantLock();
+
+	protected final Map<String, Sessione> sessionePerToken = new LinkedHashMap<>();
 
 	public Stanza(int codice, long id, String nome, int maxUtenti, GestoreSessioni gestoreSessioni) {
 		this.codice = codice;
@@ -27,30 +31,46 @@ public abstract class Stanza {
 	}
 
 	public boolean aggiungiUtente(String token) {
-		if (tokenUtenti.size() >= maxUtenti || tokenUtenti.contains(token))
-			return false;
-		tokenUtenti.add(token);
-		return true;
+		lock.lock();
+		try {
+			if (!isAperta || sessionePerToken.size() >= maxUtenti || sessionePerToken.containsKey(token))
+				return false;
+			sessionePerToken.put(token, gestoreSessioni.getSessione(token));
+			return true;
+		} finally {
+			lock.unlock();
+		}
 	}
 
 	public boolean rimuoviUtente(String token) {
-		return tokenUtenti.remove(token);
+		lock.lock();
+		try {
+			return sessionePerToken.remove(token) != null;
+		} finally {
+			lock.unlock();
+		}
 	}
 
 	public boolean isVuota() {
-		return tokenUtenti.isEmpty();
+		return sessionePerToken.isEmpty();
 	}
 
 	public boolean isPiena() {
-		return tokenUtenti.size() >= maxUtenti;
+		return sessionePerToken.size() >= maxUtenti;
 	}
 
 	public void broadcast(String evento, Object payload) {
-		for (String token : tokenUtenti) {
-			SocketIOClient client = getClient(token);
-			if (client != null) {
-				client.sendEvent(evento, payload);
+		lock.lock();
+		try {
+			for (Map.Entry<String, Sessione> entry : sessionePerToken.entrySet()) {
+				String token = entry.getKey();
+				SocketIOClient client = getClient(token);
+				if (client != null) {
+					client.sendEvent(evento, payload);
+				}
 			}
+		} finally {
+			lock.unlock();
 		}
 	}
 
@@ -71,11 +91,21 @@ public abstract class Stanza {
 	}
 
 	public Set<String> getTokenUtenti() {
-		return Collections.unmodifiableSet(tokenUtenti);
+		lock.lock();
+		try {
+			return Collections.unmodifiableSet(sessionePerToken.keySet());
+		} finally {
+			lock.unlock();
+		}
 	}
 
 	public boolean hasUtente(String token) {
-		return tokenUtenti.contains(token);
+		lock.lock();
+		try {
+			return sessionePerToken.containsKey(token);
+		} finally {
+			lock.unlock();
+		}
 	}
 
 	protected SocketIOClient getClient(String token) {

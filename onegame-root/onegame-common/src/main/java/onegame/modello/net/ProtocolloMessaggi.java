@@ -1,6 +1,6 @@
 package onegame.modello.net;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class ProtocolloMessaggi {
 
@@ -14,12 +14,13 @@ public class ProtocolloMessaggi {
 	public static final String EVENT_STANZA_ESCI = "stanza:esci";
 
 	// Eventi partite offline
-	public static final String EVENT_SALVA_PARTITA = "partita:salva";
-	public static final String EVENT_CARICA_PARTITA = "partita:carica";
-	public static final String EVENT_ELIMINA_PARTITA = "partita:elimina";
-	public static final String EVENT_LISTA_PARTITE = "partita:lista";
+	public static final String EVENT_SALVA_PARTITA = "salvataggiopartita:salva";
+	public static final String EVENT_CARICA_PARTITA = "salvataggiopartita:carica";
+	public static final String EVENT_ELIMINA_PARTITA = "salvataggiopartita:elimina";
+	public static final String EVENT_LISTA_PARTITE = "salvataggiopartita:lista";
 
-	public static final String EVENT_GIOCO_MOSSA = "gioco:mossa";
+	public static final String EVENT_INIZIA_PARTITA = "giocouno:inizia";
+	public static final String EVENT_GIOCO_MOSSA = "giocouno:mossa";
 
 //    //Risposte partite offline
 //    public static final String EVENT_PARTITA_OK = "partita:ok";
@@ -99,7 +100,7 @@ public class ProtocolloMessaggi {
 			this.codiceStanza = codiceStanza;
 		}
 	}
-	
+
 	public static class RespEntraStanza {
 		public boolean success;
 		public String messaggio;
@@ -139,7 +140,7 @@ public class ProtocolloMessaggi {
 			this.messaggio = messaggio;
 		}
 	}
-	
+
 	public static class RespAbbandonaStanza {
 		public boolean success;
 		public String messaggio;
@@ -208,27 +209,47 @@ public class ProtocolloMessaggi {
 	// richiesta elenco partite
 	public static class RespListaPartite {
 		public boolean success;
-		public List<String> nomiSalvataggi;
+		public ArrayList<String> nomiSalvataggi;
 		public String messaggio;
 
 		public RespListaPartite() {
 		}
 
-		public RespListaPartite(boolean success, List<String> nomiSalvataggi, String messaggio) {
+		public RespListaPartite(boolean success, ArrayList<String> nomiSalvataggi, String messaggio) {
 			this.success = success;
 			this.nomiSalvataggi = nomiSalvataggi;
 			this.messaggio = messaggio;
 		}
 	}
-	
+
 	public static class ReqEffettuaMossa {
 		public MossaDTO mossa;
-		
+
 		public ReqEffettuaMossa() {
 		}
-		
+
 		public ReqEffettuaMossa(MossaDTO mossa) {
 			this.mossa = mossa;
+		}
+	}
+
+	public static class MessIniziaPartita {
+		public ArrayList<GiocatoreDTO> giocatori;
+		public ArrayList<CartaDTO> carte;
+		public CartaDTO cartaIniziale;
+		public boolean direzioneCrescente;
+		public int indiceGiocatoreCorrente;
+
+		public MessIniziaPartita() {
+		}
+
+		public MessIniziaPartita(ArrayList<GiocatoreDTO> giocatori, ArrayList<CartaDTO> carte, CartaDTO cartaIniziale,
+				boolean direzioneCrescente, int indiceGiocatoreCorrente) {
+			this.giocatori = giocatori;
+			this.carte = carte;
+			this.cartaIniziale = cartaIniziale;
+			this.direzioneCrescente = direzioneCrescente;
+			this.indiceGiocatoreCorrente = indiceGiocatoreCorrente;
 		}
 	}
 }

@@ -1,7 +1,7 @@
 package onegame.server;
 
 import java.sql.SQLException;
-import java.util.List;
+import java.util.ArrayList;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -121,7 +121,7 @@ public class GestorePartiteOffline {
 
 		try {
 			long utenteId = utenteDb.getIdByUsername(sessione.getUsername());
-			List<String> nomi = partitaDb.getPartiteByUtente(utenteId);
+			ArrayList<String> nomi = partitaDb.getPartiteByUtente(utenteId);
 			ackRequest.sendAckData(new ProtocolloMessaggi.RespListaPartite(true, nomi, "Lista recuperata"));
 			logger.info("Lista salvataggi inviata per utente {}", sessione.getUsername());
 		} catch (SQLException e) {

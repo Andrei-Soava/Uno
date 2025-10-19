@@ -129,15 +129,19 @@ public abstract class GestoreStanze<Stanzz extends Stanza> implements SessioneOb
 		Stanzz stanza = stanze.get(idStanza);
 		if (stanza == null)
 			return;
+		stanza.lock.lock();
+		try {
+			if (stanza.rimuoviUtente(token)) {
+				logger.info("Utente {} rimosso da stanza {}", token, idStanza);
+			}
 
-		if (stanza.rimuoviUtente(token)) {
-			logger.info("Utente {} rimosso da stanza {}", token, idStanza);
-		}
-
-		if (stanza.isVuota()) {
-			stanze.remove(idStanza);
-			mappaCodiceAIdStanza.remove(stanza.getCodice());
-			logger.info("Stanza {} rimossa perché vuota", idStanza);
+			if (stanza.isVuota()) {
+				stanze.remove(idStanza);
+				mappaCodiceAIdStanza.remove(stanza.getCodice());
+				logger.info("Stanza {} rimossa perché vuota", idStanza);
+			}
+		} finally {
+			stanza.lock.unlock();
 		}
 	}
 
@@ -187,7 +191,8 @@ public abstract class GestoreStanze<Stanzz extends Stanza> implements SessioneOb
 		rimuoviUtenteDaSistema(sessione.getToken());
 	}
 
-	protected abstract Stanzz creaStanza(int codice, long id, String nome, int maxUtenti, GestoreSessioni gestoreSessioni);
+	protected abstract Stanzz creaStanza(int codice, long id, String nome, int maxUtenti,
+			GestoreSessioni gestoreSessioni);
 
 	private synchronized int nextCodice() {
 		int codice;
