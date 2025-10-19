@@ -4,6 +4,7 @@ import onegame.modello.carte.Colore;
 import onegame.modello.carte.CartaSpeciale.TipoSpeciale;
 
 public class CartaDTO {
+	public boolean isCartaNumero;
 	public int numero;
 	public TipoSpeciale tipo;
 	public Colore colore;
@@ -11,7 +12,8 @@ public class CartaDTO {
 	public CartaDTO() {
 	}
 
-	public CartaDTO(int numero, TipoSpeciale tipo, Colore colore) {
+	public CartaDTO(boolean isCartaNumero, int numero, TipoSpeciale tipo, Colore colore) {
+		this.isCartaNumero = isCartaNumero;
 		this.numero = numero;
 		this.tipo = tipo;
 		this.colore = colore;

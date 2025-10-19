@@ -11,6 +11,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import onegame.modello.carte.Carta;
+import onegame.modello.carte.CartaComparator;
 
 /************************************************************/
 
@@ -26,6 +27,8 @@ import onegame.modello.carte.Carta;
  * 
  */
 public class Mano {
+	private static final CartaComparator cartaComparator = new CartaComparator();
+	
 	private ArrayList<Carta> carte;
 
 	public Mano() {
@@ -39,7 +42,7 @@ public class Mano {
 	 */
 	public void aggiungiCarta(Carta c) {
 		carte.add(c);
-		Collections.sort(carte);
+		Collections.sort(carte, cartaComparator);
 	}
 	
 	/**
@@ -49,7 +52,7 @@ public class Mano {
 	 */
 	public void aggiungiCarte(List<Carta> c) {
 		carte.addAll(c);
-		Collections.sort(carte);
+		Collections.sort(carte, cartaComparator);
 	}
 	
 	/**

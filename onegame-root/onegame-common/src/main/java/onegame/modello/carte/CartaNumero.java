@@ -6,7 +6,6 @@ package onegame.modello.carte;
 
 import java.util.Objects;
 
-import onegame.modello.Partita;
 import onegame.modello.PartitaIF;
 
 /************************************************************/
@@ -14,84 +13,66 @@ import onegame.modello.PartitaIF;
 /**
  * classe che modella una carta numero (estende carta)
  * 
- * attributi importanti:
- * numero
+ * attributi importanti: numero
  * 
- * metodi importanti:
- * giocabileSu()--> override da carta (guardare lì per semantica)
+ * metodi importanti: giocabileSu()--> override da carta (guardare lì per
+ * semantica)
  */
 public class CartaNumero extends Carta {
 	private int numero;
 
-	//costruttore vuoto per Jackson
-	public CartaNumero() {this.numero = 0;}
-	
+	// costruttore vuoto per Jackson
+	public CartaNumero() {
+		this.numero = 0;
+	}
+
 	public CartaNumero(Colore colore, int numero) {
 		super(colore);
-		this.numero=numero;
+		this.numero = numero;
 	}
-	
+
 	/**
 	 * se la carta è una CartaNumero, non ci sono effetti
 	 */
 	@Override
 	public void applicaEffetto(PartitaIF p) {
-		
+
 	}
-	
+
 	@Override
 	public boolean giocabileSu(Carta c) {
-		if(this.colore==c.colore || this.colore==Colore.NERO)
+		if (this.colore == c.colore || this.colore == Colore.NERO)
 			return true;
-		if(c instanceof CartaNumero && ((CartaNumero)c).numero==this.numero)
+		if (c instanceof CartaNumero && ((CartaNumero) c).numero == this.numero)
 			return true;
 		return false;
 	}
-	
+
 	public int getNumero() {
 		return numero;
 	}
-	
+
 	void setNumero(int n) {
-		this.numero=n;
+		this.numero = n;
 	}
+
 	@Override
 	public String toString() {
 		return "CartaNumero [numero=" + numero + ", colore=" + colore + "]";
 	}
 
 	@Override
-	public int compareTo(Carta other) {
-		switch(super.compareTo(other)) {
-		case -1:{
-			return -1;
-		}
-		case 0:{
-			if(other instanceof CartaSpeciale)
-				return 1;
-			if(this.numero<((CartaNumero)other).numero)
-				return -1;
-			if(this.numero==((CartaNumero)other).numero)
-				return 0;
-			else
-				return 1;
-		}
-		default:{
-			return 1;
-		}
-		}
-	}
-	
-	@Override
 	public boolean equals(Object obj) {
-	    if (this == obj) return true;
-	    if (!(obj instanceof CartaNumero)) return false;
-	    CartaNumero other = (CartaNumero) obj;
-	    return this.colore == other.colore && this.numero == other.numero;
+		if (this == obj)
+			return true;
+		if (!(obj instanceof CartaNumero))
+			return false;
+		CartaNumero other = (CartaNumero) obj;
+		return this.colore == other.colore && this.numero == other.numero;
 	}
 
 	@Override
 	public int hashCode() {
-	    return Objects.hash(colore, numero);
+		return Objects.hash(colore, numero);
 	}
 }

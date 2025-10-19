@@ -6,87 +6,87 @@ package onegame.modello.carte;
 
 import java.util.Objects;
 
-import onegame.modello.Partita;
 import onegame.modello.PartitaIF;
 
 /************************************************************/
 /**
  * classe che modella una carta speciale (estende carta)
  * 
- * attributi importanti:
- * tipo, enumerato che modella i tipi speciali (piu_due, piu_quattro, inverti, blocca, jolly)
+ * attributi importanti: tipo, enumerato che modella i tipi speciali (piu_due,
+ * piu_quattro, inverti, blocca, jolly)
  * 
- * metodi importanti:
- * giocabileSu()--> override da carta (guardare lì per semantica)
+ * metodi importanti: giocabileSu()--> override da carta (guardare lì per
+ * semantica)
  */
 public class CartaSpeciale extends Carta {
 	public enum TipoSpeciale {
-		
+
 		PIU_DUE,
-		
+
 		PIU_QUATTRO,
-		
+
 		BLOCCA,
-		
+
 		INVERTI,
-		
-		JOLLY
-		;
+
+		JOLLY;
 	}
+
 	private TipoSpeciale tipo;
-	
-	//costruttore vuoto per Jackson
-	public CartaSpeciale() {this.tipo = null;}
-	
+
+	// costruttore vuoto per Jackson
+	public CartaSpeciale() {
+		this.tipo = null;
+	}
+
 	public CartaSpeciale(Colore colore, TipoSpeciale tipo) {
 		super(colore);
-		this.tipo=tipo;
+		this.tipo = tipo;
 	}
-	
+
 	/**
 	 * se la carta è una CartaSpeciale, l'effetto varia in base alla carta
 	 * 
-	 * funzionamento:
-	 * 1) switch case in base al Tipo della CartaSpeciale;
-	 * 2) azioni specifiche carta sul giocatore vittima;
+	 * funzionamento: 1) switch case in base al Tipo della CartaSpeciale; 2) azioni
+	 * specifiche carta sul giocatore vittima;
 	 * 
-	 * NOTE:
-	 * quando viene invocato questo metodo: 
-	 * partita.eseguiUnTurno--> partita.applicaEffettoCarta--> carta.applicaEffetto
-	 * si noti che da eseguiUnTurno fino alla sua conclusione il giocatore viene cambiato
-	 * al massimo due volte (un prossimoGiocatore() qui + un prossimoGiocatore() alla fine
-	 * di eseguiUnTurno), nel caso in cui si abbia una carta che fa saltare un turno  
+	 * NOTE: quando viene invocato questo metodo: partita.eseguiUnTurno-->
+	 * partita.applicaEffettoCarta--> carta.applicaEffetto si noti che da
+	 * eseguiUnTurno fino alla sua conclusione il giocatore viene cambiato al
+	 * massimo due volte (un prossimoGiocatore() qui + un prossimoGiocatore() alla
+	 * fine di eseguiUnTurno), nel caso in cui si abbia una carta che fa saltare un
+	 * turno
 	 */
 	@Override
 	public void applicaEffetto(PartitaIF partita) {
-			switch (this.getTipo()) {
-			case PIU_DUE:
+		switch (this.getTipo()) {
+		case PIU_DUE:
+			partita.prossimoGiocatore();
+			partita.getGiocatoreCorrente().getMano().aggiungiCarte((partita.getMazzo().pescaN(2)));
+			break;
+		case PIU_QUATTRO:
+			partita.prossimoGiocatore();
+			partita.getGiocatoreCorrente().getMano().aggiungiCarte((partita.getMazzo().pescaN(4)));
+			break;
+		case BLOCCA:
+			partita.prossimoGiocatore();
+			break;
+		case INVERTI:
+			if (partita.getNumeroGiocatori() == 2) {
 				partita.prossimoGiocatore();
-				partita.getGiocatoreCorrente().getMano().aggiungiCarte((partita.getMazzo().pescaN(2)));
-				break;
-			case PIU_QUATTRO:
-				partita.prossimoGiocatore();
-				partita.getGiocatoreCorrente().getMano().aggiungiCarte((partita.getMazzo().pescaN(4)));
-				break;
-			case BLOCCA:
-				partita.prossimoGiocatore();
-				break;
-			case INVERTI:
-				if (partita.getNumeroGiocatori() == 2) {
-					partita.prossimoGiocatore();
-				} else {
-					partita.cambiaDirezione();
-				}
-				break;
-			default:
-				break;
+			} else {
+				partita.cambiaDirezione();
 			}
+			break;
+		default:
+			break;
+		}
 	}
-	
+
 	public boolean giocabileSu(Carta c) {
-		if(this.colore==c.colore || this.colore==Colore.NERO)
+		if (this.colore == c.colore || this.colore == Colore.NERO)
 			return true;
-		if(c instanceof CartaSpeciale && this.tipo==((CartaSpeciale)c).tipo)
+		if (c instanceof CartaSpeciale && this.tipo == ((CartaSpeciale) c).tipo)
 			return true;
 		return false;
 	}
@@ -94,46 +94,29 @@ public class CartaSpeciale extends Carta {
 	public TipoSpeciale getTipo() {
 		return tipo;
 	}
-	
+
 	public void setTipo(TipoSpeciale tipo) {
-		this.tipo=tipo;
+		this.tipo = tipo;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "CartaSpeciale [tipo=" + tipo + ", colore=" + colore + "]";
 	}
 
 	@Override
-	public int compareTo(Carta other) {
-		switch(super.compareTo(other)) {
-		case -1:{
-			return -1;
-		}
-		case 0:{
-			if(other instanceof CartaNumero)
-				return -1;
-			else
-				return 0;
-		}
-		default:{
-			return 1;
-		}
-		}
-	}
-	
-	@Override
 	public boolean equals(Object obj) {
-	    if (this == obj) return true;
-	    if (!(obj instanceof CartaSpeciale)) return false;
-	    CartaSpeciale other = (CartaSpeciale) obj;
-	    return this.colore == other.colore && this.tipo == other.tipo;
+		if (this == obj)
+			return true;
+		if (!(obj instanceof CartaSpeciale))
+			return false;
+		CartaSpeciale other = (CartaSpeciale) obj;
+		return this.colore == other.colore && this.tipo == other.tipo;
 	}
 
 	@Override
 	public int hashCode() {
-	    return Objects.hash(colore, tipo);
+		return Objects.hash(colore, tipo);
 	}
 
-	
 }

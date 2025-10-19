@@ -4,13 +4,7 @@
 
 package onegame.modello.giocatori;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import onegame.modello.Mossa;
-import onegame.modello.PartitaIF;
-import onegame.modello.Mossa.TipoMossa;
 import onegame.modello.carte.Carta;
-import onegame.modello.carte.Colore;
 
 /************************************************************/
 

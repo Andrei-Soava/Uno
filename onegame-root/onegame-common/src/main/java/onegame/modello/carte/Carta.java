@@ -30,7 +30,6 @@ package onegame.modello.carte;
  */
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
-import onegame.modello.Partita;
 import onegame.modello.PartitaIF;
 import onegame.modello.carte.CartaSpeciale.TipoSpeciale;
 
@@ -42,7 +41,7 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 )
 @JsonSubTypes({ @JsonSubTypes.Type(value = CartaNumero.class, name = "numero"),
 		@JsonSubTypes.Type(value = CartaSpeciale.class, name = "speciale") })
-public abstract class Carta implements Comparable<Carta> {
+public abstract class Carta {
 	/**
 	 * Colore della carta. Può essere modificato (ad esempio per le carte jolly).
 	 */
@@ -119,79 +118,4 @@ public abstract class Carta implements Comparable<Carta> {
 	 * @return true se la carta può essere giocata, false altrimenti
 	 */
 	public abstract boolean giocabileSu(Carta c);
-
-	/**
-	 * Confronta questa carta con un'altra in base al colore, secondo una gerarchia:
-	 * NERO < ROSSO < BLU < GIALLO < altri.
-	 * 
-	 * @param other l'altra carta da confrontare
-	 * @return 0 se i colori sono uguali, -1 se questa carta precede l'altra, 1
-	 *         altrimenti
-	 */
-	@Override
-	public int compareTo(Carta other) {
-		switch (this.colore) {
-		case NERO: {
-			if (other.colore == Colore.NERO)
-				return 0;
-			else
-				return -1;
-		}
-
-		case ROSSO: {
-			switch (other.colore) {
-			case NERO:
-				return 1;
-			case ROSSO:
-				return 0;
-			default:
-				return -1;
-			}
-
-		}
-
-		case BLU: {
-			switch (other.colore) {
-			case NERO:
-				return 1;
-			case ROSSO:
-				return 1;
-			case BLU:
-				return 0;
-			default:
-				return -1;
-			}
-		}
-
-		case GIALLO: {
-			switch (other.colore) {
-			case NERO:
-				return 1;
-			case ROSSO:
-				return 1;
-			case BLU:
-				return 1;
-			case GIALLO:
-				return 0;
-			default:
-				return -1;
-			}
-		}
-
-		default: {
-			switch (other.colore) {
-			case NERO:
-				return 1;
-			case ROSSO:
-				return 1;
-			case BLU:
-				return 1;
-			case GIALLO:
-				return 1;
-			default:
-				return 0;
-			}
-		}
-		}
-	}
 }
