@@ -77,28 +77,6 @@ public class ServerUno {
 		server.addEventListener(ProtocolloMessaggi.EVENT_STANZA_ENTRA, String.class,
 				(client, data, ack) -> gestoreStanze.handleEntraStanza(client, data, ack));
 
-		// richiesta partite non concluse
-//		server.addEventListener(ProtocolloMessaggi.EVENT_RICHIESTA_PARTITE_NON_CONCLUSE, Void.class,
-//				(client, data, ack) -> gestoreConnessioni.handleRichiestaPartiteNonConcluse(client));
-
-		// evento partita:mossa -> payload: Mossa
-		server.addEventListener(ProtocolloMessaggi.EVENT_GIOCO_MOSSA, String.class, (client, mossa, ack) -> {
-			// TO DO
-			Object tokenObj = client.get("token");
-			if (tokenObj == null) {
-				client.sendEvent("partita:invalid", "Non autenticato");
-				return;
-			}
-			String token = tokenObj.toString();
-			// recupero stanza da gestoreStanze tramite mapping interno
-			StanzaPartita stanza = gestoreStanze.getStanzaPerToken(token);
-			if (stanza == null) {
-				client.sendEvent("partita:invalid", "Non sei in alcuna stanza");
-				return;
-			}
-			// stanza.riceviMossa(token, mossa);
-		});
-
 		server.addEventListener(ProtocolloMessaggi.EVENT_SALVA_PARTITA, String.class,
 				(client, data, ack) -> gestorePartiteOffline.handleSalvaPartita(client, data, ack));
 

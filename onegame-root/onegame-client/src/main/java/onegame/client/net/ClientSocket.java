@@ -8,16 +8,19 @@ import io.socket.client.Ack;
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
+import onegame.modello.net.MossaDTO;
 import onegame.modello.net.ProtocolloMessaggi;
 import onegame.modello.net.ProtocolloMessaggi.ReqAuth;
 import onegame.modello.net.ProtocolloMessaggi.ReqCaricaPartita;
 import onegame.modello.net.ProtocolloMessaggi.ReqCreaStanza;
+import onegame.modello.net.ProtocolloMessaggi.ReqEffettuaMossa;
 import onegame.modello.net.ProtocolloMessaggi.ReqEliminaPartita;
 import onegame.modello.net.ProtocolloMessaggi.ReqEntraStanza;
 import onegame.modello.net.ProtocolloMessaggi.ReqSalvaPartita;
 import onegame.modello.net.ProtocolloMessaggi.RespAuth;
 import onegame.modello.net.ProtocolloMessaggi.RespCaricaPartita;
 import onegame.modello.net.ProtocolloMessaggi.RespCreaStanza;
+import onegame.modello.net.ProtocolloMessaggi.RespEffettuaMossa;
 import onegame.modello.net.ProtocolloMessaggi.RespEliminaPartita;
 import onegame.modello.net.ProtocolloMessaggi.RespEntraStanza;
 import onegame.modello.net.ProtocolloMessaggi.RespListaPartite;
@@ -197,8 +200,8 @@ public class ClientSocket {
 	 */
     public void creaStanza(String nome, int maxGiocatori, Callback<RespCreaStanza> callback) {
         ReqCreaStanza req = new ReqCreaStanza(nome, maxGiocatori);
-        System.out.println("[CLIENT] Invio richiesta creazione stanza");
-        socket.emit("stanza:crea", JsonHelper.toJson(req), callback);
+        System.out.println("[CLIENT] Invio richiesta creazione stanza: " + nome + " (max giocatori: " + maxGiocatori + ")");
+        socket.emit(ProtocolloMessaggi.EVENT_STANZA_CREA, JsonHelper.toJson(req), callback);
     }
 
     /**
@@ -207,26 +210,17 @@ public class ClientSocket {
 	 * @param callback Callback per la risposta del server
 	 * @throws Exception
 	 */
-    public void entraStanza(String idStanza, Callback<RespEntraStanza> callback) {
-//        ReqEntraStanza r = new ReqEntraStanza(idStanza);
-        // CORRETTO - oggetto direttamente, NO json string
-//        socket.emit("stanza:entra", r, callback);
-    	throw new UnsupportedOperationException("Non ancora implementato");
+    public void entraStanza(int codice, Callback<RespEntraStanza> callback) {
+    	ReqEntraStanza req = new ReqEntraStanza(codice);
+    	System.out.println("[CLIENT] Invio richiesta ingresso in stanza: " + codice);
+    	socket.emit(ProtocolloMessaggi.EVENT_STANZA_ENTRA, JsonHelper.toJson(req), callback);
     }
 
-    /**
-	 * Invia una mossa al server
-	 * @param mossaObj La mossa da inviare
-	 * @param callback Callback per la risposta del server
-	 */
-    public void inviaMossa(Object mossaObj, Ack callback) {
-    	// TO DO
-        try {
-            // CORRETTO - oggetto direttamente
-            socket.emit("partita:mossa", mossaObj, callback);
-        } catch (Exception e) {
-            if (callback != null) callback.call(e.getMessage());
-        }
+    
+    public void inviaMossa(MossaDTO mossa, Callback<RespEffettuaMossa> callback) {
+    	ReqEffettuaMossa req = new ReqEffettuaMossa(mossa);
+    	System.out.println("[CLIENT] Invio richiesta mossa: " + mossa);
+		socket.emit(ProtocolloMessaggi.EVENT_GIOCO_MOSSA, JsonHelper.toJson(req), callback);
     }
     
     public void listaPartite(Callback<RespListaPartite> callback) {
@@ -260,6 +254,5 @@ public class ClientSocket {
     public void on(String evento, Emitter.Listener handler) {
         socket.on(evento, handler);
     }
-    
     
 }
