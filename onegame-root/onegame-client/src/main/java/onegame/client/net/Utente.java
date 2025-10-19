@@ -1,4 +1,4 @@
-package onegame.modello.net;
+package onegame.client.net;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;

@@ -18,9 +18,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
 import onegame.client.esecuzione.AppWithMaven;
 import onegame.client.net.ConnectionMonitor;
+import onegame.client.net.Utente;
 import onegame.client.vista.accessori.GestoreCallbackBottoni;
 import onegame.modello.giocatori.Statistica;
-import onegame.modello.net.Utente;
 
 public class VistaHome {
 	private Scene scene;

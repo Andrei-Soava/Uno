@@ -5,8 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.application.Platform;
 import onegame.client.net.ClientSocket;
 import onegame.client.net.ConnectionMonitor;
+import onegame.client.net.Utente;
 import onegame.client.vista.VistaRegistrazione;
-import onegame.modello.net.Utente;
 import onegame.modello.net.ProtocolloMessaggi.RespAuth;
 import onegame.modello.net.util.JsonHelper;
 

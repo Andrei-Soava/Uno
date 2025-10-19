@@ -42,8 +42,8 @@ public class ServerUno {
 		this.gestoreSessioni = new GestoreSessioni();
 		this.gestoreConnessioni = new GestoreConnessioni(gestoreSessioni);
 		this.gestoreStanze = new GestoreStanzePartita(gestoreSessioni);
-		this.gestorePartiteOffline = new GestorePartiteOffline(gestoreConnessioni);
-		this.gestoreGioco = new GestoreGioco(gestoreStanze);
+		this.gestorePartiteOffline = new GestorePartiteOffline(gestoreSessioni);
+		this.gestoreGioco = new GestoreGioco(gestoreStanze, gestoreSessioni);
 
 		this.gestoreSessioni.aggiungiObserver(gestoreStanze);
 

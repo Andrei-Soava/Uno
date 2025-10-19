@@ -22,7 +22,6 @@ import onegame.modello.net.ProtocolloMessaggi.RespEliminaPartita;
 import onegame.modello.net.ProtocolloMessaggi.RespEntraStanza;
 import onegame.modello.net.ProtocolloMessaggi.RespListaPartite;
 import onegame.modello.net.ProtocolloMessaggi.RespSalvaPartita;
-import onegame.modello.net.Utente;
 import onegame.modello.net.util.Callback;
 import onegame.modello.net.util.JsonHelper;
 

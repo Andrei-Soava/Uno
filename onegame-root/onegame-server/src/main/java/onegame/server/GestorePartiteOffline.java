@@ -25,14 +25,14 @@ import onegame.server.db.UtenteDb;
 public class GestorePartiteOffline {
 	private final PartitaIncompletaDb partitaDb;
 	private final UtenteDb utenteDb;
-	private final GestoreConnessioni gestoreConnessioni;
+	private final GestoreSessioni gestoreSessioni;
 
 	private static final Logger logger = LoggerFactory.getLogger(GestorePartiteOffline.class);
 
-	public GestorePartiteOffline(GestoreConnessioni gestoreConnessioni) {
+	public GestorePartiteOffline(GestoreSessioni gestoreSessioni) {
 		this.partitaDb = new PartitaIncompletaDb();
 		this.utenteDb = new UtenteDb();
-		this.gestoreConnessioni = gestoreConnessioni;
+		this.gestoreSessioni = gestoreSessioni;
 	}
 
 	/**
@@ -42,7 +42,7 @@ public class GestorePartiteOffline {
 	 * @param ackRequest L'oggetto per inviare l'acknowledgment
 	 */
 	public void handleSalvaPartita(SocketIOClient client, String str, AckRequest ackRequest) {
-		Sessione sessione = getSessioneAutenticato(client);
+		Sessione sessione = gestoreSessioni.getSessioneAutenticato(client);
 		if (sessione == null) {
 			ackRequest.sendAckData(new ProtocolloMessaggi.RespSalvaPartita(false, "Utente non valido"));
 			logger.warn("Accesso negato: token non valido o utente anonimo");
@@ -74,7 +74,7 @@ public class GestorePartiteOffline {
 	 * @param ackRequest L'oggetto per inviare l'acknowledgment
 	 */
 	public void handleCaricaPartita(SocketIOClient client, String str, AckRequest ackRequest) {
-		Sessione sessione = getSessioneAutenticato(client);
+		Sessione sessione = gestoreSessioni.getSessioneAutenticato(client);
 		if (sessione == null) {
 			ackRequest.sendAckData(new ProtocolloMessaggi.RespCaricaPartita(false, "", "Utente non valido"));
 			logger.warn("Accesso negato: token non valido o utente anonimo");
@@ -112,7 +112,7 @@ public class GestorePartiteOffline {
 	 * @param ackRequest L'oggetto per inviare l'acknowledgment
 	 */
 	public void handleListaSalvataggi(SocketIOClient client, AckRequest ackRequest) {
-		Sessione sessione = getSessioneAutenticato(client);
+		Sessione sessione = gestoreSessioni.getSessioneAutenticato(client);
 		if (sessione == null) {
 			ackRequest.sendAckData(new ProtocolloMessaggi.RespListaPartite(false, null, "Utente non valido"));
 			logger.warn("Accesso negato: token non valido o utente anonimo");
@@ -132,7 +132,7 @@ public class GestorePartiteOffline {
 	}
 
 	public void handleEliminaSalvataggio(SocketIOClient client, String str, AckRequest ackRequest) {
-		Sessione sessione = getSessioneAutenticato(client);
+		Sessione sessione = gestoreSessioni.getSessioneAutenticato(client);
 		if (sessione == null) {
 			ackRequest.sendAckData(new ProtocolloMessaggi.RespEliminaPartita(false, "Utente non valido"));
 			logger.warn("Accesso negato: token non valido o utente anonimo");
@@ -153,19 +153,4 @@ public class GestorePartiteOffline {
 		}
 	}
 
-	/**
-	 * Recupera l'utente autenticato associato al client
-	 * @param client Il client
-	 * @return L'utente autenticato o null se non valido
-	 */
-	private Sessione getSessioneAutenticato(SocketIOClient client) {
-		String token = client.get("token");
-		Sessione sessione = gestoreConnessioni.getSessioneByToken(token);
-
-		if (sessione == null || sessione.isAnonimo()) {
-			logger.warn("Accesso negato: token non valido o utente anonimo");
-			return null;
-		}
-		return sessione;
-	}
 }

@@ -151,6 +151,9 @@ public class Mazzo {
 	public Carta pesca() {
 		if (this.isVuoto())
 			ricostruisciMazzo();
+		if (this.isVuoto()) {
+			return null;
+		}
 		return carte.pop();
 	}
 	
@@ -164,7 +167,7 @@ public class Mazzo {
 
 	@JsonIgnore
 	public boolean isVuoto() {
-		return carte.size()==0;
+		return carte.size() == 0;
 	}
 	@Override
 	public String toString() {

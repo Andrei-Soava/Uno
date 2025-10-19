@@ -19,8 +19,8 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import onegame.client.esecuzione.AppWithMaven;
 import onegame.client.net.ConnectionMonitor;
+import onegame.client.net.Utente;
 import onegame.client.vista.accessori.GestoreCallbackBottoni;
-import onegame.modello.net.Utente;
 
 public class VistaMenuOffline {
 

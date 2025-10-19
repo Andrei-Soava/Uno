@@ -7,38 +7,43 @@ import com.corundumstudio.socketio.AckRequest;
 import com.corundumstudio.socketio.SocketIOClient;
 
 import onegame.modello.net.MossaDTO;
+import onegame.modello.net.ProtocolloMessaggi.ReqEffettuaMossa;
+import onegame.modello.net.ProtocolloMessaggi.RespEffettuaMossa;
 import onegame.modello.net.util.JsonHelper;
 
 public class GestoreGioco {
-	private final static Logger logger = LoggerFactory.getLogger(GestoreGioco.class);
-	private final GestoreStanze gestoreStanze;
+	private final GestoreStanzePartita gestoreStanze;
+	private final GestoreSessioni gestoreSessioni;
 
-	public GestoreGioco(GestoreStanze gestoreStanze) {
+	private final static Logger logger = LoggerFactory.getLogger(GestoreGioco.class);
+
+	public GestoreGioco(GestoreStanzePartita gestoreStanze, GestoreSessioni gestoreSessioni) {
 		this.gestoreStanze = gestoreStanze;
+		this.gestoreSessioni = gestoreSessioni;
 	}
 
 	public void handleEffettuaMossa(SocketIOClient client, String str, AckRequest ack) {
-//		Object tokenObj = client.get("token");
-//	    if (tokenObj == null) {
-//	        client.sendEvent("partita:invalid", "Non autenticato");
-//	        return;
-//	    }
-//
-//	    String token = tokenObj.toString();
-//	    StanzaPartita stanza = gestoreStanze.getStanzaPerToken(token);
-//	    if (stanza == null) {
-//	        client.sendEvent("partita:invalid", "Non sei in alcuna stanza");
-//	        return;
-//	    }
-//
-//	    try {
-//	        MossaDTO mossa = JsonHelper.fromJson(payloadJson, MossaDTO.class);
-//	        stanza.riceviMossa(token, mossa);
-//	        ack.sendAckData("OK");
-//	    } catch (Exception e) {
-//	        logger.error("Errore parsing mossa: {}", e.getMessage());
-//	        client.sendEvent("partita:invalid", "Formato mossa non valido");
-//	        ack.sendAckData("ERRORE");
-//	    }
+		try {
+			String token = client.get("token");
+			Sessione sessione = gestoreSessioni.getSessioneByClient(client);
+
+			if (sessione == null) {
+				ack.sendAckData(new RespEffettuaMossa(false, "Utente non valido"));
+				logger.warn("Accesso negato");
+				return;
+			}
+
+			ReqEffettuaMossa req = JsonHelper.fromJson(str, ReqEffettuaMossa.class);
+			MossaDTO mossa = req.mossa;
+			StanzaPartita stanza = gestoreStanze.getStanzaPerToken(token);
+			
+			stanza.riceviMossa(token, mossa);
+			ack.sendAckData(new RespEffettuaMossa(true, "Mossa effettuata con successo"));
+			logger.info("Mossa ricevuta da utente {}: {}", sessione.getUsername(), mossa);
+		} catch (Exception e) {
+			logger.error("Errore durante l'elaborazione della mossa", e);
+			ack.sendAckData(new RespEffettuaMossa(false, "Errore interno del server"));
+		}
+
 	}
 }

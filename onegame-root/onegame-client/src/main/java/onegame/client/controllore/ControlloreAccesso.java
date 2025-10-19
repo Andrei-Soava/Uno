@@ -4,8 +4,8 @@ package onegame.client.controllore;
 import javafx.application.Platform;
 import onegame.client.net.ClientSocket;
 import onegame.client.net.ConnectionMonitor;
+import onegame.client.net.Utente;
 import onegame.client.vista.VistaAccesso;
-import onegame.modello.net.Utente;
 
 public class ControlloreAccesso {
 	private VistaAccesso va;

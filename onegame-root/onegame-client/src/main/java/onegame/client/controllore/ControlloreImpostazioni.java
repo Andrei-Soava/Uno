@@ -2,8 +2,8 @@ package onegame.client.controllore;
 
 import onegame.client.net.ClientSocket;
 import onegame.client.net.ConnectionMonitor;
+import onegame.client.net.Utente;
 import onegame.client.vista.VistaImpostazioni;
-import onegame.modello.net.Utente;
 
 public class ControlloreImpostazioni {
 

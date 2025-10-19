@@ -5,17 +5,19 @@ import java.util.*;
 import com.corundumstudio.socketio.SocketIOClient;
 
 import onegame.modello.giocatori.Giocatore;
+import onegame.modello.net.CartaDTO;
+import onegame.modello.net.DTOUtils;
 import onegame.modello.net.GiocatoreDTO;
 import onegame.modello.net.MossaDTO;
 import onegame.modello.net.ProtocolloMessaggi;
 import onegame.modello.net.ProtocolloMessaggi.*;
+import onegame.modello.net.StatoPartitaDTO;
 import onegame.server.gioco.PartitaNET;
 
-public class StanzaPartita extends Stanza {
+public class StanzaPartita extends Stanza implements PartitaObserver {
 
 	private final Map<String, Giocatore> giocatorePerToken = new LinkedHashMap<>();
 	private PartitaNET partita;
-	private boolean partitaInCorso = false;
 
 	public StanzaPartita(int codice, long id, String nome, int maxUtenti, GestoreSessioni gestoreSessioni) {
 		super(codice, id, nome, maxUtenti, gestoreSessioni);
@@ -24,43 +26,24 @@ public class StanzaPartita extends Stanza {
 	public boolean avviaPartita() {
 		lock.lock();
 		try {
-			if (this.partitaInCorso)
+			if (isPartitaInCorso()) {
 				return false;
+			}
 
-			Map<String, SocketIOClient> clientPerToken = new HashMap<>();
-
+			// Crea i giocatori
 			for (String token : sessionePerToken.keySet()) {
 				String username = gestoreSessioni.getSessione(token).getUsername();
 				Giocatore g = new Giocatore(username);
 				giocatorePerToken.put(token, g);
-				clientPerToken.put(token, getClient(token));
 			}
 
+			// Inizializza la partita
 			List<Giocatore> giocatori = new ArrayList<>(giocatorePerToken.values());
-			this.partita = new PartitaNET(giocatori);
+			this.partita = new PartitaNET(giocatori, this);
+			this.partita.addObserver(this);
 
-			ArrayList<GiocatoreDTO> listaGiocatoriDTO = new ArrayList<>();
+			inviaTurnoCorrente(ProtocolloMessaggi.EVENT_INIZIO_PARTITA);
 
-			for (Map.Entry<String, Sessione> entry : sessionePerToken.entrySet()) {
-				String token = entry.getKey();
-				Sessione sessione = entry.getValue();
-				Giocatore g = giocatorePerToken.get(token);
-				GiocatoreDTO gDTO = new GiocatoreDTO(sessione.getUsername(), sessione.getNickname(),
-						sessione.isAnonimo(), g.getMano().getNumCarte());
-				listaGiocatoriDTO.add(gDTO);
-			}
-
-			for (Map.Entry<String, Giocatore> entry : giocatorePerToken.entrySet()) {
-				SocketIOClient client = getClient(entry.getKey());
-				if (client != null) {
-					MessIniziaPartita mess = new MessIniziaPartita();
-
-					client.sendEvent(ProtocolloMessaggi.EVENT_INIZIA_PARTITA, mess);
-				}
-			}
-
-			inviaTurnoCorrente();
-			this.partitaInCorso = true;
 			this.isAperta = false;
 			return true;
 		} finally {
@@ -69,33 +52,69 @@ public class StanzaPartita extends Stanza {
 	}
 
 	public void riceviMossa(String token, MossaDTO mossa) {
-		if (partita == null || !giocatorePerToken.containsKey(token))
+		if (partita == null || !giocatorePerToken.containsKey(token)) {
 			return;
+		}
 
 		Giocatore g = giocatorePerToken.get(token);
 		partita.effettuaMossa(mossa, g);
 
+	}
+
+	@Override
+	public void partitaAggiornata() {
+		if (partita == null) {
+			return;
+		}
+
 		if (partita.isFinished()) {
-			broadcast("UNO_PARTITA_FINITA", g.getNome());
-			partitaInCorso = false;
+			inviaTurnoCorrente(ProtocolloMessaggi.EVENT_FINE_PARTITA);
+			this.isAperta = true;
 		} else {
-			inviaTurnoCorrente();
+			inviaTurnoCorrente(ProtocolloMessaggi.EVENT_GIOCO_MOSSA);
 		}
 	}
 
-	private void inviaTurnoCorrente() {
-		if (partita == null)
-			return;
+	private void inviaTurnoCorrente(String nomeEvento) {
+		lock.lock();
 
-		Giocatore g = partita.getGiocatoreCorrente();
-//		SocketIOClient client = getClient();
-//		if (client != null) {
-//			client.sendEvent("UNO_TOCCA_A_TE", partita.topCard());
-//		}
+		try {
+			List<GiocatoreDTO> listaGiocatoriDTO = new ArrayList<>();
+
+			// Prepara i DTO dei giocatori
+			for (Map.Entry<String, Sessione> entry : sessionePerToken.entrySet()) {
+				String token = entry.getKey();
+				Sessione sessione = entry.getValue();
+
+				Giocatore g = giocatorePerToken.get(token);
+				GiocatoreDTO gDTO = new GiocatoreDTO(sessione.getUsername(), sessione.getNickname(),
+						sessione.isAnonimo(), g.getMano().getNumCarte());
+				listaGiocatoriDTO.add(gDTO);
+			}
+
+			CartaDTO cartaIniziale = DTOUtils.creaCartaDTO(partita.getCartaCorrente());
+
+			for (Map.Entry<String, Giocatore> entry : giocatorePerToken.entrySet()) {
+				String token = entry.getKey();
+				Giocatore g = entry.getValue();
+
+				List<CartaDTO> manoDTO = DTOUtils.creaListaCarteDTO(g.getMano().getCarte());
+				StatoPartitaDTO mess = new StatoPartitaDTO(cartaIniziale, listaGiocatoriDTO,
+						partita.getIndiceGiocatoreCorrente(), manoDTO, partita.getDirezione(), partita.isFinished(),
+						partita.getIndiceVincitore());
+
+				SocketIOClient client = getClient(token);
+				if (client != null) {
+					client.sendEvent(nomeEvento, new MessStatoPartita(mess));
+				}
+			}
+		} finally {
+			lock.unlock();
+		}
 	}
 
 	public boolean isPartitaInCorso() {
-		return partitaInCorso;
+		return !partita.isFinished();
 	}
 
 	public PartitaNET getPartita() {
@@ -105,4 +124,5 @@ public class StanzaPartita extends Stanza {
 	public Collection<Giocatore> getGiocatori() {
 		return Collections.unmodifiableCollection(giocatorePerToken.values());
 	}
+
 }
