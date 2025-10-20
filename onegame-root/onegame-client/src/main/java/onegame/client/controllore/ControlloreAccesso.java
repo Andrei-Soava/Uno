@@ -50,26 +50,20 @@ public class ControlloreAccesso {
 
 			// condizionale (sarà dentro una send asincrona al server e se la response ==
 			// true, si va alla vista successiva)
-			try {
-				cs.login(username, password, respAuth -> {
-					try {
-						Platform.runLater(() -> {
-				            if (respAuth.success) {
-				                Utente utente = new Utente(username, false);
-				                cs.setUtente(utente);
-				                va.mostraHome();
-				            } else {
-				                va.compilaMessaggioErrore(respAuth.messaggio);
-				                eseguiAccesso();
-				            }
-				        });
-					} catch (Exception e) {
-						e.printStackTrace();
+			cs.login(username, password, respAuth -> {
+
+				Platform.runLater(() -> {
+					if (respAuth.success) {
+						Utente utente = new Utente(username, false);
+						cs.setUtente(utente);
+						va.mostraHome();
+					} else {
+						va.compilaMessaggioErrore(respAuth.messaggio);
+						eseguiAccesso();
 					}
 				});
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+
+			});
 		});
 	}
 

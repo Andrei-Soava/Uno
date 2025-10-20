@@ -1,5 +1,6 @@
 package onegame.client.controllore.online;
 
+import javafx.application.Platform;
 import onegame.client.net.ClientSocket;
 import onegame.client.net.ConnectionMonitor;
 import onegame.client.vista.online.VistaInserimentoCodice;
@@ -34,15 +35,16 @@ public class ControlloreCodicePartita {
 			try {
 				int codiceParsato=Integer.parseInt(codice);
 				cs.entraStanza(codiceParsato, respEntraStanza -> {
-					System.out.println("Risposta entraStanza ricevuta");
-					if(respEntraStanza.success) {
-						vic.mostraStanza(codice);
-					} else {
-						vic.compilaMessaggioErrore(respEntraStanza.messaggio);
-						vic.svuotaCampoCodice();
-						eseguiAccesso();
-						return;
-					}
+					Platform.runLater(()->{
+						if(respEntraStanza.success) {
+							vic.mostraStanza(codice);
+						} else {
+							vic.compilaMessaggioErrore(respEntraStanza.messaggio);
+							vic.svuotaCampoCodice();
+							eseguiAccesso();
+							return;
+						}
+					});
 				});
 			} catch (NumberFormatException e) {
 				vic.compilaMessaggioErrore("Formato codice non valido. Riprovare");

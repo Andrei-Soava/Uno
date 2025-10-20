@@ -1,14 +1,10 @@
 package onegame.client.controllore;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import javafx.application.Platform;
 import onegame.client.net.ClientSocket;
 import onegame.client.net.ConnectionMonitor;
 import onegame.client.net.Utente;
 import onegame.client.vista.VistaRegistrazione;
-import onegame.modello.net.ProtocolloMessaggi.RespAuth;
-import onegame.modello.net.util.JsonHelper;
 
 public class ControlloreRegistrazione {
 	private VistaRegistrazione vr;
@@ -45,45 +41,31 @@ public class ControlloreRegistrazione {
 				return;
 			}
 			
-			if(!password.equals(confermaPassword)) {
+			if (!password.equals(confermaPassword)) {
 				vr.compilaMessaggioErrore("La password di conferma non è uguale alla password inserita");
 				vr.svuotaPassword();
 				eseguiRegistrazione();
 				return;
 			}
-			
-			//condizionale (sarà dentro una send asincrona al server e se la response == true, si ritorna alla vista d'accesso)
-//			if(true) {
-//				vr.mostraAccesso();	
-//			}
-//			else {
-//				vr.compilaMessaggioErrore("Dati errati");
-//				vr.svuotaPassword();
-//				eseguiRegistrazione();
-//			}
-			
-			try {
-				cs.register(username, confermaPassword, respAuth -> {
-					try {
-						Platform.runLater(() -> {
-						    if (respAuth.success) {
-						        Utente utente = new Utente(username, false);
-						        cs.setUtente(utente);
-						        vr.mostraAccesso();
-						    } else {
-						        vr.compilaMessaggioErrore(respAuth.messaggio);
-						        vr.svuotaPassword();
-						        eseguiRegistrazione();
-						    }
-						});
-					} catch (Exception e) {
-						e.printStackTrace();
+
+			// condizionale (sarà dentro una send asincrona al server e se la response ==
+			// true, si ritorna alla vista d'accesso)
+
+			cs.register(username, confermaPassword, respAuth -> {
+
+				Platform.runLater(() -> {
+					if (respAuth.success) {
+						Utente utente = new Utente(username, false);
+						cs.setUtente(utente);
+						vr.mostraAccesso();
+					} else {
+						vr.compilaMessaggioErrore(respAuth.messaggio);
+						vr.svuotaPassword();
+						eseguiRegistrazione();
 					}
 				});
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+
+			});
 		});
 	}
 }

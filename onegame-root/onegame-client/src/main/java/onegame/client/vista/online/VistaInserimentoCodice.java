@@ -72,7 +72,7 @@ public class VistaInserimentoCodice {
 		annullaBtn.setPrefWidth(95);
 
 		// costruzione scena
-		VBox centro = new VBox(15, codiceField, spacer0, erroreLabel, bottoni);
+		VBox centro = new VBox(15, codiceField, erroreLabel, bottoni);
 		centro.setAlignment(Pos.CENTER);
 		centro.setPadding(new Insets(20));
 		

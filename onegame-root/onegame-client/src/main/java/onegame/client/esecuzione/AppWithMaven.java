@@ -161,7 +161,7 @@ public class AppWithMaven extends Application {
 		ControlloreStanza cv;
 		if(host) {
 			cv=new ControlloreStanzaHost(vista,cs,cm);
-			vista.aggiornaGiocatori(List.of(cs.getUtente().getGiocatore().getNome()));
+			vista.aggiornaGiocatori(List.of(cs.getUtente().getUsername()));
 		}
 		else {
 			cv=new ControlloreStanzaOspite(vista,cs,cm);

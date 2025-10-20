@@ -153,7 +153,7 @@ public class ClientSocket {
 		this.token = token;
 	}
 
-	public void register(String username, String password, Callback<RespAuth> callback) throws Exception {
+	public void register(String username, String password, Callback<RespAuth> callback) {
 		ReqAuth req = new ReqAuth(username, password);
 		System.out.println("[CLIENT] Invio richiesta registrazione di " + username);
 		socket.emit(ProtocolloMessaggi.EVENT_AUTH_REGISTER, JsonHelper.toJson(req), (Ack) args -> {
@@ -166,7 +166,7 @@ public class ClientSocket {
 
 	}
 
-	public void login(String username, String password, Callback<RespAuth> callback) throws Exception {
+	public void login(String username, String password, Callback<RespAuth> callback) {
 		ReqAuth req = new ReqAuth(username, password);
 		System.out.println("[CLIENT] Invio richiesta login di " + username);
 		socket.emit(ProtocolloMessaggi.EVENT_AUTH_LOGIN, JsonHelper.toJson(req), (Ack) args -> {

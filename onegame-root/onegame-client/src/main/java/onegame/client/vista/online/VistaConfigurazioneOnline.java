@@ -95,14 +95,6 @@ public class VistaConfigurazioneOnline {
     	});
     }
     
-//    public void configuraPartita(Consumer<Integer> callback) {
-//    	Platform.runLater(()->{
-//    		avviaBtn.setOnAction(e->{
-//    			callback.accept(numGiocatori.getValue());
-//    		});
-//    	});
-//    }
-    
     public void mostraHome() {
     	app.mostraVistaHome();
     }
