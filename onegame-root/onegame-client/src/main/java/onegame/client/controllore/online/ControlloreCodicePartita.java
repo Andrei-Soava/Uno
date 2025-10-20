@@ -3,8 +3,6 @@ package onegame.client.controllore.online;
 import onegame.client.net.ClientSocket;
 import onegame.client.net.ConnectionMonitor;
 import onegame.client.vista.online.VistaInserimentoCodice;
-import onegame.modello.net.ProtocolloMessaggi.RespEntraStanza;
-import onegame.modello.net.util.JsonHelper;
 
 public class ControlloreCodicePartita {
 	private VistaInserimentoCodice vic;
@@ -12,6 +10,7 @@ public class ControlloreCodicePartita {
 	
 	public ControlloreCodicePartita(VistaInserimentoCodice vic, ClientSocket cs, ConnectionMonitor cm) {
 		this.vic=vic;
+		this.cs=cs;
 		
 		cm.connectedProperty().addListener((obs, oldVal, newVal) -> {
 	        if (Boolean.FALSE.equals(newVal)) {
@@ -32,26 +31,23 @@ public class ControlloreCodicePartita {
 				return;
 			}
 			
-			
-			cs.entraStanza(codice, respEntraStanza -> {
-				if(respEntraStanza.success) {
-					vic.mostraStanza(codice);
-				} else {
-					vic.compilaMessaggioErrore(respEntraStanza.messaggio);
-					vic.svuotaCampoCodice();
-					eseguiAccesso();
-					return;
-				}
-			});
-//			//condizionale (sarà dentro una send asincrona al gameserver e se la response == true, si va alla vista successiva)
-//			if(true) {
-//				vic.mostraStanza(codice);	
-//			}
-//			else {
-//				vic.compilaMessaggioErrore("Codice non valido. Riprovare");
-//				vic.svuotaCampoCodice();
-//				eseguiAccesso();
-//			}
+			try {
+				int codiceParsato=Integer.parseInt(codice);
+				cs.entraStanza(codiceParsato, respEntraStanza -> {
+					if(respEntraStanza.success) {
+						vic.mostraStanza(codice);
+					} else {
+						vic.compilaMessaggioErrore(respEntraStanza.messaggio);
+						vic.svuotaCampoCodice();
+						eseguiAccesso();
+						return;
+					}
+				});
+			} catch (NumberFormatException e) {
+				vic.compilaMessaggioErrore("Formato codice non valido. Riprovare");
+				vic.svuotaCampoCodice();
+				eseguiAccesso();
+			}
 		});
 	}
 }
