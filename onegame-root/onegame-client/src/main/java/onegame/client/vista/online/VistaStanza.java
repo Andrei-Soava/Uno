@@ -19,7 +19,8 @@ public class VistaStanza {
 
     private final AppWithMaven app;
     private final Scene scene;
-    Label codiceLbl;
+    private Label numeroGiocatori;
+    private Label codiceLbl;
     private final GridPane grigliaGiocatori;
     private final Button avviaBtn;
 
@@ -36,10 +37,13 @@ public class VistaStanza {
         Label titolo = new Label("Benvenuto nella lobby");
         titolo.getStyleClass().add("titolo");
         titolo.setTranslateX(-40);
+        
+        numeroGiocatori = new Label();
 
 
         topBar.setLeft(abbandonaBtn);
         topBar.setCenter(titolo);
+        topBar.setRight(numeroGiocatori);
         BorderPane.setAlignment(titolo, Pos.CENTER);
 
         root.setTop(topBar);
@@ -75,13 +79,13 @@ public class VistaStanza {
         );
         
         //prova
-        ArrayList<String> giocatori=new ArrayList<>();
-        giocatori.add("Luizoooooooooooooooooooooooooooooooooo");
-        giocatori.add("Fabioooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
-        giocatori.add("Matteo");
-        giocatori.add("Andrei");
-        
-        aggiornaGiocatori(giocatori);
+//        ArrayList<String> giocatori=new ArrayList<>();
+//        giocatori.add("Luizoooooooooooooooooooooooooooooooooo");
+//        giocatori.add("Fabioooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
+//        giocatori.add("Matteo");
+//        giocatori.add("Andrei");
+//        
+//        aggiornaGiocatori(giocatori);
     }
 
     public Scene getScene() {
@@ -91,7 +95,8 @@ public class VistaStanza {
     /**
      * metodo per aggiornare la lista dei giocatori connessi.
      */
-    public void aggiornaGiocatori(List<String> nomiGiocatori) {
+    public void aggiornaGiocatori(List<String> nomiGiocatori, int maxGiocatori) {
+    	numeroGiocatori.setText(nomiGiocatori.size()+"/"+maxGiocatori);
         grigliaGiocatori.getChildren().clear();
         int col = 0, row = 0;
         for (String nome : nomiGiocatori) {

@@ -1,5 +1,6 @@
 package onegame.client.controllore.online.stanza;
 
+import javafx.application.Platform;
 import onegame.client.net.ClientSocket;
 import onegame.client.net.ConnectionMonitor;
 import onegame.client.vista.online.VistaStanza;
@@ -19,7 +20,19 @@ public abstract class ControlloreStanza {
 	            vs.mostraHome();
 	        }
 	    });
+		
+		aggiornaStanza();
 	}
 	
 	public abstract void aspettaInizioPartita();
+	
+	public void aggiornaStanza() {
+		cs.dettagliStanza(dettagli->{
+			Platform.runLater(()->{
+				vs.aggiornaGiocatori(dettagli.statoStanza.nicknames, dettagli.statoStanza.maxUtenti);
+				aggiornaStanza();
+				return;
+			});
+		});
+	}
 }

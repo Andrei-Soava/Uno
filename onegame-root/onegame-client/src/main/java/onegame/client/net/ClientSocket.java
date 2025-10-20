@@ -292,7 +292,6 @@ public class ClientSocket {
 	}
 
 	private <T> void socketEmitEvent(String evento, Object req, Callback<T> callback, Class<T> clazz) {
-		System.out.println(req.getClass());
 		socket.emit(evento, JsonHelper.toJson(req), (Ack) args -> {
 			T resp = getPayload(clazz, args);
 
