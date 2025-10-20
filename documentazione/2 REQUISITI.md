@@ -4,8 +4,7 @@
 
 ## 1. Introduzione
 
-### 1.1 Scopo del documento
-
+### 1.1 Obiettivo del documento
 Il presente documento descrive in modo esaustivo e strutturato i requisiti funzionali e non funzionali del videogioco di carte “UNO-like” basato su Java.  
 La specifica dei requisiti è redatta in conformità con lo standard IEEE 830 al fine di garantire una struttura chiara, tracciabile e comprensibile delle parti coinvolte.  
 Il presente documento rappresenta un riferimento ufficiale per tutte le fasi successive del ciclo di vita del software, includendo progettazione, implementazione, test, validazione e manutenzione. Esso mira a garantire una comprensione condivisa del sistema tra tutti gli stakeholder riducendo ambiguità e assicurando la tracciabilità dei requisiti.
@@ -15,33 +14,79 @@ Il gioco “UNO-like” (ispirato al classico gioco di carte “UNO”) è stato
 Il sistema ha l’obiettivo di fornire una piattaforma modulare e scalabile, che permetta l’integrazione di nuove funzionalità in futuro senza compromettere la stabilità e le prestazioni del software.    
 
    - ### 1.2.1 Svolgimento del gioco
-      Il gioco consente ai giocatori di partecipare a partite in modalità offline (contro dei bot) oppure in modalità multigiocatore online contro altri utenti.
-      I giocatori possono scegliere se registrarsi o partecipare come utenti anonimi. Tuttavia, la modalità anonima comporta alcune limitazioni: i giocatori non registrati non possono accedere alle statistiche delle partite né salvare le partite non ancora terminate prima di abbandonarle.
-   - ### 1.2.2 Definizioni, acronimi e abbreviazioni
-      - Bot: avversario controllato da un computer (cioè un computer imita le mosse che farebbe un umano);
-      - Utente registrato: utente che, dopo l'avvio del gioco, effettua una registrazione (nel caso non fosse registrato) oppure un login (nel caso fosse già registrato). Esso può controllare le statistiche delle sue partite e può accedere ai salvataggi delle partite non terminate (solo quelle lato offline);
-      - Utente anonimo: utente che non si è registrato prima di iniziare a giocare. Esso sarà identificato con un username dato del server (ad esempio: utente#754);
+   Il gioco consente ai giocatori di partecipare a partite in modalità offline (contro dei bot) oppure in modalità multigiocatore online contro altri utenti.
+   I giocatori possono scegliere se registrarsi o partecipare come utenti anonimi. Tuttavia, la modalità anonima comporta alcune limitazioni: i giocatori non registrati non possono accedere alle statistiche delle partite né salvare le partite non ancora terminate prima di abbandonarle.
+### 1.3 Definizioni, acronimi e abbreviazioni
+- Bot: avversario controllato da un computer (cioè un computer imita le mosse che farebbe un umano);
+- Utente registrato: utente che, dopo l'avvio del gioco, effettua una registrazione (nel caso non fosse registrato) oppure un login (nel caso fosse già registrato). Esso può controllare le statistiche delle sue partite e può accedere ai salvataggi delle partite non terminate (solo quelle lato offline);
+- Utente anonimo: utente che non si è registrato prima di iniziare a giocare. Esso sarà identificato con un username dato del server (ad esempio: utente#754);
 
 
 
-### 1.2. Scopo 
+## 2. Descrizione generale 
+   ### 2.1 Prospettiva del prodotto
+   "UNO-like” è una rivisitazione digitale del celebre gioco di carte UNO.  
+   Il software è sviluppato interamente in Java e può essere eseguito su diversi sistemi operativi, purché sia installata una versione compatibile del Java Runtime Environment (JRE). 
+   ### 2.2 Funzionalità del prodotto
+   UNO-like avrà le seguenti funzionalità:
+   - Registrazione e autenticazione: ogni utente può scegliere se registrarsi prima di giocare. Gli utenti già registrati possono autenticarsi tramite nome utente e password per accedere alle proprie partite e statistiche;
+   - Modalità di gioco offline e online: il giocatore può partecipare a partite in modalità offline (contro un bot) oppure in modalità online (contro altri utenti connessi).
+   - Salvataggio e ripresa delle partita non terminate: in modalità offline gli utenti registrati possono salvare una partita in corso e riprenderla successivamente. Gli utenti non registrati non dispongono di questa funzionalità;
+   - Gestione delle statistiche personali: gli utenti registrati possono visualizzare le proprie statistiche, comprendenti numero di partite giocate, vinte e perse, e altre informazioni di riepilogo. Gli utenti non registrati non dispongono di questa funzionalità;
+   - Regolamento: nel menù principale è disponibile una sezione dedicata al regolamento ufficiale del gioco, accessibile a tutti gli utenti;
+   ### 2.3 Caratteristiche dell'utente
+   Il gioco “UNO-like” è rivolto a un pubblico ampio, composto sia da giocatori occasionali sia da utenti abituali del gioco di carte UNO.  
+   Non sono richieste competenze tecniche particolari per utilizzarlo: l’interfaccia grafica è progettata per essere intuitiva, chiara e facilmente comprensibile da qualsiasi tipo di utente.
+   ### 2.4 Vincoli
+   Il sistema "UNO-like" presenta i seguenti vincoli:
+   - il gioco dove essere eseguito su un sistema dotato di JDK 21 o una versione successiva;
+   - il software deve risultare compatibile con i sistemi operativi Windows, Linux e macOS;
+   ### 2.5 Presupposti e dipendenze
+   Il funzionamento del sistema "UNO-like" si basa sui seguenti presupposti e dipendenze.  
+   Pressuposti: 
+   - Si presuppone che l’utente disponga di un computer con JDK 21 o versione successiva installato;
+   - Si presuppone che l’utente abbia familiarità con l’utilizzo di dispositivi informatici di base (es. computer, tastiera e mouse);
+   - Si presuppone che ogni utente disponga di una connessione Internet stabile per poter giocare in modalità online;
+   Dipendenze:
+   - Il corretto funzionamento della modalità online dipende dalla disponibilità e stabilità del server di gioco;
+   - Il sistema dipende dal database integrato nel server, utilizzato per la memorizzazione delle credenziali, delle statistiche e dello stato delle partite salvate;
 
-Definire tutti i requisiti utili a garantire:
-- Coerenza tra esigenze dell’utente e funzionalità implementate  
-- Tracciabilità delle funzionalità durante le fasi di sviluppo e collaudo  
-- Chiarezza sui vincoli tecnologici e sulle dipendenze esterne  
+## 3. Requisiti Specifici
+### 3.1 Requisiti funzionali
+   - ### 3.1.1 Gestione dell'autenticazione
+      - RF1: il sitema deve permettere la registrazione di nuovi utenti tramite l'inserimento di nome utente e password;
+      - RF2: il sistema deve consentire il login agli utenti già registrati;
+      - RF3: il sistema deve permettere l'accesso come "ospite", ovvero l'accesso al gioco senza registrazione;
+   - ### 3.1.2 Gestione della modalità di gioco
+      - RF4: il sistema deve consintire la selezione della modalità di gioco: 
+         - gioca con amici (online);
+         - gioca contro computer (offline);
+      - RF5: in modalità offline, il giocatore deve poter scegliere se iniziare una nuova partita o caricarne una salvata (solo per gli utenti registrati);
+      - RF6: in modalità online, il sistema deve connettersi al server di gioco e gestire la comunicazione tra i giocatori.
+      (completare la modalità online)
+   - ### 3.1.3 Configurazione della partita offline
+      - RF7: il sistema deve permettere la selezione del numero di giocatori (da 2 a 4);
+      - RF8: dopo aver configurato la partita, l'utente può decidere se annulare la configurazione oppure avviare la partita;
+      - RF9: il sistema deve distribuire casualmente le carte ad ogni giocatore;
+   - ### 3.1.4 Svolgimento della partita
+      - RF10: il sistema deve basarsi sul regolamento deciso (visibile nella home del gioco);
+      - RF11: ogni giocatore deve poter effettuare una mossa scegliendo una carta compatibile con l’ultima giocata;
+      - RF12: il sistema deve controllare la validità delle mosse e impedire quelle non consentite;
+      - RF13: il sistema deve rilevare automaticamente la vittoria di un giocatore;
+   - ###  3.1.5 Gestione del salvataggio nella modalità offline
+      - RF14: gli utenti registrati devono poter salvare lo stato di una partita in corso;
+      - RF15: 1l sistema deve consentire di caricare una partita precedentemente salvata;
+   - ### 3.1.6 Visualizzazione delle statistiche
+      - RF16: il sistema deve mostrare le statistiche personali degli utenti registrati (numero di partite giocate, vinte, perse, ecc.);
+      - RF17: gli utenti anonimi non devono poter accedere alle statistiche;
+   - ### 3.1.7 Visualizzazione del regolamento
+      - RF18: il sistema deve offrire una sezione “Regolamento” accessibile dal menù principale;
+      - RF19: il regolamento deve descrivere in modo chiaro le regole del gioco "UNO-like";
+   - ### 3.1.8 Logout e disconnessione
+      - RF20: il sistema deve permettere di effettuare il logout in qualsiasi momento;
+### 3.2 Requisiti non funzionali
 
----
 
-## 3. Ambito
-
-Questo SRS copre:
-- Applicativo desktop Java avviabile da file .jar  
-- Modalità di gioco: multiplayer client-server, vs bot, tutorial/regolamento
-- Autenticazione utenti e gestione statistica  
-- Persistenza delle partite incomplete e dello storico  
-
-Non comprende aspetti di marketing, distribuzione in store o versioni mobile.
 
 ---
 
