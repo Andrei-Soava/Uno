@@ -55,7 +55,6 @@ public class VistaConfigurazioneOnline {
     	annullaBtn.setOnAction(e -> app.mostraVistaMenuOnline());
 
     	creaBtn = new Button("Crea stanza");
-    	//avviaBtn.setOnAction(e -> app.mostraVistaGiocoNuovo(numGiocatori.getValue()));
 
     	HBox pulsanti = new HBox(10, annullaBtn, creaBtn);
     	pulsanti.setAlignment(Pos.CENTER);
@@ -82,16 +81,18 @@ public class VistaConfigurazioneOnline {
     }
     
     public void configuraPartita(ConfiguraPartitaCallback callback) {
-        // Recupero valori
-        String nomePartita = nomeStanza.getText();
-        if (nomePartita == null || nomePartita.isBlank()) {
-            nomePartita = "Partita senza nome"; // default
-        }
-
-        int giocatori = numGiocatori.getValue();
-
-        // Invoco la callback
-        callback.onConfigura(nomePartita, giocatori);
+    	creaBtn.setOnAction(e->{
+    		// Recupero valori
+    		String nomePartita = nomeStanza.getText();
+    		if (nomePartita == null || nomePartita.isBlank()) {
+    			nomePartita = "Partita senza nome"; // default
+    		}
+    		
+    		int giocatori = numGiocatori.getValue();
+    		
+    		// Invoco la callback
+    		callback.onConfigura(nomePartita, giocatori);
+    	});
     }
     
 //    public void configuraPartita(Consumer<Integer> callback) {

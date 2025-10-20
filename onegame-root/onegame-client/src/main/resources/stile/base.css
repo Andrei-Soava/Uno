@@ -243,4 +243,41 @@
     -fx-border-radius: 0 8 8 0;
 }
 
+/* --- SCROLLPANE --- */
+.scroll-pane {
+    -fx-background-color: transparent;
+}
+
+/* --- BARRA DI SCORRIMENTO VERTICALE --- */
+.scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-pref-width: 14px;
+}
+
+/* --- TRACK (binario) --- */
+.scroll-bar:vertical .track {
+    -fx-background-color: rgba(0,0,0,0.3);
+    -fx-background-radius: 7px;
+}
+
+/* --- THUMB (cursore) --- */
+.scroll-bar:vertical .thumb {
+    -fx-background-color: linear-gradient(to bottom, #ffd700, #ff4500);
+    -fx-background-radius: 7px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.7), 6, 0.5, 0, 1);
+}
+
+/* Hover sul thumb */
+.scroll-bar:vertical .thumb:hover {
+    -fx-background-color: linear-gradient(to bottom, #ff7f50, #ff0000);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.9), 8, 0.6, 0, 2);
+}
+
+/* --- BOTTONI INCREMENT/DECREMENT --- */
+.scroll-bar:vertical .increment-button,
+.scroll-bar:vertical .decrement-button {
+    -fx-opacity: 0; /* li nascondo per look più pulito */
+    -fx-padding: 0;
+}
+
 

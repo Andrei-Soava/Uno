@@ -10,7 +10,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import onegame.client.esecuzione.AppWithMaven;
-import onegame.client.persistenza_temporanea.ManagerPersistenza;
 import onegame.client.controllore.offline.EventoSalvataggio;
 
 public class VistaSalvataggi {
@@ -43,12 +42,26 @@ public class VistaSalvataggi {
 		lista = new VBox(10);
 		lista.setAlignment(Pos.TOP_CENTER);
 		lista.setMaxWidth(Region.USE_PREF_SIZE);
+		
+		StackPane wrapper = new StackPane(lista);
+		wrapper.setAlignment(Pos.TOP_CENTER);
+		wrapper.setPadding(new Insets(20));
+		//scrollpane per quando diventa troppo grande la lista di salvataggi
+		ScrollPane scrollPane = new ScrollPane(wrapper);
+		scrollPane.setStyle(
+        	    "-fx-background-color: transparent;" +   
+        	    "-fx-background: transparent;");
+        ((Region) scrollPane.getContent()).setStyle("-fx-background-color: transparent;");
+		scrollPane.setFitToWidth(true);
+		scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+		scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+		scrollPane.setPannable(true);
 
 
 		//contenitore verticale per topBar e lista
 		VBox contenitore = new VBox(20);
 		contenitore.setAlignment(Pos.TOP_CENTER);
-		contenitore.getChildren().addAll(topBar, lista);
+		contenitore.getChildren().addAll(topBar, scrollPane);
 
 		root.setCenter(contenitore);
 
