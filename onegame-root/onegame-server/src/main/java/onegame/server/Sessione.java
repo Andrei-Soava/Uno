@@ -1,6 +1,13 @@
 package onegame.server;
 
+import java.util.Objects;
 import java.util.UUID;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.corundumstudio.socketio.AckRequest;
+import com.corundumstudio.socketio.SocketIOClient;
 
 /**
  * Rappresenta una sessione utente nel server.
@@ -12,8 +19,11 @@ public class Sessione {
 	private boolean connesso;
 	private long ultimoPing;
 	private final String token;
+	private SocketIOClient client;
 
 	private static final long TIMEOUT_MS = 300_000;
+
+	private static final Logger logger = LoggerFactory.getLogger(Sessione.class);
 
 	private Sessione(String token) {
 		this.connesso = true;
@@ -76,8 +86,48 @@ public class Sessione {
 		return token;
 	}
 
+	public SocketIOClient getClient() {
+		return client;
+	}
+
+	void setClient(SocketIOClient client) {
+		this.client = client;
+	}
+
+	public void sendEvent(String evento, Object payload) {
+		if (client != null) {
+			client.sendEvent(evento, payload);
+		} else {
+			logger.debug("Impossibile inviare evento '{}': client nullo per username {}", evento, username);
+		}
+	}
+
+	public void sendEvent(String evento, Object payload, AckRequest ack) {
+		if (client != null) {
+			client.sendEvent(evento, payload, ack);
+		} else {
+			logger.debug("Impossibile inviare evento '{}': client nullo per username {}", evento, username);
+		}
+	}
+
 	@Override
 	public String toString() {
 		return "Sessione[username=" + username + ", anonimo=" + anonimo + "]";
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null || getClass() != obj.getClass())
+			return false;
+		Sessione other = (Sessione) obj;
+		return Objects.equals(token, other.token);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(token);
+	}
+
 }

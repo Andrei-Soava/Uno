@@ -15,7 +15,6 @@ import com.corundumstudio.socketio.SocketIOClient;
 public class GestoreSessioni {
 	// token -> Utente
 	private final Map<String, Sessione> sessioni = new ConcurrentHashMap<>();
-	private final Map<String, SocketIOClient> clientPerToken = new ConcurrentHashMap<>();
 
 	private static final long SESSION_EXPIRATION_MS = 1000_000;
 
@@ -29,25 +28,22 @@ public class GestoreSessioni {
 
 	public void associaToken(String token, Sessione sessione, SocketIOClient client) {
 		sessioni.put(token, sessione);
-		clientPerToken.put(token, client);
+		sessione.setClient(client);
 		client.set("token", token);
 		sessione.aggiornaPing();
 		sessione.setConnesso(true);
+		logger.debug("Sessione associata: nickname={}, sessionId={}", sessione.getNickname(), client.getSessionId());
 	}
 
 	public Sessione getSessione(String token) {
 		return sessioni.get(token);
 	}
 
-	public SocketIOClient getClient(String token) {
-		return clientPerToken.get(token);
-	}
-	
 	public Sessione getSessioneByClient(SocketIOClient client) {
 		String token = client.get("token");
 		return getSessione(token);
 	}
-	
+
 	/**
 	 * Recupera l'utente autenticato associato al client
 	 * @param client Il client
@@ -81,14 +77,17 @@ public class GestoreSessioni {
 		Sessione s = sessioni.get(token);
 		if (s != null) {
 			s.setConnesso(false);
+			s.setClient(null);
 			logger.info("Disconnessione sessione: nickname={}, sessionId={}", s.getNickname(), client.getSessionId());
 		}
 	}
 
 	public void rimuoviSessione(String token) {
 		if (token != null) {
-			sessioni.remove(token);
-			clientPerToken.remove(token);
+			Sessione s = sessioni.remove(token);
+			if (s != null) {
+				s.setClient(null);
+			}
 		}
 	}
 

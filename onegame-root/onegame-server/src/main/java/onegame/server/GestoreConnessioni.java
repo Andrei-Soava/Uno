@@ -12,8 +12,8 @@ import com.corundumstudio.socketio.AckRequest;
 import com.corundumstudio.socketio.HandshakeData;
 import com.corundumstudio.socketio.SocketIOClient;
 
-import onegame.modello.net.messaggi.ProtocolloMessaggi.ReqAuth;
-import onegame.modello.net.messaggi.ProtocolloMessaggi.RespAuth;
+import onegame.modello.net.messaggi.Messaggi.ReqAuth;
+import onegame.modello.net.messaggi.Messaggi.RespAuth;
 import onegame.modello.net.util.JsonHelper;
 import onegame.modello.net.util.PasswordUtils;
 import onegame.server.db.UtenteDb;

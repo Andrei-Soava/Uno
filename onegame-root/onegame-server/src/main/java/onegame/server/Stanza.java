@@ -15,59 +15,52 @@ public abstract class Stanza {
 	protected final long id;
 	protected final String nome;
 	protected int maxUtenti;
-	protected final GestoreSessioni gestoreSessioni;
 	protected boolean isAperta = true;
 
 	protected final ReentrantLock lock = new ReentrantLock();
 
-	protected final Map<String, Sessione> sessionePerToken = new LinkedHashMap<>();
+	protected final Set<Sessione> sessioni = new LinkedHashSet<>();
 
-	public Stanza(int codice, long id, String nome, int maxUtenti, GestoreSessioni gestoreSessioni) {
+	public Stanza(int codice, long id, String nome, int maxUtenti) {
 		this.codice = codice;
 		this.id = id;
 		this.nome = nome;
 		this.maxUtenti = maxUtenti;
-		this.gestoreSessioni = gestoreSessioni;
 	}
 
-	public boolean aggiungiUtente(String token) {
+	public boolean aggiungiUtente(Sessione sessione) {
 		lock.lock();
 		try {
-			if (!isAperta || sessionePerToken.size() >= maxUtenti || sessionePerToken.containsKey(token))
+			if (!isAperta || sessioni.size() >= maxUtenti || sessioni.contains(sessione))
 				return false;
-			sessionePerToken.put(token, gestoreSessioni.getSessione(token));
-			return true;
+			return sessioni.add(sessione);
 		} finally {
 			lock.unlock();
 		}
 	}
 
-	public boolean rimuoviUtente(String token) {
+	public boolean rimuoviUtente(Sessione sessione) {
 		lock.lock();
 		try {
-			return sessionePerToken.remove(token) != null;
+			return sessioni.remove(sessione);
 		} finally {
 			lock.unlock();
 		}
 	}
 
 	public boolean isVuota() {
-		return sessionePerToken.isEmpty();
+		return sessioni.isEmpty();
 	}
 
 	public boolean isPiena() {
-		return sessionePerToken.size() >= maxUtenti;
+		return sessioni.size() >= maxUtenti;
 	}
 
 	public void broadcast(String evento, Object payload) {
 		lock.lock();
 		try {
-			for (Map.Entry<String, Sessione> entry : sessionePerToken.entrySet()) {
-				String token = entry.getKey();
-				SocketIOClient client = getClient(token);
-				if (client != null) {
-					client.sendEvent(evento, payload);
-				}
+			for (Sessione s : sessioni) {
+				s.sendEvent(evento, payload);
 			}
 		} finally {
 			lock.unlock();
@@ -90,25 +83,25 @@ public abstract class Stanza {
 		return maxUtenti;
 	}
 
-	public Set<String> getTokenUtenti() {
+//	public Set<String> getTokenUtenti() {
+//		lock.lock();
+//		try {
+//			Set<String> tokens = new LinkedHashSet<>();
+//			for (Sessione s : sessioni) {
+//				tokens.add(s.getToken());
+//			}
+//			return Collections.unmodifiableSet(tokens);
+//		} finally {
+//			lock.unlock();
+//		}
+//	}
+
+	public boolean hasUtente(Sessione sessione) {
 		lock.lock();
 		try {
-			return Collections.unmodifiableSet(sessionePerToken.keySet());
+			return sessioni.contains(sessione);
 		} finally {
 			lock.unlock();
 		}
-	}
-
-	public boolean hasUtente(String token) {
-		lock.lock();
-		try {
-			return sessionePerToken.containsKey(token);
-		} finally {
-			lock.unlock();
-		}
-	}
-
-	protected SocketIOClient getClient(String token) {
-		return gestoreSessioni.getClient(token);
 	}
 }

@@ -2,8 +2,9 @@ package onegame.modello.net.messaggi;
 
 import onegame.modello.net.MossaDTO;
 import onegame.modello.net.StatoPartitaDTO;
+import onegame.modello.net.StatoStanzaDTO;
 
-public class ProtocolloMessaggi {
+public class Messaggi {
 
 	// Eventi
 	public static final String EVENT_AUTH_LOGIN = "auth:login";
@@ -13,6 +14,7 @@ public class ProtocolloMessaggi {
 	public static final String EVENT_STANZA_CREA = "stanza:crea";
 	public static final String EVENT_STANZA_ENTRA = "stanza:entra";
 	public static final String EVENT_STANZA_ESCI = "stanza:esci";
+	public static final String EVENT_STANZA_DETTAGLI = "stanza:dettagli";
 
 	public static final String EVENT_INIZIO_PARTITA = "giocouno:inizia";
 	public static final String EVENT_GIOCO_MOSSA = "giocouno:mossa";
@@ -120,6 +122,21 @@ public class ProtocolloMessaggi {
 		public RespAbbandonaStanza(boolean success, String messaggio) {
 			this.success = success;
 			this.messaggio = messaggio;
+		}
+	}
+
+	public static class RespDettagliStanza {
+		public boolean success;
+		public String messaggio;
+		public StatoStanzaDTO statoStanza;
+
+		public RespDettagliStanza() {
+		}
+
+		public RespDettagliStanza(boolean success, String messaggio, StatoStanzaDTO statoStanza) {
+			this.success = success;
+			this.messaggio = messaggio;
+			this.statoStanza = statoStanza;
 		}
 	}
 

@@ -12,7 +12,7 @@ import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.SocketIOServer;
 
 import onegame.modello.net.messaggi.MessaggiSalvataggiPartite;
-import onegame.modello.net.messaggi.ProtocolloMessaggi;
+import onegame.modello.net.messaggi.Messaggi;
 import onegame.server.db.GestoreDatabase;
 
 /**
@@ -42,9 +42,9 @@ public class ServerUno {
 		this.server = new SocketIOServer(config);
 		this.gestoreSessioni = new GestoreSessioni();
 		this.gestoreConnessioni = new GestoreConnessioni(gestoreSessioni);
-		this.gestoreStanze = new GestoreStanzePartita(gestoreSessioni);
-		this.gestorePartiteOffline = new GestorePartiteOffline(gestoreSessioni);
-		this.gestoreGioco = new GestoreGioco(gestoreStanze, gestoreSessioni);
+		this.gestoreStanze = new GestoreStanzePartita();
+		this.gestorePartiteOffline = new GestorePartiteOffline();
+		this.gestoreGioco = new GestoreGioco(gestoreStanze);
 
 		this.gestoreSessioni.aggiungiObserver(gestoreStanze);
 
@@ -59,43 +59,43 @@ public class ServerUno {
 		server.addDisconnectListener(client -> gestoreConnessioni.handleDisconnessione(client));
 
 		// auth:login
-		server.addEventListener(ProtocolloMessaggi.EVENT_AUTH_LOGIN, String.class,
+		server.addEventListener(Messaggi.EVENT_AUTH_LOGIN, String.class,
 				(client, reqAuth, ack) -> gestoreConnessioni.handleLogin(client, reqAuth, ack));
 
 		// auth:register
-		server.addEventListener(ProtocolloMessaggi.EVENT_AUTH_REGISTER, String.class,
+		server.addEventListener(Messaggi.EVENT_AUTH_REGISTER, String.class,
 				(client, reqAuth, ack) -> gestoreConnessioni.handleRegister(client, reqAuth, ack));
 
 		// auth:anonimo
-		server.addEventListener(ProtocolloMessaggi.EVENT_AUTH_ANONIMO, String.class,
+		server.addEventListener(Messaggi.EVENT_AUTH_ANONIMO, String.class,
 				(client, reqAuth, ack) -> gestoreConnessioni.handleAnonimo(client, ack));
 
 		// stanza:crea
-		server.addEventListener(ProtocolloMessaggi.EVENT_STANZA_CREA, String.class,
-				(client, data, ack) -> gestoreStanze.handleCreaStanza(client, data, ack));
+		server.addEventListener(Messaggi.EVENT_STANZA_CREA, String.class,
+				(client, data, ack) -> gestoreStanze.handleCreaStanza(getSessione(client), data, ack));
 
 		// stanza:entra
-		server.addEventListener(ProtocolloMessaggi.EVENT_STANZA_ENTRA, String.class,
-				(client, data, ack) -> gestoreStanze.handleEntraStanza(client, data, ack));
+		server.addEventListener(Messaggi.EVENT_STANZA_ENTRA, String.class,
+				(client, data, ack) -> gestoreStanze.handleEntraStanza(getSessione(client), data, ack));
 
 		// Salvataggi partite offline
 		server.addEventListener(MessaggiSalvataggiPartite.EVENT_CREA_SALVATAGGIO, String.class,
-				(client, data, ack) -> gestorePartiteOffline.handleSalvaPartita(client, data, ack));
+				(client, data, ack) -> gestorePartiteOffline.handleSalvaPartita(getSessione(client), data, ack));
 
 		server.addEventListener(MessaggiSalvataggiPartite.EVENT_CARICA_SALVATAGGIO, String.class,
-				(client, data, ack) -> gestorePartiteOffline.handleCaricaPartita(client, data, ack));
+				(client, data, ack) -> gestorePartiteOffline.handleCaricaPartita(getSessione(client), data, ack));
 
 		server.addEventListener(MessaggiSalvataggiPartite.EVENT_LISTA_SALVATAGGI, Void.class,
-				(client, data, ack) -> gestorePartiteOffline.handleListaSalvataggi(client, ack));
+				(client, data, ack) -> gestorePartiteOffline.handleListaSalvataggi(getSessione(client), ack));
 
 		server.addEventListener(MessaggiSalvataggiPartite.EVENT_ELIMINA_SALVATAGGIO, String.class,
-				(client, data, ack) -> gestorePartiteOffline.handleEliminaSalvataggio(client, data, ack));
+				(client, data, ack) -> gestorePartiteOffline.handleEliminaSalvataggio(getSessione(client), data, ack));
 
 		server.addEventListener(MessaggiSalvataggiPartite.EVENT_RINOMINA_SALVATAGGIO, String.class,
-				(client, data, ack) -> gestorePartiteOffline.handleRinominaSalvataggio(client, data, ack));
+				(client, data, ack) -> gestorePartiteOffline.handleRinominaSalvataggio(getSessione(client), data, ack));
 
-		server.addEventListener(ProtocolloMessaggi.EVENT_GIOCO_MOSSA, String.class,
-				(client, data, ack) -> gestoreGioco.handleEffettuaMossa(client, data, ack));
+		server.addEventListener(Messaggi.EVENT_GIOCO_MOSSA, String.class,
+				(client, data, ack) -> gestoreGioco.handleEffettuaMossa(getSessione(client), data, ack));
 
 		// Test
 		server.addEventListener("test", String.class, (client, data, ack) -> {
@@ -113,6 +113,10 @@ public class ServerUno {
 	public void avvia() {
 		server.start();
 		logger.info("Avviato su {}:{}", server.getConfiguration().getHostname(), server.getConfiguration().getPort());
+	}
+
+	private Sessione getSessione(SocketIOClient client) {
+		return gestoreSessioni.getSessione(client.get("token"));
 	}
 
 	public void stop() {

@@ -10,15 +10,16 @@ import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 import onegame.modello.net.MossaDTO;
 import onegame.modello.net.messaggi.MessaggiSalvataggiPartite;
-import onegame.modello.net.messaggi.ProtocolloMessaggi;
-import onegame.modello.net.messaggi.ProtocolloMessaggi.ReqAuth;
-import onegame.modello.net.messaggi.ProtocolloMessaggi.ReqCreaStanza;
-import onegame.modello.net.messaggi.ProtocolloMessaggi.ReqEffettuaMossa;
-import onegame.modello.net.messaggi.ProtocolloMessaggi.ReqEntraStanza;
-import onegame.modello.net.messaggi.ProtocolloMessaggi.RespAuth;
-import onegame.modello.net.messaggi.ProtocolloMessaggi.RespCreaStanza;
-import onegame.modello.net.messaggi.ProtocolloMessaggi.RespEffettuaMossa;
-import onegame.modello.net.messaggi.ProtocolloMessaggi.RespEntraStanza;
+import onegame.modello.net.messaggi.Messaggi;
+import onegame.modello.net.messaggi.Messaggi.ReqAuth;
+import onegame.modello.net.messaggi.Messaggi.ReqCreaStanza;
+import onegame.modello.net.messaggi.Messaggi.ReqEffettuaMossa;
+import onegame.modello.net.messaggi.Messaggi.ReqEntraStanza;
+import onegame.modello.net.messaggi.Messaggi.RespAuth;
+import onegame.modello.net.messaggi.Messaggi.RespCreaStanza;
+import onegame.modello.net.messaggi.Messaggi.RespDettagliStanza;
+import onegame.modello.net.messaggi.Messaggi.RespEffettuaMossa;
+import onegame.modello.net.messaggi.Messaggi.RespEntraStanza;
 import onegame.modello.net.util.Callback;
 import onegame.modello.net.util.JsonHelper;
 
@@ -149,7 +150,7 @@ public class ClientSocket {
 	public void register(String username, String password, Callback<RespAuth> callback) {
 		ReqAuth req = new ReqAuth(username, password);
 		System.out.println("[CLIENT] Invio richiesta registrazione di " + username);
-		socket.emit(ProtocolloMessaggi.EVENT_AUTH_REGISTER, JsonHelper.toJson(req), (Ack) args -> {
+		socket.emit(Messaggi.EVENT_AUTH_REGISTER, JsonHelper.toJson(req), (Ack) args -> {
 			RespAuth auth = getPayload(RespAuth.class, args);
 
 			setToken(auth.token);
@@ -162,7 +163,7 @@ public class ClientSocket {
 	public void login(String username, String password, Callback<RespAuth> callback) {
 		ReqAuth req = new ReqAuth(username, password);
 		System.out.println("[CLIENT] Invio richiesta login di " + username);
-		socket.emit(ProtocolloMessaggi.EVENT_AUTH_LOGIN, JsonHelper.toJson(req), (Ack) args -> {
+		socket.emit(Messaggi.EVENT_AUTH_LOGIN, JsonHelper.toJson(req), (Ack) args -> {
 			RespAuth auth = getPayload(RespAuth.class, args);
 
 			setToken(auth.token);
@@ -177,7 +178,7 @@ public class ClientSocket {
 	 */
 	public void anonimo(Callback<RespAuth> callback) {
 		System.out.println("[CLIENT] Invio richiesta login anonimo");
-		socket.emit(ProtocolloMessaggi.EVENT_AUTH_ANONIMO, "", (Ack) args -> {
+		socket.emit(Messaggi.EVENT_AUTH_ANONIMO, "", (Ack) args -> {
 			RespAuth auth = getPayload(RespAuth.class, args);
 
 			setToken(auth.token);
@@ -205,7 +206,7 @@ public class ClientSocket {
 //			}
 //		});
 
-		socketEmitEvent(ProtocolloMessaggi.EVENT_STANZA_CREA, req, callback, RespCreaStanza.class);
+		socketEmitEvent(Messaggi.EVENT_STANZA_CREA, req, callback, RespCreaStanza.class);
 	}
 
 	/**
@@ -217,22 +218,21 @@ public class ClientSocket {
 	public void entraStanza(int codice, Callback<RespEntraStanza> callback) {
 		ReqEntraStanza req = new ReqEntraStanza(codice);
 		System.out.println("[CLIENT] Invio richiesta ingresso in stanza: " + codice);
-//		socket.emit(ProtocolloMessaggi.EVENT_STANZA_ENTRA, JsonHelper.toJson(req), (Ack) args -> {
-//			RespEntraStanza resp = getPayload(RespEntraStanza.class, args);
-//			
-//			if (callback != null) {
-//				callback.call(resp);
-//			}
-//		});
 
-		socketEmitEvent(ProtocolloMessaggi.EVENT_STANZA_ENTRA, req, callback, RespEntraStanza.class);
+		socketEmitEvent(Messaggi.EVENT_STANZA_ENTRA, req, callback, RespEntraStanza.class);
+	}
+	
+	public void dettagliStanza(Callback<RespDettagliStanza> callback) {
+		System.out.println("[CLIENT] Invio richiesta dettagli stanza");
+
+		socketEmitEvent(Messaggi.EVENT_STANZA_DETTAGLI, null, callback, RespDettagliStanza.class);
 	}
 
 	public void inviaMossa(MossaDTO mossa, Callback<RespEffettuaMossa> callback) {
 		ReqEffettuaMossa req = new ReqEffettuaMossa(mossa);
 		System.out.println("[CLIENT] Invio richiesta mossa: " + mossa);
 
-		socketEmitEvent(ProtocolloMessaggi.EVENT_GIOCO_MOSSA, req, callback, RespEffettuaMossa.class);
+		socketEmitEvent(Messaggi.EVENT_GIOCO_MOSSA, req, callback, RespEffettuaMossa.class);
 	}
 
 	public void listaPartite(Callback<MessaggiSalvataggiPartite.RespListaSalvataggi> callback) {
@@ -268,7 +268,8 @@ public class ClientSocket {
 		MessaggiSalvataggiPartite.ReqRinominaSalvataggio req = new MessaggiSalvataggiPartite.ReqRinominaSalvataggio(vecchioNome, nuovoNome);
 		System.out.println("[CLIENT] Invio richiesta rinomina partita: " + vecchioNome + " -> " + nuovoNome);
 
-		socketEmitEvent(MessaggiSalvataggiPartite.EVENT_RINOMINA_SALVATAGGIO, req, callback, MessaggiSalvataggiPartite.RespRinominaSalvataggio.class);
+		socketEmitEvent(MessaggiSalvataggiPartite.EVENT_RINOMINA_SALVATAGGIO, req, callback,
+				MessaggiSalvataggiPartite.RespRinominaSalvataggio.class);
 	}
 
 	/**
