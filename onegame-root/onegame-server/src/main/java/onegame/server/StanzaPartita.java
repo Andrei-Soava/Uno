@@ -9,9 +9,9 @@ import onegame.modello.net.CartaDTO;
 import onegame.modello.net.DTOUtils;
 import onegame.modello.net.GiocatoreDTO;
 import onegame.modello.net.MossaDTO;
-import onegame.modello.net.ProtocolloMessaggi;
-import onegame.modello.net.ProtocolloMessaggi.*;
 import onegame.modello.net.StatoPartitaDTO;
+import onegame.modello.net.messaggi.ProtocolloMessaggi;
+import onegame.modello.net.messaggi.ProtocolloMessaggi.*;
 import onegame.server.gioco.PartitaNET;
 
 public class StanzaPartita extends Stanza implements PartitaObserver {

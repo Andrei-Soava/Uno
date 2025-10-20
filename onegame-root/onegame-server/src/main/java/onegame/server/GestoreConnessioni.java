@@ -12,11 +12,11 @@ import com.corundumstudio.socketio.AckRequest;
 import com.corundumstudio.socketio.HandshakeData;
 import com.corundumstudio.socketio.SocketIOClient;
 
+import onegame.modello.net.messaggi.ProtocolloMessaggi.ReqAuth;
+import onegame.modello.net.messaggi.ProtocolloMessaggi.RespAuth;
 import onegame.modello.net.util.JsonHelper;
 import onegame.modello.net.util.PasswordUtils;
 import onegame.server.db.UtenteDb;
-import onegame.modello.net.ProtocolloMessaggi.ReqAuth;
-import onegame.modello.net.ProtocolloMessaggi.RespAuth;
 
 /**
  * Gestore delle connessioni e dell'autenticazione degli utenti

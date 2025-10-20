@@ -11,7 +11,8 @@ import com.corundumstudio.socketio.Configuration;
 import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.SocketIOServer;
 
-import onegame.modello.net.ProtocolloMessaggi;
+import onegame.modello.net.messaggi.MessaggiSalvataggiPartite;
+import onegame.modello.net.messaggi.ProtocolloMessaggi;
 import onegame.server.db.GestoreDatabase;
 
 /**
@@ -77,17 +78,21 @@ public class ServerUno {
 		server.addEventListener(ProtocolloMessaggi.EVENT_STANZA_ENTRA, String.class,
 				(client, data, ack) -> gestoreStanze.handleEntraStanza(client, data, ack));
 
-		server.addEventListener(ProtocolloMessaggi.EVENT_SALVA_PARTITA, String.class,
+		// Salvataggi partite offline
+		server.addEventListener(MessaggiSalvataggiPartite.EVENT_CREA_SALVATAGGIO, String.class,
 				(client, data, ack) -> gestorePartiteOffline.handleSalvaPartita(client, data, ack));
 
-		server.addEventListener(ProtocolloMessaggi.EVENT_CARICA_PARTITA, String.class,
+		server.addEventListener(MessaggiSalvataggiPartite.EVENT_CARICA_SALVATAGGIO, String.class,
 				(client, data, ack) -> gestorePartiteOffline.handleCaricaPartita(client, data, ack));
 
-		server.addEventListener(ProtocolloMessaggi.EVENT_LISTA_PARTITE, Void.class,
+		server.addEventListener(MessaggiSalvataggiPartite.EVENT_LISTA_SALVATAGGI, Void.class,
 				(client, data, ack) -> gestorePartiteOffline.handleListaSalvataggi(client, ack));
 
-		server.addEventListener(ProtocolloMessaggi.EVENT_ELIMINA_PARTITA, String.class,
+		server.addEventListener(MessaggiSalvataggiPartite.EVENT_ELIMINA_SALVATAGGIO, String.class,
 				(client, data, ack) -> gestorePartiteOffline.handleEliminaSalvataggio(client, data, ack));
+
+		server.addEventListener(MessaggiSalvataggiPartite.EVENT_RINOMINA_SALVATAGGIO, String.class,
+				(client, data, ack) -> gestorePartiteOffline.handleRinominaSalvataggio(client, data, ack));
 
 		server.addEventListener(ProtocolloMessaggi.EVENT_GIOCO_MOSSA, String.class,
 				(client, data, ack) -> gestoreGioco.handleEffettuaMossa(client, data, ack));

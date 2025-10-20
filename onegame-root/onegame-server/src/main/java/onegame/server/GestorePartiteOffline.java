@@ -9,11 +9,9 @@ import org.slf4j.LoggerFactory;
 import com.corundumstudio.socketio.AckRequest;
 import com.corundumstudio.socketio.SocketIOClient;
 
-import onegame.modello.net.ProtocolloMessaggi;
+import onegame.modello.net.messaggi.*;
+import onegame.modello.net.messaggi.MessaggiSalvataggiPartite.*;
 import onegame.modello.net.util.JsonHelper;
-import onegame.modello.net.ProtocolloMessaggi.ReqSalvaPartita;
-import onegame.modello.net.ProtocolloMessaggi.ReqCaricaPartita;
-import onegame.modello.net.ProtocolloMessaggi.ReqEliminaPartita;
 import onegame.server.db.PartitaIncompletaDb;
 import onegame.server.db.UtenteDb;
 
@@ -44,26 +42,26 @@ public class GestorePartiteOffline {
 	public void handleSalvaPartita(SocketIOClient client, String str, AckRequest ackRequest) {
 		Sessione sessione = gestoreSessioni.getSessioneAutenticato(client);
 		if (sessione == null) {
-			ackRequest.sendAckData(new ProtocolloMessaggi.RespSalvaPartita(false, "Utente non valido"));
+			ackRequest.sendAckData(new RespCreaSalvataggio(false, "Utente non valido"));
 			logger.warn("Accesso negato: token non valido o utente anonimo");
 			return;
 		}
 
 		try {
-			ReqSalvaPartita req = JsonHelper.fromJson(str, ReqSalvaPartita.class);
+			ReqCreaSalvataggio req = JsonHelper.fromJson(str, ReqCreaSalvataggio.class);
 			if (req.nomeSalvataggio == null || req.partitaSerializzata == null || req.nomeSalvataggio.isEmpty()
 					|| req.partitaSerializzata.isEmpty()) {
-				ackRequest.sendAckData(new ProtocolloMessaggi.RespSalvaPartita(false, "Dati mancanti"));
+				ackRequest.sendAckData(new RespCreaSalvataggio(false, "Dati mancanti"));
 				return;
 			}
 
 			long utenteId = utenteDb.getIdByUsername(sessione.getUsername());
 			partitaDb.createPartita(utenteId, req.nomeSalvataggio, req.partitaSerializzata);
-			ackRequest.sendAckData(new ProtocolloMessaggi.RespSalvaPartita(true, "Salvataggio riuscito"));
+			ackRequest.sendAckData(new RespCreaSalvataggio(true, "Salvataggio riuscito"));
 			logger.info("Partita salvata: {} per utente {}", req.nomeSalvataggio, sessione.getUsername());
 		} catch (Exception e) {
 			logger.error("Errore durante il salvataggio della partita: {}", e.getMessage());
-			ackRequest.sendAckData(new ProtocolloMessaggi.RespSalvaPartita(false, "Errore durante il salvataggio"));
+			ackRequest.sendAckData(new RespCreaSalvataggio(false, "Errore durante il salvataggio"));
 		}
 	}
 
@@ -76,32 +74,30 @@ public class GestorePartiteOffline {
 	public void handleCaricaPartita(SocketIOClient client, String str, AckRequest ackRequest) {
 		Sessione sessione = gestoreSessioni.getSessioneAutenticato(client);
 		if (sessione == null) {
-			ackRequest.sendAckData(new ProtocolloMessaggi.RespCaricaPartita(false, "", "Utente non valido"));
+			ackRequest.sendAckData(new RespCaricaSalvataggio(false, "", "Utente non valido"));
 			logger.warn("Accesso negato: token non valido o utente anonimo");
 			return;
 		}
 
 		try {
-			ReqCaricaPartita req = JsonHelper.fromJson(str, ReqCaricaPartita.class);
+			ReqCaricaSalvataggio req = JsonHelper.fromJson(str, ReqCaricaSalvataggio.class);
 			if (req.nomeSalvataggio == null || req.nomeSalvataggio.isBlank()) {
-				ackRequest
-						.sendAckData(new ProtocolloMessaggi.RespCaricaPartita(false, "", "Nome salvataggio mancante"));
+				ackRequest.sendAckData(new RespCaricaSalvataggio(false, "", "Nome salvataggio mancante"));
 				return;
 			}
 
 			long utenteId = utenteDb.getIdByUsername(sessione.getUsername());
 			String partitaJson = partitaDb.getPartitaByUtenteAndNome(utenteId, req.nomeSalvataggio);
 			if (partitaJson != null && !partitaJson.isBlank()) {
-				ackRequest.sendAckData(new ProtocolloMessaggi.RespCaricaPartita(true, partitaJson, "Partita caricata"));
+				ackRequest.sendAckData(new RespCaricaSalvataggio(true, partitaJson, "Partita caricata"));
 				logger.info("Partita caricata: {} per utente {}", req.nomeSalvataggio, sessione.getUsername());
 			} else {
-				ackRequest.sendAckData(new ProtocolloMessaggi.RespCaricaPartita(false, "", "Partita non trovata"));
+				ackRequest.sendAckData(new RespCaricaSalvataggio(false, "", "Partita non trovata"));
 				logger.warn("Partita non trovata: {} per utente {}", req.nomeSalvataggio, sessione.getUsername());
 			}
 		} catch (SQLException e) {
 			logger.error("Errore durante il caricamento per utente {}: {}", sessione.getUsername(), e.getMessage());
-			ackRequest
-					.sendAckData(new ProtocolloMessaggi.RespCaricaPartita(false, "", "Errore durante il caricamento"));
+			ackRequest.sendAckData(new RespCaricaSalvataggio(false, "", "Errore durante il caricamento"));
 		}
 	}
 
@@ -114,7 +110,7 @@ public class GestorePartiteOffline {
 	public void handleListaSalvataggi(SocketIOClient client, AckRequest ackRequest) {
 		Sessione sessione = gestoreSessioni.getSessioneAutenticato(client);
 		if (sessione == null) {
-			ackRequest.sendAckData(new ProtocolloMessaggi.RespListaPartite(false, null, "Utente non valido"));
+			ackRequest.sendAckData(new RespListaSalvataggi(false, null, "Utente non valido"));
 			logger.warn("Accesso negato: token non valido o utente anonimo");
 			return;
 		}
@@ -122,35 +118,59 @@ public class GestorePartiteOffline {
 		try {
 			long utenteId = utenteDb.getIdByUsername(sessione.getUsername());
 			ArrayList<String> nomi = partitaDb.getPartiteByUtente(utenteId);
-			ackRequest.sendAckData(new ProtocolloMessaggi.RespListaPartite(true, nomi, "Lista recuperata"));
+			ackRequest.sendAckData(new RespListaSalvataggi(true, nomi, "Lista recuperata"));
 			logger.info("Lista salvataggi inviata per utente {}", sessione.getUsername());
 		} catch (SQLException e) {
 			logger.error("Errore durante il recupero dei salvataggi per utente {}: {}", sessione.getUsername(),
 					e.getMessage());
-			ackRequest.sendAckData(new ProtocolloMessaggi.RespListaPartite(false, null, "Errore durante il recupero"));
+			ackRequest.sendAckData(new RespListaSalvataggi(false, null, "Errore durante il recupero"));
 		}
 	}
 
 	public void handleEliminaSalvataggio(SocketIOClient client, String str, AckRequest ackRequest) {
 		Sessione sessione = gestoreSessioni.getSessioneAutenticato(client);
 		if (sessione == null) {
-			ackRequest.sendAckData(new ProtocolloMessaggi.RespEliminaPartita(false, "Utente non valido"));
+			ackRequest.sendAckData(new RespEliminaSalvataggio(false, "Utente non valido"));
 			logger.warn("Accesso negato: token non valido o utente anonimo");
 			return;
 		}
 
 		try {
-			ReqEliminaPartita req = JsonHelper.fromJson(str, ReqEliminaPartita.class);
+			ReqEliminaSalvataggio req = JsonHelper.fromJson(str, ReqEliminaSalvataggio.class);
 			if (req.nomeSalvataggio == null || req.nomeSalvataggio.isBlank()) {
-				ackRequest.sendAckData(new ProtocolloMessaggi.RespEliminaPartita(false, "Nome salvataggio mancante"));
+				ackRequest.sendAckData(new RespEliminaSalvataggio(false, "Nome salvataggio mancante"));
 			}
 			long utenteId = utenteDb.getIdByUsername(sessione.getUsername());
 			partitaDb.deletePartitaByUtenteAndNome(utenteId, req.nomeSalvataggio);
 		} catch (Exception e) {
 			logger.error("Errore durante l'eliminazione del salvataggio per utente {}: {}", sessione.getUsername(),
 					e.getMessage());
-			ackRequest.sendAckData(new ProtocolloMessaggi.RespEliminaPartita(false, "Errore durante l'eliminazione"));
+			ackRequest.sendAckData(new RespEliminaSalvataggio(false, "Errore durante l'eliminazione"));
 		}
 	}
 
+	public void handleRinominaSalvataggio(SocketIOClient client, String str, AckRequest ackRequest) {
+		Sessione sessione = gestoreSessioni.getSessioneAutenticato(client);
+		if (sessione == null) {
+			ackRequest.sendAckData(new RespRinominaSalvataggio(false, "Utente non valido"));
+			logger.warn("Accesso negato: token non valido o utente anonimo");
+			return;
+		}
+
+		try {
+			ReqRinominaSalvataggio req = JsonHelper.fromJson(str, ReqRinominaSalvataggio.class);
+			if (req.nomeVecchio == null || req.nomeNuovo == null || req.nomeVecchio.isBlank()
+					|| req.nomeNuovo.isBlank()) {
+				ackRequest.sendAckData(new RespRinominaSalvataggio(false, "Dati mancanti"));
+				return;
+			}
+			long utenteId = utenteDb.getIdByUsername(sessione.getUsername());
+			partitaDb.rinominaSalvataggio(utenteId, req.nomeVecchio, req.nomeNuovo);
+			ackRequest.sendAckData(new RespRinominaSalvataggio(true, "Rinomina riuscita"));
+		} catch (Exception e) {
+			logger.error("Errore durante la rinomina del salvataggio per utente {}: {}", sessione.getUsername(),
+					e.getMessage());
+			ackRequest.sendAckData(new RespRinominaSalvataggio(false, "Errore durante la rinomina"));
+		}
+	}
 }

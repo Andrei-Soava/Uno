@@ -11,11 +11,11 @@ import org.slf4j.LoggerFactory;
 import com.corundumstudio.socketio.AckRequest;
 import com.corundumstudio.socketio.SocketIOClient;
 
-import onegame.modello.net.ProtocolloMessaggi.ReqCreaStanza;
-import onegame.modello.net.ProtocolloMessaggi.ReqEntraStanza;
-import onegame.modello.net.ProtocolloMessaggi.RespAbbandonaStanza;
-import onegame.modello.net.ProtocolloMessaggi.RespCreaStanza;
-import onegame.modello.net.ProtocolloMessaggi.RespEntraStanza;
+import onegame.modello.net.messaggi.ProtocolloMessaggi.ReqCreaStanza;
+import onegame.modello.net.messaggi.ProtocolloMessaggi.ReqEntraStanza;
+import onegame.modello.net.messaggi.ProtocolloMessaggi.RespAbbandonaStanza;
+import onegame.modello.net.messaggi.ProtocolloMessaggi.RespCreaStanza;
+import onegame.modello.net.messaggi.ProtocolloMessaggi.RespEntraStanza;
 import onegame.modello.net.util.JsonHelper;
 
 /**

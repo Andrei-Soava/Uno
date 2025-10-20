@@ -5,13 +5,18 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Gestisce le operazioni sul database relative alle partite incomplete salvate
  * dagli utenti registrati.
  */
 public class PartitaIncompletaDb {
+//	private final UtenteDb utenteDb = new UtenteDb();
+	
+//	public boolean createPartita(String username, String nomeSalvataggio, String partitaSerializzata) throws SQLException {
+//		long utenteId = utenteDb.getIdByUsername(username);
+//		return createPartita(utenteId, nomeSalvataggio, partitaSerializzata);
+//	}
 
 	/**
 	 * Crea una nuova partita incompleta nel database
@@ -20,15 +25,24 @@ public class PartitaIncompletaDb {
 	 * @param partitaSerializzata La partita serializzata in formato stringa
 	 * @throws SQLException
 	 */
-	public void createPartita(long utenteId, String nomeSalvataggio, String partitaSerializzata) throws SQLException {
+	public boolean createPartita(long utenteId, String nomeSalvataggio, String partitaSerializzata) throws SQLException {
+		if (nomeSalvataggio.length() == 0 || nomeSalvataggio.length() > 50) {
+			return false;
+		}
 		String sql = "INSERT INTO partita_incompleta (utente_id, nome_salvataggio, partita_serializzata) VALUES (?, ?, ?)";
 		try (Connection conn = GestoreDatabase.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
 			ps.setLong(1, utenteId);
 			ps.setString(2, nomeSalvataggio);
 			ps.setString(3, partitaSerializzata);
 			ps.executeUpdate();
+			return ps.getUpdateCount() > 0;
 		}
 	}
+	
+//	public ArrayList<String> getPartiteByUtente(String username) throws SQLException {
+//		long utenteId = utenteDb.getIdByUsername(username);
+//		return getPartiteByUtente(utenteId);
+//	}
 
 	/**
 	 * Recupera la lista dei nomi dei salvataggi delle partite incomplete per un
@@ -103,6 +117,25 @@ public class PartitaIncompletaDb {
 			ps.executeUpdate();
 		}
 	}
+	
+//	public boolean rinominaSalvataggio(String username, String vecchioNome, String nuovoNome) throws SQLException {
+//		long utenteId = utenteDb.getIdByUsername(username);
+//		return rinominaSalvataggio(utenteId, vecchioNome, nuovoNome);
+//	}
+	
+	public boolean rinominaSalvataggio(long utenteId, String vecchioNome, String nuovoNome) throws SQLException {
+		if (vecchioNome.equals(nuovoNome) || nuovoNome.length() == 0 || nuovoNome.length() > 50) {
+			return false;
+		}
+		String sql = "UPDATE partita_incompleta SET nome_salvataggio = ? WHERE utente_id = ? AND nome_salvataggio = ?";
+		try (Connection conn = GestoreDatabase.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+			ps.setString(1, nuovoNome);
+			ps.setLong(2, utenteId);
+			ps.setString(3, vecchioNome);
+			ps.executeUpdate();
+			return ps.getUpdateCount() > 0;
+		}
+	}
 
 	/**
 	 * Elimina una partita incompleta dal database
@@ -118,19 +151,25 @@ public class PartitaIncompletaDb {
 		}
 	}
 	
+//	public boolean deletePartitaByUtenteAndNome(String username, String nomeSalvataggio) throws SQLException {
+//		long utenteId = utenteDb.getIdByUsername(username);
+//		return deletePartitaByUtenteAndNome(utenteId, nomeSalvataggio);
+//	}
+	
 	/**
 	 * Elimina una partita incompleta di un utente dato il nome del salvataggio
 	 * @param utenteId ID dell'utente
 	 * @param nomeSalvataggio Nome del salvataggio da eliminare
 	 * @throws SQLException
 	 */
-	public void deletePartitaByUtenteAndNome(long utenteId, String nomeSalvataggio) throws SQLException {
+	public boolean deletePartitaByUtenteAndNome(long utenteId, String nomeSalvataggio) throws SQLException {
 		String sql = "DELETE FROM partita_incompleta WHERE utente_id = ? AND nome_salvataggio = ?";
 		try (Connection conn = GestoreDatabase.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
 			ps.setLong(1, utenteId);
 			ps.setString(2, nomeSalvataggio);
 			ps.executeUpdate();
+			return ps.getUpdateCount() > 0;
 		}
 	}
-
+	
 }

@@ -9,30 +9,25 @@ import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 import onegame.modello.net.MossaDTO;
-import onegame.modello.net.ProtocolloMessaggi;
-import onegame.modello.net.ProtocolloMessaggi.ReqAuth;
-import onegame.modello.net.ProtocolloMessaggi.ReqCaricaPartita;
-import onegame.modello.net.ProtocolloMessaggi.ReqCreaStanza;
-import onegame.modello.net.ProtocolloMessaggi.ReqEffettuaMossa;
-import onegame.modello.net.ProtocolloMessaggi.ReqEliminaPartita;
-import onegame.modello.net.ProtocolloMessaggi.ReqEntraStanza;
-import onegame.modello.net.ProtocolloMessaggi.ReqSalvaPartita;
-import onegame.modello.net.ProtocolloMessaggi.RespAuth;
-import onegame.modello.net.ProtocolloMessaggi.RespCaricaPartita;
-import onegame.modello.net.ProtocolloMessaggi.RespCreaStanza;
-import onegame.modello.net.ProtocolloMessaggi.RespEffettuaMossa;
-import onegame.modello.net.ProtocolloMessaggi.RespEliminaPartita;
-import onegame.modello.net.ProtocolloMessaggi.RespEntraStanza;
-import onegame.modello.net.ProtocolloMessaggi.RespListaPartite;
-import onegame.modello.net.ProtocolloMessaggi.RespSalvaPartita;
+import onegame.modello.net.messaggi.MessaggiSalvataggiPartite;
+import onegame.modello.net.messaggi.ProtocolloMessaggi;
+import onegame.modello.net.messaggi.ProtocolloMessaggi.ReqAuth;
+import onegame.modello.net.messaggi.ProtocolloMessaggi.ReqCreaStanza;
+import onegame.modello.net.messaggi.ProtocolloMessaggi.ReqEffettuaMossa;
+import onegame.modello.net.messaggi.ProtocolloMessaggi.ReqEntraStanza;
+import onegame.modello.net.messaggi.ProtocolloMessaggi.RespAuth;
+import onegame.modello.net.messaggi.ProtocolloMessaggi.RespCreaStanza;
+import onegame.modello.net.messaggi.ProtocolloMessaggi.RespEffettuaMossa;
+import onegame.modello.net.messaggi.ProtocolloMessaggi.RespEntraStanza;
 import onegame.modello.net.util.Callback;
 import onegame.modello.net.util.JsonHelper;
 
 /**
- * ClientSocket - gestisce la connessione al server Socket.IO - mantiene il
- * token di autenticazione - fornisce metodi per le operazioni principali
- * (login, registrazione, creazione stanza, ecc.) - registra handler per gli
- * eventi
+ * ClientSocket
+ * - gestisce la connessione al server Socket.IO
+ * - mantiene il token di autenticazione
+ * - fornisce metodi per le operazioni principali (login, registrazione, creazione stanza, ecc.)
+ * - registra handler per gli eventi
  */
 public class ClientSocket {
 
@@ -70,8 +65,7 @@ public class ClientSocket {
 	private void registerBaseHandlers() {
 		socket.on(Socket.EVENT_CONNECT, args -> {
 			System.out.println("[client] connesso al server");
-			// se abbiamo token, notifichiamo il server (se implementa un handler
-			// "auth:setToken")
+			// se abbiamo token, notifichiamo il server (se implementa un handler "auth:setToken")
 			if (token != null) {
 				try {
 					socket.emit("auth:setToken", JsonHelper.toJson(token));
@@ -105,9 +99,8 @@ public class ClientSocket {
 		if (socket != null && socket.connected()) {
 			return true;
 		}
-		// se non è connesso, prova a connettersi e attendi max 1 secondo
-		// TODO da rivedere (fare solo il primo if non è pratico visto che causa
-		// eccezioni socket.connect è asincrono))
+		// se non è connesso, prova a connettersi e attendi max 1 secondo TODO da rivedere (fare solo il primo if non è
+		// pratico visto che causa eccezioni socket.connect è asincrono))
 		try {
 			socket.connect();
 			return waitForConnect(0); // attende 0 secondi
@@ -211,7 +204,7 @@ public class ClientSocket {
 //				callback.call(resp);
 //			}
 //		});
-		
+
 		socketEmitEvent(ProtocolloMessaggi.EVENT_STANZA_CREA, req, callback, RespCreaStanza.class);
 	}
 
@@ -231,44 +224,51 @@ public class ClientSocket {
 //				callback.call(resp);
 //			}
 //		});
-		
+
 		socketEmitEvent(ProtocolloMessaggi.EVENT_STANZA_ENTRA, req, callback, RespEntraStanza.class);
 	}
 
 	public void inviaMossa(MossaDTO mossa, Callback<RespEffettuaMossa> callback) {
 		ReqEffettuaMossa req = new ReqEffettuaMossa(mossa);
 		System.out.println("[CLIENT] Invio richiesta mossa: " + mossa);
-		
+
 		socketEmitEvent(ProtocolloMessaggi.EVENT_GIOCO_MOSSA, req, callback, RespEffettuaMossa.class);
 	}
 
-	public void listaPartite(Callback<RespListaPartite> callback) {
+	public void listaPartite(Callback<MessaggiSalvataggiPartite.RespListaSalvataggi> callback) {
 		System.out.println("[CLIENT] Invio richiesta lista partite salvate");
 //		socket.emit(ProtocolloMessaggi.EVENT_LISTA_PARTITE, null, (Ack) callback);
-		
-		socketEmitEvent(ProtocolloMessaggi.EVENT_LISTA_PARTITE, null, callback, RespListaPartite.class);
+
+		socketEmitEvent(MessaggiSalvataggiPartite.EVENT_LISTA_SALVATAGGI, null, callback, MessaggiSalvataggiPartite.RespListaSalvataggi.class);
 	}
 
-	public void salvaPartita(String nomeSalvataggio, String partitaSerializzata, Callback<RespSalvaPartita> callback) {
-		ReqSalvaPartita req = new ReqSalvaPartita(nomeSalvataggio, partitaSerializzata);
+	public void salvaPartita(String nomeSalvataggio, String partitaSerializzata, Callback<MessaggiSalvataggiPartite.RespCreaSalvataggio> callback) {
+		MessaggiSalvataggiPartite.ReqCreaSalvataggio req = new MessaggiSalvataggiPartite.ReqCreaSalvataggio(nomeSalvataggio, partitaSerializzata);
 		System.out.println("[CLIENT] Invio richiesta salvataggio partita: " + nomeSalvataggio);
 //		socket.emit(ProtocolloMessaggi.EVENT_SALVA_PARTITA, JsonHelper.toJson(req), (Ack) callback);
-		
-		socketEmitEvent(ProtocolloMessaggi.EVENT_SALVA_PARTITA, req, callback, RespSalvaPartita.class);
+
+		socketEmitEvent(MessaggiSalvataggiPartite.EVENT_CREA_SALVATAGGIO, req, callback, MessaggiSalvataggiPartite.RespCreaSalvataggio.class);
 	}
 
-	public void caricaPartita(String nomeSalvataggio, Callback<RespCaricaPartita> callback) {
-		ReqCaricaPartita req = new ReqCaricaPartita(nomeSalvataggio);
+	public void caricaPartita(String nomeSalvataggio, Callback<MessaggiSalvataggiPartite.RespCaricaSalvataggio> callback) {
+		MessaggiSalvataggiPartite.ReqCaricaSalvataggio req = new MessaggiSalvataggiPartite.ReqCaricaSalvataggio(nomeSalvataggio);
 		System.out.println("[CLIENT] Invio richiesta caricamento partita: " + nomeSalvataggio);
 
-		socketEmitEvent(ProtocolloMessaggi.EVENT_CARICA_PARTITA, req, callback, RespCaricaPartita.class);
+		socketEmitEvent(MessaggiSalvataggiPartite.EVENT_CARICA_SALVATAGGIO, req, callback, MessaggiSalvataggiPartite.RespCaricaSalvataggio.class);
 	}
 
-	public void eliminaPartita(String nomeSalvataggio, Callback<RespEliminaPartita> callback) {
-		ReqEliminaPartita req = new ReqEliminaPartita(nomeSalvataggio);
+	public void eliminaPartita(String nomeSalvataggio, Callback<MessaggiSalvataggiPartite.RespEliminaSalvataggio> callback) {
+		MessaggiSalvataggiPartite.ReqEliminaSalvataggio req = new MessaggiSalvataggiPartite.ReqEliminaSalvataggio(nomeSalvataggio);
 		System.out.println("[CLIENT] Invio richiesta eliminazione partita: " + nomeSalvataggio);
-		
-		socketEmitEvent(ProtocolloMessaggi.EVENT_ELIMINA_PARTITA, req, callback, RespEliminaPartita.class);
+
+		socketEmitEvent(MessaggiSalvataggiPartite.EVENT_ELIMINA_SALVATAGGIO, req, callback, MessaggiSalvataggiPartite.RespEliminaSalvataggio.class);
+	}
+	
+	public void rinominaPartita(String vecchioNome, String nuovoNome, Callback<MessaggiSalvataggiPartite.RespRinominaSalvataggio> callback) {
+		MessaggiSalvataggiPartite.ReqRinominaSalvataggio req = new MessaggiSalvataggiPartite.ReqRinominaSalvataggio(vecchioNome, nuovoNome);
+		System.out.println("[CLIENT] Invio richiesta rinomina partita: " + vecchioNome + " -> " + nuovoNome);
+
+		socketEmitEvent(MessaggiSalvataggiPartite.EVENT_RINOMINA_SALVATAGGIO, req, callback, MessaggiSalvataggiPartite.RespRinominaSalvataggio.class);
 	}
 
 	/**
@@ -289,12 +289,12 @@ public class ClientSocket {
 		String json = args[0].toString();
 		return JsonHelper.fromJson(json, clazz);
 	}
-	
-	
+
 	private <T> void socketEmitEvent(String evento, Object req, Callback<T> callback, Class<T> clazz) {
+		System.out.println(req.getClass());
 		socket.emit(evento, JsonHelper.toJson(req), (Ack) args -> {
 			T resp = getPayload(clazz, args);
-			
+
 			if (callback != null) {
 				callback.call(resp);
 			}

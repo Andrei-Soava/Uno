@@ -1,6 +1,7 @@
-package onegame.modello.net;
+package onegame.modello.net.messaggi;
 
-import java.util.List;
+import onegame.modello.net.MossaDTO;
+import onegame.modello.net.StatoPartitaDTO;
 
 public class ProtocolloMessaggi {
 
@@ -13,16 +14,9 @@ public class ProtocolloMessaggi {
 	public static final String EVENT_STANZA_ENTRA = "stanza:entra";
 	public static final String EVENT_STANZA_ESCI = "stanza:esci";
 
-	// Eventi partite offline
-	public static final String EVENT_SALVA_PARTITA = "salvataggiopartita:salva";
-	public static final String EVENT_CARICA_PARTITA = "salvataggiopartita:carica";
-	public static final String EVENT_ELIMINA_PARTITA = "salvataggiopartita:elimina";
-	public static final String EVENT_LISTA_PARTITE = "salvataggiopartita:lista";
-
 	public static final String EVENT_INIZIO_PARTITA = "giocouno:inizia";
 	public static final String EVENT_GIOCO_MOSSA = "giocouno:mossa";
 	public static final String EVENT_FINE_PARTITA = "giocouno:fine";
-	
 
 //    //Risposte partite offline
 //    public static final String EVENT_PARTITA_OK = "partita:ok";
@@ -116,33 +110,6 @@ public class ProtocolloMessaggi {
 		}
 	}
 
-	// Richiesta di salvataggio
-	public static class ReqSalvaPartita {
-		public String nomeSalvataggio;
-		public String partitaSerializzata;
-
-		public ReqSalvaPartita() {
-		}
-
-		public ReqSalvaPartita(String nomeSalvataggio, String partitaSerializzata) {
-			this.nomeSalvataggio = nomeSalvataggio;
-			this.partitaSerializzata = partitaSerializzata;
-		}
-	}
-
-	public static class RespSalvaPartita {
-		public boolean success;
-		public String messaggio;
-
-		public RespSalvaPartita() {
-		}
-
-		public RespSalvaPartita(boolean success, String messaggio) {
-			this.success = success;
-			this.messaggio = messaggio;
-		}
-	}
-
 	public static class RespAbbandonaStanza {
 		public boolean success;
 		public String messaggio;
@@ -152,74 +119,6 @@ public class ProtocolloMessaggi {
 
 		public RespAbbandonaStanza(boolean success, String messaggio) {
 			this.success = success;
-			this.messaggio = messaggio;
-		}
-	}
-
-	// Richiesta di caricamento
-	public static class ReqCaricaPartita {
-		public String nomeSalvataggio;
-
-		public ReqCaricaPartita() {
-		}
-
-		public ReqCaricaPartita(String nomeSalvataggio) {
-			this.nomeSalvataggio = nomeSalvataggio;
-		}
-	}
-
-	public static class RespCaricaPartita {
-		public boolean success;
-		public String partitaSerializzata;
-		public String messaggio;
-
-		public RespCaricaPartita() {
-		}
-
-		public RespCaricaPartita(boolean success, String partitaSerializzata, String messaggio) {
-			this.success = success;
-			this.partitaSerializzata = partitaSerializzata;
-			this.messaggio = messaggio;
-		}
-	}
-
-	// richiesta di eliminazione
-	public static class ReqEliminaPartita {
-		public String nomeSalvataggio;
-
-		public ReqEliminaPartita() {
-		}
-
-		public ReqEliminaPartita(String nomeSalvataggio) {
-			this.nomeSalvataggio = nomeSalvataggio;
-		}
-	}
-
-	public static class RespEliminaPartita {
-		public boolean success;
-		public String messaggio;
-
-		public RespEliminaPartita() {
-		}
-
-		public RespEliminaPartita(boolean success, String messaggio) {
-			this.success = success;
-			this.messaggio = messaggio;
-		}
-	}
-
-	// richiesta elenco partite
-	public static class RespListaPartite {
-		public boolean success;
-		public List<String> nomiSalvataggi;
-		public String messaggio;
-
-		public RespListaPartite() {
-		}
-
-		public RespListaPartite(boolean success, List<String> nomiSalvataggi, String messaggio) {
-			this.success = success;
-			this.nomiSalvataggi = nomiSalvataggi;
 			this.messaggio = messaggio;
 		}
 	}
@@ -234,7 +133,7 @@ public class ProtocolloMessaggi {
 			this.mossa = mossa;
 		}
 	}
-	
+
 	public static class RespEffettuaMossa {
 		public boolean success;
 		public String messaggio;

@@ -7,8 +7,8 @@ import com.corundumstudio.socketio.AckRequest;
 import com.corundumstudio.socketio.SocketIOClient;
 
 import onegame.modello.net.MossaDTO;
-import onegame.modello.net.ProtocolloMessaggi.ReqEffettuaMossa;
-import onegame.modello.net.ProtocolloMessaggi.RespEffettuaMossa;
+import onegame.modello.net.messaggi.ProtocolloMessaggi.ReqEffettuaMossa;
+import onegame.modello.net.messaggi.ProtocolloMessaggi.RespEffettuaMossa;
 import onegame.modello.net.util.JsonHelper;
 
 public class GestoreGioco {
