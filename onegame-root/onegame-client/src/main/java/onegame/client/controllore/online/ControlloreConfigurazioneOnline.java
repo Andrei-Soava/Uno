@@ -25,6 +25,7 @@ public class ControlloreConfigurazioneOnline {
 	public void aspettaCreazioneStanza() {
 		vco.configuraPartita((nomeStanza,numeroGiocatori)-> {
 			cs.creaStanza(nomeStanza, numeroGiocatori, respCreaStanza -> {
+				System.out.println("[client] Risposta creazione stanza ricevuta: " + respCreaStanza);
 				if(respCreaStanza.success) {
 					vco.mostraStanza(Integer.toString(respCreaStanza.codiceStanza));
 				} else {

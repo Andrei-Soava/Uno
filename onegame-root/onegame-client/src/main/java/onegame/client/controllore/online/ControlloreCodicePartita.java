@@ -34,6 +34,7 @@ public class ControlloreCodicePartita {
 			try {
 				int codiceParsato=Integer.parseInt(codice);
 				cs.entraStanza(codiceParsato, respEntraStanza -> {
+					System.out.println("Risposta entraStanza ricevuta");
 					if(respEntraStanza.success) {
 						vic.mostraStanza(codice);
 					} else {
