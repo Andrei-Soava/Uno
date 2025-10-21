@@ -75,7 +75,7 @@ public class VistaMenuOnline {
 		return GestoreCallbackBottoni.waitForClick(logoutBtn);
     }
     
-    public void mostraHome() {
-    	app.mostraVistaHome();
+    public void mostraAccesso() {
+    	app.mostraVistaAccesso();
     }
 }

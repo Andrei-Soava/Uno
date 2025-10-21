@@ -14,7 +14,7 @@ public class ControlloreMenuOnline {
 	    cm.connectedProperty().addListener((obs, oldVal, newVal) -> {
 	        if (Boolean.FALSE.equals(newVal)) {
 	            // siamo passati a disconnesso
-	            vmo.mostraHome();
+	            vmo.mostraAccesso();
 	        }
 	    });
 		
@@ -24,7 +24,7 @@ public class ControlloreMenuOnline {
 	public void aspettaLogout() {
 		vmo.waitForLogoutBtnClick().thenRun(() -> {
 			cs.disconnect();
-			vmo.mostraHome();
+			vmo.mostraAccesso();
 		});
 	}
 }
