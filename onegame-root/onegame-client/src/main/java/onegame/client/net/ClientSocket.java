@@ -8,7 +8,9 @@ import io.socket.client.Ack;
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
+import onegame.client.controllore.online.ClientSocketObserver;
 import onegame.modello.net.MossaDTO;
+import onegame.modello.net.StatoStanzaDTO;
 import onegame.modello.net.messaggi.MessaggiSalvataggiPartite;
 import onegame.modello.net.messaggi.MessaggiSalvataggiPartite.*;
 import onegame.modello.net.messaggi.Messaggi;
@@ -28,6 +30,7 @@ public class ClientSocket {
 	private final Socket socket;
 	private String token;
 	private Utente utente;
+	private ClientSocketObserver observer;
 
 	public ClientSocket(String url) throws Exception {
 		IO.Options opts = new IO.Options();
@@ -52,6 +55,22 @@ public class ClientSocket {
 	public void setUtente(Utente utente) {
 		this.utente = utente;
 	}
+	
+	/**
+	 * Ottieni observer dal socket
+	 * @return observer del socket
+	 */
+	public ClientSocketObserver getObserver() {
+		return observer;
+	}
+
+	/**
+	 * Imposta observer del socket
+	 * @param observer
+	 */
+	public void setObserver(ClientSocketObserver observer) {
+		this.observer = observer;
+	}
 
 	/**
 	 * Registra gli handler di base
@@ -71,11 +90,17 @@ public class ClientSocket {
 		socket.on(Socket.EVENT_DISCONNECT, args -> System.out.println("[client] disconnesso dal server"));
 		socket.on("connect_error", args -> System.out.println("[client] errore connessione: " + args[0]));
 
-		socket.on("stanza:aggiornamento", args -> System.out.println("[server][stanza:aggiornamento] " + args[0]));
+		//socket.on("stanza:aggiornamento", args -> System.out.println("[server][stanza:aggiornamento] " + args[0]));
 		socket.on("partita:inizia", args -> System.out.println("[server][partita:inizia] " + args[0]));
 		socket.on("partita:turno", args -> System.out.println("[server][partita:turno] " + args[0]));
 		socket.on("partita:mossa", args -> System.out.println("[server][partita:mossa] " + args[0]));
 		socket.on("partita:terminata", args -> System.out.println("[server][partita:terminata] " + args[0]));
+		socket.on(Messaggi.EVENT_STANZA_AGGIORNAMENTO, (args->{
+			StatoStanzaDTO stato = getPayload(StatoStanzaDTO.class, args);
+			if(observer != null) {
+				observer.aggiornaStanza(stato);
+			}
+		}));
 	}
 
 	/**
