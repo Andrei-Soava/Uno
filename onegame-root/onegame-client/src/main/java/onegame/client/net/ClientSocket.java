@@ -194,9 +194,10 @@ public class ClientSocket {
 	 * Invia la richiesta di login anonimo al server
 	 * @param callback Callback per la risposta del server
 	 */
-	public void anonimo(Callback<RespAuth> callback) {
-		System.out.println("[CLIENT] Invio richiesta login anonimo");
-		socket.emit(Messaggi.EVENT_AUTH_ANONIMO, "", (Ack) args -> {
+	public void anonimo(String nickname, Callback<RespAuth> callback) {
+		ReqAuthAnonimo req = new ReqAuthAnonimo(nickname);
+		System.out.println("[CLIENT] Invio richiesta login anonimo con nickname: " + nickname);
+		socket.emit(Messaggi.EVENT_AUTH_ANONIMO, JsonHelper.toJson(req), (Ack) args -> {
 			RespAuth auth = getPayload(RespAuth.class, args);
 
 			setToken(auth.token);

@@ -46,7 +46,7 @@ public class ServerUno {
 		this.gestorePartiteOffline = new GestorePartiteOffline();
 		this.gestoreGioco = new GestoreGioco(gestoreStanze);
 
-		this.gestoreSessioni.aggiungiObserver(gestoreStanze);
+		this.gestoreSessioni.addObserver(gestoreStanze);
 
 		registraEventi();
 	}
@@ -68,7 +68,7 @@ public class ServerUno {
 
 		// auth:anonimo
 		server.addEventListener(Messaggi.EVENT_AUTH_ANONIMO, String.class,
-				(client, reqAuth, ack) -> gestoreConnessioni.handleAnonimo(client, ack));
+				(client, reqAuth, ack) -> gestoreConnessioni.handleAnonimo(client, reqAuth, ack));
 
 		// stanza:crea
 		server.addEventListener(Messaggi.EVENT_STANZA_CREA, String.class,

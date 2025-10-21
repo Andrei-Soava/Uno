@@ -13,6 +13,7 @@ import com.corundumstudio.socketio.HandshakeData;
 import com.corundumstudio.socketio.SocketIOClient;
 
 import onegame.modello.net.messaggi.Messaggi.ReqAuth;
+import onegame.modello.net.messaggi.Messaggi.ReqAuthAnonimo;
 import onegame.modello.net.messaggi.Messaggi.RespAuth;
 import onegame.modello.net.util.JsonHelper;
 import onegame.modello.net.util.PasswordUtils;
@@ -54,13 +55,13 @@ public class GestoreConnessioni {
 			String password = req.password;
 
 			if (username == null || password == null || username.isEmpty() || password.isEmpty()) {
-				ackRequest.sendAckData(new RespAuth(false, null, null, "Credenziali mancanti"));
+				ackRequest.sendAckData(new RespAuth(false, null, "Credenziali mancanti", null, null));
 				return;
 			}
 
 			String storedHash = utenteDb.getPasswordHash(username);
 			if (storedHash == null || !PasswordUtils.verificaPassword(password, storedHash)) {
-				ackRequest.sendAckData(new RespAuth(false, null, null, "Credenziali non valide"));
+				ackRequest.sendAckData(new RespAuth(false, null, "Credenziali non valide", null, null));
 				logger.warn("Tentativo di login fallito per username: {}", username);
 				return;
 			}
@@ -69,12 +70,13 @@ public class GestoreConnessioni {
 			Sessione sessione = Sessione.createSessione(username, token);
 			gestoreSessioni.associaToken(token, sessione, client);
 
-			ackRequest.sendAckData(new RespAuth(true, null, token, "Login completato"));
+			ackRequest.sendAckData(
+					new RespAuth(true, token, "Login completato", sessione.getUsername(), sessione.getNickname()));
 			logger.info("Login utente: username: {}, token: {}, session-id: {}", username, token,
 					client.getSessionId());
 		} catch (Exception e) {
 			logger.error("Errore durante il login: {}", e.getMessage());
-			ackRequest.sendAckData(new RespAuth(false, null, null, "Errore interno"));
+			ackRequest.sendAckData(new RespAuth(false, null, "Errore interno", null, null));
 		}
 	}
 
@@ -91,18 +93,18 @@ public class GestoreConnessioni {
 			String password = req.password;
 
 			if (username == null || password == null || username.isEmpty() || password.isEmpty()) {
-				ackRequest.sendAckData(new RespAuth(false, null, null, "Credenziali mancanti"));
+				ackRequest.sendAckData(new RespAuth(false, null, "Credenziali mancanti", null, null));
 				return;
 			}
 
 			if (!isUsernameValido(username)) {
-				ackRequest.sendAckData(new RespAuth(false, null, null, "Username non disponibile"));
+				ackRequest.sendAckData(new RespAuth(false, null, "Username non disponibile", null, null));
 				logger.warn("Tentativo di registrazione con username non valido: {}", username);
 				return;
 			}
 
 			if (utenteDb.esisteUtente(username)) {
-				ackRequest.sendAckData(new RespAuth(false, null, null, "Username non disponibile"));
+				ackRequest.sendAckData(new RespAuth(false, null, "Username non disponibile", null, null));
 				logger.warn("Tentativo di registrazione con username già esistente: {}", username);
 				return;
 			}
@@ -114,12 +116,13 @@ public class GestoreConnessioni {
 			Sessione sessione = Sessione.createSessione(username, token);
 			gestoreSessioni.associaToken(token, sessione, client);
 
-			ackRequest.sendAckData(new RespAuth(true, null, token, "Registrazione completata"));
+			ackRequest.sendAckData(new RespAuth(true, token, "Registrazione completata", sessione.getUsername(),
+					sessione.getNickname()));
 			logger.info("Registrazione utente: username: {}, token: {}, session-id: {}", username, token,
 					client.getSessionId());
 		} catch (Exception e) {
 			logger.error("Errore durante la registrazione: {}", e.getMessage());
-			ackRequest.sendAckData(new RespAuth(false, null, null, "Errore interno"));
+			ackRequest.sendAckData(new RespAuth(false, null, "Errore interno", null, null));
 		}
 	}
 
@@ -128,8 +131,16 @@ public class GestoreConnessioni {
 	 * @param client Il client che effettua la richiesta
 	 * @param ackRequest L'oggetto per inviare la risposta di ack
 	 */
-	public void handleAnonimo(SocketIOClient client, AckRequest ackRequest) {
+	public void handleAnonimo(SocketIOClient client, String str, AckRequest ackRequest) {
 		try {
+			ReqAuthAnonimo req = JsonHelper.fromJson(str, ReqAuthAnonimo.class);
+			String nickname = req.nickname;
+
+			if (nickname == null || nickname.isEmpty() || nickname.length() < 3 || nickname.length() > 20) {
+				ackRequest.sendAckData(new RespAuth(false, null, "Nickname non valido", null, null));
+				return;
+			}
+
 			String token;
 			do {
 				token = UUID.randomUUID().toString();
@@ -138,11 +149,13 @@ public class GestoreConnessioni {
 			Sessione sessione = Sessione.createSessioneAnonimo("Anonimo", token);
 			gestoreSessioni.associaToken(token, sessione, client);
 
-			ackRequest.sendAckData(new RespAuth(true, null, token, "Accesso anonimo riuscito"));
-			logger.info("Accesso anonimo: token={} sessionId={}", token, client.getSessionId());
+			ackRequest.sendAckData(new RespAuth(true, token, "Accesso anonimo riuscito", sessione.getUsername(),
+					sessione.getNickname()));
+			logger.info("Accesso anonimo: nickname={} token={} sessionId={}", sessione.getNickname(), token,
+					client.getSessionId());
 		} catch (Exception e) {
 			logger.error("Errore durante l'accesso anonimo: {}", e.getMessage());
-			ackRequest.sendAckData(new RespAuth(false, null, null, "Errore interno"));
+			ackRequest.sendAckData(new RespAuth(false, null, "Errore interno", null, null));
 		}
 	}
 

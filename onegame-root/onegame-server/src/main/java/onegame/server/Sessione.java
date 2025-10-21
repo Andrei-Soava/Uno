@@ -42,7 +42,13 @@ public class Sessione {
 		Sessione sessione = new Sessione(token);
 		sessione.anonimo = true;
 		sessione.username = "guest-" + System.currentTimeMillis() + UUID.randomUUID().toString();
-		sessione.nickname = nickname;
+
+		if (nickname.startsWith("guest-")) {
+			sessione.nickname = nickname;
+		} else {
+			sessione.nickname = "guest-" + nickname;
+		}
+
 		return sessione;
 	}
 

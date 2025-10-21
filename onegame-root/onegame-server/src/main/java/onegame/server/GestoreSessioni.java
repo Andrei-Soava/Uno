@@ -117,7 +117,11 @@ public class GestoreSessioni {
 		}, 0, 5, TimeUnit.MINUTES);
 	}
 
-	public void aggiungiObserver(SessioneObserver observer) {
-		observers.add(observer);
+	public boolean addObserver(SessioneObserver observer) {
+		return observers.add(observer);
+	}
+	
+	public boolean removeObserver(SessioneObserver observer) {
+		return observers.remove(observer);
 	}
 }
