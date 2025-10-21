@@ -80,6 +80,9 @@ public class ServerUno {
 
 		server.addEventListener(Messaggi.EVENT_STANZA_DETTAGLI, String.class,
 				(client, data, ack) -> gestoreStanze.handleDettagliStanza(getSessione(client), ack));
+		
+		server.addEventListener(Messaggi.EVENT_STANZA_ESCI, Void.class,
+				(client, data, ack) -> gestoreStanze.handleAbbandonaStanza(getSessione(client), ack));
 
 		// Salvataggi partite offline
 		server.addEventListener(MessaggiSalvataggiPartite.EVENT_CREA_SALVATAGGIO, String.class,

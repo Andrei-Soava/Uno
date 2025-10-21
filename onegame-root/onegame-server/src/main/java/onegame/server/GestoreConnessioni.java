@@ -180,6 +180,6 @@ public class GestoreConnessioni {
 		String str;
 		return username != null && username.matches("^[a-zA-Z0-9_]{3,50}$")
 				&& !(str = username.toLowerCase()).startsWith("anonimo") && !str.startsWith("guest")
-				&& !str.startsWith("admin");
+				&& !str.startsWith("admin") && !str.contains("__");
 	}
 }

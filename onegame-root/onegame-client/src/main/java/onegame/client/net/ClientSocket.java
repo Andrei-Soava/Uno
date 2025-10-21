@@ -207,6 +207,12 @@ public class ClientSocket {
 
 		socketEmitEvent(Messaggi.EVENT_STANZA_ENTRA, req, callback, RespEntraStanza.class);
 	}
+	
+	public void esciStanza(Callback<RespAbbandonaStanza> callback) {
+		System.out.println("[CLIENT] Invio richiesta uscita dalla stanza");
+
+		socketEmitEvent(Messaggi.EVENT_STANZA_ESCI, null, callback, RespAbbandonaStanza.class);
+	}
 
 	public void dettagliStanza(Callback<RespDettagliStanza> callback) {
 		System.out.println("[CLIENT] Invio richiesta dettagli stanza");
