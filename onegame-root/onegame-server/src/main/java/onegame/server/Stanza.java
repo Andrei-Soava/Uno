@@ -3,6 +3,9 @@ package onegame.server;
 import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import onegame.modello.net.StatoStanzaDTO;
 import onegame.modello.net.messaggi.Messaggi;
 import onegame.server.utils.DTOServerUtils;
@@ -21,6 +24,8 @@ public abstract class Stanza {
 	protected final ReentrantLock lock = new ReentrantLock();
 
 	protected final Set<Sessione> sessioni = new LinkedHashSet<>();
+
+	private static final Logger logger = LoggerFactory.getLogger(Stanza.class);
 
 	public Stanza(int codice, String nome, int maxUtenti) {
 		this.codice = codice;
@@ -100,6 +105,7 @@ public abstract class Stanza {
 
 	public void notificaStato() {
 		lock.lock();
+		logger.debug("Notifica stato stanza {} a {} utenti", codice, sessioni.size());
 		try {
 			StatoStanzaDTO dto = DTOServerUtils.creaStanzaDTO(this);
 			for (Sessione s : sessioni) {

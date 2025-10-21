@@ -9,6 +9,7 @@ import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 import onegame.client.controllore.online.ClientSocketObserver;
+import onegame.modello.net.DTOUtils;
 import onegame.modello.net.MossaDTO;
 import onegame.modello.net.StatoStanzaDTO;
 import onegame.modello.net.messaggi.MessaggiSalvataggiPartite;
@@ -31,6 +32,7 @@ public class ClientSocket {
 	private String token;
 	private Utente utente;
 	private ClientSocketObserver observer;
+	private StatoStanzaDTO statoStanza;
 
 	public ClientSocket(String url) throws Exception {
 		IO.Options opts = new IO.Options();
@@ -97,6 +99,8 @@ public class ClientSocket {
 		socket.on("partita:terminata", args -> System.out.println("[server][partita:terminata] " + args[0]));
 		socket.on(Messaggi.EVENT_STANZA_AGGIORNAMENTO, (args -> {
 			StatoStanzaDTO stato = getPayload(StatoStanzaDTO.class, args);
+			this.statoStanza = DTOUtils.clone(stato);
+			
 			if (observer != null) {
 				observer.aggiornaStanza(stato);
 			}
@@ -317,5 +321,9 @@ public class ClientSocket {
 				callback.call(resp);
 			}
 		});
+	}
+	
+	public StatoStanzaDTO getStatoStanza() {
+		return DTOUtils.clone(this.statoStanza);
 	}
 }

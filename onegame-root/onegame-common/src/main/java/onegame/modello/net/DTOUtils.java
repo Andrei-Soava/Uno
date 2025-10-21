@@ -67,4 +67,16 @@ public class DTOUtils {
 		return new PartitaOfflineDTO(usernames, mani, scarti, topCarta, direzione, indiceGiocatoreCorrente);
 
 	}
+
+// @formatter:off
+	public static StatoStanzaDTO clone(StatoStanzaDTO dto) {
+	    return new StatoStanzaDTO(
+	        dto.codiceStanza,
+	        dto.maxUtenti,
+	        dto.nicknames != null ? List.copyOf(dto.nicknames) : null,
+	        dto.usernames != null ? List.copyOf(dto.usernames) : null
+	    );
+	}
+// @formatter:on
+
 }
