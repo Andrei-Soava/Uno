@@ -103,7 +103,7 @@ public class ControlloreImpostazioni {
 	
 	public void aspettaLogout() {
 		vi.waitForLogoutBtnClick().thenRun(()->{
-			cs.disconnect();
+			cs.setUtente(null);
 			vi.mostraAccesso();
 		});
 	}

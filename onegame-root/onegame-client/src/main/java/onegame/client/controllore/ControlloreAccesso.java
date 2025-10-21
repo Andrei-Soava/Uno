@@ -28,14 +28,17 @@ public class ControlloreAccesso {
 				return;
 			}
 			if (username == null && password == null) {
-				cs.anonimo(args -> {});
-				cs.setUtente(new Utente(true));
 				va.inserisciNickname("Scegli un nome utente").thenAccept(nickname->{
 					//se viene cliccato annulla o X
 					if(nickname==null) {
 						eseguiAccesso();
 						return;
 					}
+					if(nickname.isBlank())
+						cs.anonimo("anonimo", null);
+					else
+						cs.anonimo(nickname, null);
+					cs.setUtente(new Utente(true));
 					cs.getUtente().setUsername(nickname);
 					va.mostraHome();
 					return;

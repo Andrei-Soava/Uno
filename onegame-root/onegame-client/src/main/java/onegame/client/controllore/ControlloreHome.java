@@ -33,7 +33,7 @@ public class ControlloreHome {
 	 */
 	public void aspettaLogout() {
 		vh.waitForLogoutBtnClick().thenRun(()->{
-			cs.disconnect();
+			cs.setUtente(null);
 			vh.mostraAccesso();
 		});
 	}

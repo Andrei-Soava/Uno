@@ -24,7 +24,7 @@ public class ControlloreMenuOffline {
 
 	public void aspettaLogout() {
 		vmo.waitForLogoutBtnClick().thenRun(() -> {
-			cs.disconnect();
+			cs.setUtente(null);
 			vmo.mostraAccesso();
 		});
 	}
