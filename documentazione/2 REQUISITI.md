@@ -85,7 +85,47 @@ Il sistema ha l’obiettivo di fornire una piattaforma modulare e scalabile, che
    - ### 3.1.8 Logout e disconnessione
       - RF20: il sistema deve permettere di effettuare il logout in qualsiasi momento;
 ### 3.2 Requisiti non funzionali
-
+   - ### 3.2.1 Usabilità
+      - RNF1: l'interfaccia grafica deve essere intuitiva, colorata e di facile comprensioneper gli utenti;
+      - RNF2: i pulsanti devono avere un feedback visivo al passaggio del mouse o alla pressione;
+   - ### 3.2.2 Prestazioni
+      - RFN3: il sistema deve avviarsi entro 5 secondi dall'esecuzione;
+      - RFN4: le mosse di gioco devono essere elaborate in meno di 1 secondo;
+   - ### 3.2.3 Affidabilità
+      - RFN5: il sistema deve garantire il salvataggio corretto della partita in caso di chiusura improvvisa (solo per gli utenti registrati);
+      - RFN6: il server deve garantire un’elevata disponibilità e affidabilità nella maggior parte del tempo di utilizzo;
+   - ### 3.2.4 Portabilità
+      - RFN6: il gioco deve essere eseguibile su Windows, Linux e macOS, con JDK 21 o versione successiva installata;
+   - ### 3.2.5 Sicurezza
+      - RFN7: le credenziali, degli utenti registrati, devono essere memorizzate nel database. Le password devono essere crittografate;
+      - RFN8: le comunicazioni tra client e server deveno avvenire tramite protocollo sicuro;
+### 3.3 Requisiti di interfaccia 
+   - ### 3.3.1 Schermata di Login
+      - RI1: campi di testo:
+         - nome utente;
+         - password (campo oscurato);
+      - RI2: pulsanti:
+         - "Accedi": consente l'accesso agli utenti registrati;
+         - "Registrati": permette ai nuovi utenti di creare un account;
+         - "Entra come opsite": consente di avviare il gioco senza autenticazione;
+      - RI3: in caso di errore nell’inserimento delle credenziali, deve comparire un messaggio di errore informativo;
+   - ### 3.3.2 Menù principale
+      - RI4: dopo l’accesso, l’utente visualizza il menù principale con le seguenti opzioni:
+         - "Gioca con amici": pulsante che consente di entrare nella modalità online;
+         - "Gioca contro computer": pulsante che consente di entrare nella modalità offline;
+         - "Regolamento": pulsante che consente di leggere il regolamento del gioco;
+         - "Mostra statistiche": pulsante che consente di leggere le statistiche personali (solo per gli utenti registrati);
+         - "Logout": pulsante che consente la disconnessione dal gioco;
+      - RI5: in basso alla schermata del menù principale si visualizzerà:
+         - lo stato di connessione ("Connessione"/"Disconnessione") al server;
+         - il tipo di utente (se l'utente è anonimo oppure registrato);
+   - ### 3.3.3 Schermata "Gioca contro computer"
+      - RI6: l'utente può scegliere:
+         - se giocare una nuova partita (questa funzione è disponibile per tutti gli utenti);
+         - se caricare una partita già iniziata (funzione disponibile solo per gli utenti registrati);
+      - RI7: pulsanti di navigazione:
+         - "Home": consente di tornare al menù principale;
+         - "Logout": disconnette l'utente dal sistema;
 
 
 ---
