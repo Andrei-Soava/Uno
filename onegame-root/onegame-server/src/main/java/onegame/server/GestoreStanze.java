@@ -68,6 +68,8 @@ public abstract class GestoreStanze<Stanzz extends Stanza> implements SessioneOb
 
 			ack.sendAckData(new RespCreaStanza(true, "Stanza creata con successo", codiceStanza));
 			logger.info("Creata stanza {} da sessione {}", stanza.getCodice(), sessione.getToken());
+
+			stanza.notificaStato();
 		} catch (Exception e) {
 			logger.error("Errore creazione stanza: {}", e.getMessage());
 			ack.sendAckData(new RespCreaStanza(false, "Errore creazione stanza", -1));
@@ -105,6 +107,8 @@ public abstract class GestoreStanze<Stanzz extends Stanza> implements SessioneOb
 			mappaSessioneAStanza.put(sessione, stanza);
 			ack.sendAckData(new RespEntraStanza(true, "Ingresso in stanza avvenuto con successo"));
 			logger.info("Sessione {} entrata nella stanza con codice {}", sessione.getToken(), req.codiceStanza);
+
+			stanza.notificaStato();
 		} catch (Exception e) {
 			logger.error("Errore ingresso stanza: {}", e.getMessage());
 			ack.sendAckData(new RespEntraStanza(false, "Errore ingresso stanza"));

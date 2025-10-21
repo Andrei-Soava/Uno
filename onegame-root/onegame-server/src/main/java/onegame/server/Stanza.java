@@ -33,10 +33,8 @@ public abstract class Stanza {
 		try {
 			if (!isAperta || sessioni.size() >= maxUtenti || sessioni.contains(sessione))
 				return false;
-			boolean added = sessioni.add(sessione);
-			if (added)
-				notificaStato();
-			return added;
+
+			return sessioni.add(sessione);
 		} finally {
 			lock.unlock();
 		}
@@ -45,10 +43,7 @@ public abstract class Stanza {
 	public boolean rimuoviUtente(Sessione sessione) {
 		lock.lock();
 		try {
-			boolean removed = sessioni.remove(sessione);
-			if (removed)
-				notificaStato();
-			return removed;
+			return sessioni.remove(sessione);
 		} finally {
 			lock.unlock();
 		}
@@ -103,7 +98,7 @@ public abstract class Stanza {
 		}
 	}
 
-	private void notificaStato() {
+	public void notificaStato() {
 		lock.lock();
 		try {
 			StatoStanzaDTO dto = DTOServerUtils.creaStanzaDTO(this);
