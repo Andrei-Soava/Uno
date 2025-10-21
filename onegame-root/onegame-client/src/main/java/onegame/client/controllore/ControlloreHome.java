@@ -33,10 +33,7 @@ public class ControlloreHome {
 	 */
 	public void aspettaLogout() {
 		vh.waitForLogoutBtnClick().thenRun(()->{
-			if(cs.getUtente()!=null) {
-				cs.getUtente().setAnonimo(true);
-				cs.getUtente().setUsername("anonimo");
-			}
+			cs.disconnect();
 			vh.mostraAccesso();
 		});
 	}

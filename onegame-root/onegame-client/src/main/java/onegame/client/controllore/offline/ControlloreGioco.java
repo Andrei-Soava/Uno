@@ -81,12 +81,11 @@ public class ControlloreGioco {
 		this.partita = partita;
 	}
 	
-	//BEGIN test esotico
 	
 	private void creaTimers() {
 		timerTurno = new PauseTransition(Duration.seconds(30));
-		timerPreMossaBot = new PauseTransition(Duration.seconds(5));
-		timerPostMossaBot = new PauseTransition(Duration.seconds(3));
+		timerPreMossaBot = new PauseTransition(Duration.seconds(3));
+		timerPostMossaBot = new PauseTransition(Duration.seconds(2));
 		timerONE = new PauseTransition(Duration.seconds(5));
 		countdownTurno.setCycleCount(30);
 		vg.stampaTimerTurno(secondsLeft);
@@ -147,7 +146,6 @@ public class ControlloreGioco {
 		});
 	}
 	
-	//END
 	
 
     /**

@@ -131,3 +131,4 @@ Esempio COMPLETO:
 - 19/10, Andrei, (creazione nuovo ControllorePersistenza, ma ancora incompleto), null;
 - 20/10, Andrei, (fix minori dentro controllori per creazione partita online e controllo codice + aggiunta scroll pane dentro vista salvataggi per quando ci sono tanti salvataggi), null;
 - 20/10, Giuseppe, (aggiornamento del documento riguardante la specifica dei requisiti);
+- 21/10, Andrei, (creazione classe MappaUtils + piccoli adattamenti ai controllori/viste), null; 

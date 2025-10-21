@@ -22,9 +22,17 @@ public abstract class ControlloreStanza {
 	    });
 		
 		aggiornaStanza();
+		aspettaAbbandonaStanza();
 	}
 	
 	public abstract void aspettaInizioPartita();
+	
+	public void aspettaAbbandonaStanza() {
+		vs.waitForAbbandonaBtnClick().thenRun(()->{
+			cs.esciStanza(null);
+			vs.mostraMenuOnline();
+			});
+	}
 	
 	public void aggiornaStanza() {
 		cs.dettagliStanza(dettagli->{

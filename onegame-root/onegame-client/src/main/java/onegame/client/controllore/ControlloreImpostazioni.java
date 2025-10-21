@@ -103,10 +103,7 @@ public class ControlloreImpostazioni {
 	
 	public void aspettaLogout() {
 		vi.waitForLogoutBtnClick().thenRun(()->{
-			if(cs.getUtente()!=null) {
-				cs.getUtente().setAnonimo(true);
-				cs.getUtente().setUsername("anonimo");
-			}
+			cs.disconnect();
 			vi.mostraAccesso();
 		});
 	}

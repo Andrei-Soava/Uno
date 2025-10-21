@@ -2,6 +2,7 @@ package onegame.client.vista.online;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -14,6 +15,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import onegame.client.esecuzione.AppWithMaven;
+import onegame.client.vista.accessori.GestoreCallbackBottoni;
 
 public class VistaStanza {
 
@@ -22,6 +24,7 @@ public class VistaStanza {
     private Label numeroGiocatori;
     private Label codiceLbl;
     private final GridPane grigliaGiocatori;
+    private Button abbandonaBtn;
     private final Button avviaBtn;
 
     public VistaStanza(AppWithMaven app) {
@@ -31,8 +34,8 @@ public class VistaStanza {
         BorderPane topBar = new BorderPane();
         topBar.setPadding(new Insets(10));
 
-        Button abbandonaBtn = new Button("Abbandona");
-        abbandonaBtn.setOnAction(e -> app.mostraVistaMenuOnline());
+        abbandonaBtn = new Button("Abbandona");
+        //abbandonaBtn.setOnAction(e -> app.mostraVistaMenuOnline());
 
         Label titolo = new Label("Benvenuto nella lobby");
         titolo.getStyleClass().add("titolo");
@@ -90,6 +93,14 @@ public class VistaStanza {
 
     public Scene getScene() {
         return scene;
+    }
+    
+    public void mostraMenuOnline() {
+    	app.mostraVistaMenuOnline();
+    }
+    
+    public CompletableFuture<Void> waitForAbbandonaBtnClick(){
+    	return GestoreCallbackBottoni.waitForClick(abbandonaBtn);
     }
 
     /**
