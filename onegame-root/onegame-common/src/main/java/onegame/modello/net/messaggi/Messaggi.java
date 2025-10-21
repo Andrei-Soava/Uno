@@ -15,6 +15,7 @@ public class Messaggi {
 	public static final String EVENT_STANZA_ENTRA = "stanza:entra";
 	public static final String EVENT_STANZA_ESCI = "stanza:esci";
 	public static final String EVENT_STANZA_DETTAGLI = "stanza:dettagli";
+	public static final String EVENT_STANZA_AGGIORNAMENTO = "stanza:aggiornamento";
 
 	public static final String EVENT_INIZIO_PARTITA = "giocouno:inizia";
 	public static final String EVENT_GIOCO_MOSSA = "giocouno:mossa";

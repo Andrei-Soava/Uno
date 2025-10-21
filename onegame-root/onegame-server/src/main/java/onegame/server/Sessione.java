@@ -86,10 +86,6 @@ public class Sessione {
 		return token;
 	}
 
-	public SocketIOClient getClient() {
-		return client;
-	}
-
 	void setClient(SocketIOClient client) {
 		this.client = client;
 	}

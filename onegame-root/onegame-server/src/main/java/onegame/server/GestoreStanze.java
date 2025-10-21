@@ -143,12 +143,17 @@ public abstract class GestoreStanze<Stanzz extends Stanza> implements SessioneOb
 				logger.info("Sessione {} rimossa da stanza {}", sessione.getToken(), stanza.getCodice());
 			}
 			if (stanza.isVuota()) {
-				stanzePerCodice.remove(stanza.getCodice());
-				logger.info("Stanza {} rimossa perché vuota", stanza.getCodice());
+				removeStanza(stanza);
+
 			}
 		} finally {
 			stanza.lock.unlock();
 		}
+	}
+
+	private void removeStanza(Stanzz stanza) {
+		stanzePerCodice.remove(stanza.getCodice());
+		logger.info("Stanza {} rimossa manualmente", stanza.getCodice());
 	}
 
 	public Stanzz getStanzaPerSessione(Sessione sessione) {

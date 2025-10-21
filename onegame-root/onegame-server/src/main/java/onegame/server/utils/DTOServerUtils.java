@@ -21,7 +21,7 @@ public class DTOServerUtils {
 			nicknames.add(s.getNickname());
 			usernames.add(s.getUsername());
 		}
-		
+
 		StatoStanzaDTO dto = new StatoStanzaDTO(stanza.getCodice(), stanza.getMaxUtenti(), nicknames, usernames);
 		return dto;
 	}

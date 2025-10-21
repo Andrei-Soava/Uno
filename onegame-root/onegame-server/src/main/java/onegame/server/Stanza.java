@@ -3,7 +3,9 @@ package onegame.server;
 import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
 
-import com.corundumstudio.socketio.SocketIOClient;
+import onegame.modello.net.StatoStanzaDTO;
+import onegame.modello.net.messaggi.Messaggi;
+import onegame.server.utils.DTOServerUtils;
 
 /**
  * Classe astratta che rappresenta una stanza generica con gestione delle
@@ -31,7 +33,10 @@ public abstract class Stanza {
 		try {
 			if (!isAperta || sessioni.size() >= maxUtenti || sessioni.contains(sessione))
 				return false;
-			return sessioni.add(sessione);
+			boolean added = sessioni.add(sessione);
+			if (added)
+				notificaStato();
+			return added;
 		} finally {
 			lock.unlock();
 		}
@@ -40,7 +45,10 @@ public abstract class Stanza {
 	public boolean rimuoviUtente(Sessione sessione) {
 		lock.lock();
 		try {
-			return sessioni.remove(sessione);
+			boolean removed = sessioni.remove(sessione);
+			if (removed)
+				notificaStato();
+			return removed;
 		} finally {
 			lock.unlock();
 		}
@@ -77,19 +85,6 @@ public abstract class Stanza {
 		return maxUtenti;
 	}
 
-//	public Set<String> getTokenUtenti() {
-//		lock.lock();
-//		try {
-//			Set<String> tokens = new LinkedHashSet<>();
-//			for (Sessione s : sessioni) {
-//				tokens.add(s.getToken());
-//			}
-//			return Collections.unmodifiableSet(tokens);
-//		} finally {
-//			lock.unlock();
-//		}
-//	}
-
 	public boolean hasUtente(Sessione sessione) {
 		lock.lock();
 		try {
@@ -98,7 +93,7 @@ public abstract class Stanza {
 			lock.unlock();
 		}
 	}
-	
+
 	public Set<Sessione> getSessioni() {
 		lock.lock();
 		try {
@@ -107,4 +102,17 @@ public abstract class Stanza {
 			lock.unlock();
 		}
 	}
+
+	private void notificaStato() {
+		lock.lock();
+		try {
+			StatoStanzaDTO dto = DTOServerUtils.creaStanzaDTO(this);
+			for (Sessione s : sessioni) {
+				s.sendEvent(Messaggi.EVENT_STANZA_AGGIORNAMENTO, dto);
+			}
+		} finally {
+			lock.unlock();
+		}
+	}
+
 }

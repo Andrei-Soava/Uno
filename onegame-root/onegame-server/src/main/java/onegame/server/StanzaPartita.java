@@ -37,6 +37,7 @@ public class StanzaPartita extends Stanza implements PartitaObserver {
 
 			// Inizializza la partita
 			List<Giocatore> lista = new ArrayList<>(giocatori.values());
+			Collections.shuffle(lista);
 			this.partita = new PartitaNET(lista, this);
 			this.partita.addObserver(this);
 
@@ -77,28 +78,29 @@ public class StanzaPartita extends Stanza implements PartitaObserver {
 
 		try {
 			List<GiocatoreDTO> listaGiocatoriDTO = new ArrayList<>();
-
-			// Prepara i DTO dei giocatori
-			for (Sessione s : sessioni) {
-				Giocatore g = giocatori.get(s);
-				GiocatoreDTO gDTO = new GiocatoreDTO(s.getUsername(), s.getNickname(), s.isAnonimo(),
-						g.getMano().getNumCarte());
-				listaGiocatoriDTO.add(gDTO);
-			}
-
-			CartaDTO cartaIniziale = DTOUtils.creaCartaDTO(partita.getCartaCorrente());
-
-			for (Map.Entry<Sessione, Giocatore> entry : giocatori.entrySet()) {
-				Sessione s = entry.getKey();
-				Giocatore g = entry.getValue();
-
-				List<CartaDTO> manoDTO = DTOUtils.creaListaCarteDTO(g.getMano().getCarte());
-				StatoPartitaDTO mess = new StatoPartitaDTO(cartaIniziale, listaGiocatoriDTO,
-						partita.getIndiceGiocatoreCorrente(), manoDTO, partita.getDirezione(), partita.isFinished(),
-						partita.getIndiceVincitore());
-
-				s.sendEvent(nomeEvento, new MessStatoPartita(mess));
-			}
+			
+			throw new RuntimeException();
+//			// Prepara i DTO dei giocatori
+//			for (Sessione s : sessioni) {
+//				Giocatore g = giocatori.get(s);
+//				GiocatoreDTO gDTO = new GiocatoreDTO(s.getUsername(), s.getNickname(), s.isAnonimo(),
+//						g.getMano().getNumCarte());
+//				listaGiocatoriDTO.add(gDTO);
+//			}
+//
+//			CartaDTO cartaIniziale = DTOUtils.creaCartaDTO(partita.getCartaCorrente());
+//
+//			for (Map.Entry<Sessione, Giocatore> entry : giocatori.entrySet()) {
+//				Sessione s = entry.getKey();
+//				Giocatore g = entry.getValue();
+//
+//				List<CartaDTO> manoDTO = DTOUtils.creaListaCarteDTO(g.getMano().getCarte());
+//				StatoPartitaDTO mess = new StatoPartitaDTO(cartaIniziale, listaGiocatoriDTO,
+//						partita.getIndiceGiocatoreCorrente(), manoDTO, partita.getDirezione(), partita.isFinished(),
+//						partita.getIndiceVincitore());
+//
+//				s.sendEvent(nomeEvento, new MessStatoPartita(mess));
+//			}
 		} finally {
 			lock.unlock();
 		}

@@ -10,16 +10,9 @@ import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 import onegame.modello.net.MossaDTO;
 import onegame.modello.net.messaggi.MessaggiSalvataggiPartite;
+import onegame.modello.net.messaggi.MessaggiSalvataggiPartite.*;
 import onegame.modello.net.messaggi.Messaggi;
-import onegame.modello.net.messaggi.Messaggi.ReqAuth;
-import onegame.modello.net.messaggi.Messaggi.ReqCreaStanza;
-import onegame.modello.net.messaggi.Messaggi.ReqEffettuaMossa;
-import onegame.modello.net.messaggi.Messaggi.ReqEntraStanza;
-import onegame.modello.net.messaggi.Messaggi.RespAuth;
-import onegame.modello.net.messaggi.Messaggi.RespCreaStanza;
-import onegame.modello.net.messaggi.Messaggi.RespDettagliStanza;
-import onegame.modello.net.messaggi.Messaggi.RespEffettuaMossa;
-import onegame.modello.net.messaggi.Messaggi.RespEntraStanza;
+import onegame.modello.net.messaggi.Messaggi.*;
 import onegame.modello.net.util.Callback;
 import onegame.modello.net.util.JsonHelper;
 
@@ -198,13 +191,6 @@ public class ClientSocket {
 		ReqCreaStanza req = new ReqCreaStanza(nome, maxGiocatori);
 		System.out.println(
 				"[CLIENT] Invio richiesta creazione stanza: " + nome + " (max giocatori: " + maxGiocatori + ")");
-//		socket.emit(ProtocolloMessaggi.EVENT_STANZA_CREA, JsonHelper.toJson(req), (Ack) args -> {
-//			RespCreaStanza resp = getPayload(RespCreaStanza.class, args);
-//			
-//			if (callback != null) {
-//				callback.call(resp);
-//			}
-//		});
 
 		socketEmitEvent(Messaggi.EVENT_STANZA_CREA, req, callback, RespCreaStanza.class);
 	}
@@ -221,7 +207,7 @@ public class ClientSocket {
 
 		socketEmitEvent(Messaggi.EVENT_STANZA_ENTRA, req, callback, RespEntraStanza.class);
 	}
-	
+
 	public void dettagliStanza(Callback<RespDettagliStanza> callback) {
 		System.out.println("[CLIENT] Invio richiesta dettagli stanza");
 
@@ -235,41 +221,41 @@ public class ClientSocket {
 		socketEmitEvent(Messaggi.EVENT_GIOCO_MOSSA, req, callback, RespEffettuaMossa.class);
 	}
 
-	public void listaPartite(Callback<MessaggiSalvataggiPartite.RespListaSalvataggi> callback) {
+	public void listaPartite(Callback<RespListaSalvataggi> callback) {
 		System.out.println("[CLIENT] Invio richiesta lista partite salvate");
-//		socket.emit(ProtocolloMessaggi.EVENT_LISTA_PARTITE, null, (Ack) callback);
 
-		socketEmitEvent(MessaggiSalvataggiPartite.EVENT_LISTA_SALVATAGGI, null, callback, MessaggiSalvataggiPartite.RespListaSalvataggi.class);
+		socketEmitEvent(MessaggiSalvataggiPartite.EVENT_LISTA_SALVATAGGI, null, callback, RespListaSalvataggi.class);
 	}
 
-	public void salvaPartita(String nomeSalvataggio, String partitaSerializzata, Callback<MessaggiSalvataggiPartite.RespCreaSalvataggio> callback) {
-		MessaggiSalvataggiPartite.ReqCreaSalvataggio req = new MessaggiSalvataggiPartite.ReqCreaSalvataggio(nomeSalvataggio, partitaSerializzata);
+	public void salvaPartita(String nomeSalvataggio, String partitaSerializzata,
+			Callback<RespCreaSalvataggio> callback) {
+		ReqCreaSalvataggio req = new ReqCreaSalvataggio(nomeSalvataggio, partitaSerializzata);
 		System.out.println("[CLIENT] Invio richiesta salvataggio partita: " + nomeSalvataggio);
-//		socket.emit(ProtocolloMessaggi.EVENT_SALVA_PARTITA, JsonHelper.toJson(req), (Ack) callback);
 
-		socketEmitEvent(MessaggiSalvataggiPartite.EVENT_CREA_SALVATAGGIO, req, callback, MessaggiSalvataggiPartite.RespCreaSalvataggio.class);
+		socketEmitEvent(MessaggiSalvataggiPartite.EVENT_CREA_SALVATAGGIO, req, callback, RespCreaSalvataggio.class);
 	}
 
-	public void caricaPartita(String nomeSalvataggio, Callback<MessaggiSalvataggiPartite.RespCaricaSalvataggio> callback) {
-		MessaggiSalvataggiPartite.ReqCaricaSalvataggio req = new MessaggiSalvataggiPartite.ReqCaricaSalvataggio(nomeSalvataggio);
+	public void caricaPartita(String nomeSalvataggio, Callback<RespCaricaSalvataggio> callback) {
+		ReqCaricaSalvataggio req = new ReqCaricaSalvataggio(nomeSalvataggio);
 		System.out.println("[CLIENT] Invio richiesta caricamento partita: " + nomeSalvataggio);
 
-		socketEmitEvent(MessaggiSalvataggiPartite.EVENT_CARICA_SALVATAGGIO, req, callback, MessaggiSalvataggiPartite.RespCaricaSalvataggio.class);
+		socketEmitEvent(MessaggiSalvataggiPartite.EVENT_CARICA_SALVATAGGIO, req, callback, RespCaricaSalvataggio.class);
 	}
 
-	public void eliminaPartita(String nomeSalvataggio, Callback<MessaggiSalvataggiPartite.RespEliminaSalvataggio> callback) {
-		MessaggiSalvataggiPartite.ReqEliminaSalvataggio req = new MessaggiSalvataggiPartite.ReqEliminaSalvataggio(nomeSalvataggio);
+	public void eliminaPartita(String nomeSalvataggio, Callback<RespEliminaSalvataggio> callback) {
+		ReqEliminaSalvataggio req = new ReqEliminaSalvataggio(nomeSalvataggio);
 		System.out.println("[CLIENT] Invio richiesta eliminazione partita: " + nomeSalvataggio);
 
-		socketEmitEvent(MessaggiSalvataggiPartite.EVENT_ELIMINA_SALVATAGGIO, req, callback, MessaggiSalvataggiPartite.RespEliminaSalvataggio.class);
+		socketEmitEvent(MessaggiSalvataggiPartite.EVENT_ELIMINA_SALVATAGGIO, req, callback,
+				RespEliminaSalvataggio.class);
 	}
-	
-	public void rinominaPartita(String vecchioNome, String nuovoNome, Callback<MessaggiSalvataggiPartite.RespRinominaSalvataggio> callback) {
-		MessaggiSalvataggiPartite.ReqRinominaSalvataggio req = new MessaggiSalvataggiPartite.ReqRinominaSalvataggio(vecchioNome, nuovoNome);
+
+	public void rinominaPartita(String vecchioNome, String nuovoNome, Callback<RespRinominaSalvataggio> callback) {
+		ReqRinominaSalvataggio req = new ReqRinominaSalvataggio(vecchioNome, nuovoNome);
 		System.out.println("[CLIENT] Invio richiesta rinomina partita: " + vecchioNome + " -> " + nuovoNome);
 
 		socketEmitEvent(MessaggiSalvataggiPartite.EVENT_RINOMINA_SALVATAGGIO, req, callback,
-				MessaggiSalvataggiPartite.RespRinominaSalvataggio.class);
+				RespRinominaSalvataggio.class);
 	}
 
 	/**
