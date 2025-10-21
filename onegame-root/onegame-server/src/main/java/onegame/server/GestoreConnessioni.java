@@ -136,7 +136,7 @@ public class GestoreConnessioni {
 			ReqAuthAnonimo req = JsonHelper.fromJson(str, ReqAuthAnonimo.class);
 			String nickname = req.nickname;
 
-			if (nickname == null || nickname.isEmpty() || nickname.length() < 3 || nickname.length() > 20) {
+			if (nickname == null || nickname.isEmpty() || !nickname.matches("^[a-zA-Z0-9_]{3,44}$")) {
 				ackRequest.sendAckData(new RespAuth(false, null, "Nickname non valido", null, null));
 				return;
 			}

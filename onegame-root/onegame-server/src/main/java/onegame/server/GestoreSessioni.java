@@ -82,37 +82,12 @@ public class GestoreSessioni {
 		}
 	}
 
-	public void rimuoviSessione(String token) {
-		if (token != null) {
-			Sessione s = sessioni.remove(token);
-			if (s != null) {
-				s.setClient(null);
-			}
-		}
-	}
-
 	private void avviaControlloTimeout() {
 		ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 		scheduler.scheduleAtFixedRate(() -> {
 			long now = System.currentTimeMillis();
-			for (Map.Entry<String, Sessione> entry : sessioni.entrySet()) {
-				String token = entry.getKey();
-				Sessione sessione = entry.getValue();
-
-				// Utente inattivo → non connesso
-				if (sessione.isConnesso() && !sessione.isAttivo()) {
-					sessione.setConnesso(false);
-					logger.info("Timeout sessione: nickname={}, token={}", sessione.getNickname(), token);
-					for (SessioneObserver observer : observers) {
-						observer.onSessioneInattiva(sessione);
-					}
-				}
-
-//				// Utente disconnesso → rimozione sessione
-//				if (!u.isConnesso() && now - u.getUltimoPing() > SESSION_EXPIRATION_MS) {
-//					sessioni.remove(token)
-//					logger.info("Sessione rimossa per inattività: nickname={}, token={}", s.getNickname(), token);
-//				}
+			for (Sessione s : sessioni.values()) {
+				rimuoviSeScaduta(s, now);
 			}
 		}, 0, 5, TimeUnit.MINUTES);
 	}
@@ -120,8 +95,21 @@ public class GestoreSessioni {
 	public boolean addObserver(SessioneObserver observer) {
 		return observers.add(observer);
 	}
-	
+
 	public boolean removeObserver(SessioneObserver observer) {
 		return observers.remove(observer);
 	}
+
+	private void rimuoviSeScaduta(Sessione sessione, long now) {
+		String token = sessione.getToken();
+		if (!sessione.isConnesso() && now - sessione.getUltimoPing() > SESSION_EXPIRATION_MS) {
+			sessioni.remove(token);
+			logger.info("Sessione rimossa per inattività: nickname={}, token={}", sessione.getNickname(), token);
+
+			for (SessioneObserver observer : observers) {
+				observer.onSessioneInattiva(sessione);
+			}
+		}
+	}
+
 }

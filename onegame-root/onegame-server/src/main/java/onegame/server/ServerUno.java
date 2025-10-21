@@ -127,6 +127,7 @@ public class ServerUno {
 			logger.warn("Sessione non trovata per client con token {}", client.get("token").toString());
 			throw new IllegalStateException("Sessione non trovata");
 		}
+		s.aggiornaPing();
 		return s;
 	}
 

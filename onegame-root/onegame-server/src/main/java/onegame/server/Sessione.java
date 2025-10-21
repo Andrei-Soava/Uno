@@ -21,8 +21,6 @@ public class Sessione {
 	private final String token;
 	private SocketIOClient client;
 
-	private static final long TIMEOUT_MS = 300_000;
-
 	private static final Logger logger = LoggerFactory.getLogger(Sessione.class);
 
 	private Sessione(String token) {
@@ -74,14 +72,6 @@ public class Sessione {
 
 	public void aggiornaPing() {
 		this.ultimoPing = System.currentTimeMillis();
-	}
-
-	public boolean isAttivo() {
-		return connesso && (System.currentTimeMillis() - ultimoPing < TIMEOUT_MS);
-	}
-
-	public boolean isAttivo(long timeoutMs) {
-		return connesso && (System.currentTimeMillis() - ultimoPing < timeoutMs);
 	}
 
 	public long getUltimoPing() {
