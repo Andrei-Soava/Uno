@@ -21,9 +21,24 @@ public class GestoreDatabase {
 
 	private static final Logger logger = LoggerFactory.getLogger(GestoreDatabase.class);
 
-	private static final String[] DDL = {
-
-	};
+	private static final String[] DDL = { """
+			CREATE TABLE IF NOT EXISTS utente (
+			    id IDENTITY PRIMARY KEY,
+			    username VARCHAR(50) UNIQUE NOT NULL,
+			    password VARCHAR(200) NOT NULL,
+			    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+			)
+			""", """
+			CREATE TABLE IF NOT EXISTS partita_incompleta (
+			    id IDENTITY PRIMARY KEY,
+			    utente_id BIGINT NOT NULL,
+			    nome_salvataggio VARCHAR(100) NOT NULL,
+			    partita_serializzata CLOB NOT NULL,
+			    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+			    FOREIGN KEY (utente_id) REFERENCES utente(id) ON DELETE CASCADE,
+			    UNIQUE (utente_id, nome_salvataggio)
+			)
+			""" };
 
 	private static String buildUrl() {
 		File dir = new File(DB_DIR);
@@ -50,33 +65,13 @@ public class GestoreDatabase {
 	 * Inizializza il database con le tabelle necessarie.
 	 *
 	 * @throws SQLException in caso di errori SQL durante l'esecuzione
-	 * @throws Exception    in caso di errori generici
+	 * @throws Exception in caso di errori generici
 	 */
 	public static void inizializzaDatabase() {
 		try (Connection conn = getConnection(); Statement st = conn.createStatement()) {
-			// Tabella utente
-			st.executeUpdate("""
-					CREATE TABLE IF NOT EXISTS utente (
-					    id IDENTITY PRIMARY KEY,
-					    username VARCHAR(50) UNIQUE NOT NULL,
-					    password VARCHAR(200) NOT NULL,
-					    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-					      )
-					  """);
-
-			// Tabella partita incompleta
-			st.executeUpdate("""
-	                CREATE TABLE IF NOT EXISTS partita_incompleta (
-	                    id IDENTITY PRIMARY KEY,
-	                    utente_id BIGINT NOT NULL,
-	                    nome_salvataggio VARCHAR(100) NOT NULL,
-	                    partita_serializzata CLOB NOT NULL,
-	                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-	                    FOREIGN KEY (utente_id) REFERENCES utente(id) ON DELETE CASCADE,
-	                    UNIQUE (utente_id, nome_salvataggio)
-	                )
-	            """);
-			
+			for (String ddl : DDL) {
+				st.executeUpdate(ddl);
+			}
 			logger.info("Database inizializzato correttamente");
 		} catch (SQLException e) {
 			logger.error("Errore durante l'inizializzazione del database: {}", e);

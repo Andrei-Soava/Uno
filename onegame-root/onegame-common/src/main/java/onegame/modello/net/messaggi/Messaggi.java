@@ -42,21 +42,36 @@ public class Messaggi {
 		}
 	}
 
+	public static class ReqAuthAnonimo {
+		public String nickname;
+
+		public ReqAuthAnonimo() {
+		}
+
+		public ReqAuthAnonimo(String nickname) {
+			this.nickname = nickname;
+		}
+
+	}
+
 	public static class RespAuth {
 		public boolean success;
-		public String idGiocatore;
 		public String token;
 		public String messaggio;
+		public String username;
+		public String nickname;
 
 		public RespAuth() {
 		}
 
-		public RespAuth(boolean success, String idGiocatore, String token, String messaggio) {
+		public RespAuth(boolean success, String token, String messaggio, String username, String nickname) {
 			this.success = success;
-			this.idGiocatore = idGiocatore;
 			this.token = token;
 			this.messaggio = messaggio;
+			this.username = username;
+			this.nickname = nickname;
 		}
+
 	}
 
 //     Crea stanza

@@ -55,7 +55,7 @@ public class ClientSocket {
 	public void setUtente(Utente utente) {
 		this.utente = utente;
 	}
-	
+
 	/**
 	 * Ottieni observer dal socket
 	 * @return observer del socket
@@ -90,14 +90,14 @@ public class ClientSocket {
 		socket.on(Socket.EVENT_DISCONNECT, args -> System.out.println("[client] disconnesso dal server"));
 		socket.on("connect_error", args -> System.out.println("[client] errore connessione: " + args[0]));
 
-		//socket.on("stanza:aggiornamento", args -> System.out.println("[server][stanza:aggiornamento] " + args[0]));
+		// socket.on("stanza:aggiornamento", args -> System.out.println("[server][stanza:aggiornamento] " + args[0]));
 		socket.on("partita:inizia", args -> System.out.println("[server][partita:inizia] " + args[0]));
 		socket.on("partita:turno", args -> System.out.println("[server][partita:turno] " + args[0]));
 		socket.on("partita:mossa", args -> System.out.println("[server][partita:mossa] " + args[0]));
 		socket.on("partita:terminata", args -> System.out.println("[server][partita:terminata] " + args[0]));
-		socket.on(Messaggi.EVENT_STANZA_AGGIORNAMENTO, (args->{
+		socket.on(Messaggi.EVENT_STANZA_AGGIORNAMENTO, (args -> {
 			StatoStanzaDTO stato = getPayload(StatoStanzaDTO.class, args);
-			if(observer != null) {
+			if (observer != null) {
 				observer.aggiornaStanza(stato);
 			}
 		}));
@@ -233,7 +233,7 @@ public class ClientSocket {
 
 		socketEmitEvent(Messaggi.EVENT_STANZA_ENTRA, req, callback, RespEntraStanza.class);
 	}
-	
+
 	public void esciStanza(Callback<RespAbbandonaStanza> callback) {
 		System.out.println("[CLIENT] Invio richiesta uscita dalla stanza");
 
