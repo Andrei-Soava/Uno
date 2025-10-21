@@ -396,28 +396,6 @@ public class ControlloreGioco {
 	                                partita.applicaMossa(g, m);
 	                                
 	                                //QUI MOSTRA PULSANTE ONE (se hai appena giocato la penultima)
-//	                                if (g.getMano().getNumCarte() == 1) { 
-//	                                	vg.stampaManoReadOnly(m.getCartaScelta(), g);
-//	                                    vg.mostraPulsanteONE(premuto -> {
-//	                                    	if (premuto) {
-//		                        	            vg.stampaMessaggio(g.getNome()+" ha chiamato ONE");
-//		                        	        } else {
-//		                        	            vg.stampaMessaggio(g.getNome()+" NON ha chiamato ONE in tempo -> pesca 2 carte");
-//		                        	            g.getMano().aggiungiCarte(partita.getMazzo().pescaN(2));
-//		                        	        }
-//		                        	        partita.passaTurno();
-//		                        	        cp.salvaPartitaAutomatico(this);
-//		                        	        if (partitaAttiva)
-//		                        	            eseguiTurno();
-//	                                    });
-//	                                } else {
-//	                                    //condizione falsa -> eseguo subito le 4 righe
-//	                                    partita.passaTurno();
-//	                                    cp.salvaPartitaAutomatico(this);
-//	                                    if (partitaAttiva)
-//	                                        eseguiTurno();
-//	                                }
-//	                                
 	                                //seconda versione per gestione chiamata ONE (timer gestito internamente)
 	                                if (g.getMano().getNumCarte() == 1) { 
 	                                	vg.stampaManoReadOnly(m.getCartaScelta(), g);
@@ -458,30 +436,8 @@ public class ControlloreGioco {
 	                        	countdownTurno.stop();
 	                        	timerTurno.stop();
 	                        	timerTurno.setOnFinished(null);
-	                        	partita.applicaMossa(g, m);
 	                        	
 	                        	//QUI MOSTRA PULSANTE ONE (se hai appena giocato la penultima carta)
-//	                        	if (g.getMano().getNumCarte() == 1) { 
-//	                        		vg.stampaManoReadOnly(m.getCartaScelta(), g);
-//	                        	    vg.mostraPulsanteONE(premuto -> {
-//	                        	        if (premuto) {
-//	                        	            vg.stampaMessaggio(g.getNome()+" ha chiamato ONE");
-//	                        	        } else {
-//	                        	            vg.stampaMessaggio(g.getNome()+" NON ha chiamato ONE in tempo -> pesca 2 carte");
-//	                        	            g.getMano().aggiungiCarte(partita.getMazzo().pescaN(2));
-//	                        	        }
-//	                        	        partita.passaTurno();
-//	                        	        cp.salvaPartitaAutomatico(this);
-//	                        	        if (partitaAttiva)
-//	                        	            eseguiTurno();
-//	                        	    });
-//	                        	} else {
-//	                        	    partita.passaTurno();
-//	                        	    cp.salvaPartitaAutomatico(this);
-//	                        	    if (partitaAttiva)
-//	                        	        eseguiTurno();
-//	                        	}
-	                        	
 	                        	//seconda versione per gestione chiamata ONE (timer gestito internamente)
                                 if (g.getMano().getNumCarte() == 1) { 
                                 	vg.stampaManoReadOnly(m.getCartaScelta(), g);
