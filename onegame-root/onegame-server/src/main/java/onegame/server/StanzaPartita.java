@@ -18,8 +18,8 @@ public class StanzaPartita extends Stanza implements PartitaObserver {
 
 	private PartitaNET partita;
 
-	public StanzaPartita(int codice, long id, String nome, int maxUtenti) {
-		super(codice, id, nome, maxUtenti);
+	public StanzaPartita(int codice, String nome, int maxUtenti) {
+		super(codice, nome, maxUtenti);
 	}
 
 	public boolean avviaPartita() {

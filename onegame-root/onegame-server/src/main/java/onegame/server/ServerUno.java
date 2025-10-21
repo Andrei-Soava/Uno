@@ -78,6 +78,9 @@ public class ServerUno {
 		server.addEventListener(Messaggi.EVENT_STANZA_ENTRA, String.class,
 				(client, data, ack) -> gestoreStanze.handleEntraStanza(getSessione(client), data, ack));
 
+		server.addEventListener(Messaggi.EVENT_STANZA_DETTAGLI, String.class,
+				(client, data, ack) -> gestoreStanze.handleDettagliStanza(getSessione(client), ack));
+
 		// Salvataggi partite offline
 		server.addEventListener(MessaggiSalvataggiPartite.EVENT_CREA_SALVATAGGIO, String.class,
 				(client, data, ack) -> gestorePartiteOffline.handleSalvaPartita(getSessione(client), data, ack));
@@ -116,7 +119,12 @@ public class ServerUno {
 	}
 
 	private Sessione getSessione(SocketIOClient client) {
-		return gestoreSessioni.getSessione(client.get("token"));
+		Sessione s =  gestoreSessioni.getSessione(client.get("token"));
+		if (s == null) {
+			logger.warn("Sessione non trovata per client con token {}", client.get("token").toString());
+			throw new IllegalStateException("Sessione non trovata");
+		}
+		return s;
 	}
 
 	public void stop() {

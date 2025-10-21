@@ -12,7 +12,6 @@ import com.corundumstudio.socketio.SocketIOClient;
 public abstract class Stanza {
 
 	protected final int codice;
-	protected final long id;
 	protected final String nome;
 	protected int maxUtenti;
 	protected boolean isAperta = true;
@@ -21,9 +20,8 @@ public abstract class Stanza {
 
 	protected final Set<Sessione> sessioni = new LinkedHashSet<>();
 
-	public Stanza(int codice, long id, String nome, int maxUtenti) {
+	public Stanza(int codice, String nome, int maxUtenti) {
 		this.codice = codice;
-		this.id = id;
 		this.nome = nome;
 		this.maxUtenti = maxUtenti;
 	}
@@ -71,10 +69,6 @@ public abstract class Stanza {
 		return codice;
 	}
 
-	public long getId() {
-		return id;
-	}
-
 	public String getNome() {
 		return nome;
 	}
@@ -100,6 +94,15 @@ public abstract class Stanza {
 		lock.lock();
 		try {
 			return sessioni.contains(sessione);
+		} finally {
+			lock.unlock();
+		}
+	}
+	
+	public Set<Sessione> getSessioni() {
+		lock.lock();
+		try {
+			return Collections.unmodifiableSet(new LinkedHashSet<>(sessioni));
 		} finally {
 			lock.unlock();
 		}

@@ -7,7 +7,7 @@ public class GestoreStanzePartita extends GestoreStanze<StanzaPartita> {
 	}
 
 	@Override
-	protected StanzaPartita creaStanza(int codice, long id, String nome, int maxUtenti) {
-		return new StanzaPartita(codice, id, nome, maxUtenti);
+	protected StanzaPartita creaStanza(int codice, String nome, int maxUtenti) {
+		return new StanzaPartita(codice, nome, maxUtenti);
 	}
 }

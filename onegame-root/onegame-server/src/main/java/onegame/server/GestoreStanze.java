@@ -3,36 +3,32 @@ package onegame.server;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicLong;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.corundumstudio.socketio.AckRequest;
-import com.corundumstudio.socketio.SocketIOClient;
 
+import onegame.modello.net.StatoStanzaDTO;
 import onegame.modello.net.messaggi.Messaggi.ReqCreaStanza;
 import onegame.modello.net.messaggi.Messaggi.ReqEntraStanza;
 import onegame.modello.net.messaggi.Messaggi.RespAbbandonaStanza;
 import onegame.modello.net.messaggi.Messaggi.RespCreaStanza;
+import onegame.modello.net.messaggi.Messaggi.RespDettagliStanza;
 import onegame.modello.net.messaggi.Messaggi.RespEntraStanza;
 import onegame.modello.net.util.JsonHelper;
+import onegame.server.utils.DTOServerUtils;
 
 /**
  * Gestisce creazione, ingresso e gestione delle stanze di gioco. Una stanza è
  * rappresentata da un'istanza di StanzaPartita. Ogni stanza ha un id univoco
- * (long) e un codice (int).
+ * (long) e un codice (int). Ogni sessione può essere in al più una stanza alla volta.
  */
 public abstract class GestoreStanze<Stanzz extends Stanza> implements SessioneObserver {
 
-	// Mappa idStanza → Stanza
-	protected final Map<Long, Stanzz> stanze = new ConcurrentHashMap<>();
-	// Mappa sessione → idStanza
-	private final Map<Sessione, Long> mappaSessioneAIdStanza = new ConcurrentHashMap<>();
-	// Mappa codiceStanza → idStanza
-	private final Map<Integer, Long> mappaCodiceAIdStanza = new ConcurrentHashMap<>();
+	private final Map<Sessione, Stanzz> mappaSessioneAStanza = new ConcurrentHashMap<>();
+	protected final Map<Integer, Stanzz> stanzePerCodice = new ConcurrentHashMap<>();
 
-	private final AtomicLong counterId = new AtomicLong();
 	private final AtomicInteger counterCodice = new AtomicInteger(MIN_CODICE);
 
 	private static final int MIN_CODICE = 1000000;
@@ -48,25 +44,30 @@ public abstract class GestoreStanze<Stanzz extends Stanza> implements SessioneOb
 	 */
 	public void handleCreaStanza(Sessione sessione, String str, AckRequest ack) {
 		try {
+			if (mappaSessioneAStanza.containsKey(sessione)) {
+				ack.sendAckData(new RespCreaStanza(false, "Utente già in una stanza", -1));
+				logger.warn("Tentativo di creare una stanza da parte di una sessione già in stanza: {}",
+						sessione.getToken());
+				return;
+			}
+
 			ReqCreaStanza req = JsonHelper.fromJson(str, ReqCreaStanza.class);
-			long idStanza = counterId.incrementAndGet();
 			int maxGiocatori = Math.max(2, req.maxGiocatori);
 			int codiceStanza = nextCodice();
 
-			Stanzz stanza = creaStanza(codiceStanza, idStanza, req.nomeStanza, maxGiocatori);
+			Stanzz stanza = creaStanza(codiceStanza, req.nomeStanza, maxGiocatori);
 			if (stanza == null) {
 				ack.sendAckData(new RespCreaStanza(false, "Errore creazione stanza", -1));
 				logger.error("Creazione stanza fallita per sessione {}", sessione.getToken());
 				return;
 			}
 
-			stanze.put(idStanza, stanza);
-			mappaSessioneAIdStanza.put(sessione, idStanza);
+			mappaSessioneAStanza.put(sessione, stanza);
+			stanzePerCodice.put(codiceStanza, stanza);
 			stanza.aggiungiUtente(sessione);
-			mappaCodiceAIdStanza.put(codiceStanza, idStanza);
 
 			ack.sendAckData(new RespCreaStanza(true, "Stanza creata con successo", codiceStanza));
-			logger.info("Creata stanza {} da sessione {}", idStanza, sessione.getToken());
+			logger.info("Creata stanza {} da sessione {}", stanza.getCodice(), sessione.getToken());
 		} catch (Exception e) {
 			logger.error("Errore creazione stanza: {}", e.getMessage());
 			ack.sendAckData(new RespCreaStanza(false, "Errore creazione stanza", -1));
@@ -78,9 +79,16 @@ public abstract class GestoreStanze<Stanzz extends Stanza> implements SessioneOb
 	 */
 	public void handleEntraStanza(Sessione sessione, String str, AckRequest ack) {
 		try {
+			if (mappaSessioneAStanza.containsKey(sessione)) {
+				ack.sendAckData(new RespEntraStanza(false, "Utente già in una stanza"));
+				logger.warn("Tentativo di ingresso in stanza da parte di una sessione già in stanza: {}",
+						sessione.getToken());
+				return;
+			}
+
 			ReqEntraStanza req = JsonHelper.fromJson(str, ReqEntraStanza.class);
-			Long idStanza = mappaCodiceAIdStanza.get(req.codiceStanza);
-			Stanzz stanza = stanze.get(idStanza);
+
+			Stanzz stanza = stanzePerCodice.get(req.codiceStanza);
 
 			if (stanza == null) {
 				ack.sendAckData(new RespEntraStanza(false, "Stanza non trovata"));
@@ -94,57 +102,64 @@ public abstract class GestoreStanze<Stanzz extends Stanza> implements SessioneOb
 				return;
 			}
 
-			mappaSessioneAIdStanza.put(sessione, idStanza);
+			mappaSessioneAStanza.put(sessione, stanza);
 			ack.sendAckData(new RespEntraStanza(true, "Ingresso in stanza avvenuto con successo"));
-			logger.info("Sessione {} entrata in stanza {} con codice {}", sessione.getToken(), idStanza,
-					req.codiceStanza);
+			logger.info("Sessione {} entrata nella stanza con codice {}", sessione.getToken(), req.codiceStanza);
 		} catch (Exception e) {
 			logger.error("Errore ingresso stanza: {}", e.getMessage());
 			ack.sendAckData(new RespEntraStanza(false, "Errore ingresso stanza"));
 		}
 	}
 
+	public void handleDettagliStanza(Sessione sessione, AckRequest ack) {
+		try {
+			Stanza stanzz = mappaSessioneAStanza.get(sessione);
+			if (stanzz == null) {
+				ack.sendAckData(new RespDettagliStanza(false, "Utente non è in una stanza", null));
+				logger.warn("Richiesta dettagli stanza da parte di una sessione non in stanza: {}",
+						sessione.getToken());
+				return;
+			}
+			StatoStanzaDTO dto = DTOServerUtils.creaStanzaDTO(stanzz);
+			ack.sendAckData(new RespDettagliStanza(true, "Dettagli stanza ottenuti con successo", dto));
+			logger.info("Dettagli stanza {} inviati a sessione {}", stanzz.getCodice(), sessione.getToken());
+		} catch (Exception e) {
+			logger.error("Errore ottenimento dettagli stanza: {}", e.getMessage());
+			ack.sendAckData(new RespDettagliStanza(false, "Errore ottenimento dettagli stanza", null));
+		}
+	}
+
 	/**
 	 * Rimuove l'utente dalla stanza e la stanza se è vuota.
 	 */
-	public void rimuoviUtenteDaSistema(Sessione sessione) {
-		Long idStanza = mappaSessioneAIdStanza.remove(sessione);
-		if (idStanza == null)
-			return;
-
-		Stanzz stanza = stanze.get(idStanza);
+	private void rimuoviUtenteDaSistema(Sessione sessione) {
+		Stanzz stanza = mappaSessioneAStanza.remove(sessione);
 		if (stanza == null)
 			return;
 
 		stanza.lock.lock();
 		try {
 			if (stanza.rimuoviUtente(sessione)) {
-				logger.info("Sessione {} rimossa da stanza {}", sessione.getToken(), idStanza);
+				logger.info("Sessione {} rimossa da stanza {}", sessione.getToken(), stanza.getCodice());
 			}
 			if (stanza.isVuota()) {
-				stanze.remove(idStanza);
-				mappaCodiceAIdStanza.remove(stanza.getCodice());
-				logger.info("Stanza {} rimossa perché vuota", idStanza);
+				stanzePerCodice.remove(stanza.getCodice());
+				logger.info("Stanza {} rimossa perché vuota", stanza.getCodice());
 			}
 		} finally {
 			stanza.lock.unlock();
 		}
 	}
 
-	public Stanzz getStanza(long idStanza) {
-		return stanze.get(idStanza);
-	}
-
 	public Stanzz getStanzaPerSessione(Sessione sessione) {
-		Long idStanza = mappaSessioneAIdStanza.get(sessione);
-		return idStanza != null ? stanze.get(idStanza) : null;
+		return mappaSessioneAStanza.get(sessione);
 	}
 
 	/**
 	 * Permette all'utente di abbandonare la stanza in cui si trova.
 	 */
 	public void handleAbbandonaStanza(Sessione sessione, AckRequest ack) {
-		if (!mappaSessioneAIdStanza.containsKey(sessione)) {
+		if (!mappaSessioneAStanza.containsKey(sessione)) {
 			ack.sendAckData(new RespAbbandonaStanza(false, "Utente in nessuna stanza"));
 			logger.warn("Sessione {} non è in nessuna stanza", sessione.getToken());
 			return;
@@ -159,7 +174,7 @@ public abstract class GestoreStanze<Stanzz extends Stanza> implements SessioneOb
 		rimuoviUtenteDaSistema(sessione);
 	}
 
-	protected abstract Stanzz creaStanza(int codice, long id, String nome, int maxUtenti);
+	protected abstract Stanzz creaStanza(int codice, String nome, int maxUtenti);
 
 	private synchronized int nextCodice() {
 		int codice;
@@ -169,7 +184,7 @@ public abstract class GestoreStanze<Stanzz extends Stanza> implements SessioneOb
 				counterCodice.set(MIN_CODICE);
 				codice = counterCodice.getAndIncrement();
 			}
-		} while (mappaCodiceAIdStanza.containsKey(codice));
+		} while (stanzePerCodice.containsKey(codice));
 		return codice;
 	}
 }

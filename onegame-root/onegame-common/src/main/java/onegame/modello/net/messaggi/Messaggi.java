@@ -75,7 +75,7 @@ public class Messaggi {
 	public static class RespCreaStanza {
 		public boolean success;
 		public String messaggio;
-		public int codiceStanza;
+		public int codiceStanza; // -1 se fallita
 
 		public RespCreaStanza() {
 		}
