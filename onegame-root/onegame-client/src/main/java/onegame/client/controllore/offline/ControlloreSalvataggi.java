@@ -1,10 +1,8 @@
 package onegame.client.controllore.offline;
 
-import java.util.List;
-
+import javafx.application.Platform;
 import onegame.client.net.ClientSocket;
 import onegame.client.net.ConnectionMonitor;
-import onegame.client.persistenza_temporanea.ManagerPersistenza;
 import onegame.client.vista.offline.VistaSalvataggi;
 
 public class ControlloreSalvataggi {
@@ -22,32 +20,7 @@ public class ControlloreSalvataggi {
 	        }
 	    });
 		
-		eseguiScelta();
-	}
-	
-	public void eseguiScelta() {
-		List<String> salvataggi = ManagerPersistenza.listaSalvataggi();
-		vs.scegliAzioneSalvataggiAsync(salvataggi, event -> {
-            switch (event.getTipo()) {
-                case GIOCA: { 
-                	vs.mostraGiocoCaricato(event.getNomeOriginale());
-                	break;
-                }
-                case RINOMINA: {
-                	if(ManagerPersistenza.verificaRinominaSalvataggio(event.getNomeOriginale(), event.getNuovoNome()))
-                		ManagerPersistenza.rinominaSalvataggio(event.getNomeOriginale(), event.getNuovoNome());
-                	else
-                		System.out.println("Nome già presente");
-                    eseguiScelta();
-                    return;
-                }
-                case ELIMINA: {
-                    ManagerPersistenza.eliminaSalvataggio(event.getNomeOriginale());
-                    eseguiScelta();
-                    return;
-                }
-            }
-        });
+		eseguiSceltaWithDb();
 	}
 	
 	public void eseguiSceltaWithDb() {
@@ -56,27 +29,46 @@ public class ControlloreSalvataggi {
 				vs.scegliAzioneSalvataggiAsync(respListaPartite.nomiSalvataggi, event->{
 					switch (event.getTipo()) {
 	                case GIOCA: { 
-	                	//probabilmente partita da ottenere qui, deserializzarla e lo passo alla appwithmaven che la carica
-	                	//vs.mostraGiocoCaricato(event.getNomeOriginale());
 	                	cs.caricaPartita(event.getNomeOriginale(), respCaricaPartita ->{
-	                		if(respCaricaPartita.success) {
-	                			vs.mostraGiocoCaricatoWithDb(event.getNomeOriginale(), respCaricaPartita.partitaSerializzata);
-	                		}
+	                		Platform.runLater(()->{
+	                			if(respCaricaPartita.success) {
+	                				vs.mostraGiocoCaricato(event.getNomeOriginale(), respCaricaPartita.partitaSerializzata);
+	                			}
+	                			else {
+	                				eseguiSceltaWithDb();
+	                			}
+	                		});
 	                	});
 	                	break;
 	                }
 	                case RINOMINA: {
 	                	//serve un cs.rinomina visto che cs.salva di adesso prende solo nome e partita serializzata 
+	                	cs.rinominaPartita(event.getNomeOriginale(), event.getNuovoNome(), respRinominaPartita ->{
+	                		Platform.runLater(()->{
+	                			if(respRinominaPartita.success) {
+	                				eseguiSceltaWithDb();
+	                			}
+	                			else {
+	                				System.out.println("Errore durante la rinomina del salvataggio");
+	                			}
+	                		});
+	                	});
 	                    eseguiSceltaWithDb();
-	                    return;
+	                    break;
 	                }
 	                case ELIMINA: {
 	                    cs.eliminaPartita(event.getNomeOriginale(), respEliminaPartita -> {
-	                    	if (respEliminaPartita.success) {
-	                    		eseguiSceltaWithDb();
-	                    		return;
-	                    	}
+	                    	Platform.runLater(()->{
+	                    		if (respEliminaPartita.success) {
+	                    			eseguiSceltaWithDb();
+	                    		}
+	                    		else {
+	                    			System.out.println("Errore durante l'eliminazione");
+	                    		}
+	                    		
+	                    	});
 	                    });
+	                    break;
 	                }
 	            }
 				});

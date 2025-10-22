@@ -77,12 +77,8 @@ public class VistaSalvataggi {
 		app.mostraVistaMenuOffline();
 	}
 
-	public void mostraGiocoCaricato(String salvataggio) {
-		app.mostraVistaPartitaCaricata(salvataggio);
-	}
-	
-	public void mostraGiocoCaricatoWithDb(String nomeSalvataggio, String partitaSerializzata) {
-		app.mostraVistaPartitaCaricataWithDb(nomeSalvataggio, partitaSerializzata);
+	public void mostraGiocoCaricato(String nomeSalvataggio, String partitaSerializzata) {
+		app.mostraVistaPartitaCaricata(nomeSalvataggio, partitaSerializzata);
 	}
 
 	/**

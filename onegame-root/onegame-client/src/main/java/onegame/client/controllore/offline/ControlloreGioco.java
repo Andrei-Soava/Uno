@@ -43,7 +43,7 @@ public class ControlloreGioco {
 	private VistaGioco vg;
 	private VistaSpettatore vsp;
 	private Partita partita;
-	private ControllorePersistenzaTEMP cp;
+	private ControllorePersistenza cp;
 	private ClientSocket cs;
 	private boolean partitaAttiva = false;
 	private PauseTransition timerTurno;
@@ -56,11 +56,11 @@ public class ControlloreGioco {
 			);
 
 
-	public ControlloreGioco(VistaGioco vg, VistaSpettatore vsp, ClientSocket cs) {
+	public ControlloreGioco(VistaGioco vg, VistaSpettatore vsp, ClientSocket cs, ControllorePersistenza cp) {
 		this.vg = vg;
 		this.vsp = vsp;
 		this.cs = cs;
-		this.cp=new ControllorePersistenzaTEMP(null);
+		this.cp = cp;
 		creaTimers();
 		aspettaAbbandona();
 	}
@@ -73,7 +73,7 @@ public class ControlloreGioco {
 		return partita;
 	}
 
-	public ControllorePersistenzaTEMP getCp() {
+	public ControllorePersistenza getCp() {
 		return cp;
 	}
 	
@@ -131,7 +131,7 @@ public class ControlloreGioco {
 	            		cs.getUtente().getGiocatore().getMano().aggiungiCarte(partita.getMazzo().pescaN(2));
 	            		partita.passaTurno(); //al rientro, sarà già turno del successivo
 	            	}
-	                cp.salvaPartitaAutomatico(this);
+	                cp.salvaPartitaAutomatico(partita);
 	                partitaAttiva=false;
 	            	vg.mostraMenuOffline();
 	            	System.out.println("ci sto provandooo");
@@ -152,7 +152,7 @@ public class ControlloreGioco {
      * metodo che crea una nuova partita contro bots (difatto l'unica opzione disponibile)
      * @param numeroGiocatori
      */
-	public void configuraNuovaPartitaVsBot(int numeroGiocatori) {
+	public void configuraNuovaPartitaVsBot(int numeroGiocatori, String salvataggio) {
 		ArrayList<Giocatore> giocatori = new ArrayList<>();
 		//String s = vg.inserisciStringa("Scegli un nome per te:");
 		Giocatore giocatore=new Giocatore(cs.getUtente().getUsername());
@@ -168,35 +168,13 @@ public class ControlloreGioco {
 		partita = new Partita(giocatori);
 		partita.eseguiPrePartita();
 		//da fare solo se persona è loggata
-		cp.setSalvataggioCorrente();
-		//salvataggioCorrente=getNomeDisponibile();
+		cp.salvataggioCorrente = salvataggio;
+		cp.salvaPartita(salvataggio, partita);
 	}
 	
-	/**
-	 * metodo che crea una partita di tutti giocatori senzienti (ma ti fatto inutile)
-	 * @param numero
-	 */
-	@Deprecated
-	public void configuraNuovaPartita(int numero) {
-		ArrayList<Giocatore> giocatori = new ArrayList<>();
-		for (int i = 0; i < numero; i++) {
-			//String s = tv.inserisciStringa("Scegli un nome per il giocatore " + (i + 1) + ":");
-			String s="giocatore"+i;
-			giocatori.add(new Giocatore(s));
-		}
-		partita = new Partita(giocatori);
-		partita.eseguiPrePartita();
-		//da fare solo se persona è loggata
-		cp.setSalvataggioCorrente();
-		//salvataggioCorrente=getNomeDisponibile();
-	}
 	
-	public void caricaPartita(String salvataggio) {
-		cp.caricaPartita(this, salvataggio);
-	}
-	
-	public void caricaPartitaWithDb(String nomeSalvataggio, String partitaSerializzata) {
-		//cp.caricaPartita(String nomeSalvataggio, String partitaSerializzata);
+	public void caricaPartita(String nomeSalvataggio, String partitaSerializzata) {
+		cp.caricaPartita(this, nomeSalvataggio, partitaSerializzata);
 	}
 	
 	/**
@@ -216,7 +194,7 @@ public class ControlloreGioco {
 	 * metodo richiamato ogni volta che viene avviata una partita (nuova o caricata)
 	 */
 	public void avviaPartita() {
-	    cp.salvaPartitaAutomatico(this);
+	    cp.salvaPartitaAutomatico(partita);
 	    partitaAttiva=true;
 	    recuperaGiocatoreNonBot();
 	    vg.mostraVista();
@@ -277,8 +255,7 @@ public class ControlloreGioco {
 	    //fine partita?
 	    if (partita.verificaFinePartita()) {
 	    	vg.stampaFinePartita(partita.getVincitore().getNome(), ()->{
-	    		String salvataggio = getCp().getSalvataggioCorrente();
-	            ManagerPersistenza.eliminaSalvataggio(salvataggio);
+	    		cp.eliminaPartita();
 	            vg.mostraMenuOffline();
 	    	});
 	        partitaAttiva=false;
@@ -303,7 +280,7 @@ public class ControlloreGioco {
 					vg.stampaTurnazione(partita.getTurnazioneDalGiocatore(cs.getUtente().getGiocatore()), partita.getDirezione());
 			    	vg.stampaManoReadOnly(partita.getCartaCorrente(), cs.getUtente().getGiocatore());
 					partita.passaTurno();
-					cp.salvaPartitaAutomatico(this);
+					cp.salvaPartitaAutomatico(partita);
 					// seconda pausa di 3 secondi dopo aver mostrato il messaggio
 					timerPostMossaBot.setOnFinished(ev2 -> {
 						if (partitaAttiva) {
@@ -341,7 +318,7 @@ public class ControlloreGioco {
                 	if(flagGiaPescato.getTipoMossa()!=TipoMossa.PESCA)
                 		g.aggiungiCarta(partita.pescaCarta());
                 	partita.passaTurno();
-                	cp.salvaPartitaAutomatico(this);
+                	cp.salvaPartitaAutomatico(partita);
                 	eseguiTurno(); 
                 }
 	        	}
@@ -363,7 +340,7 @@ public class ControlloreGioco {
 	    	            timerTurno.stop();
 	    	            timerTurno.setOnFinished(null);
 	                    partita.passaTurno();
-	                    cp.salvaPartitaAutomatico(this);
+	                    cp.salvaPartitaAutomatico(partita);
 	                    if(partitaAttiva)
 	                    	eseguiTurno();
 	                	}
@@ -404,7 +381,7 @@ public class ControlloreGioco {
 	                                		vg.stampaMessaggio(g.getNome()+" NON ha chiamato ONE in tempo -> pesca 2 carte");
 	                        	            g.getMano().aggiungiCarte(partita.getMazzo().pescaN(2));
 	                        	            partita.passaTurno();
-		                        	        cp.salvaPartitaAutomatico(this);
+	                        	            cp.salvaPartitaAutomatico(partita);
 		                        	        if (partitaAttiva)
 		                        	            eseguiTurno();
 	                                	});
@@ -414,14 +391,14 @@ public class ControlloreGioco {
 	                                		vg.nascondiONEBtn();
 	                                		vg.stampaMessaggio(g.getNome()+" ha chiamato ONE");
 	                                		partita.passaTurno();
-		                                    cp.salvaPartitaAutomatico(this);
+	                                		cp.salvaPartitaAutomatico(partita);
 		                                    if (partitaAttiva)
 		                                        eseguiTurno();
 	                                	});
 	                                	
 	                                } else {
 	                                    partita.passaTurno();
-	                                    cp.salvaPartitaAutomatico(this);
+	                                    cp.salvaPartitaAutomatico(partita);
 	                                    if (partitaAttiva)
 	                                        eseguiTurno();
 	                                }
@@ -446,7 +423,7 @@ public class ControlloreGioco {
                                 		vg.stampaMessaggio(g.getNome()+" NON ha chiamato ONE in tempo -> pesca 2 carte");
                         	            g.getMano().aggiungiCarte(partita.getMazzo().pescaN(2));
                         	            partita.passaTurno();
-	                        	        cp.salvaPartitaAutomatico(this);
+                        	            cp.salvaPartitaAutomatico(partita);
 	                        	        if (partitaAttiva)
 	                        	            eseguiTurno();
                                 	});
@@ -456,14 +433,14 @@ public class ControlloreGioco {
                                 		vg.nascondiONEBtn();
                                 		vg.stampaMessaggio(g.getNome()+" ha chiamato ONE");
                                 		partita.passaTurno();
-	                                    cp.salvaPartitaAutomatico(this);
+                                		cp.salvaPartitaAutomatico(partita);
 	                                    if (partitaAttiva)
 	                                        eseguiTurno();
                                 	});
                                 	
                                 } else {
                                     partita.passaTurno();
-                                    cp.salvaPartitaAutomatico(this);
+                                    cp.salvaPartitaAutomatico(partita);
                                     if (partitaAttiva)
                                         eseguiTurno();
                                 }

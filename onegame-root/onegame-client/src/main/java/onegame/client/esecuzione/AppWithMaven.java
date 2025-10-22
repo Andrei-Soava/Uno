@@ -194,40 +194,41 @@ public class AppWithMaven extends Application {
 		//ccoff.aspettaCreazionePartita();
 	}
 
-	public void mostraVistaPartitaCaricata(String salvataggio) {
-		VistaGioco vista = new VistaGioco(this);
-		@SuppressWarnings("deprecation")
-		ControlloreGioco controllore = new ControlloreGioco(vista, new VistaSpettatore(this), cs); // Passo la vista al controller
-		controllore.caricaPartita(salvataggio);
-		//primaryStage.setScene(vista.getScene());
-		controllore.avviaPartita();
-	}
+//	public void mostraVistaPartitaCaricata(String salvataggio) {
+//		VistaGioco vista = new VistaGioco(this);
+//		@SuppressWarnings("deprecation")
+//		ControlloreGioco controllore = new ControlloreGioco(vista, new VistaSpettatore(this), cs); // Passo la vista al controller
+//		controllore.caricaPartita(salvataggio);
+//		//primaryStage.setScene(vista.getScene());
+//		controllore.avviaPartita();
+//	}
 	
-	public void mostraVistaPartitaCaricataWithDb(String nomeSalvataggio, String partitaSerializzata) {
+	public void mostraVistaPartitaCaricata(String nomeSalvataggio, String partitaSerializzata) {
 		VistaGioco vista = new VistaGioco(this);
+		ControllorePersistenza cp = new ControllorePersistenza(cs,cm);
 		@SuppressWarnings("deprecation")
-		ControlloreGioco controllore = new ControlloreGioco(vista, new VistaSpettatore(this), cs); // Passo la vista al controller
-		controllore.caricaPartitaWithDb(nomeSalvataggio, partitaSerializzata);
-		//primaryStage.setScene(vista.getScene());
+		ControlloreGioco controllore = new ControlloreGioco(vista, new VistaSpettatore(this), cs, cp);
+		controllore.caricaPartita(nomeSalvataggio, partitaSerializzata);
 		controllore.avviaPartita();
 	}
 
-	public void mostraVistaPartitaNuova(int numGiocatori) {
-		VistaGioco vista = new VistaGioco(this);
-		@SuppressWarnings("deprecation")
-		ControlloreGioco controllore = new ControlloreGioco(vista, new VistaSpettatore(this), cs); 
-		// se si vuole giocatori tra persone umane toglie il "vsBot"
-		controllore.configuraNuovaPartitaVsBot(numGiocatori);
-		//primaryStage.setScene(vista.getScene());
-		controllore.avviaPartita();
-	}
+//	public void mostraVistaPartitaNuova(int numGiocatori) {
+//		VistaGioco vista = new VistaGioco(this);
+//		@SuppressWarnings("deprecation")
+//		ControlloreGioco controllore = new ControlloreGioco(vista, new VistaSpettatore(this), cs); 
+//		// se si vuole giocatori tra persone umane toglie il "vsBot"
+//		controllore.configuraNuovaPartitaVsBot(numGiocatori);
+//		//primaryStage.setScene(vista.getScene());
+//		controllore.avviaPartita();
+//	}
 	
-	public void mostraVistaPartitaNuovaWithDb(int numGiocatori, String salvataggio) {
+	public void mostraVistaPartitaNuova(int numGiocatori, String salvataggio) {
 		VistaGioco vista = new VistaGioco(this);
+		ControllorePersistenza cp = new ControllorePersistenza(cs,cm);
 		@SuppressWarnings("deprecation")
-		ControlloreGioco controllore = new ControlloreGioco(vista, new VistaSpettatore(this), cs);
+		ControlloreGioco controllore = new ControlloreGioco(vista, new VistaSpettatore(this), cs, cp);
 		// se si vuole giocatori tra persone umane toglie il "vsBot"
-		controllore.configuraNuovaPartitaVsBot(numGiocatori);
+		controllore.configuraNuovaPartitaVsBot(numGiocatori, salvataggio);
 		//primaryStage.setScene(vista.getScene());
 		controllore.avviaPartita();
 	}

@@ -14,16 +14,13 @@ public class ControlloreConfigurazioneOffline {
 		this.vcoff=vcoff;
 		this.cs=cs;
 		
-		aspettaCreazionePartitaNew();
+		aspettaCreazionePartita();
 	}
 	
+	/**
+	 * metodo per gestione creazione partita nel caso di utente anonimo e registrato
+	 */
 	public void aspettaCreazionePartita() {
-		vcoff.configuraPartita(numeroGiocatori->{
-			vcoff.mostraGiocoOffline(numeroGiocatori);
-		});
-	}
-	
-	public void aspettaCreazionePartitaNew() {
 		vcoff.configuraPartita(numeroGiocatori->{
 			//entro dentro il menu speciale SOLO se sono connesso E sono registrato
 			if(cs.getUtente()!=null && (!cs.getUtente().isAnonimo())){
@@ -31,7 +28,7 @@ public class ControlloreConfigurazioneOffline {
 				vcoff.mostraDialogNomeSalvataggio(contesto->{
 					if(contesto.getSalvataggio()==null) {
 						contesto.getDialog().close();
-						vcoff.mostraGiocoOfflineConSalvataggio(numeroGiocatori, null);
+						vcoff.mostraGiocoOffline(numeroGiocatori, null);
 						return;
 					} 
 					else //qui ha premuto conferma, quindi devo applicare politiche sul nomeSalvataggio
@@ -44,8 +41,11 @@ public class ControlloreConfigurazioneOffline {
 										for(String partita : risposta.nomiSalvataggi) {
 											if(partita.equals(contesto.getSalvataggio())) {
 												contesto.getErroreLbl().setText("Nome non dispobibile");
+												return;
 											}
 										}
+										contesto.getDialog().close();
+										vcoff.mostraGiocoOffline(numeroGiocatori, contesto.getSalvataggio());
 									} else {
 										contesto.getErroreLbl().setText("Errore nella verifica");
 									}
@@ -57,17 +57,17 @@ public class ControlloreConfigurazioneOffline {
 							String randomName = (UUID.randomUUID()).toString();
 							randomName = "salvataggio" + randomName.substring(0, 8);
 							contesto.getDialog().close();
-							vcoff.mostraGiocoOfflineConSalvataggio(numeroGiocatori, randomName);
+							vcoff.mostraGiocoOffline(numeroGiocatori, randomName);
 						}
 					}
 					
 					
 				}, ()->{
-					aspettaCreazionePartitaNew();
+					aspettaCreazionePartita();
 				});
 				
 			} else {
-				vcoff.mostraGiocoOffline(numeroGiocatori);
+				vcoff.mostraGiocoOffline(numeroGiocatori, null);
 			}
 		});
 	}

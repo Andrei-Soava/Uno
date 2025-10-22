@@ -8,13 +8,13 @@ import onegame.modello.net.util.JsonHelper;
 /**
  * classe DEFINITIVA per la gestione del salvataggio delle partite durante il gioco
  */
-class ControllorePersistenza {
+public class ControllorePersistenza {
 	private ClientSocket cs;
 	private ConnectionMonitor cm;
 	
 	String salvataggioCorrente;
 	
-	ControllorePersistenza(ClientSocket cs, ConnectionMonitor cm) {
+	public ControllorePersistenza(ClientSocket cs, ConnectionMonitor cm) {
 		this.cs=cs;
 		this.cm=cm;
 	}

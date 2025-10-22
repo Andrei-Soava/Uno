@@ -81,9 +81,7 @@ public class VistaConfigurazioneOffline {
     	return GestoreCallbackBottoni.waitForClick(avviaBtn);
     }
     
-//    /**
-//	 * sezione ottenimento dati da campo di login
-//	 */
+
 //	@FunctionalInterface
 //	public interface NumeroGiocatoriCallback {
 //		void mandaNumero(int numero);
@@ -96,6 +94,10 @@ public class VistaConfigurazioneOffline {
 //		});
 //	}
     
+    public void mostraGiocoOffline(int numero, String salvataggio) {
+    	app.mostraVistaPartitaNuova(numero, salvataggio);
+    }
+    
     public void configuraPartita(Consumer<Integer> callback) {
     	Platform.runLater(()->{
     		avviaBtn.setOnAction(e->{
@@ -104,14 +106,11 @@ public class VistaConfigurazioneOffline {
     	});
     }
     
-    public void mostraGiocoOffline(int numero) {
-    	app.mostraVistaPartitaNuova(numero);
-    }
     
-    public void mostraGiocoOfflineConSalvataggio(int numero, String salvataggio) {
-    	app.mostraVistaPartitaNuovaWithDb(numero, salvataggio);
-    }
     
+    /**
+     * classe ausiliaria per gestione delle scelte dell'utente registrato
+     */
     public static class ContestoNomeSalvataggio {
         private final Dialog<?> dialog;
         private final String salvataggio;
@@ -128,6 +127,13 @@ public class VistaConfigurazioneOffline {
         public Label getErroreLbl() { return erroreLbl; }
     }
 
+    /**
+     * metodo che mostra una dialog per gli utenti registrati dove che nome dare ad un nuovo salvataggio
+     * (qualora lo volessero dare)
+     * 
+     * @param onConferma
+     * @param onClose
+     */
     public void mostraDialogNomeSalvataggio(Consumer<ContestoNomeSalvataggio> onConferma, Runnable onClose) {
         Dialog<Void> dialog = new Dialog<>();
         dialog.setTitle("Nome salvataggio");
