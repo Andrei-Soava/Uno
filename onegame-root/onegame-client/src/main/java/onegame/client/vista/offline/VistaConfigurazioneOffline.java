@@ -42,7 +42,7 @@ public class VistaConfigurazioneOffline {
 
     	Label lblNumGiocatori = new Label("Numero Giocatori");
     	numGiocatori = new ComboBox<>();
-    	numGiocatori.getItems().addAll(2, 3, 4);
+    	numGiocatori.getItems().addAll(2, 3, 4, 5, 6, 7, 8, 9, 10);
     	numGiocatori.setValue(2);
 
     	//possibile scelta modalità alternative QUI
