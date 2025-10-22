@@ -5,7 +5,7 @@ import java.util.List;
 public class MessaggiSalvataggioPartite {
 
 	// Eventi partite offline
-	public static final String EVENT_CREA_SALVATAGGIO = "salvataggiopartita:crea";
+	public static final String EVENT_SALVA_SALVATAGGIO = "salvataggiopartita:salva";
 	public static final String EVENT_CARICA_SALVATAGGIO = "salvataggiopartita:carica";
 	public static final String EVENT_ELIMINA_SALVATAGGIO = "salvataggiopartita:elimina";
 	public static final String EVENT_RINOMINA_SALVATAGGIO = "salvataggiopartita:rinomina";
@@ -15,14 +15,17 @@ public class MessaggiSalvataggioPartite {
 	public static class ReqCreaSalvataggio {
 		public String nomeSalvataggio;
 		public String partitaSerializzata;
+		public boolean sovrascriviSeEsiste; // true = sovrascrive se esiste, false = errore se duplicato
 
 		public ReqCreaSalvataggio() {
 		}
 
-		public ReqCreaSalvataggio(String nomeSalvataggio, String partitaSerializzata) {
+		public ReqCreaSalvataggio(String nomeSalvataggio, String partitaSerializzata, boolean sovrascriviSeEsiste) {
 			this.nomeSalvataggio = nomeSalvataggio;
 			this.partitaSerializzata = partitaSerializzata;
+			this.sovrascriviSeEsiste = sovrascriviSeEsiste;
 		}
+
 	}
 
 	public static class RespCreaSalvataggio {

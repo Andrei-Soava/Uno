@@ -88,7 +88,7 @@ public class ServerUno {
 				(client, data, ack) -> gestoreStanze.handleAbbandonaStanza(getSessione(client), ack));
 
 		// Salvataggi partite offline
-		server.addEventListener(MessaggiSalvataggioPartite.EVENT_CREA_SALVATAGGIO, String.class,
+		server.addEventListener(MessaggiSalvataggioPartite.EVENT_SALVA_SALVATAGGIO, String.class,
 				(client, data, ack) -> gestorePartiteOffline.handleSalvaPartita(getSessione(client), data, ack));
 
 		server.addEventListener(MessaggiSalvataggioPartite.EVENT_CARICA_SALVATAGGIO, String.class,

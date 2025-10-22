@@ -265,12 +265,12 @@ public class ClientSocket {
 		socketEmitEvent(MessaggiSalvataggioPartite.EVENT_LISTA_SALVATAGGI, null, callback, RespListaSalvataggi.class);
 	}
 
-	public void salvaPartita(String nomeSalvataggio, String partitaSerializzata,
+	public void salvaPartita(String nomeSalvataggio, String partitaSerializzata, boolean sovrascriviSeEsiste,
 			Callback<RespCreaSalvataggio> callback) {
-		ReqCreaSalvataggio req = new ReqCreaSalvataggio(nomeSalvataggio, partitaSerializzata);
+		ReqCreaSalvataggio req = new ReqCreaSalvataggio(nomeSalvataggio, partitaSerializzata, sovrascriviSeEsiste);
 		System.out.println("[CLIENT] Invio richiesta salvataggio partita: " + nomeSalvataggio);
 
-		socketEmitEvent(MessaggiSalvataggioPartite.EVENT_CREA_SALVATAGGIO, req, callback, RespCreaSalvataggio.class);
+		socketEmitEvent(MessaggiSalvataggioPartite.EVENT_SALVA_SALVATAGGIO, req, callback, RespCreaSalvataggio.class);
 	}
 
 	public void caricaPartita(String nomeSalvataggio, Callback<RespCaricaSalvataggio> callback) {

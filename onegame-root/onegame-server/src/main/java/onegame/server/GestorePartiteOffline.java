@@ -47,10 +47,10 @@ public class GestorePartiteOffline {
 			}
 
 			long utenteId = utenteDb.getIdByUsername(sessione.getUsername());
-			boolean esiste = partitaDb.esistePartita(utenteId, req.nomeSalvataggio);
 			boolean success;
+			boolean esiste = partitaDb.esistePartita(utenteId, req.nomeSalvataggio);
 
-			if (esiste) {
+			if (esiste && req.sovrascriviSeEsiste) {
 				success = partitaDb.updatePartita(utenteId, req.nomeSalvataggio, req.partitaSerializzata);
 				if (success) {
 					logger.info("Salvataggio esistente {} sovrascritto per utente {}", req.nomeSalvataggio,
@@ -62,6 +62,10 @@ public class GestorePartiteOffline {
 							sessione.getUsername());
 					ackRequest.sendAckData(new RespCreaSalvataggio(success, -1, "Errore nella sovrascrittura"));
 				}
+			} else if (esiste && !req.sovrascriviSeEsiste) {
+				logger.warn("Tentativo di creare salvataggio esistente {} per utente {}", req.nomeSalvataggio,
+						sessione.getUsername());
+				ackRequest.sendAckData(new RespCreaSalvataggio(false, -1, "Salvataggio già esistente"));
 			} else {
 				success = partitaDb.createPartita(utenteId, req.nomeSalvataggio, req.partitaSerializzata);
 				if (success) {
