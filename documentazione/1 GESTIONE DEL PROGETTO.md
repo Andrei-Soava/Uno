@@ -129,6 +129,10 @@ Esempio COMPLETO:
 - 18/10, Andrei, (refactoring generale dentro il Client per migliore gestione di tutti i timer durante il gioco + piccole migliorie grafiche del alert/dialog + campi input per username ospite e nome stanza), null;
 - 18/10, Fabio, migliorata gestione di sessioni e stanze lato server, completamento StanzaPartita e gioco;
 - 19/10, Andrei, (creazione nuovo ControllorePersistenza, ma ancora incompleto), null;
+- 19/10, Fabio, (refactoring modello, continuazione implementazione gioco lato server), refactoring del server;
+- 20/10, Fabio, (refactoring radicale del server, implementazione gioco lato server, refactoring comunicazione lato client), null;
 - 20/10, Andrei, (fix minori dentro controllori per creazione partita online e controllo codice + aggiunta scroll pane dentro vista salvataggi per quando ci sono tanti salvataggi), null;
-- 20/10, Giuseppe, (aggiornamento del documento riguardante la specifica dei requisiti);
+- 20/10, Giuseppe, (aggiornamento del documento riguardante la specifica dei requisiti), null;
+- 21/10, Fabio, (refactoring e implementazione stanze (eliminato id), accesso con nickname, eliminazione sessioni scadute), cambio username, password ed eliminazione account;
 - 21/10, Andrei, (creazione classe MappaUtils + piccoli adattamenti ai controllori/viste), null; 
+- 22/10, Fabio, (implementazione cambio username, password ed eliminazione account), null;
