@@ -1,8 +1,8 @@
 package onegame.client.controllore;
 
+import javafx.application.Platform;
 import onegame.client.net.ClientSocket;
 import onegame.client.net.ConnectionMonitor;
-import onegame.client.net.Utente;
 import onegame.client.vista.VistaImpostazioni;
 
 public class ControlloreImpostazioni {
@@ -40,14 +40,16 @@ public class ControlloreImpostazioni {
 				return;
 			}
 			
-			if(contesto.getNuovoNome().equals("Marco")) {
-				contesto.getErroreLbl().setText("Nome non disponibile");
-				return;
-			}
-			
-			if(contesto.getNuovoNome().equals("Fabio")) {
-				contesto.getDialog().close();
-			}
+			cs.cambioUsername(contesto.getNuovoNome(), risposta->{
+				Platform.runLater(()->{
+					if(risposta.success) {
+						cs.getUtente().setUsername(contesto.getNuovoNome());
+						contesto.getDialog().close();
+					} else {
+						contesto.getErroreLbl().setText(risposta.messaggio);
+					}	
+				});
+			});
 		}, () -> {
 	        // questo viene chiamato SEMPRE quando la dialog si chiude
 	        aspettaSelezione();
@@ -73,10 +75,15 @@ public class ControlloreImpostazioni {
 		        return;
 		    }
 		    
-		    //validazione password qui (se password vecchia è giusta, se password nuova rispetta criteri)
-		    if(contesto.getOldPassword().equals("a") && contesto.getNewPassword().equals("b")) {
-		    	contesto.getDialog().close();
-		    }
+		    cs.cambioPassword(contesto.getOldPassword(), contesto.getNewPassword(), risposta->{
+		    	Platform.runLater(()->{
+		    		if(risposta.success) {
+		    			contesto.getDialog().close();
+		    		} else {
+		    			contesto.getErroreLbl().setText(risposta.messaggio);
+		    		}
+		    	});
+		    });
 		    
 		}, ()->{
 			aspettaSelezione();
@@ -86,16 +93,17 @@ public class ControlloreImpostazioni {
 	private void gestisciEliminaUtente() {
 		vi.mostraDialogEliminaUtente((alert) -> {
 			//sarà dentro una callback del client-socket
-			if(true) { //ramo in cui è avvenuta eliminazione
-				//possibili azioni sul clientsocket? in teoria se entro qui ho utente nullo, quindi mi serve un nuovo utente
-				cs.setUtente(new Utente(true));
-				vi.mostraAccesso();
-				alert.close();				
-			}
-			else { //non è stato possibile eliminare
-				alert.setContentText("Ciao");
-				return;
-			}
+			cs.eliminaAccount(alert.getPassword(), risposta->{
+				Platform.runLater(()->{
+					if(risposta.success) {
+						alert.getDialog().close();
+						cs.setUtente(null);
+						vi.mostraAccesso();
+					} else {
+						alert.getErroreLbl().setText(risposta.messaggio);
+					}
+				});
+			});
 		}, ()->{
 			aspettaSelezione();
 		});

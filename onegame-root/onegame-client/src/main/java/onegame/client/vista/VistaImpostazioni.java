@@ -179,6 +179,7 @@ public class VistaImpostazioni {
         dialog.show();
     }
 
+    //-------------------------------------------------------------------------------------------------------
     /**
      * classe ausiliaria per gestione callback modifica password dentro controllore
      * (interfaccia funzionale NON sarebbe stata un'opzione saggia,
@@ -232,11 +233,11 @@ public class VistaImpostazioni {
         dialog.getDialogPane().setMinWidth(250);
 
         PasswordField vecchia = new PasswordField();
-        vecchia.setPromptText("Vecchia password");
+        vecchia.setPromptText("Password attuale");
         PasswordField nuova = new PasswordField();
-        nuova.setPromptText("Nuova password");
+        nuova.setPromptText("Password nuova");
         PasswordField conferma = new PasswordField();
-        conferma.setPromptText("Conferma nuova password");
+        conferma.setPromptText("Conferma password nuova");
 
         Label errorePasswordLbl = new Label();
         errorePasswordLbl.setStyle("-fx-text-fill: red;");
@@ -271,37 +272,100 @@ public class VistaImpostazioni {
         dialog.show();
     }
 
-//    public static class ContestoEliminaUtente {
-//        private final Dialog<?> dialog;
-//
-//        private ContestoEliminaUtente(Dialog<?> dialog) {
-//            this.dialog = dialog;
-//        }
-//
-//        public Dialog<?> getDialog() { return dialog; }
-//    }
+    //-------------------------------------------------------------------------------------------------------
+    /**
+     * classe ausiliaria per gestione callback elimina utente dentro controllore
+     * (interfaccia funzionale NON ottimale qui visto che devo inserire anche la password 
+     * e gestire la label di errore)
+     */
+    public static class ContestoEliminaUtente {
+        private final Dialog<?> dialog;
+        private final String password;
+        private final Label erroreLbl;
+
+        private ContestoEliminaUtente(Dialog<?> dialog, String password, Label erroreLbl) {
+            this.dialog = dialog;
+            this.password = password;
+            this.erroreLbl = erroreLbl;
+            
+        }
+
+        public Dialog<?> getDialog() { return dialog; }
+        public String getPassword() { return password; }
+        public Label getErroreLbl() { return erroreLbl; }
+    }
     
     /**
+     * metodo asincrono che mostra una dialog per confermare eliminazione account 
+     * SENZA però gestire gli effetti della sua chiusura
+     * 
+     * @param onConferma, callback contenente elementi per gestione eliminazione utente
+     * @param onClose, runnable utilizzato da controllore durante la chiusura della dialog 
+     */
+    public void mostraDialogEliminaUtente(Consumer<ContestoEliminaUtente> onConferma, Runnable onClose) {
+        Dialog<Void> dialog = new Dialog<>();
+        dialog.setTitle("Elimina utente");
+
+        Label title = new Label("Sicuro di voler eliminare l'account?");
+        title.getStyleClass().add("titolo");
+        Label lbl = new Label("Questa azione è irreversibile");
+        Label erroreLbl = new Label();
+        erroreLbl.setStyle("-fx-text-fill: red;");
+
+        PasswordField passwordField = new PasswordField();
+        passwordField.setPromptText("Inserisci la tua password per confermare");
+
+        VBox content = new VBox(10, title, lbl, passwordField, erroreLbl);
+        dialog.getDialogPane().setContent(content);
+
+        ButtonType confermaBtn = new ButtonType("Conferma", ButtonData.OK_DONE);
+        ButtonType annullaBtn = new ButtonType("Annulla", ButtonData.CANCEL_CLOSE);
+        dialog.getDialogPane().getButtonTypes().addAll(confermaBtn, annullaBtn);
+
+        // intercetto il click su Conferma e passo i dati al callback
+        Button conferma = (Button) dialog.getDialogPane().lookupButton(confermaBtn);
+        conferma.addEventFilter(ActionEvent.ACTION, ev -> {
+            String password = passwordField.getText().trim();
+            // creo un piccolo "contesto" con i riferimenti utili
+            ContestoEliminaUtente ctx = new ContestoEliminaUtente(dialog, password, erroreLbl);
+            // passo il contesto al callback (sarà il controllore a gestire cosa fare)
+            onConferma.accept(ctx);
+            ev.consume(); // blocco la chiusura automatica, sarà il controllore a decidere
+        });
+        
+        // notifica al controllore quando la dialog si chiude
+        dialog.setOnHidden(e -> {
+            if (onClose != null) onClose.run();
+        });
+        DialogPane dialogPane = dialog.getDialogPane();
+        dialogPane.getStylesheets().add(getClass().getResource("/stile/base.css").toExternalForm());
+        dialog.show();
+    }
+    
+    //-------------------------------------------------------------------------------------------------------
+    /**
      * interfaccia funzionale con la scopo di passare nella callback una dialog
-     * (soluzione valida rispetto al fare una classe dedicata visto che serve 
-     * passare solo un oggetto)
+     * (soluzione valida rispetto al fare una classe dedicata SE mi viene chiesto solo un click di bottone)
      * 
      * soluzione con classe sopra
      */
     @FunctionalInterface
-    public interface ContestoEliminaUtente {
+    @Deprecated
+    public interface ContestoEliminaUtenteOld {
     	public abstract void onConferma(Dialog<?> dialog);
     }
 
     /**
-     * metodo asincrono che mostra una alert per confermare eliminazione utente
+     * VARIANTE SENZA CAMPO PASSWORD PER CONFERMA
+     * metodo asincrono che mostra una alert per confermare eliminazione utente 
      * SENZA però gestire gli effetti della sua chiusura
      * 
      * @param handler, interfaccia funzionale che fornisce nel callback l'alert mostrato
      * --> utile SOLO per impostare il testo della alert qualora l'eliminazione fallisse
      * @param onClose, runnable utilizzato da controllore durante la chiusura della alert
      */
-    public void mostraDialogEliminaUtente(ContestoEliminaUtente handler, Runnable onClose) {
+    @Deprecated
+    public void mostraDialogEliminaUtenteOld(ContestoEliminaUtenteOld handler, Runnable onClose) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Elimina account");
         alert.setHeaderText("Vuoi davvero eliminare il tuo account?");
@@ -327,5 +391,7 @@ public class VistaImpostazioni {
         dialogPane.getStylesheets().add(getClass().getResource("/stile/base.css").toExternalForm());
         alert.show();
     }
+    
+    
 
 }
