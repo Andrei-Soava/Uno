@@ -16,8 +16,9 @@ import onegame.modello.net.messaggi.Messaggi.ReqAuth;
 import onegame.modello.net.messaggi.Messaggi.ReqAuthAnonimo;
 import onegame.modello.net.messaggi.Messaggi.RespAuth;
 import onegame.modello.net.util.JsonHelper;
-import onegame.modello.net.util.PasswordUtils;
 import onegame.server.db.UtenteDb;
+import onegame.server.utils.PasswordUtils;
+import onegame.server.utils.UsernameValidator;
 
 /**
  * Gestore delle connessioni e dell'autenticazione degli utenti
@@ -97,7 +98,7 @@ public class GestoreConnessioni {
 				return;
 			}
 
-			if (!isUsernameValido(username)) {
+			if (!UsernameValidator.isUsernameValido(username)) {
 				ackRequest.sendAckData(new RespAuth(false, null, "Username non disponibile", null, null));
 				logger.warn("Tentativo di registrazione con username non valido: {}", username);
 				return;
@@ -187,12 +188,5 @@ public class GestoreConnessioni {
 
 	public void handleDisconnessione(SocketIOClient client) {
 		gestoreSessioni.marcaDisconnesso(client);
-	}
-
-	private boolean isUsernameValido(String username) {
-		String str;
-		return username != null && username.matches("^[a-zA-Z0-9_]{3,50}$")
-				&& !(str = username.toLowerCase()).startsWith("anonimo") && !str.startsWith("guest")
-				&& !str.startsWith("admin") && !str.contains("__");
 	}
 }

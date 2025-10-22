@@ -134,7 +134,7 @@ public abstract class GestoreStanze<Stanzz extends Stanza> implements SessioneOb
 	}
 
 	/**
-	 * Rimuove l'utente dalla stanza e la stanza se è vuota.
+	 * Rimuove la sessione dalla stanza e la stanza se è vuota.
 	 */
 	private void rimuoviUtenteDaSistema(Sessione sessione) {
 		Stanzz stanza = mappaSessioneAStanza.remove(sessione);
@@ -148,8 +148,9 @@ public abstract class GestoreStanze<Stanzz extends Stanza> implements SessioneOb
 			}
 			if (stanza.isVuota()) {
 				removeStanza(stanza);
-
+				return;
 			}
+			stanza.notificaStato();
 		} finally {
 			stanza.lock.unlock();
 		}

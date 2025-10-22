@@ -1,6 +1,8 @@
 package onegame.server;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
@@ -11,6 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.corundumstudio.socketio.SocketIOClient;
+
+import onegame.modello.net.messaggi.Messaggi;
 
 public class GestoreSessioni {
 	// token -> Utente
@@ -44,25 +48,39 @@ public class GestoreSessioni {
 		return getSessione(token);
 	}
 
-	/**
-	 * Recupera l'utente autenticato associato al client
-	 * @param client Il client
-	 * @return L'utente autenticato o null se non valido
-	 */
-	public Sessione getSessioneAutenticato(SocketIOClient client) {
-		Sessione sessione = getSessioneByClient(client);
-
-		if (sessione == null || sessione.isAnonimo()) {
-			logger.warn("Accesso negato: token non valido o utente anonimo");
-			return null;
-		}
-		return sessione;
-	}
+//	/**
+//	 * Recupera l'utente autenticato associato al client
+//	 * @param client Il client
+//	 * @return L'utente autenticato o null se non valido
+//	 */
+//	public Sessione getSessioneAutenticato(SocketIOClient client) {
+//		Sessione sessione = getSessioneByClient(client);
+//
+//		if (sessione == null || sessione.isAnonimo()) {
+//			logger.warn("Accesso negato: token non valido o utente anonimo");
+//			return null;
+//		}
+//		return sessione;
+//	}
 
 	public void aggiornaPing(String token) {
 		Sessione s = getSessione(token);
 		if (s != null) {
 			s.aggiornaPing();
+		}
+	}
+
+	public void rimuoviSessione(Sessione sessione) {
+		if (sessione == null)
+			return;
+
+		sessioni.remove(sessione.getToken());
+		sessione.sendEvent(Messaggi.EVENT_LOGOUT_FORZATO, "Il tuo account è stato eliminato");
+
+		logger.info("Sessione rimossa manualmente: nickname={}, token={}", sessione.getNickname(), sessione.getToken());
+
+		for (SessioneObserver observer : observers) {
+			observer.onSessioneInattiva(sessione);
 		}
 	}
 
@@ -80,6 +98,10 @@ public class GestoreSessioni {
 			s.setClient(null);
 			logger.info("Disconnessione sessione: nickname={}, sessionId={}", s.getNickname(), client.getSessionId());
 		}
+	}
+
+	public Collection<Sessione> getSessioniAttive() {
+		return Collections.unmodifiableCollection(sessioni.values());
 	}
 
 	private void avviaControlloTimeout() {

@@ -11,7 +11,8 @@ import com.corundumstudio.socketio.Configuration;
 import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.SocketIOServer;
 
-import onegame.modello.net.messaggi.MessaggiSalvataggiPartite;
+import onegame.modello.net.messaggi.MessaggiSalvataggioPartite;
+import onegame.modello.net.messaggi.MessaggiUtente;
 import onegame.modello.net.messaggi.Messaggi;
 import onegame.server.db.GestoreDatabase;
 
@@ -28,6 +29,7 @@ public class ServerUno {
 	private final GestorePartiteOffline gestorePartiteOffline;
 	private final GestoreGioco gestoreGioco;
 	private final GestoreSessioni gestoreSessioni;
+	private final GestoreUtenti gestoreUtenti;
 
 	private static final Logger logger = LoggerFactory.getLogger(ServerUno.class);
 
@@ -45,6 +47,7 @@ public class ServerUno {
 		this.gestoreStanze = new GestoreStanzePartita();
 		this.gestorePartiteOffline = new GestorePartiteOffline();
 		this.gestoreGioco = new GestoreGioco(gestoreStanze);
+		this.gestoreUtenti = new GestoreUtenti(gestoreSessioni);
 
 		this.gestoreSessioni.addObserver(gestoreStanze);
 
@@ -80,28 +83,37 @@ public class ServerUno {
 
 		server.addEventListener(Messaggi.EVENT_STANZA_DETTAGLI, String.class,
 				(client, data, ack) -> gestoreStanze.handleDettagliStanza(getSessione(client), ack));
-		
+
 		server.addEventListener(Messaggi.EVENT_STANZA_ESCI, Void.class,
 				(client, data, ack) -> gestoreStanze.handleAbbandonaStanza(getSessione(client), ack));
 
 		// Salvataggi partite offline
-		server.addEventListener(MessaggiSalvataggiPartite.EVENT_CREA_SALVATAGGIO, String.class,
+		server.addEventListener(MessaggiSalvataggioPartite.EVENT_CREA_SALVATAGGIO, String.class,
 				(client, data, ack) -> gestorePartiteOffline.handleSalvaPartita(getSessione(client), data, ack));
 
-		server.addEventListener(MessaggiSalvataggiPartite.EVENT_CARICA_SALVATAGGIO, String.class,
+		server.addEventListener(MessaggiSalvataggioPartite.EVENT_CARICA_SALVATAGGIO, String.class,
 				(client, data, ack) -> gestorePartiteOffline.handleCaricaPartita(getSessione(client), data, ack));
 
-		server.addEventListener(MessaggiSalvataggiPartite.EVENT_LISTA_SALVATAGGI, Void.class,
+		server.addEventListener(MessaggiSalvataggioPartite.EVENT_LISTA_SALVATAGGI, Void.class,
 				(client, data, ack) -> gestorePartiteOffline.handleListaSalvataggi(getSessione(client), ack));
 
-		server.addEventListener(MessaggiSalvataggiPartite.EVENT_ELIMINA_SALVATAGGIO, String.class,
+		server.addEventListener(MessaggiSalvataggioPartite.EVENT_ELIMINA_SALVATAGGIO, String.class,
 				(client, data, ack) -> gestorePartiteOffline.handleEliminaSalvataggio(getSessione(client), data, ack));
 
-		server.addEventListener(MessaggiSalvataggiPartite.EVENT_RINOMINA_SALVATAGGIO, String.class,
+		server.addEventListener(MessaggiSalvataggioPartite.EVENT_RINOMINA_SALVATAGGIO, String.class,
 				(client, data, ack) -> gestorePartiteOffline.handleRinominaSalvataggio(getSessione(client), data, ack));
 
 		server.addEventListener(Messaggi.EVENT_GIOCO_MOSSA, String.class,
 				(client, data, ack) -> gestoreGioco.handleEffettuaMossa(getSessione(client), data, ack));
+
+		server.addEventListener(MessaggiUtente.EVENT_CAMBIO_USERNAME, String.class,
+				(client, data, ack) -> gestoreUtenti.handleCambioUsername(getSessione(client), data, ack));
+
+		server.addEventListener(MessaggiUtente.EVENT_CAMBIO_PASSWORD, String.class,
+				(client, data, ack) -> gestoreUtenti.handleCambioPassword(getSessione(client), data, ack));
+
+		server.addEventListener(MessaggiUtente.EVENT_ELIMINA_ACCOUNT, String.class,
+				(client, data, ack) -> gestoreUtenti.handleEliminaAccount(getSessione(client), data, ack));
 
 		// Test
 		server.addEventListener("test", String.class, (client, data, ack) -> {
@@ -122,7 +134,7 @@ public class ServerUno {
 	}
 
 	private Sessione getSessione(SocketIOClient client) {
-		Sessione s =  gestoreSessioni.getSessione(client.get("token"));
+		Sessione s = gestoreSessioni.getSessione(client.get("token"));
 		if (s == null) {
 			logger.warn("Sessione non trovata per client con token {}", client.get("token").toString());
 			throw new IllegalStateException("Sessione non trovata");

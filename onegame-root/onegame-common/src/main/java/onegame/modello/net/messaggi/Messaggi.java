@@ -10,6 +10,7 @@ public class Messaggi {
 	public static final String EVENT_AUTH_LOGIN = "auth:login";
 	public static final String EVENT_AUTH_REGISTER = "auth:register";
 	public static final String EVENT_AUTH_ANONIMO = "auth:anonimo";
+	public static final String EVENT_LOGOUT_FORZATO = "auth:logout_forzato";
 
 	public static final String EVENT_STANZA_CREA = "stanza:crea";
 	public static final String EVENT_STANZA_ENTRA = "stanza:entra";

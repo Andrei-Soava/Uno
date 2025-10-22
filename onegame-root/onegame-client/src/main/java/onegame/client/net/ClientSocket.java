@@ -12,8 +12,10 @@ import onegame.client.controllore.online.ClientSocketObserver;
 import onegame.modello.net.DTOUtils;
 import onegame.modello.net.MossaDTO;
 import onegame.modello.net.StatoStanzaDTO;
-import onegame.modello.net.messaggi.MessaggiSalvataggiPartite;
-import onegame.modello.net.messaggi.MessaggiSalvataggiPartite.*;
+import onegame.modello.net.messaggi.MessaggiSalvataggioPartite;
+import onegame.modello.net.messaggi.MessaggiSalvataggioPartite.*;
+import onegame.modello.net.messaggi.MessaggiUtente;
+import onegame.modello.net.messaggi.MessaggiUtente.*;
 import onegame.modello.net.messaggi.Messaggi;
 import onegame.modello.net.messaggi.Messaggi.*;
 import onegame.modello.net.util.Callback;
@@ -100,7 +102,7 @@ public class ClientSocket {
 		socket.on(Messaggi.EVENT_STANZA_AGGIORNAMENTO, (args -> {
 			StatoStanzaDTO stato = getPayload(StatoStanzaDTO.class, args);
 			this.statoStanza = DTOUtils.clone(stato);
-			
+
 			if (observer != null) {
 				observer.aggiornaStanza(stato);
 			}
@@ -260,7 +262,7 @@ public class ClientSocket {
 	public void listaPartite(Callback<RespListaSalvataggi> callback) {
 		System.out.println("[CLIENT] Invio richiesta lista partite salvate");
 
-		socketEmitEvent(MessaggiSalvataggiPartite.EVENT_LISTA_SALVATAGGI, null, callback, RespListaSalvataggi.class);
+		socketEmitEvent(MessaggiSalvataggioPartite.EVENT_LISTA_SALVATAGGI, null, callback, RespListaSalvataggi.class);
 	}
 
 	public void salvaPartita(String nomeSalvataggio, String partitaSerializzata,
@@ -268,21 +270,22 @@ public class ClientSocket {
 		ReqCreaSalvataggio req = new ReqCreaSalvataggio(nomeSalvataggio, partitaSerializzata);
 		System.out.println("[CLIENT] Invio richiesta salvataggio partita: " + nomeSalvataggio);
 
-		socketEmitEvent(MessaggiSalvataggiPartite.EVENT_CREA_SALVATAGGIO, req, callback, RespCreaSalvataggio.class);
+		socketEmitEvent(MessaggiSalvataggioPartite.EVENT_CREA_SALVATAGGIO, req, callback, RespCreaSalvataggio.class);
 	}
 
 	public void caricaPartita(String nomeSalvataggio, Callback<RespCaricaSalvataggio> callback) {
 		ReqCaricaSalvataggio req = new ReqCaricaSalvataggio(nomeSalvataggio);
 		System.out.println("[CLIENT] Invio richiesta caricamento partita: " + nomeSalvataggio);
 
-		socketEmitEvent(MessaggiSalvataggiPartite.EVENT_CARICA_SALVATAGGIO, req, callback, RespCaricaSalvataggio.class);
+		socketEmitEvent(MessaggiSalvataggioPartite.EVENT_CARICA_SALVATAGGIO, req, callback,
+				RespCaricaSalvataggio.class);
 	}
 
 	public void eliminaPartita(String nomeSalvataggio, Callback<RespEliminaSalvataggio> callback) {
 		ReqEliminaSalvataggio req = new ReqEliminaSalvataggio(nomeSalvataggio);
 		System.out.println("[CLIENT] Invio richiesta eliminazione partita: " + nomeSalvataggio);
 
-		socketEmitEvent(MessaggiSalvataggiPartite.EVENT_ELIMINA_SALVATAGGIO, req, callback,
+		socketEmitEvent(MessaggiSalvataggioPartite.EVENT_ELIMINA_SALVATAGGIO, req, callback,
 				RespEliminaSalvataggio.class);
 	}
 
@@ -290,8 +293,29 @@ public class ClientSocket {
 		ReqRinominaSalvataggio req = new ReqRinominaSalvataggio(vecchioNome, nuovoNome);
 		System.out.println("[CLIENT] Invio richiesta rinomina partita: " + vecchioNome + " -> " + nuovoNome);
 
-		socketEmitEvent(MessaggiSalvataggiPartite.EVENT_RINOMINA_SALVATAGGIO, req, callback,
+		socketEmitEvent(MessaggiSalvataggioPartite.EVENT_RINOMINA_SALVATAGGIO, req, callback,
 				RespRinominaSalvataggio.class);
+	}
+
+	public void cambioUsername(String nuovoUsername, Callback<RespCambioUsername> callback) {
+		ReqCambioUsername req = new ReqCambioUsername(nuovoUsername);
+		System.out.println("[CLIENT] Invio richiesta cambio username: " + nuovoUsername);
+
+		socketEmitEvent(MessaggiUtente.EVENT_CAMBIO_USERNAME, req, callback, RespCambioUsername.class);
+	}
+
+	public void cambioPassword(String passwordAttuale, String nuovaPassword, Callback<RespCambioPassword> callback) {
+		ReqCambioPassword req = new ReqCambioPassword(passwordAttuale, nuovaPassword);
+		System.out.println("[CLIENT] Invio richiesta cambio password");
+
+		socketEmitEvent(MessaggiUtente.EVENT_CAMBIO_PASSWORD, req, callback, RespCambioPassword.class);
+	}
+
+	public void eliminaAccount(String password, Callback<RespEliminaAccount> callback) {
+		ReqEliminaAccount req = new ReqEliminaAccount(password);
+		System.out.println("[CLIENT] Invio richiesta eliminazione account");
+
+		socketEmitEvent(MessaggiUtente.EVENT_ELIMINA_ACCOUNT, req, callback, RespEliminaAccount.class);
 	}
 
 	/**
@@ -322,7 +346,7 @@ public class ClientSocket {
 			}
 		});
 	}
-	
+
 	public StatoStanzaDTO getStatoStanza() {
 		return DTOUtils.clone(this.statoStanza);
 	}

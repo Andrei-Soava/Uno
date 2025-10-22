@@ -2,7 +2,7 @@ package onegame.modello.net.messaggi;
 
 import java.util.List;
 
-public class MessaggiSalvataggiPartite {
+public class MessaggiSalvataggioPartite {
 
 	// Eventi partite offline
 	public static final String EVENT_CREA_SALVATAGGIO = "salvataggiopartita:crea";

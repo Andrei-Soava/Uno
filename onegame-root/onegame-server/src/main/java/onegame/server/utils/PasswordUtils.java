@@ -1,4 +1,4 @@
-package onegame.modello.net.util;
+package onegame.server.utils;
 
 import java.security.MessageDigest;
 import java.security.SecureRandom;

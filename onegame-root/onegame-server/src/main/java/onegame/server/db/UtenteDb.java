@@ -77,4 +77,58 @@ public class UtenteDb {
 		return -1;
 	}
 
+	/**
+	 * Aggiorna lo username dell'utente
+	 * @param vecchioUsername lo username attuale
+	 * @param nuovoUsername il nuovo username desiderato
+	 * @return true se l'aggiornamento è riuscito, false altrimenti
+	 * @throws SQLException
+	 */
+	public boolean aggiornaUsername(String vecchioUsername, String nuovoUsername) throws SQLException {
+		// Verifica che il nuovo username non sia già in uso
+		if (esisteUtente(nuovoUsername)) {
+			return false;
+		}
+
+		String sql = "UPDATE utente SET username=? WHERE username=?";
+		try (Connection conn = GestoreDatabase.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+			ps.setString(1, nuovoUsername);
+			ps.setString(2, vecchioUsername);
+			int updated = ps.executeUpdate();
+			return updated > 0;
+		}
+	}
+
+	/**
+	 * Aggiorna la password dell'utente
+	 * @param username lo username dell'utente
+	 * @param nuovaPasswordHash la nuova password hash
+	 * @return true se l'aggiornamento è riuscito, false altrimenti
+	 * @throws SQLException
+	 */
+	public boolean aggiornaPassword(String username, String nuovaPasswordHash) throws SQLException {
+		String sql = "UPDATE utente SET password=? WHERE username=?";
+		try (Connection conn = GestoreDatabase.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+			ps.setString(1, nuovaPasswordHash);
+			ps.setString(2, username);
+			int updated = ps.executeUpdate();
+			return updated > 0;
+		}
+	}
+
+	/**
+	 * Elimina l'utente con lo username specificato
+	 * @param username lo username dell'utente da eliminare
+	 * @return true se l'eliminazione è riuscita, false altrimenti
+	 * @throws SQLException
+	 */
+	public boolean eliminaUtente(String username) throws SQLException {
+		String sql = "DELETE FROM utente WHERE username=?";
+		try (Connection conn = GestoreDatabase.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+			ps.setString(1, username);
+			int deleted = ps.executeUpdate();
+			return deleted > 0;
+		}
+	}
+
 }
