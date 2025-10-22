@@ -26,7 +26,7 @@ class ControllorePersistenza {
 	 */
 	void salvaPartita(String nuovoSalvataggio, Partita partita) {
 		if(!cs.getUtente().isAnonimo() && cm.connectedProperty().get()) {
-			cs.salvaPartita(nuovoSalvataggio, JsonHelper.toJson(partita), null);
+			cs.salvaPartita(nuovoSalvataggio, JsonHelper.toJson(partita), false, null);
 		}
 	}
 	
@@ -35,10 +35,8 @@ class ControllorePersistenza {
 	 * @param partita
 	 */
 	void salvaPartitaAutomatico(Partita partita) {
-		if(!cs.getUtente().isAnonimo() && cm.connectedProperty().get()) {
-			/* SERVE UN SALVA PARTITA CON SOVRASCRITTURA
-			cs.salvaPartitaSovrascive(salvataggioCorrente, partita.toJson(), null);
-			*/
+		if(salvataggioCorrente!=null && cm.connectedProperty().get()) {
+			cs.salvaPartita(salvataggioCorrente, JsonHelper.toJson(partita), true, null);
 		}
 	}
 	
@@ -47,7 +45,7 @@ class ControllorePersistenza {
 	 * (viene invocato alla fine di una partita SOLO se connesso E loggato)
 	 */
 	void eliminaPartita() {
-		if(!cs.getUtente().isAnonimo() && cm.connectedProperty().get()) {
+		if(salvataggioCorrente!=null && cm.connectedProperty().get()) {
 			cs.eliminaPartita(salvataggioCorrente, null);
 		}
 	}

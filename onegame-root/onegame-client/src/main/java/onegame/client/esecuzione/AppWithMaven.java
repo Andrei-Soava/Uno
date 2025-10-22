@@ -189,7 +189,7 @@ public class AppWithMaven extends Application {
 	public void mostraVistaConfigurazioneOffline() {
 		VistaConfigurazioneOffline vista = new VistaConfigurazioneOffline(this);
 		@SuppressWarnings("unused")
-		ControlloreConfigurazioneOffline ccoff=new ControlloreConfigurazioneOffline(vista);
+		ControlloreConfigurazioneOffline ccoff=new ControlloreConfigurazioneOffline(vista, cs);
 		primaryStage.setScene(vista.getScene());
 		//ccoff.aspettaCreazionePartita();
 	}
@@ -216,6 +216,16 @@ public class AppWithMaven extends Application {
 		VistaGioco vista = new VistaGioco(this);
 		@SuppressWarnings("deprecation")
 		ControlloreGioco controllore = new ControlloreGioco(vista, new VistaSpettatore(this), cs); 
+		// se si vuole giocatori tra persone umane toglie il "vsBot"
+		controllore.configuraNuovaPartitaVsBot(numGiocatori);
+		//primaryStage.setScene(vista.getScene());
+		controllore.avviaPartita();
+	}
+	
+	public void mostraVistaPartitaNuovaWithDb(int numGiocatori, String salvataggio) {
+		VistaGioco vista = new VistaGioco(this);
+		@SuppressWarnings("deprecation")
+		ControlloreGioco controllore = new ControlloreGioco(vista, new VistaSpettatore(this), cs);
 		// se si vuole giocatori tra persone umane toglie il "vsBot"
 		controllore.configuraNuovaPartitaVsBot(numGiocatori);
 		//primaryStage.setScene(vista.getScene());

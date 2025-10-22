@@ -1,14 +1,20 @@
 package onegame.client.vista.offline;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.layout.*;
 import onegame.client.esecuzione.AppWithMaven;
+import onegame.client.vista.VistaAccesso.DatiAccessoCallback;
+import onegame.client.vista.VistaImpostazioni.ContestoModificaNome;
+import onegame.client.vista.accessori.GestoreCallbackBottoni;
 
 public class VistaConfigurazioneOffline {
 
@@ -51,7 +57,6 @@ public class VistaConfigurazioneOffline {
     	annullaBtn.setOnAction(e -> app.mostraVistaMenuOffline());
 
     	avviaBtn = new Button("Avvia Partita");
-    	//avviaBtn.setOnAction(e -> app.mostraVistaGiocoNuovo(numGiocatori.getValue()));
 
     	HBox pulsanti = new HBox(10, annullaBtn, avviaBtn);
     	pulsanti.setAlignment(Pos.CENTER);
@@ -72,6 +77,25 @@ public class VistaConfigurazioneOffline {
         return scene;
     }
     
+    public CompletableFuture<Void> waitForAvviaBtnClick(){
+    	return GestoreCallbackBottoni.waitForClick(avviaBtn);
+    }
+    
+//    /**
+//	 * sezione ottenimento dati da campo di login
+//	 */
+//	@FunctionalInterface
+//	public interface NumeroGiocatoriCallback {
+//		void mandaNumero(int numero);
+//	}
+//
+//	public void ottieniNumero(NumeroGiocatoriCallback callback) {
+//		avviaBtn.setOnAction(e -> {
+//			int numero = numGiocatori.getValue();
+//			callback.mandaNumero(numero);
+//		});
+//	}
+    
     public void configuraPartita(Consumer<Integer> callback) {
     	Platform.runLater(()->{
     		avviaBtn.setOnAction(e->{
@@ -82,6 +106,69 @@ public class VistaConfigurazioneOffline {
     
     public void mostraGiocoOffline(int numero) {
     	app.mostraVistaPartitaNuova(numero);
+    }
+    
+    public void mostraGiocoOfflineConSalvataggio(int numero, String salvataggio) {
+    	app.mostraVistaPartitaNuovaWithDb(numero, salvataggio);
+    }
+    
+    public static class ContestoNomeSalvataggio {
+        private final Dialog<?> dialog;
+        private final String salvataggio;
+        private final Label erroreLbl;
+
+        private ContestoNomeSalvataggio(Dialog<?> dialog, String salvataggio, Label erroreLbl) {
+            this.dialog = dialog;
+            this.salvataggio = salvataggio;
+            this.erroreLbl = erroreLbl;
+        }
+
+        public Dialog<?> getDialog() { return dialog; }
+        public String getSalvataggio() { return salvataggio; }
+        public Label getErroreLbl() { return erroreLbl; }
+    }
+
+    public void mostraDialogNomeSalvataggio(Consumer<ContestoNomeSalvataggio> onConferma, Runnable onClose) {
+        Dialog<Void> dialog = new Dialog<>();
+        dialog.setTitle("Nome salvataggio");
+
+        Label lbl = new Label("Scegli nome salvataggio");
+        lbl.getStyleClass().add("titolo");
+        Label erroreLbl = new Label();
+        erroreLbl.setStyle("-fx-text-fill: red;");
+
+        TextField salvataggioField = new TextField();
+        salvataggioField.setPromptText("Inserisci un nome valido (oppure lascia vuoto per generarne uno)");
+
+        VBox content = new VBox(10, lbl, salvataggioField, erroreLbl);
+        dialog.getDialogPane().setContent(content);
+
+        ButtonType confermaBtn = new ButtonType("Conferma", ButtonData.OK_DONE);
+        ButtonType nonSalvareBtn = new ButtonType("Continua senza salvare", ButtonData.OK_DONE);
+        ButtonType annullaBtn = new ButtonType("Annulla", ButtonData.CANCEL_CLOSE);
+        dialog.getDialogPane().getButtonTypes().addAll(confermaBtn,nonSalvareBtn, annullaBtn);
+
+        Button conferma = (Button) dialog.getDialogPane().lookupButton(confermaBtn);
+        conferma.addEventFilter(ActionEvent.ACTION, ev -> {
+            String salvataggio = salvataggioField.getText().trim();
+            ContestoNomeSalvataggio ctx = new ContestoNomeSalvataggio(dialog, salvataggio, erroreLbl);
+            onConferma.accept(ctx);
+            ev.consume();
+        });
+        
+        Button continua = (Button) dialog.getDialogPane().lookupButton(nonSalvareBtn);
+        continua.addEventFilter(ActionEvent.ACTION, ev -> {
+            ContestoNomeSalvataggio ctx = new ContestoNomeSalvataggio(dialog, null, erroreLbl);
+            onConferma.accept(ctx);
+            ev.consume();
+        });
+        
+        dialog.setOnHidden(e -> {
+            if (onClose != null) onClose.run();
+        });
+        DialogPane dialogPane = dialog.getDialogPane();
+        dialogPane.getStylesheets().add(getClass().getResource("/stile/base.css").toExternalForm());
+        dialog.show();
     }
     
 }
