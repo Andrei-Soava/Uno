@@ -29,7 +29,7 @@ public class GestorePartiteOffline {
 
 	public void handleSalvaPartita(Sessione sessione, String str, AckRequest ackRequest) {
 		if (sessione == null || sessione.isAnonimo()) {
-			ackRequest.sendAckData(new RespCreaSalvataggio(false, "Utente non valido"));
+			ackRequest.sendAckData(new RespCreaSalvataggio(false, -1, "Utente non valido"));
 			logger.warn("Accesso negato: sessione nulla o utente anonimo");
 			return;
 		}
@@ -38,17 +38,45 @@ public class GestorePartiteOffline {
 			ReqCreaSalvataggio req = JsonHelper.fromJson(str, ReqCreaSalvataggio.class);
 			if (req.nomeSalvataggio == null || req.partitaSerializzata == null || req.nomeSalvataggio.isBlank()
 					|| req.partitaSerializzata.isBlank()) {
-				ackRequest.sendAckData(new RespCreaSalvataggio(false, "Dati mancanti"));
+				ackRequest.sendAckData(new RespCreaSalvataggio(false, -1, "Dati mancanti"));
+				return;
+			}
+			if (!isNomeSalvataggioValido(req.nomeSalvataggio)) {
+				ackRequest.sendAckData(new RespCreaSalvataggio(false, -1, "Nome salvataggio non valido"));
 				return;
 			}
 
 			long utenteId = utenteDb.getIdByUsername(sessione.getUsername());
-			partitaDb.createPartita(utenteId, req.nomeSalvataggio, req.partitaSerializzata);
-			ackRequest.sendAckData(new RespCreaSalvataggio(true, "Salvataggio riuscito"));
-			logger.info("Partita salvata: {} per utente {}", req.nomeSalvataggio, sessione.getUsername());
+			boolean esiste = partitaDb.esistePartita(utenteId, req.nomeSalvataggio);
+			boolean success;
+
+			if (esiste) {
+				success = partitaDb.updatePartita(utenteId, req.nomeSalvataggio, req.partitaSerializzata);
+				if (success) {
+					logger.info("Salvataggio esistente {} sovrascritto per utente {}", req.nomeSalvataggio,
+							sessione.getUsername());
+					ackRequest.sendAckData(new RespCreaSalvataggio(success, 1, "Salvataggio sovrascritto"));
+
+				} else {
+					logger.warn("Errore nella sovrascrittura del salvataggio {} per utente {}", req.nomeSalvataggio,
+							sessione.getUsername());
+					ackRequest.sendAckData(new RespCreaSalvataggio(success, -1, "Errore nella sovrascrittura"));
+				}
+			} else {
+				success = partitaDb.createPartita(utenteId, req.nomeSalvataggio, req.partitaSerializzata);
+				if (success) {
+					logger.info("Nuovo salvataggio {} creato per utente {}", req.nomeSalvataggio,
+							sessione.getUsername());
+					ackRequest.sendAckData(new RespCreaSalvataggio(success, 0, "Salvataggio creato"));
+				} else {
+					logger.warn("Errore nella creazione del salvataggio {} per utente {}", req.nomeSalvataggio,
+							sessione.getUsername());
+					ackRequest.sendAckData(new RespCreaSalvataggio(success, -1, "Errore nella creazione"));
+				}
+			}
 		} catch (Exception e) {
 			logger.error("Errore durante il salvataggio della partita: {}", e.getMessage());
-			ackRequest.sendAckData(new RespCreaSalvataggio(false, "Errore durante il salvataggio"));
+			ackRequest.sendAckData(new RespCreaSalvataggio(false, -1, "Errore durante il salvataggio"));
 		}
 	}
 
@@ -115,9 +143,11 @@ public class GestorePartiteOffline {
 			}
 
 			long utenteId = utenteDb.getIdByUsername(sessione.getUsername());
-			partitaDb.deletePartitaByUtenteAndNome(utenteId, req.nomeSalvataggio);
-			ackRequest.sendAckData(new RespEliminaSalvataggio(true, "Salvataggio eliminato"));
-			logger.info("Salvataggio eliminato: {} per utente {}", req.nomeSalvataggio, sessione.getUsername());
+			boolean success = partitaDb.deletePartitaByUtenteAndNome(utenteId, req.nomeSalvataggio);
+			ackRequest.sendAckData(
+					new RespEliminaSalvataggio(success, success ? "Salvataggio eliminato" : "Salvataggio non trovato"));
+			logger.info("Eliminazione salvataggio {} per utente {}: {}", req.nomeSalvataggio, sessione.getUsername(),
+					success ? "successo" : "fallita");
 		} catch (Exception e) {
 			logger.error("Errore durante l'eliminazione del salvataggio per utente {}: {}", sessione.getUsername(),
 					e.getMessage());
@@ -139,16 +169,42 @@ public class GestorePartiteOffline {
 				ackRequest.sendAckData(new RespRinominaSalvataggio(false, "Dati mancanti"));
 				return;
 			}
+			if (req.nomeVecchio.equals(req.nomeNuovo)) {
+				ackRequest.sendAckData(new RespRinominaSalvataggio(false, "Il nome nuovo deve essere diverso"));
+				logger.warn("Tentativo di rinomina salvataggio con nomi identici per utente {}",
+						sessione.getUsername());
+				return;
+			}
+
+			if (!isNomeSalvataggioValido(req.nomeNuovo)) {
+				ackRequest.sendAckData(new RespRinominaSalvataggio(false, "Nome salvataggio non valido"));
+				logger.warn("Tentativo di rinomina salvataggio con nome non valido per utente {}",
+						sessione.getUsername());
+				return;
+			}
 
 			long utenteId = utenteDb.getIdByUsername(sessione.getUsername());
-			partitaDb.rinominaSalvataggio(utenteId, req.nomeVecchio, req.nomeNuovo);
-			ackRequest.sendAckData(new RespRinominaSalvataggio(true, "Rinomina riuscita"));
-			logger.info("Salvataggio rinominato: {} → {} per utente {}", req.nomeVecchio, req.nomeNuovo,
-					sessione.getUsername());
+
+			if (partitaDb.esistePartita(utenteId, req.nomeNuovo)) {
+				ackRequest.sendAckData(new RespRinominaSalvataggio(false, "Nome già esistente"));
+				logger.warn("Tentativo di rinomina con nome già esistente per utente {}", sessione.getUsername());
+				return;
+			}
+
+			boolean success = partitaDb.rinominaSalvataggio(utenteId, req.nomeVecchio, req.nomeNuovo);
+			ackRequest.sendAckData(
+					new RespRinominaSalvataggio(success, success ? "Rinomina riuscita" : "Rinomina fallita"));
+			logger.info("Rinomina salvataggio {} → {} per utente {}: {}", req.nomeVecchio, req.nomeNuovo,
+					sessione.getUsername(), success ? "successo" : "fallita");
 		} catch (Exception e) {
 			logger.error("Errore durante la rinomina del salvataggio per utente {}: {}", sessione.getUsername(),
 					e.getMessage());
 			ackRequest.sendAckData(new RespRinominaSalvataggio(false, "Errore durante la rinomina"));
 		}
 	}
+
+	private boolean isNomeSalvataggioValido(String nomeSalvataggio) {
+		return (nomeSalvataggio != null && !nomeSalvataggio.trim().isEmpty() && nomeSalvataggio.length() <= 100);
+	}
+
 }

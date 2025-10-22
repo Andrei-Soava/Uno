@@ -27,15 +27,18 @@ public class MessaggiSalvataggioPartite {
 
 	public static class RespCreaSalvataggio {
 		public boolean success;
+		public int sovrascritto; // 0 = nuovo, 1 = sovrascritto, -1 = errore
 		public String messaggio;
 
 		public RespCreaSalvataggio() {
 		}
 
-		public RespCreaSalvataggio(boolean success, String messaggio) {
+		public RespCreaSalvataggio(boolean success, int sovrascritto, String messaggio) {
 			this.success = success;
+			this.sovrascritto = sovrascritto;
 			this.messaggio = messaggio;
 		}
+
 	}
 
 	// Richiesta di caricamento
