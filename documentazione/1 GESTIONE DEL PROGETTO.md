@@ -136,3 +136,4 @@ Esempio COMPLETO:
 - 21/10, Fabio, (refactoring e implementazione stanze (eliminato id), accesso con nickname, eliminazione sessioni scadute), cambio username, password ed eliminazione account;
 - 21/10, Andrei, (creazione classe MappaUtils + piccoli adattamenti ai controllori/viste), null; 
 - 22/10, Fabio, (implementazione cambio username, password ed eliminazione account), null;
+- 22/10, Giuseppe, (Aggiornamento del documento dei requisiti);

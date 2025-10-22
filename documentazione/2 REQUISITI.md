@@ -126,8 +126,91 @@ Il sistema ha l’obiettivo di fornire una piattaforma modulare e scalabile, che
       - RI7: pulsanti di navigazione:
          - "Home": consente di tornare al menù principale;
          - "Logout": disconnette l'utente dal sistema;
+   - ### 3.3.4 Configurazione nuova partita
+      - RI8: l'utente può selezionare il numero di giocatori (minimo 2, massimo 4);
+      - RI9: pulsanti: 
+            - "Avvia partita": consente di avviare la partita;
+            - "Annulla": consente di annullare la configurazione della partita e tornare alla schermata precedente;
+   - ### 3.3.5 Regolamento
+      - RI10: visualizza le regole del gioco "Uno-like", è composto da una parte testatuale e da delle immagini inerenti al gioco
+      - RI11: pulsanti:
+         - "Avanti": passaggio alla pagina successiva;
+         - "Indietro": passaggio alla pagina precedente;
+   - ### 3.3.6 Satistiche
+      - RI12: mostra i dati relativi alle partite giocate: numero di vittorie, sconfitte, ecc.;
+      - RI13: sezione disponibile solo per gli utenti registrati;
+### 3.4 Requisiti interfaccia hardware e software
+   - ### 3.4.1 Interfaccia hardware
+      - RIHS1: il sistema non richiede dispositivi hardware specifici oltre a un computer, mouse e tastiera;
+   - ### 3.4.2 Interccia software
+      - RIHS2: il server utilizza la libreria Socket.IO per la gestione delle connessioni tra client e server;
+      - RIHS3: la comunicazione è di tipo event-driven, cioè basata su eventi personalizzati (es. auth:login);
+      - RIHS4: il server ha la funzione di:
+         - Gestire la connessione e disconnessione dei client;
+         - Gestire gli eventi di autenticazione e registrazione;
+         - Creare ed eliminare le stanze di gioco per le partite online;
+         - Gestire il salvataggio delle partite offline;
+         - Gestire le mosse di gioco in tempo reale;
+         - Gestire operazioni sull'account (modifica username/password, eliminazione account);
+      - RIHS5: il server comunica con il database per gestire le operazioni di persistenza;
+### 3.5 Requisiti di comunicazione
+   - RC1: il server utilizza Socket.IO su protocollo TCP/IP per la comunicazione in tempo reale con i client;
+   - RC2: la comunicazione è bidirezione, con conferma opzionale tramite ACK(acknowledgment) del messaggio;
+   - RC3: il sistema registra ogni eventi importante tramite il sistema di logging SLF4J;
+   - RC4: in caso di interruzione improvvisa, il server avrà un arresto controllato (chiudendo correttamente le connessioni);
+### 3.6 Vincoli di progettazione
+   - VP1: il server deve essere sviluppato in java, utilizzando la libreria Socket.IO;
+   - VP2: l'archiettura deve seguire il modello client-server a eventi, in cui il server è responsabile dellinstradamento dei messaggi e della gestione delle sessioni;
+   - VP3: deve essere garantita la modularità del codice;
+   - VP4: deve essere presente un sistema di logging centralizzato tramite SLF4J per tracciare eventi e possibili errori;
+   - VP5: l’inizializzazione del database deve essere eseguita all’avvio del server;
+   - VP6: è previsto un hook di chiusura automatica del server in fase di spegnimento per garantire la chiusura ordinata delle connessioni;
+### 3.7 Requisiti del database
+   - ### 3.7.1 Tipologia
+      - RDB1: il sistema utilizza un database H2 embedded, gestito localmente dal server;
+   - ### 3.7.2 Struttura delle tabelle
+   | Tabella               | Campo                | Tipo          | Descrizione                                               |
+   |-----------------------|----------------------|---------------|-----------------------------------------------------------|
+   | UTENTE                | id                   | IDENTITY      | Identificativo univoco dell'utente                        |
+   |                       | username             | VARCHAR(50)   | Nome utente scelto dall’utente                            |
+   |                       | password             | VARCHAR(250)  | Password crittografata dell’utente                        |
+   |                       | created_at           | TIMESTAMP     | Data e ora di creazione dell' account                     |
+   | PARTITA_INCOMPLETA    | id                   | IDENTITY      | Identificativo univoco della partita                      |
+   |                       | utente_id            | BIGINT        | Riferimento all’utente proprietario                       |
+   |                       | nome_salvataggio     | VARCHAR(100)  | Nome assegnato al salvataggio                             |
+   |                       | partita_serializzata | CLOB          | Dati della partita salvata in formato serializzato        |
+   |                       | created_at           | TIMESTAMP     | Data e ora del salvataggio della partita                  |
 
-
+   - ### 3.7.3 Vincoli e integrità
+      - RDB2: un utente non può avere due salvataggi con lo stesso nome;
+      - RDB3: un salvataggio non può esistere senza un utente associato;
+      - RDB4: la cancellazione di un utente comporta l’eliminazione automatica delle sue partite salvate;
+   - ### 3.7.4 Requisiti e sicurezza
+      - RDB5: le password devono essere crittografate (hash) prima dell’inserimento nel database;
+      - RDB6: l’accesso diretto al database è limitato esclusivamente al server;
+   - ### 3.7.5 Prestazioni
+      - RDB7: l’inizializzazione del database deve avvenire entro 2 secondi;
+      - RDB8: le query principali (lettura, scrittura, aggiornamento, eliminazione) devono completarsi entro 500 ms;
+      - RDB9: il sistema deve supportare almeno 50 utenti concorrenti senza degrado significativo.
+   - ### 3.7.6 Gestione degli errori
+      - RDB10: gli errori di connessione o SQL devono essere loggati tramite SLF4J;
+      - RDB11: in caso di errore critico all’avvio (inizializzazione fallita), il server deve terminare con un messaggio esplicativo;
+### 3.8 Requisiti del server
+   - ### 3.8.1 Architettura
+      - RS1: il server è basato sulla libreria Socket.IO, e gestisce eventi asincroni di connessione e gioco;
+   - ### 3.8.2 Requisiti funzionali
+      - RS2: il server deve poter gestire almeno 10 stanze di gioco attive contemporaneamente;
+      - RS3: deve garantire una disponibilità del servizio ≥ 95%;
+   - ### 3.8.3 Sicurezza
+      - RS4: le comunicazioni client–server devono avvenire tramite socket protette (protocollo TCP stabile);
+      - RS5: le credenziali e le sessioni utente devono essere validate e mai trasmesse in chiaro;
+      - RS6: ogni sessione deve avere un token univoco di autenticazione;
+   - ### 3.8.5 Logging e monitoraggio
+      - RS7: tutti gli eventi di connessione, errore e azione di gioco devono essere registrati tramite SLF4J;
+      - RS8: i log devono contenere:
+         - timestamp dell’evento;
+         - identificativo del client;
+         - tipo di operazione (connessione, messaggio, errore);
 ---
 
 ## 4. Stakeholder
