@@ -74,7 +74,8 @@ public class DTOUtils {
 	        dto.codiceStanza,
 	        dto.maxUtenti,
 	        dto.nicknames != null ? List.copyOf(dto.nicknames) : null,
-	        dto.usernames != null ? List.copyOf(dto.usernames) : null
+	        dto.usernames != null ? List.copyOf(dto.usernames) : null,
+	        dto.indiceProprietario
 	    );
 	}
 // @formatter:on

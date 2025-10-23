@@ -13,16 +13,23 @@ public class DTOServerUtils {
 		if (stanza == null) {
 			return null;
 		}
-		// Ottieni nicknames e usernames delle sessioni nella stanza
+		// Ottieni nicknames e usernames delle sessioni nella stanza e l'indice del proprietario
 		List<String> nicknames = new ArrayList<>();
 		List<String> usernames = new ArrayList<>();
 		Set<Sessione> sessioni = stanza.getSessioni();
+		int i = 0;
+		int indiceProprietario = -1;
 		for (Sessione s : sessioni) {
 			nicknames.add(s.getNickname());
 			usernames.add(s.getUsername());
+			if (s.equals(stanza.getProprietario())) {
+				indiceProprietario = i;
+			}
+			i++;
 		}
 
-		StatoStanzaDTO dto = new StatoStanzaDTO(stanza.getCodice(), stanza.getMaxSessioni(), nicknames, usernames);
+		StatoStanzaDTO dto = new StatoStanzaDTO(stanza.getCodice(), stanza.getMaxSessioni(), nicknames, usernames,
+				indiceProprietario);
 		return dto;
 	}
 }

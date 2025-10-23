@@ -138,5 +138,6 @@ Esempio COMPLETO:
 - 22/10, Fabio, (implementazione cambio username, password ed eliminazione account), null;
 - 22/10, Giuseppe, (Aggiornamento del documento dei requisiti), null;
 - 22/10, Andrei, (collegamento cambio username, password ed eliminazione account tra client e server), null;
-- 23/10, Fabio, (migliorata e forse ultimata la partita nel server, aggiunta connessione client/server circa la partita), null;
+- 23/10, Fabio, (migliorata e forse ultimata la partita nel server, aggiunta connessione client/server circa la partita, aggiunto nickname a scelta per utenti anonimi lato server), null;
 - 23/10, Andrei, (collegamento persistenza client-server per salvataggi delle partite incomplete), null;
+- 23/10, Fabio, (aggiunto proprietario della stanza, ora solo il proprietario ha il diritto di avviare la partita), null;

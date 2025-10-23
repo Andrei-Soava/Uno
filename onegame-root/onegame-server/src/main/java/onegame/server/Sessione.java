@@ -89,11 +89,18 @@ public class Sessione {
 		this.client = client;
 	}
 
-	public void sendEvent(String evento, Object payload) {
-		if (client != null) {
-			client.sendEvent(evento, payload);
-		} else {
-			logger.debug("Impossibile inviare evento '{}': client nullo per username {}", evento, username);
+	public boolean sendEvent(String evento, Object payload) {
+		try {
+			if (client != null) {
+				client.sendEvent(evento, payload);
+				return true;
+			} else {
+				logger.debug("Impossibile inviare evento '{}': client nullo per username {}", evento, username);
+				return false;
+			}
+		} catch (Exception e) {
+			logger.error("Errore invio evento '{}' a username {}: {}", evento, username, e.getMessage());
+			return false;
 		}
 	}
 

@@ -24,6 +24,7 @@ public abstract class Stanza {
 	protected final ReentrantLock lock = new ReentrantLock();
 
 	protected final Set<Sessione> sessioni = new LinkedHashSet<>();
+	protected Sessione proprietario = null;
 
 	private static final Logger logger = LoggerFactory.getLogger(Stanza.class);
 
@@ -39,7 +40,11 @@ public abstract class Stanza {
 			if (!isAperta || sessioni.size() >= maxSessioni || sessioni.contains(sessione))
 				return false;
 
-			return sessioni.add(sessione);
+			boolean added = sessioni.add(sessione);
+			if (added && proprietario == null) {
+				proprietario = sessione;
+			}
+			return added;
 		} finally {
 			lock.unlock();
 		}
@@ -48,7 +53,11 @@ public abstract class Stanza {
 	public boolean rimuoviSessione(Sessione sessione) {
 		lock.lock();
 		try {
-			return sessioni.remove(sessione);
+			boolean removed = sessioni.remove(sessione);
+			if (removed && Objects.equals(proprietario, sessione)) {
+				proprietario = sessioni.isEmpty() ? null : sessioni.iterator().next();
+			}
+			return removed;
 		} finally {
 			lock.unlock();
 		}
@@ -120,6 +129,23 @@ public abstract class Stanza {
 			for (Sessione s : sessioni) {
 				s.sendEvent(Messaggi.EVENT_STANZA_AGGIORNAMENTO, dto);
 			}
+		} finally {
+			lock.unlock();
+		}
+	}
+
+	public Sessione getProprietario() {
+		return proprietario;
+	}
+
+	public boolean trasferisciProprietario(Sessione nuovoProprietario) {
+		lock.lock();
+		try {
+			if (sessioni.contains(nuovoProprietario)) {
+				proprietario = nuovoProprietario;
+				return true;
+			}
+			return false;
 		} finally {
 			lock.unlock();
 		}

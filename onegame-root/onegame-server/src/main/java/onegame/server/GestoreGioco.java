@@ -33,6 +33,12 @@ public class GestoreGioco {
 			logger.warn("Sessione {} non è associata a nessuna stanza", sessione.getToken());
 			return;
 		}
+
+		if (!sessione.equals(stanza.getProprietario())) {
+			ack.sendAckData(new RespIniziaPartita(false, "Solo il proprietario della stanza può avviare la partita"));
+			logger.warn("Utente {} non è il proprietario della stanza {}", sessione.getUsername(), stanza.getNome());
+			return;
+		}
 		if (stanza.getNumSessioni() < 2) {
 			ack.sendAckData(new RespIniziaPartita(false, "Non ci sono abbastanza giocatori per iniziare la partita"));
 			logger.warn("Tentativo di avviare la partita nella stanza {} con meno di 2 giocatori", stanza.getNome());
