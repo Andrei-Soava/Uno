@@ -176,6 +176,7 @@ public abstract class GestoreStanze<Stanzz extends Stanza> implements SessioneOb
 		}
 
 		rimuoviUtenteDaSistema(sessione);
+		logger.info("Sessione {} ha abbandonato la stanza", sessione.getToken());
 		ack.sendAckData(new RespAbbandonaStanza(true, "Abbandono stanza avvenuto con successo"));
 	}
 
