@@ -99,9 +99,6 @@ public class ServerUno {
 		server.addEventListener(MessaggiSalvataggioPartite.EVENT_RINOMINA_SALVATAGGIO, String.class,
 				(client, data, ack) -> gestorePartiteOffline.handleRinominaSalvataggio(getSessione(client), data, ack));
 
-		server.addEventListener(Messaggi.EVENT_AGGIORNAMENTO_PARTITA, String.class,
-				(client, data, ack) -> gestoreGioco.handleEffettuaMossa(getSessione(client), data, ack));
-
 		server.addEventListener(MessaggiUtente.EVENT_CAMBIO_USERNAME, String.class,
 				(client, data, ack) -> gestoreUtenti.handleCambioUsername(getSessione(client), data, ack));
 
@@ -110,6 +107,12 @@ public class ServerUno {
 
 		server.addEventListener(MessaggiUtente.EVENT_ELIMINA_ACCOUNT, String.class,
 				(client, data, ack) -> gestoreUtenti.handleEliminaAccount(getSessione(client), data, ack));
+
+		server.addEventListener(Messaggi.EVENT_INIZIA_PARTITA, String.class,
+				(client, data, ack) -> gestoreGioco.handleIniziaPartita(getSessione(client), ack));
+
+		server.addEventListener(Messaggi.EVENT_EFFETTUA_MOSSA_PARTITA, String.class,
+				(client, data, ack) -> gestoreGioco.handleEffettuaMossa(getSessione(client), data, ack));
 
 		// Test
 		server.addEventListener("test", String.class, (client, data, ack) -> {

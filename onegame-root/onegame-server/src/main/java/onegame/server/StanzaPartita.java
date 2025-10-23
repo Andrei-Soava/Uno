@@ -41,7 +41,7 @@ public class StanzaPartita extends Stanza implements PartitaObserver {
 			this.partita = new PartitaNET(lista, this);
 			this.partita.addObserver(this);
 
-			inviaTurnoCorrente(Messaggi.EVENT_INIZIO_PARTITA);
+			inviaTurnoCorrente(Messaggi.EVENT_INIZIATA_PARTITA);
 
 			this.isAperta = false;
 			return true;
@@ -66,10 +66,10 @@ public class StanzaPartita extends Stanza implements PartitaObserver {
 		}
 
 		if (partita.isFinished()) {
-			inviaTurnoCorrente(Messaggi.EVENT_FINE_PARTITA);
+			inviaTurnoCorrente(Messaggi.EVENT_FINITA_PARTITA);
 			this.isAperta = true;
 		} else {
-			inviaTurnoCorrente(Messaggi.EVENT_AGGIORNAMENTO_PARTITA);
+			inviaTurnoCorrente(Messaggi.EVENT_AGGIORNATA_PARTITA);
 		}
 	}
 

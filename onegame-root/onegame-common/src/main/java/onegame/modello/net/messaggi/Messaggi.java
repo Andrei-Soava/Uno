@@ -18,9 +18,11 @@ public class Messaggi {
 	public static final String EVENT_STANZA_DETTAGLI = "stanza:dettagli";
 	public static final String EVENT_STANZA_AGGIORNAMENTO = "stanza:aggiornamento";
 
-	public static final String EVENT_INIZIO_PARTITA = "partita:inizia";
-	public static final String EVENT_AGGIORNAMENTO_PARTITA = "partita:aggiornamento";
-	public static final String EVENT_FINE_PARTITA = "partita:fine";
+	public static final String EVENT_INIZIA_PARTITA = "partita:inizia";
+	public static final String EVENT_INIZIATA_PARTITA = "partita:iniziata";
+	public static final String EVENT_AGGIORNATA_PARTITA = "partita:aggiornata";
+	public static final String EVENT_FINITA_PARTITA = "partita:finita";
+	public static final String EVENT_EFFETTUA_MOSSA_PARTITA = "partita:mossa";
 
 //    //Risposte partite offline
 //    public static final String EVENT_PARTITA_OK = "partita:ok";
@@ -176,6 +178,19 @@ public class Messaggi {
 		}
 
 		public RespEffettuaMossa(boolean success, String messaggio) {
+			this.success = success;
+			this.messaggio = messaggio;
+		}
+	}
+
+	public static class RespIniziaPartita {
+		public boolean success;
+		public String messaggio;
+
+		public RespIniziaPartita() {
+		}
+
+		public RespIniziaPartita(boolean success, String messaggio) {
 			this.success = success;
 			this.messaggio = messaggio;
 		}

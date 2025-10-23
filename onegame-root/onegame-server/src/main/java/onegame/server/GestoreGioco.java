@@ -8,6 +8,7 @@ import com.corundumstudio.socketio.AckRequest;
 import onegame.modello.net.MossaDTO;
 import onegame.modello.net.messaggi.Messaggi.ReqEffettuaMossa;
 import onegame.modello.net.messaggi.Messaggi.RespEffettuaMossa;
+import onegame.modello.net.messaggi.Messaggi.RespIniziaPartita;
 import onegame.modello.net.util.JsonHelper;
 
 public class GestoreGioco {
@@ -17,6 +18,31 @@ public class GestoreGioco {
 
 	public GestoreGioco(GestoreStanzePartita gestoreStanze) {
 		this.gestoreStanze = gestoreStanze;
+	}
+
+	public void handleIniziaPartita(Sessione sessione, AckRequest ack) {
+		if (sessione == null) {
+			ack.sendAckData(new RespIniziaPartita(false, "Utente non valido"));
+			logger.warn("Accesso negato");
+			return;
+		}
+
+		StanzaPartita stanza = gestoreStanze.getStanzaPerSessione(sessione);
+		if (stanza == null) {
+			ack.sendAckData(new RespIniziaPartita(false, "Stanza non trovata"));
+			logger.warn("Sessione {} non è associata a nessuna stanza", sessione.getToken());
+			return;
+		}
+
+		boolean avviata = stanza.avviaPartita();
+		if (avviata) {
+			logger.info("Partita avviata nella stanza {} da utente {}", stanza.getNome(), sessione.getUsername());
+			ack.sendAckData(new RespIniziaPartita(true, "Partita avviata con successo"));
+		} else {
+			logger.warn("Impossibile avviare la partita nella stanza {} da utente {}", stanza.getNome(),
+					sessione.getUsername());
+			ack.sendAckData(new RespIniziaPartita(false, "Impossibile avviare la partita"));
+		}
 	}
 
 	public void handleEffettuaMossa(Sessione sessione, String str, AckRequest ack) {
