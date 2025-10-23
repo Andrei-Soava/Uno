@@ -69,7 +69,7 @@ public class StanzaPartita extends Stanza implements PartitaObserver {
 			inviaTurnoCorrente(Messaggi.EVENT_FINE_PARTITA);
 			this.isAperta = true;
 		} else {
-			inviaTurnoCorrente(Messaggi.EVENT_GIOCO_MOSSA);
+			inviaTurnoCorrente(Messaggi.EVENT_AGGIORNAMENTO_PARTITA);
 		}
 	}
 

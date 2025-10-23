@@ -1,13 +1,13 @@
 package onegame.client.controllore.online.stanza;
 
 import javafx.application.Platform;
-import onegame.client.controllore.online.ClientSocketObserver;
+import onegame.client.controllore.online.StatoStanzaObserver;
 import onegame.client.net.ClientSocket;
 import onegame.client.net.ConnectionMonitor;
 import onegame.client.vista.online.VistaStanza;
 import onegame.modello.net.StatoStanzaDTO;
 
-public abstract class ControlloreStanza implements ClientSocketObserver {
+public abstract class ControlloreStanza implements StatoStanzaObserver {
 
 	protected VistaStanza vs;
 	protected ClientSocket cs;
@@ -23,7 +23,7 @@ public abstract class ControlloreStanza implements ClientSocketObserver {
 	        }
 	    });
 		
-		cs.setObserver(this);
+		cs.setStanzaObserver(this);
 		aspettaAbbandonaStanza();
 	}
 	

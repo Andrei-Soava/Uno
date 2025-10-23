@@ -1,9 +1,5 @@
 package onegame.server;
 
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -103,7 +99,7 @@ public class ServerUno {
 		server.addEventListener(MessaggiSalvataggioPartite.EVENT_RINOMINA_SALVATAGGIO, String.class,
 				(client, data, ack) -> gestorePartiteOffline.handleRinominaSalvataggio(getSessione(client), data, ack));
 
-		server.addEventListener(Messaggi.EVENT_GIOCO_MOSSA, String.class,
+		server.addEventListener(Messaggi.EVENT_AGGIORNAMENTO_PARTITA, String.class,
 				(client, data, ack) -> gestoreGioco.handleEffettuaMossa(getSessione(client), data, ack));
 
 		server.addEventListener(MessaggiUtente.EVENT_CAMBIO_USERNAME, String.class,

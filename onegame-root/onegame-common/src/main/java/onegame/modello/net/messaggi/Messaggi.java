@@ -18,9 +18,9 @@ public class Messaggi {
 	public static final String EVENT_STANZA_DETTAGLI = "stanza:dettagli";
 	public static final String EVENT_STANZA_AGGIORNAMENTO = "stanza:aggiornamento";
 
-	public static final String EVENT_INIZIO_PARTITA = "giocouno:inizia";
-	public static final String EVENT_GIOCO_MOSSA = "giocouno:mossa";
-	public static final String EVENT_FINE_PARTITA = "giocouno:fine";
+	public static final String EVENT_INIZIO_PARTITA = "partita:inizia";
+	public static final String EVENT_AGGIORNAMENTO_PARTITA = "partita:aggiornamento";
+	public static final String EVENT_FINE_PARTITA = "partita:fine";
 
 //    //Risposte partite offline
 //    public static final String EVENT_PARTITA_OK = "partita:ok";

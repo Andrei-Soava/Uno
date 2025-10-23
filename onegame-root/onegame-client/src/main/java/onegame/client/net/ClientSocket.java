@@ -8,9 +8,11 @@ import io.socket.client.Ack;
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
-import onegame.client.controllore.online.ClientSocketObserver;
+import onegame.client.controllore.online.StatoPartitaObserver;
+import onegame.client.controllore.online.StatoStanzaObserver;
 import onegame.modello.net.DTOUtils;
 import onegame.modello.net.MossaDTO;
+import onegame.modello.net.StatoPartitaDTO;
 import onegame.modello.net.StatoStanzaDTO;
 import onegame.modello.net.messaggi.MessaggiSalvataggioPartite;
 import onegame.modello.net.messaggi.MessaggiSalvataggioPartite.*;
@@ -33,8 +35,10 @@ public class ClientSocket {
 	private final Socket socket;
 	private String token;
 	private Utente utente;
-	private ClientSocketObserver observer;
+	private StatoStanzaObserver stanzaObserver;
+	private StatoPartitaObserver partitaObserver;
 	private StatoStanzaDTO statoStanza;
+	private StatoPartitaDTO statoPartita;
 
 	public ClientSocket(String url) throws Exception {
 		IO.Options opts = new IO.Options();
@@ -61,19 +65,19 @@ public class ClientSocket {
 	}
 
 	/**
-	 * Ottieni observer dal socket
-	 * @return observer del socket
+	 * Imposta observer dello stato della stanza
+	 * @param observer
 	 */
-	public ClientSocketObserver getObserver() {
-		return observer;
+	public void setStanzaObserver(StatoStanzaObserver observer) {
+		this.stanzaObserver = observer;
 	}
 
 	/**
-	 * Imposta observer del socket
+	 * Imposta observer dello stato della partita
 	 * @param observer
 	 */
-	public void setObserver(ClientSocketObserver observer) {
-		this.observer = observer;
+	public void setPartitaObserver(StatoPartitaObserver observer) {
+		this.partitaObserver = observer;
 	}
 
 	/**
@@ -94,17 +98,41 @@ public class ClientSocket {
 		socket.on(Socket.EVENT_DISCONNECT, args -> System.out.println("[client] disconnesso dal server"));
 		socket.on("connect_error", args -> System.out.println("[client] errore connessione: " + args[0]));
 
-		// socket.on("stanza:aggiornamento", args -> System.out.println("[server][stanza:aggiornamento] " + args[0]));
-		socket.on("partita:inizia", args -> System.out.println("[server][partita:inizia] " + args[0]));
-		socket.on("partita:turno", args -> System.out.println("[server][partita:turno] " + args[0]));
-		socket.on("partita:mossa", args -> System.out.println("[server][partita:mossa] " + args[0]));
-		socket.on("partita:terminata", args -> System.out.println("[server][partita:terminata] " + args[0]));
+//		socket.on("stanza:aggiornamento", args -> System.out.println("[server][stanza:aggiornamento] " + args[0]));
+//		socket.on("partita:inizia", args -> System.out.println("[server][partita:inizia] " + args[0]));
+//		socket.on("partita:turno", args -> System.out.println("[server][partita:turno] " + args[0]));
+//		socket.on("partita:mossa", args -> System.out.println("[server][partita:mossa] " + args[0]));
+//		socket.on("partita:terminata", args -> System.out.println("[server][partita:terminata] " + args[0]));
 		socket.on(Messaggi.EVENT_STANZA_AGGIORNAMENTO, (args -> {
 			StatoStanzaDTO stato = getPayload(StatoStanzaDTO.class, args);
 			this.statoStanza = DTOUtils.clone(stato);
 
-			if (observer != null) {
-				observer.aggiornaStanza(stato);
+			if (stanzaObserver != null) {
+				stanzaObserver.aggiornaStanza(stato);
+			}
+		}));
+		socket.on(Messaggi.EVENT_INIZIO_PARTITA, (args -> {
+			StatoPartitaDTO stato = getPayload(StatoPartitaDTO.class, args);
+			this.statoPartita = stato;
+
+			if (partitaObserver != null) {
+				partitaObserver.inizioPartita(stato);
+			}
+		}));
+		socket.on(Messaggi.EVENT_AGGIORNAMENTO_PARTITA, (args -> {
+			StatoPartitaDTO stato = getPayload(StatoPartitaDTO.class, args);
+			this.statoPartita = stato;
+
+			if (partitaObserver != null) {
+				partitaObserver.aggiornaPartita(stato);
+			}
+		}));
+		socket.on(Messaggi.EVENT_FINE_PARTITA, (args -> {
+			StatoPartitaDTO stato = getPayload(StatoPartitaDTO.class, args);
+			this.statoPartita = stato;
+
+			if (partitaObserver != null) {
+				partitaObserver.finePartita(stato);
 			}
 		}));
 	}
@@ -256,7 +284,7 @@ public class ClientSocket {
 		ReqEffettuaMossa req = new ReqEffettuaMossa(mossa);
 		System.out.println("[CLIENT] Invio richiesta mossa: " + mossa);
 
-		socketEmitEvent(Messaggi.EVENT_GIOCO_MOSSA, req, callback, RespEffettuaMossa.class);
+		socketEmitEvent(Messaggi.EVENT_AGGIORNAMENTO_PARTITA, req, callback, RespEffettuaMossa.class);
 	}
 
 	public void listaPartite(Callback<RespListaSalvataggi> callback) {
@@ -318,6 +346,13 @@ public class ClientSocket {
 		socketEmitEvent(MessaggiUtente.EVENT_ELIMINA_ACCOUNT, req, callback, RespEliminaAccount.class);
 	}
 
+	public void effettuaMossa(MossaDTO mossa, Callback<RespEffettuaMossa> callback) {
+		ReqEffettuaMossa req = new ReqEffettuaMossa(mossa);
+		System.out.println("[CLIENT] Invio richiesta mossa: " + mossa);
+
+		socketEmitEvent(Messaggi.EVENT_AGGIORNAMENTO_PARTITA, req, callback, RespEffettuaMossa.class);
+	}
+
 	/**
 	 * Registra un nuovo handler
 	 * @param evento Nome dell'evento
@@ -349,5 +384,9 @@ public class ClientSocket {
 
 	public StatoStanzaDTO getStatoStanza() {
 		return DTOUtils.clone(this.statoStanza);
+	}
+
+	public StatoPartitaDTO getStatoPartita() {
+		return statoPartita;
 	}
 }
