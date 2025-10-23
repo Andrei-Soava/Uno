@@ -10,43 +10,46 @@ La specifica dei requisiti è redatta in conformità con lo standard IEEE 830 al
 Il presente documento rappresenta un riferimento ufficiale per tutte le fasi successive del ciclo di vita del software, includendo progettazione, implementazione, test, validazione e manutenzione. Esso mira a garantire una comprensione condivisa del sistema tra tutti gli stakeholder riducendo ambiguità e assicurando la tracciabilità dei requisiti.
 
 ### 1.2 Scopo del gioco
-Il gioco “UNO-like” (ispirato al classico gioco di carte “UNO”) è stato progettato per offrire un’esperienza interattiva, fluida e accessibile a qualsiasi tipo di utente.
+Il gioco "ONE” (ispirato al classico gioco di carte “UNO”) è stato progettato per offrire un’esperienza interattiva, fluida e accessibile a qualsiasi tipo di utente.
 Il sistema ha l’obiettivo di fornire una piattaforma modulare e scalabile, che permetta l’integrazione di nuove funzionalità in futuro senza compromettere la stabilità e le prestazioni del software.    
 
    - ### 1.2.1 Svolgimento del gioco
    Il gioco consente ai giocatori di partecipare a partite in modalità offline (contro dei bot) oppure in modalità multigiocatore online contro altri utenti.
-   I giocatori possono scegliere se registrarsi o partecipare come utenti anonimi. Tuttavia, la modalità anonima comporta alcune limitazioni: i giocatori non registrati non possono accedere alle statistiche delle partite né salvare le partite non ancora terminate prima di abbandonarle.
+   I giocatori possono scegliere se registrarsi o partecipare come utenti anonimi. Tuttavia, la modalità anonima comporta alcune limitazioni: i giocatori non registrati non possono accedere alle statistiche delle partite, né salvare le partite contro il coomputer.
 ### 1.3 Definizioni, acronimi e abbreviazioni
 - Bot: avversario controllato da un computer (cioè un computer imita le mosse che farebbe un umano);
 - Utente registrato: utente che, dopo l'avvio del gioco, effettua una registrazione (nel caso non fosse registrato) oppure un login (nel caso fosse già registrato). Esso può controllare le statistiche delle sue partite e può accedere ai salvataggi delle partite non terminate (solo quelle lato offline);
-- Utente anonimo: utente che non si è registrato prima di iniziare a giocare. Esso sarà identificato con un username dato del server (ad esempio: utente#754);
+- Utente anonimo: utente che non si è registrato prima di iniziare a giocare. Esso potrà scegliere un nome temporaneo, valido per quella sessione di gioco;
 
 
 
 ## 2. Descrizione generale 
    ### 2.1 Prospettiva del prodotto
-   "UNO-like” è una rivisitazione digitale del celebre gioco di carte UNO.  
+   "ONE” è una rivisitazione digitale del celebre gioco di carte UNO.  
    Il software è sviluppato interamente in Java e può essere eseguito su diversi sistemi operativi, purché sia installata una versione compatibile del Java Runtime Environment (JRE). 
    ### 2.2 Funzionalità del prodotto
-   UNO-like avrà le seguenti funzionalità:
+   ONE avrà le seguenti funzionalità:
    - Registrazione e autenticazione: ogni utente può scegliere se registrarsi prima di giocare. Gli utenti già registrati possono autenticarsi tramite nome utente e password per accedere alle proprie partite e statistiche;
    - Modalità di gioco offline e online: il giocatore può partecipare a partite in modalità offline (contro un bot) oppure in modalità online (contro altri utenti connessi).
    - Salvataggio e ripresa delle partita non terminate: in modalità offline gli utenti registrati possono salvare una partita in corso e riprenderla successivamente. Gli utenti non registrati non dispongono di questa funzionalità;
-   - Gestione delle statistiche personali: gli utenti registrati possono visualizzare le proprie statistiche, comprendenti numero di partite giocate, vinte e perse, e altre informazioni di riepilogo. Gli utenti non registrati non dispongono di questa funzionalità;
+   - Gestione delle statistiche personali: gli utenti registrati possono visualizzare le proprie statistiche, che comprendono numero di partite giocate, vinte e perse, e altre informazioni di riepilogo. Gli utenti non registrati non dispongono di questa funzionalità;
    - Regolamento: nel menù principale è disponibile una sezione dedicata al regolamento ufficiale del gioco, accessibile a tutti gli utenti;
+   - Impostazioni: (solo per utenti registrati) per modificare nome/password, oppure eliminare l'account.
+   
    ### 2.3 Caratteristiche dell'utente
-   Il gioco “UNO-like” è rivolto a un pubblico ampio, composto sia da giocatori occasionali sia da utenti abituali del gioco di carte UNO.  
+   Il gioco “ONE” è rivolto a un pubblico ampio, composto sia da giocatori occasionali sia da utenti abituali del gioco di carte UNO.  
    Non sono richieste competenze tecniche particolari per utilizzarlo: l’interfaccia grafica è progettata per essere intuitiva, chiara e facilmente comprensibile da qualsiasi tipo di utente.
+
    ### 2.4 Vincoli
-   Il sistema "UNO-like" presenta i seguenti vincoli:
+   Il sistema "ONE" presenta i seguenti vincoli:
    - il gioco dove essere eseguito su un sistema dotato di JDK 21 o una versione successiva;
    - il software deve risultare compatibile con i sistemi operativi Windows, Linux e macOS;
    ### 2.5 Presupposti e dipendenze
-   Il funzionamento del sistema "UNO-like" si basa sui seguenti presupposti e dipendenze.  
+   Il funzionamento del sistema "ONE" si basa sui seguenti presupposti e dipendenze.  
    Pressuposti: 
    - Si presuppone che l’utente disponga di un computer con JDK 21 o versione successiva installato;
    - Si presuppone che l’utente abbia familiarità con l’utilizzo di dispositivi informatici di base (es. computer, tastiera e mouse);
-   - Si presuppone che ogni utente disponga di una connessione Internet stabile per poter giocare in modalità online;
+   - Si presuppone che ogni utente si debba connettere al server per poter giocare in modalità online (in caso contrario potrà solo giocare contro bots e senza possibilità di autenticarsi);
    Dipendenze:
    - Il corretto funzionamento della modalità online dipende dalla disponibilità e stabilità del server di gioco;
    - Il sistema dipende dal database integrato nel server, utilizzato per la memorizzazione delle credenziali, delle statistiche e dello stato delle partite salvate;
@@ -56,37 +59,38 @@ Il sistema ha l’obiettivo di fornire una piattaforma modulare e scalabile, che
    - ### 3.1.1 Gestione dell'autenticazione
       - RF1: il sitema deve permettere la registrazione di nuovi utenti tramite l'inserimento di nome utente e password;
       - RF2: il sistema deve consentire il login agli utenti già registrati;
-      - RF3: il sistema deve permettere l'accesso come "ospite", ovvero l'accesso al gioco senza registrazione;
+      - RF3: il sistema deve permettere l'accesso come "ospite", ovvero l'accesso al gioco senza registrazione (lasciando la possibilità di scegliere un nome temporaneo);
    - ### 3.1.2 Gestione della modalità di gioco
-      - RF4: il sistema deve consintire la selezione della modalità di gioco: 
+      - RF4: il sistema deve consentire la selezione della modalità di gioco: 
          - gioca con amici (online);
          - gioca contro computer (offline);
       - RF5: in modalità offline, il giocatore deve poter scegliere se iniziare una nuova partita o caricarne una salvata (solo per gli utenti registrati);
       - RF6: in modalità online, il sistema deve connettersi al server di gioco e gestire la comunicazione tra i giocatori.
       (completare la modalità online)
    - ### 3.1.3 Configurazione della partita offline
-      - RF7: il sistema deve permettere la selezione del numero di giocatori (da 2 a 4);
+      - RF7: il sistema deve permettere la selezione del numero di giocatori (da 2 a 10);
       - RF8: dopo aver configurato la partita, l'utente può decidere se annulare la configurazione oppure avviare la partita;
-      - RF9: il sistema deve distribuire casualmente le carte ad ogni giocatore;
+      - RF9: (per utenti registrati) dopo aver premuto il pulsante di avvia partita, appare una schermata aggiuntiva in cui viene data l'opzione di salvare o meno la partita che viene avviata;
    - ### 3.1.4 Svolgimento della partita
       - RF10: il sistema deve basarsi sul regolamento deciso (visibile nella home del gioco);
-      - RF11: ogni giocatore deve poter effettuare una mossa scegliendo una carta compatibile con l’ultima giocata;
-      - RF12: il sistema deve controllare la validità delle mosse e impedire quelle non consentite;
-      - RF13: il sistema deve rilevare automaticamente la vittoria di un giocatore;
+      - RF11: il sistema deve distribuire casualmente le carte ad ogni giocatore;
+      - RF12: ogni giocatore deve poter effettuare una mossa scegliendo una carta compatibile con l’ultima giocata;
+      - RF13: il sistema deve controllare la validità delle mosse e impedire quelle non consentite;
+      - RF14: il sistema deve rilevare automaticamente la vittoria di un giocatore;
    - ###  3.1.5 Gestione del salvataggio nella modalità offline
-      - RF14: gli utenti registrati devono poter salvare lo stato di una partita in corso;
-      - RF15: 1l sistema deve consentire di caricare una partita precedentemente salvata;
+      - RF15: gli utenti registrati devono poter salvare lo stato di una partita in corso (qualora avessero deciso di salvare la partita, come spiegato in RF9);
+      - RF16: 1l sistema deve consentire di caricare una partita precedentemente salvata;
    - ### 3.1.6 Visualizzazione delle statistiche
-      - RF16: il sistema deve mostrare le statistiche personali degli utenti registrati (numero di partite giocate, vinte, perse, ecc.);
-      - RF17: gli utenti anonimi non devono poter accedere alle statistiche;
+      - RF17: il sistema deve mostrare le statistiche personali degli utenti registrati (numero di partite giocate, vinte, perse, ecc.);
+      - RF18: gli utenti anonimi non devono poter accedere alle statistiche;
    - ### 3.1.7 Visualizzazione del regolamento
-      - RF18: il sistema deve offrire una sezione “Regolamento” accessibile dal menù principale;
-      - RF19: il regolamento deve descrivere in modo chiaro le regole del gioco "UNO-like";
+      - RF19: il sistema deve offrire una sezione “Regolamento” accessibile dal menù principale;
+      - RF20: il regolamento deve descrivere in modo chiaro le regole del gioco "ONE";
    - ### 3.1.8 Logout e disconnessione
-      - RF20: il sistema deve permettere di effettuare il logout in qualsiasi momento;
-### 3.2 Requisiti non funzionali
+      - RF21: il sistema deve permettere di effettuare il logout dalle schermate più importanti;
+### 3.2 Requisiti non funzionali (in riferimento ad ISO 9126)
    - ### 3.2.1 Usabilità
-      - RNF1: l'interfaccia grafica deve essere intuitiva, colorata e di facile comprensioneper gli utenti;
+      - RNF1: l'interfaccia grafica deve essere intuitiva, colorata e di facile comprensione per gli utenti;
       - RNF2: i pulsanti devono avere un feedback visivo al passaggio del mouse o alla pressione;
    - ### 3.2.2 Prestazioni
       - RFN3: il sistema deve avviarsi entro 5 secondi dall'esecuzione;
@@ -99,7 +103,7 @@ Il sistema ha l’obiettivo di fornire una piattaforma modulare e scalabile, che
    - ### 3.2.5 Sicurezza
       - RFN7: le credenziali, degli utenti registrati, devono essere memorizzate nel database. Le password devono essere crittografate;
       - RFN8: le comunicazioni tra client e server deveno avvenire tramite protocollo sicuro;
-### 3.3 Requisiti di interfaccia 
+### 3.3 Requisiti di interfaccia utente
    - ### 3.3.1 Schermata di Login
       - RI1: campi di testo:
          - nome utente;
@@ -107,38 +111,53 @@ Il sistema ha l’obiettivo di fornire una piattaforma modulare e scalabile, che
       - RI2: pulsanti:
          - "Accedi": consente l'accesso agli utenti registrati;
          - "Registrati": permette ai nuovi utenti di creare un account;
-         - "Entra come opsite": consente di avviare il gioco senza autenticazione;
+         - "Entra come opsite": consente di avviare il gioco senza autenticazione (con possibilità di scegliere un nome temporaneo);
       - RI3: in caso di errore nell’inserimento delle credenziali, deve comparire un messaggio di errore informativo;
+   - ### 3.3.2 Schermata di Registrazione
+      - RI4: campi di testo:
+         - nome utente;
+         - password (campo oscurato);
+         - conferma password (campo oscurato);
+      - RI5: pulsanti:
+         - "Registrati": permette di provare a creare un account;
+         - "Annulla": consente di ritornare alla schermata 3.3.1;
+      - RI6: in caso di errore nel processo di registrazione, deve comparire un messaggio di errore informativo;
    - ### 3.3.2 Menù principale
-      - RI4: dopo l’accesso, l’utente visualizza il menù principale con le seguenti opzioni:
+      - RI7: dopo l’accesso, l’utente visualizza il menù principale con le seguenti opzioni:
          - "Gioca con amici": pulsante che consente di entrare nella modalità online;
          - "Gioca contro computer": pulsante che consente di entrare nella modalità offline;
          - "Regolamento": pulsante che consente di leggere il regolamento del gioco;
          - "Mostra statistiche": pulsante che consente di leggere le statistiche personali (solo per gli utenti registrati);
          - "Logout": pulsante che consente la disconnessione dal gioco;
-      - RI5: in basso alla schermata del menù principale si visualizzerà:
+      - RI8: in basso alla schermata del menù principale si visualizzerà:
          - lo stato di connessione ("Connessione"/"Disconnessione") al server;
          - il tipo di utente (se l'utente è anonimo oppure registrato);
+         - se l'utente è registrato, il nome utente in basso a destra diventa un bottone che porta alle impostazioni dell'account;
    - ### 3.3.3 Schermata "Gioca contro computer"
-      - RI6: l'utente può scegliere:
+      - RI9: l'utente può scegliere:
          - se giocare una nuova partita (questa funzione è disponibile per tutti gli utenti);
          - se caricare una partita già iniziata (funzione disponibile solo per gli utenti registrati);
-      - RI7: pulsanti di navigazione:
+      - RI10: pulsanti di navigazione:
          - "Home": consente di tornare al menù principale;
          - "Logout": disconnette l'utente dal sistema;
    - ### 3.3.4 Configurazione nuova partita
-      - RI8: l'utente può selezionare il numero di giocatori (minimo 2, massimo 4);
-      - RI9: pulsanti: 
+      - RI11: l'utente può selezionare il numero di giocatori (minimo 2, massimo 10);
+      - RI12: pulsanti: 
             - "Avvia partita": consente di avviare la partita;
             - "Annulla": consente di annullare la configurazione della partita e tornare alla schermata precedente;
+      - RI13: (solo per utenti registrati) schermata aggiuntiva in cui si seleziona il nome del nuovo salvataggio (lasciando vuoto viene generato il nome in automatico) oppure si dichiara di non voler salvare la partita che si vuole creare;
    - ### 3.3.5 Regolamento
-      - RI10: visualizza le regole del gioco "Uno-like", è composto da una parte testatuale e da delle immagini inerenti al gioco
-      - RI11: pulsanti:
+      - RI14: visualizza le regole del gioco "ONE", è composto da una parte testuale e da delle immagini inerenti al gioco
+      - RI15: pulsanti:
          - "Avanti": passaggio alla pagina successiva;
          - "Indietro": passaggio alla pagina precedente;
-   - ### 3.3.6 Satistiche
-      - RI12: mostra i dati relativi alle partite giocate: numero di vittorie, sconfitte, ecc.;
-      - RI13: sezione disponibile solo per gli utenti registrati;
+   - ### 3.3.6 Statistiche 
+      - RI16: (solo per utenti registrati) mostra i dati relativi alle partite giocate: numero di vittorie, sconfitte, ecc.;
+   - ### 3.3.7 Impostazioni
+      - RI17: (solo per utenti registrati) pulsanti:
+            - "Modifica nome": consente di modificare il nome utente;
+            - "Modifica password": consente di modificare la password attutale (inserendo password vecchia, password nuova e conferma password nuova);
+            - "Elimina utente": consente di eliminare l'utente corrente, dopo aver inserito la password;
 ### 3.4 Requisiti interfaccia hardware e software
    - ### 3.4.1 Interfaccia hardware
       - RIHS1: il sistema non richiede dispositivi hardware specifici oltre a un computer, mouse e tastiera;
@@ -151,7 +170,7 @@ Il sistema ha l’obiettivo di fornire una piattaforma modulare e scalabile, che
          - Creare ed eliminare le stanze di gioco per le partite online;
          - Gestire il salvataggio delle partite offline;
          - Gestire le mosse di gioco in tempo reale;
-         - Gestire operazioni sull'account (modifica username/password, eliminazione account);
+         - Gestire operazioni sull'account (modifica nome/password, eliminazione account);
       - RIHS5: il server comunica con il database per gestire le operazioni di persistenza;
 ### 3.5 Requisiti di comunicazione
    - RC1: il server utilizza Socket.IO su protocollo TCP/IP per la comunicazione in tempo reale con i client;
