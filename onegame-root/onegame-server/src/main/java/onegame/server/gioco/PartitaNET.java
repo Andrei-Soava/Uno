@@ -1,11 +1,12 @@
 package onegame.server.gioco;
 
-import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,15 +15,11 @@ import onegame.modello.Mazzo;
 import onegame.modello.PartitaIF;
 import onegame.modello.PilaScarti;
 import onegame.modello.carte.Carta;
-import onegame.modello.carte.CartaNumero;
-import onegame.modello.carte.CartaSpeciale;
 import onegame.modello.carte.Colore;
 import onegame.modello.giocatori.Giocatore;
-import onegame.modello.net.CartaDTO;
 import onegame.modello.net.DTOUtils;
 import onegame.modello.net.MossaDTO;
 import onegame.modello.net.MossaDTO.TipoMossa;
-import onegame.server.GestoreSessioni;
 import onegame.server.PartitaObserver;
 import onegame.server.StanzaPartita;
 
@@ -43,12 +40,20 @@ public final class PartitaNET implements PartitaIF {
 	private boolean haPescatoNelTurno = false;
 	private Carta cartaPescataCorrente = null;
 
+	private final int TEMPO_DICHIARAZIONE_UNO = 3000; // ms
+	private final int TEMPO_DI_GUARDIA = 3000; // ms
+	private final int TEMPO_MAX_MOSSA = 14000; // ms
+
 	// gestione timer
 	private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 	// Timer attivo
-	private ScheduledFuture<?> timerAttivo = null;
+	private ScheduledFuture<?> timerUNO = null;
+	private ScheduledFuture<?> timerTurno = null;
 
 	private static final Logger logger = LoggerFactory.getLogger(PartitaNET.class);
+
+	private ReentrantLock lock = new ReentrantLock();
+	private Semaphore mutexDichiaraUNO = new Semaphore(1);
 
 	public PartitaNET(List<Giocatore> giocatori, StanzaPartita stanza) {
 		this.giocatori.addAll(giocatori);
@@ -58,8 +63,7 @@ public final class PartitaNET implements PartitaIF {
 	}
 
 	private void init() {
-		// Distribuisce 7 carte a ogni giocatore e inizializza pila scarti con prima
-		// carta valida
+		// Distribuisce 7 carte a ogni giocatore e inizializza pila scarti con prima carta valida
 		for (Giocatore g : giocatori) {
 			g.getMano().aggiungiCarte(mazzo.pescaN(7));
 		}
@@ -98,10 +102,15 @@ public final class PartitaNET implements PartitaIF {
 	}
 
 	public boolean effettuaMossa(MossaDTO mossa, Giocatore giocatore) {
+		lock.lock();
 		try {
 			if (mossa == null || giocatore == null || partitaFinita) {
 				logger.warn("Mossa o giocatore nulli, o partita già finita");
 				return false;
+			}
+			if (mossa.tipo != TipoMossa.DICHIARA_UNO) {
+				mutexDichiaraUNO.acquireUninterruptibly();
+				mutexDichiaraUNO.release();
 			}
 			// verifica il turno
 			if (!Objects.equals(giocatore, getCurrentPlayer())) {
@@ -109,15 +118,7 @@ public final class PartitaNET implements PartitaIF {
 				return false;
 			}
 
-			TipoMossa tipo = mossa.tipo;
-
-			// Impedisce la doppia pescata
-			if (haPescatoNelTurno && tipo == TipoMossa.PESCA) {
-				logger.warn("Il giocatore {} ha già pescato in questo turno", giocatore.getNome());
-				return false;
-			}
-
-			switch (tipo) {
+			switch (mossa.tipo) {
 			case GIOCA_CARTA: {
 				Carta cartaGiocata = DTOUtils.convertiDTOinCarta(mossa.carta);
 				if (cartaGiocata == null) {
@@ -165,15 +166,15 @@ public final class PartitaNET implements PartitaIF {
 
 				// Regola dell'UNO: se ha una sola carta, deve dichiarare UNO
 				if (giocatore.getMano().getNumCarte() == 1) {
-					avviaTimer(giocatore);
+					avviaTimerDichiaraUNO(giocatore);
 				} else {
 					giocatore.setHaDichiaratoUNO(false);
-					cancellaTimer();
+					cancellaTimerDichiaraUNO();
 				}
+				cancellaTimerTurno();
 
 				checkWinCondition(giocatore);
-				// prima controlla che la partita non sia finita, e se non lo è passa il turno
-				// al prossimo giocatore
+				// prima controlla che la partita non sia finita, e se non lo è passa il turno al prossimo giocatore
 				if (!partitaFinita) {
 					passaTurno(1);
 				}
@@ -184,14 +185,21 @@ public final class PartitaNET implements PartitaIF {
 			}
 
 			case PESCA: {
-				Carta pescata = mazzo.pesca();
-				if (pescata != null) {
-					giocatore.getMano().aggiungiCarta(pescata);
-					cartaPescataCorrente = pescata;
+				// Impedisce la doppia pescata
+				if (haPescatoNelTurno) {
+					logger.warn("Il giocatore {} ha già pescato in questo turno", giocatore.getNome());
+					return false;
+				}
+
+				Carta cartaPescata = pesca(giocatore);
+				if (cartaPescata != null) {
+					cartaPescataCorrente = cartaPescata;
 					haPescatoNelTurno = true;
 					giocatore.setHaDichiaratoUNO(false);
 					logger.info("Il giocatore {} ha pescato una carta", giocatore.getNome());
 				}
+				cancellaTimerTurno();
+				avviaTimerTurno();
 
 				notifyObserverspartitaAggiornata();
 				return true;
@@ -203,7 +211,7 @@ public final class PartitaNET implements PartitaIF {
 					logger.warn("Il giocatore {} non può passare senza aver pescato", giocatore.getNome());
 					return false;
 				}
-
+				cancellaTimerTurno();
 				passaTurno(1);
 
 				notifyObserverspartitaAggiornata();
@@ -212,40 +220,105 @@ public final class PartitaNET implements PartitaIF {
 			case DICHIARA_UNO: {
 				if (giocatore.getMano().getNumCarte() == 1) {
 					giocatore.setHaDichiaratoUNO(true);
-					cancellaTimer();
+					cancellaTimerDichiaraUNO();
+					mutexDichiaraUNO.release();
 					logger.info("Il giocatore {} ha dichiarato UNO!", giocatore.getNome());
 					return true;
 				}
 				return false;
+			}
+			case PESCA_E_PASSA: {
+				if (!haPescatoNelTurno) {
+					pesca(giocatore);
+				} else {
+					logger.warn("Il giocatore {} non può pescare di nuovo prima di passare", giocatore.getNome());
+				}
+
+				passaTurno(1);
+
+				notifyObserverspartitaAggiornata();
+				return true;
 			}
 			}
 			return false;
 		} catch (Exception e) {
 			logger.error("Errore durante l'effettuazione della mossa: {}", e.getMessage());
 			return false;
+		} finally {
+			lock.unlock();
 		}
 	}
 
-	private void cancellaTimer() { // Interrompe il timer quando non è più necessario
-		if (timerAttivo != null) {
-			timerAttivo.cancel(false);
-			timerAttivo = null;
-		}
-
-	}
-
-	private void avviaTimer(Giocatore giocatore) {
-		cancellaTimer();
-		timerAttivo = scheduler.schedule(() -> {
-			if (!giocatore.haDichiaratoUNO()) {
-				giocatore.getMano().aggiungiCarte(mazzo.pescaN(2));
-				logger.info("Il giocatore {} non ha dichiarato UNO in tempo e pesca 2 carte", giocatore.getNome());
-				notifyObserverspartitaAggiornata();
+	private void effettuaMossaAutomatica() {
+		Giocatore g = getCurrentPlayer();
+		for (Carta c : g.getMano().getCarte()) {
+			if (isCartaGiocabile(c)) {
+				MossaDTO mossa = new MossaDTO(TipoMossa.GIOCA_CARTA);
+				mossa.carta = DTOUtils.creaCartaDTO(c);
+				if (c.getColore() == Colore.NERO) {
+					mossa.coloreScelto = Colore.ROSSO; // o scegli dinamicamente
+				}
+				effettuaMossa(mossa, g);
+				return;
 			}
-		}, 8, TimeUnit.SECONDS);
+		}
+		effettuaMossa(new MossaDTO(TipoMossa.PESCA_E_PASSA), g);
+	}
+
+	private void cancellaTimerDichiaraUNO() {
+		if (timerUNO != null) {
+			timerUNO.cancel(false);
+			timerUNO = null;
+		}
+	}
+
+	private void cancellaTimerTurno() {
+		if (timerTurno != null) {
+			timerTurno.cancel(false);
+			timerTurno = null;
+		}
+	}
+
+	private Carta pesca(Giocatore giocatore) {
+		Carta pescata = mazzo.pesca();
+		if (pescata != null) {
+			giocatore.getMano().aggiungiCarta(pescata);
+			logger.info("Il giocatore {} ha pescato una carta e passa il turno", giocatore.getNome());
+		} else {
+			logger.info("Il mazzo è vuoto", giocatore.getNome());
+		}
+		return pescata;
+	}
+
+	private void avviaTimerDichiaraUNO(Giocatore giocatore) {
+		cancellaTimerDichiaraUNO();
+		mutexDichiaraUNO.acquireUninterruptibly();
+		timerUNO = scheduler.schedule(() -> {
+			lock.lock();
+			try {
+				if (!giocatore.haDichiaratoUNO()) {
+					giocatore.getMano().aggiungiCarte(mazzo.pescaN(2));
+					logger.info("Il giocatore {} non ha dichiarato UNO in tempo e pesca 2 carte", giocatore.getNome());
+					notifyObserverspartitaAggiornata();
+					mutexDichiaraUNO.release();
+				}
+			} finally {
+				lock.unlock();
+			}
+		}, TEMPO_DICHIARAZIONE_UNO + TEMPO_DI_GUARDIA, TimeUnit.MILLISECONDS);
+	}
+
+	private void avviaTimerTurno() {
+		cancellaTimerTurno();
+		timerTurno = scheduler.schedule(() -> {
+			logger.info("Il giocatore {} non ha effettuato la mossa in tempo", getCurrentPlayer().getNome());
+			effettuaMossaAutomatica();
+		}, TEMPO_MAX_MOSSA + TEMPO_DI_GUARDIA, TimeUnit.MILLISECONDS);
 	}
 
 	private void passaTurno(int step) {
+		avviaTimerTurno();
+
 		haPescatoNelTurno = false;
 		cartaPescataCorrente = null;
 

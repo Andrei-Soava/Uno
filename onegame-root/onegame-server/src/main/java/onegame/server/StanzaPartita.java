@@ -78,29 +78,45 @@ public class StanzaPartita extends Stanza implements PartitaObserver {
 
 		try {
 			List<GiocatoreDTO> listaGiocatoriDTO = new ArrayList<>();
-			
-			throw new RuntimeException();
-//			// Prepara i DTO dei giocatori
-//			for (Sessione s : sessioni) {
-//				Giocatore g = giocatori.get(s);
-//				GiocatoreDTO gDTO = new GiocatoreDTO(s.getUsername(), s.getNickname(), s.isAnonimo(),
-//						g.getMano().getNumCarte());
-//				listaGiocatoriDTO.add(gDTO);
-//			}
-//
-//			CartaDTO cartaIniziale = DTOUtils.creaCartaDTO(partita.getCartaCorrente());
-//
-//			for (Map.Entry<Sessione, Giocatore> entry : giocatori.entrySet()) {
-//				Sessione s = entry.getKey();
-//				Giocatore g = entry.getValue();
-//
-//				List<CartaDTO> manoDTO = DTOUtils.creaListaCarteDTO(g.getMano().getCarte());
-//				StatoPartitaDTO mess = new StatoPartitaDTO(cartaIniziale, listaGiocatoriDTO,
-//						partita.getIndiceGiocatoreCorrente(), manoDTO, partita.getDirezione(), partita.isFinished(),
-//						partita.getIndiceVincitore());
-//
-//				s.sendEvent(nomeEvento, new MessStatoPartita(mess));
-//			}
+
+			// Prepara i DTO dei giocatori
+			List<Giocatore> listaGiocatori = partita.getGiocatori();
+
+			for (Giocatore g : listaGiocatori) {
+				GiocatoreDTO gDTO = new GiocatoreDTO(g.getNome(), g.getMano().getNumCarte());
+				listaGiocatoriDTO.add(gDTO);
+			}
+
+			CartaDTO cartaCorrente = DTOUtils.creaCartaDTO(partita.getCartaCorrente());
+
+			for (Map.Entry<Sessione, Giocatore> entry : giocatori.entrySet()) {
+				Sessione s = entry.getKey();
+				Giocatore g = entry.getValue();
+
+				List<CartaDTO> manoDTO = DTOUtils.creaListaCarteDTO(g.getMano().getCarte());
+				int indiceGiocatoreLocale = listaGiocatori.indexOf(g);
+				int indiceGiocatoreCorrente = partita.getIndiceGiocatoreCorrente();
+				boolean direzione = partita.getDirezione();
+				int indiceVincitore = partita.getIndiceVincitore();
+				boolean finished = partita.isFinished();
+
+				StatoPartitaDTO statoDTO = new StatoPartitaDTO(cartaCorrente, listaGiocatoriDTO, indiceGiocatoreLocale,
+						indiceGiocatoreCorrente, manoDTO, direzione, finished, indiceVincitore);
+
+				s.sendEvent(nomeEvento, new MessStatoPartita(statoDTO));
+			}
+		} finally {
+			lock.unlock();
+		}
+	}
+
+	@Override
+	public boolean rimuoviSessione(Sessione sessione) {
+		lock.lock();
+		try {
+			Giocatore g = giocatori.remove(sessione);
+			g.setBot(true);
+			return super.rimuoviSessione(sessione);
 		} finally {
 			lock.unlock();
 		}
@@ -121,6 +137,15 @@ public class StanzaPartita extends Stanza implements PartitaObserver {
 		} finally {
 			lock.unlock();
 		}
+	}
+
+	private Sessione trovaSessionePerGiocatore(Giocatore g) {
+		for (Map.Entry<Sessione, Giocatore> entry : giocatori.entrySet()) {
+			if (entry.getValue().equals(g)) {
+				return entry.getKey();
+			}
+		}
+		return null;
 	}
 
 }

@@ -64,7 +64,7 @@ public abstract class GestoreStanze<Stanzz extends Stanza> implements SessioneOb
 
 			mappaSessioneAStanza.put(sessione, stanza);
 			stanzePerCodice.put(codiceStanza, stanza);
-			stanza.aggiungiUtente(sessione);
+			stanza.aggiungiSessione(sessione);
 
 			ack.sendAckData(new RespCreaStanza(true, "Stanza creata con successo", codiceStanza));
 			logger.info("Creata stanza {} da sessione {}", stanza.getCodice(), sessione.getToken());
@@ -98,7 +98,7 @@ public abstract class GestoreStanze<Stanzz extends Stanza> implements SessioneOb
 				return;
 			}
 
-			boolean ok = stanza.aggiungiUtente(sessione);
+			boolean ok = stanza.aggiungiSessione(sessione);
 			if (!ok) {
 				ack.sendAckData(new RespEntraStanza(false, "Impossibile entrare in stanza (piena o già in gioco)"));
 				return;
@@ -143,7 +143,7 @@ public abstract class GestoreStanze<Stanzz extends Stanza> implements SessioneOb
 
 		stanza.lock.lock();
 		try {
-			if (stanza.rimuoviUtente(sessione)) {
+			if (stanza.rimuoviSessione(sessione)) {
 				logger.info("Sessione {} rimossa da stanza {}", sessione.getToken(), stanza.getCodice());
 			}
 			if (stanza.isVuota()) {

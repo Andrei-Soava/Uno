@@ -18,7 +18,7 @@ public abstract class Stanza {
 
 	protected final int codice;
 	protected final String nome;
-	protected int maxUtenti;
+	protected int maxSessioni;
 	protected boolean isAperta = true;
 
 	protected final ReentrantLock lock = new ReentrantLock();
@@ -27,16 +27,16 @@ public abstract class Stanza {
 
 	private static final Logger logger = LoggerFactory.getLogger(Stanza.class);
 
-	public Stanza(int codice, String nome, int maxUtenti) {
+	public Stanza(int codice, String nome, int maxSessioni) {
 		this.codice = codice;
 		this.nome = nome;
-		this.maxUtenti = maxUtenti;
+		this.maxSessioni = maxSessioni;
 	}
 
-	public boolean aggiungiUtente(Sessione sessione) {
+	public boolean aggiungiSessione(Sessione sessione) {
 		lock.lock();
 		try {
-			if (!isAperta || sessioni.size() >= maxUtenti || sessioni.contains(sessione))
+			if (!isAperta || sessioni.size() >= maxSessioni || sessioni.contains(sessione))
 				return false;
 
 			return sessioni.add(sessione);
@@ -45,7 +45,7 @@ public abstract class Stanza {
 		}
 	}
 
-	public boolean rimuoviUtente(Sessione sessione) {
+	public boolean rimuoviSessione(Sessione sessione) {
 		lock.lock();
 		try {
 			return sessioni.remove(sessione);
@@ -59,7 +59,7 @@ public abstract class Stanza {
 	}
 
 	public boolean isPiena() {
-		return sessioni.size() >= maxUtenti;
+		return sessioni.size() >= maxSessioni;
 	}
 
 	public void broadcast(String evento, Object payload) {
@@ -81,11 +81,11 @@ public abstract class Stanza {
 		return nome;
 	}
 
-	public int getMaxUtenti() {
-		return maxUtenti;
+	public int getMaxSessioni() {
+		return maxSessioni;
 	}
 
-	public boolean hasUtente(Sessione sessione) {
+	public boolean hasSessione(Sessione sessione) {
 		lock.lock();
 		try {
 			return sessioni.contains(sessione);

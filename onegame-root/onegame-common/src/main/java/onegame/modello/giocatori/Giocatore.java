@@ -97,6 +97,10 @@ public class Giocatore {
 	public boolean isBot() {
 		return bot;
 	}
+	
+	public void setBot(boolean bot) {
+		this.bot = bot;
+	}
 	/**
 	 * Verifica se il giocatore ha dichiarato UNO
 	 * @return
