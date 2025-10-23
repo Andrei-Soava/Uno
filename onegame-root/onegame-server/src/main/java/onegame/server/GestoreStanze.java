@@ -151,6 +151,9 @@ public abstract class GestoreStanze<Stanzz extends Stanza> implements SessioneOb
 				return;
 			}
 			stanza.notificaStato();
+
+		} catch (Exception e) {
+			logger.error("Errore rimozione sessione {} da stanza {}", sessione.getToken(), stanza.getCodice());
 		} finally {
 			stanza.lock.unlock();
 		}

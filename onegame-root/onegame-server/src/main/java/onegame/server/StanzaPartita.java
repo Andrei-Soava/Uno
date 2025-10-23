@@ -112,11 +112,14 @@ public class StanzaPartita extends Stanza implements PartitaObserver {
 
 	@Override
 	public boolean rimuoviSessione(Sessione sessione) {
+		boolean removed = super.rimuoviSessione(sessione);
 		lock.lock();
 		try {
-			Giocatore g = giocatori.remove(sessione);
-			g.setBot(true);
-			return super.rimuoviSessione(sessione);
+			if (giocatori.containsKey(sessione)) {
+				Giocatore g = giocatori.remove(sessione);
+				g.setBot(true);
+			}
+			return removed;
 		} finally {
 			lock.unlock();
 		}

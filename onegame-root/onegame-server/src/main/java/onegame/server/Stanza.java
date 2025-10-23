@@ -58,6 +58,9 @@ public abstract class Stanza {
 				proprietario = sessioni.isEmpty() ? null : sessioni.iterator().next();
 			}
 			return removed;
+		} catch (Exception e) {
+			logger.error("Errore rimozione sessione dalla stanza {}: {}", codice, e.getMessage());
+			return false;
 		} finally {
 			lock.unlock();
 		}
@@ -123,12 +126,14 @@ public abstract class Stanza {
 
 	public void notificaStato() {
 		lock.lock();
-		logger.debug("Notifica stato stanza {} a {} utenti", codice, sessioni.size());
 		try {
 			StatoStanzaDTO dto = DTOServerUtils.creaStanzaDTO(this);
 			for (Sessione s : sessioni) {
 				s.sendEvent(Messaggi.EVENT_STANZA_AGGIORNAMENTO, dto);
 			}
+			logger.debug("Notifica stato stanza {} a {} utenti", codice, sessioni.size());
+		} catch (Exception e) {
+			logger.error("Errore notifica stato stanza {}: {}", codice, e.getMessage());
 		} finally {
 			lock.unlock();
 		}
