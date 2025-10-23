@@ -147,7 +147,7 @@ public class GestoreConnessioni {
 				token = UUID.randomUUID().toString();
 			} while (gestoreSessioni.getSessione(token) != null);
 
-			Sessione sessione = Sessione.createSessioneAnonimo("Anonimo", token);
+			Sessione sessione = Sessione.createSessioneAnonimo(nickname, token);
 			gestoreSessioni.associaToken(token, sessione, client);
 
 			ackRequest.sendAckData(new RespAuth(true, token, "Accesso anonimo riuscito", sessione.getUsername(),

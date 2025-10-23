@@ -85,6 +85,15 @@ public abstract class Stanza {
 		return maxSessioni;
 	}
 
+	public int getNumSessioni() {
+		lock.lock();
+		try {
+			return sessioni.size();
+		} finally {
+			lock.unlock();
+		}
+	}
+
 	public boolean hasSessione(Sessione sessione) {
 		lock.lock();
 		try {

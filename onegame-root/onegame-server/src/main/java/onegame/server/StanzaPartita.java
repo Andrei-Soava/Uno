@@ -25,7 +25,7 @@ public class StanzaPartita extends Stanza implements PartitaObserver {
 	public boolean avviaPartita() {
 		lock.lock();
 		try {
-			if (isPartitaInCorso()) {
+			if (isPartitaInCorso() || sessioni.size() < 2) {
 				return false;
 			}
 

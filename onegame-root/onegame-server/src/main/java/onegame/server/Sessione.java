@@ -6,7 +6,6 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.corundumstudio.socketio.AckRequest;
 import com.corundumstudio.socketio.SocketIOClient;
 
 /**
@@ -98,13 +97,13 @@ public class Sessione {
 		}
 	}
 
-	public void sendEvent(String evento, Object payload, AckRequest ack) {
-		if (client != null) {
-			client.sendEvent(evento, payload, ack);
-		} else {
-			logger.debug("Impossibile inviare evento '{}': client nullo per username {}", evento, username);
-		}
-	}
+//	public void sendEvent(String evento, Object payload, AckRequest ack) {
+//		if (client != null) {
+//			client.sendEvent(evento, payload, ack);
+//		} else {
+//			logger.debug("Impossibile inviare evento '{}': client nullo per username {}", evento, username);
+//		}
+//	}
 
 	@Override
 	public String toString() {
