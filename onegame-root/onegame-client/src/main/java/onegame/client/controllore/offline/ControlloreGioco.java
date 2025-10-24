@@ -125,7 +125,6 @@ public class ControlloreGioco {
 	        // Gestisci il risultato in modo asincrono
 	        scelta.thenAccept(confermato -> {
 	            if (confermato) {
-	            	System.out.println("utente vuole abbandonare la partita");
 	            	//se abbandono mentre devo chiamare ONE, pesco due carte
 	            	if(timerONE.getStatus()==Animation.Status.PAUSED) {
 	            		cs.getUtente().getGiocatore().getMano().aggiungiCarte(partita.getMazzo().pescaN(2));
@@ -134,10 +133,8 @@ public class ControlloreGioco {
 	                cp.salvaPartitaAutomatico(partita);
 	                partitaAttiva=false;
 	            	vg.mostraMenuOffline();
-	            	System.out.println("ci sto provandooo");
 	            	
 	            } else {
-	                System.out.println("utente vuole continaure la partita");
 	                riprendiTimers();
 	                aspettaAbbandona();
 	                return;
@@ -267,7 +264,7 @@ public class ControlloreGioco {
 	    if (g.isBot()) {
 	    	// primo delay di 5 secondi prima di scegliere la mossa
 	    	vg.stampaTurnazione(partita.getTurnazioneDalGiocatore(cs.getUtente().getGiocatore()), partita.getDirezione());
-	    	vg.stampaManoReadOnly(partita.getCartaCorrente(), cs.getUtente().getGiocatore());
+	    	vg.stampaManoReadOnly(partita.getCartaCorrente(), cs.getUtente().getGiocatore().getMano().getCarte());
 			timerPreMossaBot.setOnFinished(ev1 -> {
 				if (partitaAttiva) {
 					// eseguo la mossa automatica
@@ -278,7 +275,7 @@ public class ControlloreGioco {
 						vg.stampaMessaggio(g.getNome() + " ha giocato la carta: " + m.getCartaScelta());
 					}
 					vg.stampaTurnazione(partita.getTurnazioneDalGiocatore(cs.getUtente().getGiocatore()), partita.getDirezione());
-			    	vg.stampaManoReadOnly(partita.getCartaCorrente(), cs.getUtente().getGiocatore());
+			    	vg.stampaManoReadOnly(partita.getCartaCorrente(), cs.getUtente().getGiocatore().getMano().getCarte());
 					partita.passaTurno();
 					cp.salvaPartitaAutomatico(partita);
 					// seconda pausa di 3 secondi dopo aver mostrato il messaggio
@@ -327,7 +324,7 @@ public class ControlloreGioco {
 	        timerTurno.playFromStart();
 	        vg.stampaTurnazione(partita.getTurnazioneDalGiocatore(g), partita.getDirezione());
 	    	//inizio turno vero e proprio (posso o pescare, o tentare di giocare una carta)
-	        vg.scegliMossaAsync(partita.getCartaCorrente(), g, m -> {
+	        vg.scegliMossaAsync(partita.getCartaCorrente(), g.getMano().getCarte(), m -> {
 	        	;//breakpoint
 	            if (m.getTipoMossa() == TipoMossa.PESCA) {
 	            	//serve nel caso in cui esca fuori una carta giocabile-> non faccio pescare di nuovo
@@ -375,7 +372,7 @@ public class ControlloreGioco {
 	                                //QUI MOSTRA PULSANTE ONE (se hai appena giocato la penultima)
 	                                //seconda versione per gestione chiamata ONE (timer gestito internamente)
 	                                if (g.getMano().getNumCarte() == 1) { 
-	                                	vg.stampaManoReadOnly(m.getCartaScelta(), g);
+	                                	vg.stampaManoReadOnly(m.getCartaScelta(), g.getMano().getCarte());
 	                                	timerONE.setOnFinished(event->{
 	                                		vg.nascondiONEBtn();
 	                                		vg.stampaMessaggio(g.getNome()+" NON ha chiamato ONE in tempo -> pesca 2 carte");
@@ -417,7 +414,7 @@ public class ControlloreGioco {
 	                        	//QUI MOSTRA PULSANTE ONE (se hai appena giocato la penultima carta)
 	                        	//seconda versione per gestione chiamata ONE (timer gestito internamente)
                                 if (g.getMano().getNumCarte() == 1) { 
-                                	vg.stampaManoReadOnly(m.getCartaScelta(), g);
+                                	vg.stampaManoReadOnly(m.getCartaScelta(), g.getMano().getCarte());
                                 	timerONE.setOnFinished(event->{
                                 		vg.nascondiONEBtn();
                                 		vg.stampaMessaggio(g.getNome()+" NON ha chiamato ONE in tempo -> pesca 2 carte");

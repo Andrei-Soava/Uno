@@ -166,7 +166,15 @@ public class AppWithMaven extends Application {
 			cv=new ControlloreStanzaOspite(vista,cs,cm);
 		}
 		primaryStage.setScene(vista.getScene());
-		cv.aspettaInizioPartita();
+		cv.aggiornaStanza(cs.getStatoStanza());
+		cv.aspetta();
+	}
+	
+	public void mostraVistaGiocoOnline() {
+		VistaGioco vista = new VistaGioco(this);
+		@SuppressWarnings("unused")
+		ControlloreGiocoOnline cgo=new ControlloreGiocoOnline(cs,cm,vista);
+		primaryStage.setScene(vista.getScene());
 	}
 
 	//SEZIONE VISTE GIOCO OFFLINE

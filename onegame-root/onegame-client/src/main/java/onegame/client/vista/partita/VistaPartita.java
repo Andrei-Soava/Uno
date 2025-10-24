@@ -434,5 +434,13 @@ public abstract class VistaPartita {
     public void mostraMenuOffline() {
     	app.mostraVistaMenuOffline();
     }
+    
+    public void mostraMenuOnline() {
+    	app.mostraVistaMenuOnline();
+    }
+    
+    public void mostraHome() {
+    	app.mostraVistaHome();
+    }
 
 }

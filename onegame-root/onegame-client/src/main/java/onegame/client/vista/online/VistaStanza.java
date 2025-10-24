@@ -35,7 +35,6 @@ public class VistaStanza {
         topBar.setPadding(new Insets(10));
 
         abbandonaBtn = new Button("Abbandona");
-        //abbandonaBtn.setOnAction(e -> app.mostraVistaMenuOnline());
 
         Label titolo = new Label("Benvenuto nella lobby");
         titolo.getStyleClass().add("titolo");
@@ -102,6 +101,10 @@ public class VistaStanza {
     public CompletableFuture<Void> waitForAbbandonaBtnClick(){
     	return GestoreCallbackBottoni.waitForClick(abbandonaBtn);
     }
+    
+    public CompletableFuture<Void> waitForAvviaBtnClick(){
+    	return GestoreCallbackBottoni.waitForClick(avviaBtn);
+    }
 
     /**
      * metodo per aggiornare la lista dei giocatori connessi.
@@ -138,6 +141,16 @@ public class VistaStanza {
     
     public void mostraAvviaBtn() {
     	avviaBtn.setVisible(true);
+    }
+    
+    public void disattivaAvviaBtn() {
+    	avviaBtn.setDisable(true);
+    	avviaBtn.setOpacity(0.5);
+    }
+    
+    public void attivaAvviaBtn() {
+    	avviaBtn.setDisable(false);
+    	avviaBtn.setOpacity(1);
     }
     
     public void mostraHome() {

@@ -303,7 +303,7 @@ public class VistaGioco extends VistaPartita {
     /**
      * sezione scelta principale durante il turno
      */
-    public void scegliMossaAsync(Carta cartaCorrente, Giocatore g, Consumer<Mossa> callback) {
+    public void scegliMossaAsync(Carta cartaCorrente, List<Carta> carte, Consumer<Mossa> callback) {
     	Platform.runLater(() -> {
     		overlay.getChildren().clear();
     		for (Node c : mano.getChildren()) {
@@ -318,7 +318,7 @@ public class VistaGioco extends VistaPartita {
     		GestoreEffettiGenerici.assegnaPulsazioneColorata(this.cartaCorrente, Color.AZURE);
             mano.getChildren().clear();
             int i=0;
-            for (Carta c : g.getMano().getCarte()) {
+            for (Carta c : carte) {
             	StackPane carta=GestoreGraficaCarta.creaVistaCarta(c);
             	//associazione click carta ad evento di callback
             	carta.setOnMouseClicked(e -> {
@@ -361,7 +361,7 @@ public class VistaGioco extends VistaPartita {
         });
     }
     
-    public void stampaManoReadOnly(Carta cartaCorrente, Giocatore g) {
+    public void stampaManoReadOnly(Carta cartaCorrente, List<Carta> carte) {
     	Platform.runLater(() -> {
     		overlay.getChildren().clear();
     		for (Node c : mano.getChildren()) {
@@ -375,7 +375,7 @@ public class VistaGioco extends VistaPartita {
     		timerBox.setVisible(false);
     		stampaCartaCorrente(cartaCorrente);
             mano.getChildren().clear();
-            for (Carta c : g.getMano().getCarte()) {
+            for (Carta c : carte) {
             	StackPane carta=GestoreGraficaCarta.creaVistaCarta(c);
                 carta.setStyle(
                 		"-fx-cursor: hand;"+
