@@ -41,6 +41,14 @@ public class DTOUtils {
 			return new CartaNumero(dto.colore, dto.numero);
 		}
 	}
+	
+	public static List<Carta> convertiListaDTOinCarte(List<CartaDTO> carteDTO){
+		List<Carta> carte = new ArrayList<>();
+		for(CartaDTO c : carteDTO) {
+			carte.add(convertiDTOinCarta(c));
+		}
+		return carte;
+	}
 
 	@Deprecated
 	public static PartitaOfflineDTO creaPartitaOfflineDTO(Partita partita) {

@@ -141,3 +141,4 @@ Esempio COMPLETO:
 - 23/10, Fabio, (migliorata e forse ultimata la partita nel server, aggiunta connessione client/server circa la partita, aggiunto nickname a scelta per utenti anonimi lato server), null;
 - 23/10, Andrei, (collegamento persistenza client-server per salvataggi delle partite incomplete), null;
 - 23/10, Fabio, (aggiunto proprietario della stanza, ora solo il proprietario ha il diritto di avviare la partita), null;
+- 24/10, Andrei, (inizio collegamento client-server per la partita online), null;

@@ -36,6 +36,7 @@ public class ControlloreCodicePartita {
 				int codiceParsato=Integer.parseInt(codice);
 				cs.entraStanza(codiceParsato, respEntraStanza -> {
 					Platform.runLater(()->{
+						System.out.println("DENTRO CALLBACK RICHIESTA INGRESSO");
 						if(respEntraStanza.success) {
 							vic.mostraStanza(codice);
 						} else {

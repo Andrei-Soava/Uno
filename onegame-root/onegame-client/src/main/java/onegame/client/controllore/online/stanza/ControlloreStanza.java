@@ -43,7 +43,10 @@ public abstract class ControlloreStanza implements StatoStanzaObserver, StatoPar
 	
 	@Override
 	public void inizioPartita(StatoPartitaDTO stato) {
-		vs.mostraGiocoOnline();
+		System.out.println("RICEVUTO");
+		Platform.runLater(()->{
+			vs.mostraGiocoOnline();
+		});
 	}
 
 	@Override

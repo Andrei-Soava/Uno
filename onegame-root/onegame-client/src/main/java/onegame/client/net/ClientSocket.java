@@ -283,12 +283,12 @@ public class ClientSocket {
 		socketEmitEvent(Messaggi.EVENT_STANZA_DETTAGLI, null, callback, RespDettagliStanza.class);
 	}
 
-	public void inviaMossa(MossaDTO mossa, Callback<RespEffettuaMossa> callback) {
-		ReqEffettuaMossa req = new ReqEffettuaMossa(mossa);
-		System.out.println("[CLIENT] Invio richiesta mossa: " + mossa);
-
-		socketEmitEvent(Messaggi.EVENT_AGGIORNATA_PARTITA, req, callback, RespEffettuaMossa.class);
-	}
+//	public void inviaMossa(MossaDTO mossa, Callback<RespEffettuaMossa> callback) {
+//		ReqEffettuaMossa req = new ReqEffettuaMossa(mossa);
+//		System.out.println("[CLIENT] Invio richiesta mossa: " + mossa);
+//
+//		socketEmitEvent(Messaggi.EVENT_AGGIORNATA_PARTITA, req, callback, RespEffettuaMossa.class);
+//	}
 
 	public void listaPartite(Callback<RespListaSalvataggi> callback) {
 		System.out.println("[CLIENT] Invio richiesta lista partite salvate");

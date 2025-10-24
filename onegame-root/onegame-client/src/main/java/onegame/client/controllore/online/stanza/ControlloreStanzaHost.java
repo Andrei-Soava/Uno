@@ -20,6 +20,7 @@ public class ControlloreStanzaHost extends ControlloreStanza {
 	
 	public void aspettaAvviaPartita() {
 		vs.waitForAvviaBtnClick().thenRun(()->{
+			System.out.println("INIZIATA");
 			cs.iniziaPartita(null);
 		});
 	}
