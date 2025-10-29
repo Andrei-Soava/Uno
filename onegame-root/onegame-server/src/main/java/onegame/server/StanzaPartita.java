@@ -5,14 +5,16 @@ import java.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import onegame.modello.carte.Carta;
 import onegame.modello.giocatori.Giocatore;
 import onegame.modello.net.CartaDTO;
 import onegame.modello.net.DTOUtils;
 import onegame.modello.net.GiocatoreDTO;
 import onegame.modello.net.MossaDTO;
 import onegame.modello.net.StatoPartitaDTO;
-import onegame.modello.net.messaggi.Messaggi;
 import onegame.modello.net.messaggi.Messaggi.*;
+import onegame.modello.net.messaggi.MessaggiGioco;
+import onegame.modello.net.messaggi.MessaggiGioco.MessStatoPartita;
 import onegame.server.gioco.PartitaNET;
 
 public class StanzaPartita extends Stanza implements PartitaObserver {
@@ -46,7 +48,7 @@ public class StanzaPartita extends Stanza implements PartitaObserver {
 			this.partita = new PartitaNET(lista, this);
 			this.partita.addObserver(this);
 
-			inviaTurnoCorrente(Messaggi.EVENT_INIZIATA_PARTITA);
+			inviaTurnoCorrente(MessaggiGioco.EVENT_INIZIATA_PARTITA, Map.of());
 
 			this.isAperta = false;
 			return true;
@@ -65,20 +67,20 @@ public class StanzaPartita extends Stanza implements PartitaObserver {
 	}
 
 	@Override
-	public void partitaAggiornata() {
+	public void partitaAggiornata(Map<Giocatore, List<Carta>> cartePescate) {
 		if (partita == null) {
 			return;
 		}
 
 		if (partita.isFinished()) {
-			inviaTurnoCorrente(Messaggi.EVENT_FINITA_PARTITA);
+			inviaTurnoCorrente(MessaggiGioco.EVENT_FINITA_PARTITA, cartePescate);
 			this.isAperta = true;
 		} else {
-			inviaTurnoCorrente(Messaggi.EVENT_AGGIORNATA_PARTITA);
+			inviaTurnoCorrente(MessaggiGioco.EVENT_AGGIORNATA_PARTITA, cartePescate);
 		}
 	}
 
-	private void inviaTurnoCorrente(String nomeEvento) {
+	private void inviaTurnoCorrente(String nomeEvento, Map<Giocatore, List<Carta>> cartePescateMap) {
 		lock.lock();
 
 		try {
@@ -92,25 +94,32 @@ public class StanzaPartita extends Stanza implements PartitaObserver {
 				listaGiocatoriDTO.add(gDTO);
 			}
 
-			CartaDTO cartaCorrente = DTOUtils.creaCartaDTO(partita.getCartaCorrente());
+			CartaDTO cartaCorrente = DTOUtils.convertiCartaInDTO(partita.getCartaCorrente());
+			int indiceGiocatoreCorrente = partita.getIndiceGiocatoreCorrente();
+			boolean direzione = partita.getDirezione();
+			int indiceVincitore = partita.getIndiceVincitore();
+			boolean finished = partita.isFinished();
+
+			StatoPartitaDTO statoDTO = new StatoPartitaDTO(cartaCorrente, listaGiocatoriDTO, indiceGiocatoreCorrente,
+					direzione, finished, indiceVincitore);
 
 			for (Map.Entry<Sessione, Giocatore> entry : giocatori.entrySet()) {
 				Sessione s = entry.getKey();
 				Giocatore g = entry.getValue();
 
-				List<CartaDTO> manoDTO = DTOUtils.creaListaCarteDTO(g.getMano().getCarte());
+				List<CartaDTO> manoDTO = DTOUtils.convertiListaCarteInDTO(g.getMano().getCarte());
 				int indiceGiocatoreLocale = listaGiocatori.indexOf(g);
-				int indiceGiocatoreCorrente = partita.getIndiceGiocatoreCorrente();
-				boolean direzione = partita.getDirezione();
-				int indiceVincitore = partita.getIndiceVincitore();
-				boolean finished = partita.isFinished();
 
-				StatoPartitaDTO statoDTO = new StatoPartitaDTO(cartaCorrente, listaGiocatoriDTO, indiceGiocatoreLocale,
-						indiceGiocatoreCorrente, manoDTO, direzione, finished, indiceVincitore);
+				List<CartaDTO> cartePescate;
+				if (cartePescateMap != null && cartePescateMap.containsKey(g)) {
+					cartePescate = DTOUtils.convertiListaCarteInDTO(cartePescateMap.get(g));
+				} else {
+					cartePescate = new ArrayList<>();
+				}
 
+				MessStatoPartita mess = new MessStatoPartita(statoDTO, indiceGiocatoreLocale, manoDTO, cartePescate);
+				s.sendEvent(nomeEvento, mess);
 				logger.debug("Stato inviato a utente {}: {}", s.getNickname(), statoDTO);
-
-				s.sendEvent(nomeEvento, new MessStatoPartita(statoDTO));
 			}
 			logger.debug("Stato partita inviato a tutti i giocatori nella stanza {}", codice);
 		} finally {

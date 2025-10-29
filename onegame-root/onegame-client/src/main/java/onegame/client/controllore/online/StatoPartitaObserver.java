@@ -1,11 +1,11 @@
 package onegame.client.controllore.online;
 
-import onegame.modello.net.StatoPartitaDTO;
+import onegame.modello.net.messaggi.MessaggiGioco.MessStatoPartita;
 
 public interface StatoPartitaObserver {
-	public void inizioPartita(StatoPartitaDTO stato);
+	public void inizioPartita(MessStatoPartita stato);
 
-	public void aggiornaPartita(StatoPartitaDTO stato);
+	public void aggiornaPartita(MessStatoPartita stato);
 
-	public void finePartita(StatoPartitaDTO stato);
+	public void finePartita(MessStatoPartita stato);
 }

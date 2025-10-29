@@ -20,6 +20,8 @@ import onegame.modello.net.messaggi.MessaggiUtente;
 import onegame.modello.net.messaggi.MessaggiUtente.*;
 import onegame.modello.net.messaggi.Messaggi;
 import onegame.modello.net.messaggi.Messaggi.*;
+import onegame.modello.net.messaggi.MessaggiGioco;
+import onegame.modello.net.messaggi.MessaggiGioco.*;
 import onegame.modello.net.util.Callback;
 import onegame.modello.net.util.JsonHelper;
 
@@ -111,32 +113,32 @@ public class ClientSocket {
 				stanzaObserver.aggiornaStanza(stato);
 			}
 		}));
-		socket.on(Messaggi.EVENT_INIZIATA_PARTITA, (args -> {
+		socket.on(MessaggiGioco.EVENT_INIZIATA_PARTITA, (args -> {
 			System.out.println("[client] ricevuto evento inizio partita");
-			StatoPartitaDTO stato = getPayload(StatoPartitaDTO.class, args);
-			this.statoPartita = stato;
-			System.out.println("Stato partita ricevuto: " + stato);
+			MessStatoPartita mess = getPayload(MessStatoPartita.class, args);
+			this.statoPartita = mess.statoPartita;
+			System.out.println("Stato partita ricevuto: " + mess.statoPartita);
 
 			if (partitaObserver != null) {
-				partitaObserver.inizioPartita(stato);
+				partitaObserver.inizioPartita(mess);
 			}
 		}));
-		socket.on(Messaggi.EVENT_AGGIORNATA_PARTITA, (args -> {
+		socket.on(MessaggiGioco.EVENT_AGGIORNATA_PARTITA, (args -> {
 			System.out.println("[client] ricevuto evento aggiornamento partita");
-			StatoPartitaDTO stato = getPayload(StatoPartitaDTO.class, args);
-			this.statoPartita = stato;
+			MessStatoPartita mess = getPayload(MessStatoPartita.class, args);
+			this.statoPartita = mess.statoPartita;
 
 			if (partitaObserver != null) {
-				partitaObserver.aggiornaPartita(stato);
+				partitaObserver.aggiornaPartita(mess);
 			}
 		}));
-		socket.on(Messaggi.EVENT_FINITA_PARTITA, (args -> {
+		socket.on(MessaggiGioco.EVENT_FINITA_PARTITA, (args -> {
 			System.out.println("[client] ricevuto evento fine partita");
-			StatoPartitaDTO stato = getPayload(StatoPartitaDTO.class, args);
-			this.statoPartita = stato;
+			MessStatoPartita mess = getPayload(MessStatoPartita.class, args);
+			this.statoPartita = mess.statoPartita;
 
 			if (partitaObserver != null) {
-				partitaObserver.finePartita(stato);
+				partitaObserver.finePartita(mess);
 			}
 		}));
 	}
@@ -353,14 +355,14 @@ public class ClientSocket {
 	public void iniziaPartita(Callback<RespIniziaPartita> callback) {
 		System.out.println("[CLIENT] Invio richiesta inizio partita");
 
-		socketEmitEvent(Messaggi.EVENT_INIZIA_PARTITA, null, callback, RespIniziaPartita.class);
+		socketEmitEvent(MessaggiGioco.EVENT_INIZIA_PARTITA, null, callback, RespIniziaPartita.class);
 	}
 
 	public void effettuaMossa(MossaDTO mossa, Callback<RespEffettuaMossa> callback) {
 		ReqEffettuaMossa req = new ReqEffettuaMossa(mossa);
 		System.out.println("[CLIENT] Invio richiesta mossa: " + mossa);
 
-		socketEmitEvent(Messaggi.EVENT_EFFETTUA_MOSSA_PARTITA, req, callback, RespEffettuaMossa.class);
+		socketEmitEvent(MessaggiGioco.EVENT_EFFETTUA_MOSSA_PARTITA, req, callback, RespEffettuaMossa.class);
 	}
 
 	/**

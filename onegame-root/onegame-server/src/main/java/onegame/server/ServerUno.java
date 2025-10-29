@@ -10,6 +10,7 @@ import com.corundumstudio.socketio.SocketIOServer;
 import onegame.modello.net.messaggi.MessaggiSalvataggioPartite;
 import onegame.modello.net.messaggi.MessaggiUtente;
 import onegame.modello.net.messaggi.Messaggi;
+import onegame.modello.net.messaggi.MessaggiGioco;
 import onegame.server.db.GestoreDatabase;
 
 /**
@@ -108,10 +109,10 @@ public class ServerUno {
 		server.addEventListener(MessaggiUtente.EVENT_ELIMINA_ACCOUNT, String.class,
 				(client, data, ack) -> gestoreUtenti.handleEliminaAccount(getSessione(client), data, ack));
 
-		server.addEventListener(Messaggi.EVENT_INIZIA_PARTITA, String.class,
+		server.addEventListener(MessaggiGioco.EVENT_INIZIA_PARTITA, String.class,
 				(client, data, ack) -> gestoreGioco.handleIniziaPartita(getSessione(client), ack));
 
-		server.addEventListener(Messaggi.EVENT_EFFETTUA_MOSSA_PARTITA, String.class,
+		server.addEventListener(MessaggiGioco.EVENT_EFFETTUA_MOSSA_PARTITA, String.class,
 				(client, data, ack) -> gestoreGioco.handleEffettuaMossa(getSessione(client), data, ack));
 
 		// Test

@@ -1,10 +1,5 @@
 package onegame.modello.net.messaggi;
 
-import java.util.List;
-
-import onegame.modello.net.CartaDTO;
-import onegame.modello.net.MossaDTO;
-import onegame.modello.net.StatoPartitaDTO;
 import onegame.modello.net.StatoStanzaDTO;
 
 public class Messaggi {
@@ -20,12 +15,6 @@ public class Messaggi {
 	public static final String EVENT_STANZA_ESCI = "stanza:esci";
 	public static final String EVENT_STANZA_DETTAGLI = "stanza:dettagli";
 	public static final String EVENT_STANZA_AGGIORNAMENTO = "stanza:aggiornamento";
-
-	public static final String EVENT_INIZIA_PARTITA = "partita:inizia";
-	public static final String EVENT_INIZIATA_PARTITA = "partita:iniziata";
-	public static final String EVENT_AGGIORNATA_PARTITA = "partita:aggiornata";
-	public static final String EVENT_FINITA_PARTITA = "partita:finita";
-	public static final String EVENT_EFFETTUA_MOSSA_PARTITA = "partita:mossa";
 
 //    //Risposte partite offline
 //    public static final String EVENT_PARTITA_OK = "partita:ok";
@@ -159,56 +148,6 @@ public class Messaggi {
 			this.success = success;
 			this.messaggio = messaggio;
 			this.statoStanza = statoStanza;
-		}
-	}
-
-	public static class ReqEffettuaMossa {
-		public MossaDTO mossa;
-
-		public ReqEffettuaMossa() {
-		}
-
-		public ReqEffettuaMossa(MossaDTO mossa) {
-			this.mossa = mossa;
-		}
-	}
-
-	public static class RespEffettuaMossa {
-		public boolean success;
-		public String messaggio;
-
-		public RespEffettuaMossa() {
-		}
-
-		public RespEffettuaMossa(boolean success, String messaggio) {
-			this.success = success;
-			this.messaggio = messaggio;
-		}
-	}
-
-	public static class RespIniziaPartita {
-		public boolean success;
-		public String messaggio;
-
-		public RespIniziaPartita() {
-		}
-
-		public RespIniziaPartita(boolean success, String messaggio) {
-			this.success = success;
-			this.messaggio = messaggio;
-		}
-	}
-
-	public static class MessStatoPartita {
-		public StatoPartitaDTO statoPartita;
-		public List<CartaDTO> cartePescate;
-		public List<CartaDTO> carteInMano;
-
-		public MessStatoPartita() {
-		}
-
-		public MessStatoPartita(StatoPartitaDTO statoPartita) {
-			this.statoPartita = statoPartita;
 		}
 	}
 }

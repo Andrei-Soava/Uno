@@ -6,9 +6,9 @@ import org.slf4j.LoggerFactory;
 import com.corundumstudio.socketio.AckRequest;
 
 import onegame.modello.net.MossaDTO;
-import onegame.modello.net.messaggi.Messaggi.ReqEffettuaMossa;
-import onegame.modello.net.messaggi.Messaggi.RespEffettuaMossa;
-import onegame.modello.net.messaggi.Messaggi.RespIniziaPartita;
+import onegame.modello.net.messaggi.MessaggiGioco.ReqEffettuaMossa;
+import onegame.modello.net.messaggi.MessaggiGioco.RespEffettuaMossa;
+import onegame.modello.net.messaggi.MessaggiGioco.RespIniziaPartita;
 import onegame.modello.net.util.JsonHelper;
 
 public class GestoreGioco {

@@ -6,8 +6,8 @@ import onegame.client.controllore.online.StatoStanzaObserver;
 import onegame.client.net.ClientSocket;
 import onegame.client.net.ConnectionMonitor;
 import onegame.client.vista.online.VistaStanza;
-import onegame.modello.net.StatoPartitaDTO;
 import onegame.modello.net.StatoStanzaDTO;
+import onegame.modello.net.messaggi.MessaggiGioco.MessStatoPartita;
 
 public abstract class ControlloreStanza implements StatoStanzaObserver, StatoPartitaObserver{
 
@@ -42,7 +42,7 @@ public abstract class ControlloreStanza implements StatoStanzaObserver, StatoPar
 	
 	
 	@Override
-	public void inizioPartita(StatoPartitaDTO stato) {
+	public void inizioPartita(MessStatoPartita mess) {
 		System.out.println("RICEVUTO");
 		Platform.runLater(()->{
 			vs.mostraGiocoOnline();
@@ -50,12 +50,12 @@ public abstract class ControlloreStanza implements StatoStanzaObserver, StatoPar
 	}
 
 	@Override
-	public void aggiornaPartita(StatoPartitaDTO stato) {
+	public void aggiornaPartita(MessStatoPartita mess) {
 		//NON SERVE
 	}
 
 	@Override
-	public void finePartita(StatoPartitaDTO stato) {
+	public void finePartita(MessStatoPartita mess) {
 		//NON SERVE
 	}
 

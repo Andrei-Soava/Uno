@@ -17,6 +17,7 @@ import onegame.modello.net.GiocatoreDTO;
 import onegame.modello.net.MossaDTO;
 import onegame.modello.net.MossaDTO.TipoMossa;
 import onegame.modello.net.StatoPartitaDTO;
+import onegame.modello.net.messaggi.MessaggiGioco.MessStatoPartita;
 
 public class ControlloreGiocoOnline implements StatoPartitaObserver {
 	private ClientSocket cs;
@@ -59,18 +60,19 @@ public class ControlloreGiocoOnline implements StatoPartitaObserver {
 	}
 
 	@Override
-	public void inizioPartita(StatoPartitaDTO stato) {
+	public void inizioPartita(MessStatoPartita mess) {
 		//NON SERVE
 	}
 
 	@Override
-	public void aggiornaPartita(StatoPartitaDTO stato) {
-		List<GiocatoreDTO> giocatori = stato.giocatori;
-		List<Carta> carte = DTOUtils.convertiListaDTOinCarte(stato.carteInMano);
-		Carta cartaCorrente = DTOUtils.convertiDTOinCarta(stato.cartaCorrente);
-		boolean direzione = stato.direzioneCrescente;
-		int posizioneAssoluta = stato.indiceGiocatoreLocale;
-		int posizioneTurnoCorrente = stato.indiceGiocatoreCorrente;
+	public void aggiornaPartita(MessStatoPartita mess) {
+		StatoPartitaDTO statoPartita = mess.statoPartita;
+		List<GiocatoreDTO> giocatori = statoPartita.giocatori;
+		List<Carta> carte = DTOUtils.convertiListaDTOinCarte(mess.carteInMano);
+		Carta cartaCorrente = DTOUtils.convertiDTOinCarta(statoPartita.cartaCorrente);
+		boolean direzione = statoPartita.direzioneCrescente;
+		int posizioneAssoluta = mess.indiceGiocatoreLocale;
+		int posizioneTurnoCorrente = statoPartita.indiceGiocatoreCorrente;
 		vg.stampaTurnoCorrente(giocatori.get(posizioneTurnoCorrente).nickname);
 		vg.stampaTurnazione(MappaUtils.creaMappa(giocatori, posizioneTurnoCorrente, posizioneAssoluta), direzione);
 		
@@ -152,7 +154,7 @@ public class ControlloreGiocoOnline implements StatoPartitaObserver {
 	}
 	
 	private void gestisciInviaCarta(Carta cartaDaInviare, int numeroCarteInMano) {
-		cs.effettuaMossa(new MossaDTO((TipoMossa.GIOCA_CARTA), DTOUtils.creaCartaDTO(cartaDaInviare)), null);
+		cs.effettuaMossa(new MossaDTO((TipoMossa.GIOCA_CARTA), DTOUtils.convertiCartaInDTO(cartaDaInviare)), null);
 		if(numeroCarteInMano==2) {
 			vg.mostraONEBtn().thenRun(()->{
 				cs.effettuaMossa(new MossaDTO(TipoMossa.DICHIARA_UNO), null);
@@ -161,8 +163,8 @@ public class ControlloreGiocoOnline implements StatoPartitaObserver {
 	}
 
 	@Override
-	public void finePartita(StatoPartitaDTO stato) {
-		vg.stampaFinePartita(stato.giocatori.get(stato.indiceVincitore).nickname, ()->{
+	public void finePartita(MessStatoPartita mess) {
+		vg.stampaFinePartita(mess.statoPartita.giocatori.get(mess.statoPartita.indiceVincitore).nickname, ()->{
 			vg.mostraMenuOnline();
 		});
 		

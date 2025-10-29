@@ -180,7 +180,7 @@ public final class PartitaNET implements PartitaIF {
 				}
 				logger.info("Il giocatore {} ha giocato la carta {}", giocatore.getNome(), cartaGiocata.toString());
 
-				notifyObserverspartitaAggiornata();
+				notifyObserverspartitaAggiornata(Map.of());
 				return true;
 			}
 
@@ -201,7 +201,7 @@ public final class PartitaNET implements PartitaIF {
 				cancellaTimerTurno();
 				avviaTimerTurno();
 
-				notifyObserverspartitaAggiornata();
+				notifyObserverspartitaAggiornata(Map.of(giocatore, List.of(cartaPescata)));
 				return true;
 			}
 
@@ -214,7 +214,7 @@ public final class PartitaNET implements PartitaIF {
 				cancellaTimerTurno();
 				passaTurno(1);
 
-				notifyObserverspartitaAggiornata();
+				notifyObserverspartitaAggiornata(Map.of());
 				return true;
 			}
 			case DICHIARA_UNO: {
@@ -236,7 +236,7 @@ public final class PartitaNET implements PartitaIF {
 
 				passaTurno(1);
 
-				notifyObserverspartitaAggiornata();
+				notifyObserverspartitaAggiornata(Map.of());
 				return true;
 			}
 			}
@@ -254,7 +254,7 @@ public final class PartitaNET implements PartitaIF {
 		for (Carta c : g.getMano().getCarte()) {
 			if (isCartaGiocabile(c)) {
 				MossaDTO mossa = new MossaDTO(TipoMossa.GIOCA_CARTA);
-				mossa.carta = DTOUtils.creaCartaDTO(c);
+				mossa.carta = DTOUtils.convertiCartaInDTO(c);
 				if (c.getColore() == Colore.NERO) {
 					mossa.coloreScelto = Colore.ROSSO; // o scegli dinamicamente
 				}
@@ -297,9 +297,10 @@ public final class PartitaNET implements PartitaIF {
 			lock.lock();
 			try {
 				if (!giocatore.haDichiaratoUNO()) {
-					giocatore.getMano().aggiungiCarte(mazzo.pescaN(2));
+					List<Carta> cartePescate = mazzo.pescaN(2);
+					giocatore.getMano().aggiungiCarte(cartePescate);
 					logger.info("Il giocatore {} non ha dichiarato UNO in tempo e pesca 2 carte", giocatore.getNome());
-					notifyObserverspartitaAggiornata();
+					notifyObserverspartitaAggiornata(Map.of(giocatore, cartePescate));
 					mutexDichiaraUNO.release();
 				}
 			} finally {
@@ -375,9 +376,10 @@ public final class PartitaNET implements PartitaIF {
 		return observers.remove(ob);
 	}
 
-	private void notifyObserverspartitaAggiornata() {
+	private void notifyObserverspartitaAggiornata(Map<Giocatore, List<Carta>> cartePescate) {
 		for (PartitaObserver ob : observers) {
-			ob.partitaAggiornata();
+			ob.partitaAggiornata(cartePescate);
 		}
 	}
+
 }

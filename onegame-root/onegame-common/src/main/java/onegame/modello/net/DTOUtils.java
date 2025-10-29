@@ -10,7 +10,7 @@ import onegame.modello.carte.CartaSpeciale;
 import onegame.modello.giocatori.Giocatore;
 
 public class DTOUtils {
-	public static CartaDTO creaCartaDTO(Carta carta) {
+	public static CartaDTO convertiCartaInDTO(Carta carta) {
 		if (carta == null) {
 			return null;
 		}
@@ -24,10 +24,10 @@ public class DTOUtils {
 		return null;
 	}
 
-	public static List<CartaDTO> creaListaCarteDTO(List<Carta> carte) {
+	public static List<CartaDTO> convertiListaCarteInDTO(List<Carta> carte) {
 		List<CartaDTO> carteDTO = new ArrayList<>();
 		for (Carta carta : carte) {
-			carteDTO.add(creaCartaDTO(carta));
+			carteDTO.add(convertiCartaInDTO(carta));
 		}
 		return carteDTO;
 	}
@@ -54,7 +54,7 @@ public class DTOUtils {
 	public static PartitaOfflineDTO creaPartitaOfflineDTO(Partita partita) {
 		boolean direzione = partita.getDirezione();
 		int indiceGiocatoreCorrente = partita.getNavigatore().getIndiceCorrente();
-		CartaDTO topCarta = creaCartaDTO(partita.getCartaCorrente());
+		CartaDTO topCarta = convertiCartaInDTO(partita.getCartaCorrente());
 
 		List<String> usernames = new ArrayList<String>();
 		List<ArrayList<CartaDTO>> mani = new ArrayList<ArrayList<CartaDTO>>();
@@ -62,14 +62,14 @@ public class DTOUtils {
 			usernames.add(g.getNome());
 			ArrayList<CartaDTO> mano = new ArrayList<>();
 			for (Carta c : g.getMano().getCarte()) {
-				mano.add(creaCartaDTO(c));
+				mano.add(convertiCartaInDTO(c));
 			}
 			mani.add(mano);
 		}
 
 		List<CartaDTO> scarti = new ArrayList<CartaDTO>();
 		for (Carta c : partita.getPilaScarti().getScarti()) {
-			scarti.add(creaCartaDTO(c));
+			scarti.add(convertiCartaInDTO(c));
 		}
 
 		return new PartitaOfflineDTO(usernames, mani, scarti, topCarta, direzione, indiceGiocatoreCorrente);
