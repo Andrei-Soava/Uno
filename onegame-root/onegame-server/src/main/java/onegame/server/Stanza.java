@@ -24,6 +24,7 @@ public abstract class Stanza {
 	protected final ReentrantLock lock = new ReentrantLock();
 
 	protected final Set<Sessione> sessioni = new LinkedHashSet<>();
+	// Aggiungere un identificatore univoco di ogni sessione nella stanza
 	protected Sessione proprietario = null;
 
 	private static final Logger logger = LoggerFactory.getLogger(Stanza.class);

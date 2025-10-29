@@ -115,6 +115,7 @@ public class ClientSocket {
 			System.out.println("[client] ricevuto evento inizio partita");
 			StatoPartitaDTO stato = getPayload(StatoPartitaDTO.class, args);
 			this.statoPartita = stato;
+			System.out.println("Stato partita ricevuto: " + stato);
 
 			if (partitaObserver != null) {
 				partitaObserver.inizioPartita(stato);

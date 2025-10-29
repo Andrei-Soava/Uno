@@ -1,5 +1,8 @@
 package onegame.modello.net.messaggi;
 
+import java.util.List;
+
+import onegame.modello.net.CartaDTO;
 import onegame.modello.net.MossaDTO;
 import onegame.modello.net.StatoPartitaDTO;
 import onegame.modello.net.StatoStanzaDTO;
@@ -198,6 +201,8 @@ public class Messaggi {
 
 	public static class MessStatoPartita {
 		public StatoPartitaDTO statoPartita;
+		public List<CartaDTO> cartePescate;
+		public List<CartaDTO> carteInMano;
 
 		public MessStatoPartita() {
 		}

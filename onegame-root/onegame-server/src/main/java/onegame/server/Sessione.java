@@ -15,8 +15,8 @@ public class Sessione {
 	private String username;
 	private String nickname;
 	private boolean anonimo;
-	private boolean connesso;
-	private long ultimoPing;
+	private volatile boolean connesso;
+	private volatile long ultimoPing;
 	private final String token;
 	private SocketIOClient client;
 

@@ -21,38 +21,49 @@ public class GestoreGioco {
 	}
 
 	public void handleIniziaPartita(Sessione sessione, AckRequest ack) {
-		if (sessione == null) {
-			ack.sendAckData(new RespIniziaPartita(false, "Utente non valido"));
-			logger.warn("Accesso negato");
-			return;
-		}
+		try {
+			logger.debug("Richiesta di inizio partita da utente {}",
+					(sessione != null) ? sessione.getUsername() : "null");
+			if (sessione == null) {
+				ack.sendAckData(new RespIniziaPartita(false, "Utente non valido"));
+				logger.warn("Accesso negato");
+				return;
+			}
 
-		StanzaPartita stanza = gestoreStanze.getStanzaPerSessione(sessione);
-		if (stanza == null) {
-			ack.sendAckData(new RespIniziaPartita(false, "Stanza non trovata"));
-			logger.warn("Sessione {} non è associata a nessuna stanza", sessione.getToken());
-			return;
-		}
+			StanzaPartita stanza = gestoreStanze.getStanzaPerSessione(sessione);
+			if (stanza == null) {
+				ack.sendAckData(new RespIniziaPartita(false, "Stanza non trovata"));
+				logger.warn("Sessione {} non è associata a nessuna stanza", sessione.getToken());
+				return;
+			}
 
-		if (!sessione.equals(stanza.getProprietario())) {
-			ack.sendAckData(new RespIniziaPartita(false, "Solo il proprietario della stanza può avviare la partita"));
-			logger.warn("Utente {} non è il proprietario della stanza {}", sessione.getUsername(), stanza.getNome());
-			return;
-		}
-		if (stanza.getNumSessioni() < 2) {
-			ack.sendAckData(new RespIniziaPartita(false, "Non ci sono abbastanza giocatori per iniziare la partita"));
-			logger.warn("Tentativo di avviare la partita nella stanza {} con meno di 2 giocatori", stanza.getNome());
-			return;
-		}
+			if (!sessione.equals(stanza.getProprietario())) {
+				ack.sendAckData(
+						new RespIniziaPartita(false, "Solo il proprietario della stanza può avviare la partita"));
+				logger.warn("Utente {} non è il proprietario della stanza {}", sessione.getUsername(),
+						stanza.getNome());
+				return;
+			}
+			if (stanza.getNumSessioni() < 2) {
+				ack.sendAckData(
+						new RespIniziaPartita(false, "Non ci sono abbastanza giocatori per iniziare la partita"));
+				logger.warn("Tentativo di avviare la partita nella stanza {} con meno di 2 giocatori",
+						stanza.getNome());
+				return;
+			}
 
-		boolean avviata = stanza.avviaPartita();
-		if (avviata) {
-			logger.info("Partita avviata nella stanza {} da utente {}", stanza.getNome(), sessione.getUsername());
-			ack.sendAckData(new RespIniziaPartita(true, "Partita avviata con successo"));
-		} else {
-			logger.warn("Impossibile avviare la partita nella stanza {} da utente {}", stanza.getNome(),
-					sessione.getUsername());
-			ack.sendAckData(new RespIniziaPartita(false, "Impossibile avviare la partita"));
+			boolean avviata = stanza.avviaPartita();
+			if (avviata) {
+				logger.info("Partita avviata nella stanza {} da utente {}", stanza.getNome(), sessione.getUsername());
+				ack.sendAckData(new RespIniziaPartita(true, "Partita avviata con successo"));
+			} else {
+				logger.warn("Impossibile avviare la partita nella stanza {} da utente {}", stanza.getNome(),
+						sessione.getUsername());
+				ack.sendAckData(new RespIniziaPartita(false, "Impossibile avviare la partita"));
+			}
+		} catch (Exception e) {
+			logger.error("Errore durante l'elaborazione della richiesta di inizio partita", e);
+			ack.sendAckData(new RespIniziaPartita(false, "Errore interno del server"));
 		}
 	}
 

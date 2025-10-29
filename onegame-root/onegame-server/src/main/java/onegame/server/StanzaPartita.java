@@ -2,6 +2,9 @@ package onegame.server;
 
 import java.util.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import onegame.modello.giocatori.Giocatore;
 import onegame.modello.net.CartaDTO;
 import onegame.modello.net.DTOUtils;
@@ -18,6 +21,8 @@ public class StanzaPartita extends Stanza implements PartitaObserver {
 
 	private PartitaNET partita;
 
+	private static final Logger logger = LoggerFactory.getLogger(StanzaPartita.class);
+
 	public StanzaPartita(int codice, String nome, int maxUtenti) {
 		super(codice, nome, maxUtenti);
 	}
@@ -25,7 +30,7 @@ public class StanzaPartita extends Stanza implements PartitaObserver {
 	public boolean avviaPartita() {
 		lock.lock();
 		try {
-			if (isPartitaInCorso() || sessioni.size() < 2) {
+			if ((partita != null && isPartitaInCorso()) || sessioni.size() < 2) {
 				return false;
 			}
 
@@ -103,8 +108,11 @@ public class StanzaPartita extends Stanza implements PartitaObserver {
 				StatoPartitaDTO statoDTO = new StatoPartitaDTO(cartaCorrente, listaGiocatoriDTO, indiceGiocatoreLocale,
 						indiceGiocatoreCorrente, manoDTO, direzione, finished, indiceVincitore);
 
+				logger.debug("Stato inviato a utente {}: {}", s.getNickname(), statoDTO);
+
 				s.sendEvent(nomeEvento, new MessStatoPartita(statoDTO));
 			}
+			logger.debug("Stato partita inviato a tutti i giocatori nella stanza {}", codice);
 		} finally {
 			lock.unlock();
 		}
@@ -115,8 +123,8 @@ public class StanzaPartita extends Stanza implements PartitaObserver {
 		boolean removed = super.rimuoviSessione(sessione);
 		lock.lock();
 		try {
-			if (giocatori.containsKey(sessione)) {
-				Giocatore g = giocatori.remove(sessione);
+			Giocatore g = giocatori.remove(sessione);
+			if (g != null) {
 				g.setBot(true);
 			}
 			return removed;
