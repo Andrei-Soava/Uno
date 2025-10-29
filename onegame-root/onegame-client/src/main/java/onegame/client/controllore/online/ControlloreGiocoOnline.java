@@ -68,6 +68,7 @@ public class ControlloreGiocoOnline implements StatoPartitaObserver {
 
 	@Override
 	public void aggiornaPartita(MessStatoPartita mess) {
+		vg.chiudiFinestraAperta();
 		StatoPartitaDTO statoPartita = mess.statoPartita;
 		List<GiocatoreDTO> giocatori = statoPartita.giocatori;
 		List<Carta> carte = DTOUtils.convertiListaDTOinCarte(mess.carteInMano);
@@ -81,7 +82,10 @@ public class ControlloreGiocoOnline implements StatoPartitaObserver {
 		//turno giocante
 		if(posizioneAssoluta == posizioneTurnoCorrente) {
 			vg.evidenziaTurnoCorrente();
-			scegliMossa(cartaCorrente, carte);
+			if(mess.cartePescate.size()==0)
+				scegliMossa(cartaCorrente, carte);
+			else
+				gestisciCartaPescata(DTOUtils.convertiDTOinCarta(mess.cartePescate.getFirst()), carte, cartaCorrente);
 		} 
 		else //turno spettatore
 		{
@@ -90,14 +94,51 @@ public class ControlloreGiocoOnline implements StatoPartitaObserver {
 		
 	}
 	
+	private void gestisciCartaPescata(Carta cartaPescata, List<Carta> carteMano, Carta cartaCorrente) {
+		// verifico subito se la carta pescata è un +4
+		if (cartaPescata instanceof CartaSpeciale
+				&& ((CartaSpeciale) cartaPescata).getTipo() == TipoSpeciale.PIU_QUATTRO) {
+
+			// se ci sono carte giocabili esclusi i +4, allora passo subito
+			if (!verificaPiuQuattroGiocabile(cartaCorrente, carteMano)) {
+				cs.effettuaMossa(new MossaDTO(TipoMossa.PASSA), null);
+				return;
+			}
+
+		}
+		if (cartaPescata.giocabileSu(cartaCorrente)) {
+			vg.stampaCartaPescataAsync(cartaPescata, scelta ->{
+				if(scelta==1) //gioco la carta pescata
+				{
+					// se è una carta nera, devo prima cambiare il colore
+					if (cartaPescata.getColore() == Colore.NERO) {
+						vg.stampaColoriAsync(coloreScelto -> {
+							cartaPescata.setColore(coloreScelto);
+							gestisciInviaCarta(cartaPescata, carteMano.size());
+							return;
+						});
+					} else // carta NON nera
+					{
+						gestisciInviaCarta(cartaPescata, carteMano.size());
+						return;
+					}
+				} else //tengo la carta pescata
+				{
+					cs.effettuaMossa(new MossaDTO(TipoMossa.PASSA), null);
+				}
+			});
+			
+		} else // carta non giocabile
+		{
+			cs.effettuaMossa(new MossaDTO(TipoMossa.PASSA), null);
+			return;
+		}	
+	}
+	
 	private void scegliMossa(Carta cartaCorrente, List<Carta> carteMano) {
-		System.out.println("Scegli mossa...");
 		vg.scegliMossaAsync(cartaCorrente, carteMano, mossa->{
 			if(mossa.getTipoMossa()==onegame.modello.Mossa.TipoMossa.PESCA) {
-				//COME OTTENGO LA CARTA PESCATA????
-				cs.effettuaMossa(new MossaDTO(TipoMossa.PESCA), callback->{
-					
-				});
+				cs.effettuaMossa(new MossaDTO(TipoMossa.PESCA), null);
 			}
 			else {
 				gestisciCartaScelta(mossa.getCartaScelta(), carteMano, cartaCorrente);
@@ -106,42 +147,39 @@ public class ControlloreGiocoOnline implements StatoPartitaObserver {
 	}
 	
 	private void gestisciCartaScelta(Carta cartaScelta, List<Carta> carteMano, Carta cartaCorrente) {
-		System.out.println("Carta scelta: "+cartaScelta);
-		//verifico subito se la cartascelta è un +4
-		if(cartaScelta instanceof CartaSpeciale && ((CartaSpeciale)cartaScelta).getTipo()==TipoSpeciale.PIU_QUATTRO) {
-			
-			//se ci sono carte giocabili esclusi i +4, allora è da rifare la mossa
-			if(!verificaPiuQuattroGiocabile(cartaCorrente, carteMano)) {
+		// verifico subito se la cartascelta è un +4
+		if (cartaScelta instanceof CartaSpeciale
+				&& ((CartaSpeciale) cartaScelta).getTipo() == TipoSpeciale.PIU_QUATTRO) {
+
+			// se ci sono carte giocabili esclusi i +4, allora è da rifare la mossa
+			if (!verificaPiuQuattroGiocabile(cartaCorrente, carteMano)) {
 				vg.stampaMessaggio("Puoi giocare un +4 SOLO se non hai altre opzioni");
 				scegliMossa(cartaCorrente, carteMano);
 				return;
 			}
-			
-			if(cartaScelta.giocabileSu(cartaCorrente)) {
-				
-				//se è una carta nera, devo prima cambiare il colore
-				if(cartaScelta.getColore()==Colore.NERO) {
-					vg.stampaColoriAsync(coloreScelto->{
-						cartaScelta.setColore(coloreScelto);
-						gestisciInviaCarta(cartaScelta, carteMano.size());
-						return;
-					});
-				}
-				else //carta NON nera
-				{
+
+		}
+		if (cartaScelta.giocabileSu(cartaCorrente)) {
+
+			// se è una carta nera, devo prima cambiare il colore
+			if (cartaScelta.getColore() == Colore.NERO) {
+				vg.stampaColoriAsync(coloreScelto -> {
+					cartaScelta.setColore(coloreScelto);
 					gestisciInviaCarta(cartaScelta, carteMano.size());
 					return;
-				}
-			}
-			else //carta non giocabile
+				});
+			} else // carta NON nera
 			{
-				vg.stampaMessaggio("Carta non compatibile");
-				scegliMossa(cartaCorrente, carteMano);
+				gestisciInviaCarta(cartaScelta, carteMano.size());
 				return;
 			}
-			
+		} else // carta non giocabile
+		{
+			vg.stampaMessaggio("Carta non compatibile");
+			scegliMossa(cartaCorrente, carteMano);
+			return;
 		}
-			
+
 	}
 	
 	private static boolean verificaPiuQuattroGiocabile(Carta cartaCorrente, List<Carta> carte) {
@@ -157,7 +195,16 @@ public class ControlloreGiocoOnline implements StatoPartitaObserver {
 	}
 	
 	private void gestisciInviaCarta(Carta cartaDaInviare, int numeroCarteInMano) {
-		cs.effettuaMossa(new MossaDTO((TipoMossa.GIOCA_CARTA), DTOUtils.convertiCartaInDTO(cartaDaInviare)), null);
+		MossaDTO mossaDaInviare = new MossaDTO((TipoMossa.GIOCA_CARTA));
+		if(cartaDaInviare instanceof CartaSpeciale && 
+				(((CartaSpeciale)cartaDaInviare).getTipo()==TipoSpeciale.JOLLY ||
+				((CartaSpeciale)cartaDaInviare).getTipo()==TipoSpeciale.PIU_QUATTRO
+				)) {
+			mossaDaInviare.coloreScelto = cartaDaInviare.getColore();
+			cartaDaInviare.setColore(Colore.NERO);
+		}
+		mossaDaInviare.carta = DTOUtils.convertiCartaInDTO(cartaDaInviare);
+		cs.effettuaMossa(mossaDaInviare, null);
 		if(numeroCarteInMano==2) {
 			vg.mostraONEBtn().thenRun(()->{
 				cs.effettuaMossa(new MossaDTO(TipoMossa.DICHIARA_UNO), null);
