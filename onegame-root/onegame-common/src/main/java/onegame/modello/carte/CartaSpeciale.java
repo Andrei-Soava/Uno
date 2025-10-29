@@ -4,6 +4,7 @@
 
 package onegame.modello.carte;
 
+import java.util.List;
 import java.util.Objects;
 
 import onegame.modello.PartitaIF;
@@ -58,28 +59,31 @@ public class CartaSpeciale extends Carta {
 	 * turno
 	 */
 	@Override
-	public void applicaEffetto(PartitaIF partita) {
+	public List<Carta> applicaEffetto(PartitaIF partita) {
+		List<Carta> cartePescate = null;
 		switch (this.getTipo()) {
 		case PIU_DUE:
 			partita.prossimoGiocatore();
-			partita.getGiocatoreCorrente().getMano().aggiungiCarte((partita.getMazzo().pescaN(2)));
-			break;
+			cartePescate = partita.getMazzo().pescaN(2);
+			partita.getGiocatoreCorrente().getMano().aggiungiCarte(cartePescate);
+			return cartePescate;
 		case PIU_QUATTRO:
 			partita.prossimoGiocatore();
-			partita.getGiocatoreCorrente().getMano().aggiungiCarte((partita.getMazzo().pescaN(4)));
-			break;
+			cartePescate = partita.getMazzo().pescaN(4);
+			partita.getGiocatoreCorrente().getMano().aggiungiCarte(cartePescate);
+			return cartePescate;
 		case BLOCCA:
 			partita.prossimoGiocatore();
-			break;
+			return null;
 		case INVERTI:
 			if (partita.getNumeroGiocatori() == 2) {
 				partita.prossimoGiocatore();
 			} else {
 				partita.cambiaDirezione();
 			}
-			break;
+			return null;
 		default:
-			break;
+			return null;
 		}
 	}
 

@@ -37,12 +37,12 @@ public class PilaScarti {
 	}
 
 	public void mettiCarta(Carta c) {
-		scarti.add(c);
+		scarti.push(c);
 	}
 	
 	@JsonIgnore
 	public Carta getTop() {
-		return scarti.firstElement();
+		return scarti.peek();
 	}
 	
 	@Override

@@ -162,7 +162,7 @@ public final class PartitaNET implements PartitaIF {
 				pilaScarti.mettiCarta(cartaGiocata);
 
 				// applica l'effetto della carta giocata
-				cartaGiocata.applicaEffetto(this);
+				List<Carta> cartePescate = cartaGiocata.applicaEffetto(this);
 
 				// Regola dell'UNO: se ha una sola carta, deve dichiarare UNO
 				if (giocatore.getMano().getNumCarte() == 1) {
@@ -178,9 +178,10 @@ public final class PartitaNET implements PartitaIF {
 				if (!partitaFinita) {
 					passaTurno(1);
 				}
+//				notifyObserverspartitaAggiornata(Map.of(giocatore, cartePescate));
+				notifyObserverspartitaAggiornata(Map.of());
 				logger.info("Il giocatore {} ha giocato la carta {}", giocatore.getNome(), cartaGiocata.toString());
 
-				notifyObserverspartitaAggiornata(Map.of());
 				return true;
 			}
 
@@ -242,7 +243,7 @@ public final class PartitaNET implements PartitaIF {
 			}
 			return false;
 		} catch (Exception e) {
-			logger.error("Errore durante l'effettuazione della mossa: {}", e.getMessage());
+			logger.error("Errore durante l'effettuazione della mossa: {}", e);
 			return false;
 		} finally {
 			lock.unlock();

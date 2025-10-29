@@ -100,6 +100,8 @@ public class StanzaPartita extends Stanza implements PartitaObserver {
 			int indiceVincitore = partita.getIndiceVincitore();
 			boolean finished = partita.isFinished();
 
+			logger.debug("Carta corrente: {}", cartaCorrente);
+
 			StatoPartitaDTO statoDTO = new StatoPartitaDTO(cartaCorrente, listaGiocatoriDTO, indiceGiocatoreCorrente,
 					direzione, finished, indiceVincitore);
 

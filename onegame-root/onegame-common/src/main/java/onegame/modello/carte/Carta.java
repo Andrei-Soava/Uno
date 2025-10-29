@@ -33,6 +33,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import onegame.modello.PartitaIF;
 import onegame.modello.carte.CartaSpeciale.TipoSpeciale;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, // usa un nome leggibile
@@ -109,7 +111,7 @@ public abstract class Carta {
 	 * 
 	 * @param p la partita su cui applicare l'effetto
 	 */
-	public abstract void applicaEffetto(PartitaIF p);
+	public abstract List<Carta> applicaEffetto(PartitaIF p);
 
 	/**
 	 * Determina se la carta può essere giocata sopra la carta specificata.
