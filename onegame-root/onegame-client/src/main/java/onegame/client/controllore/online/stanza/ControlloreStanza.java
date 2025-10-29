@@ -46,6 +46,7 @@ public abstract class ControlloreStanza implements StatoStanzaObserver, StatoPar
 		System.out.println("RICEVUTO");
 		Platform.runLater(()->{
 			vs.mostraGiocoOnline();
+			System.out.println("Mostra gioco online");
 		});
 	}
 

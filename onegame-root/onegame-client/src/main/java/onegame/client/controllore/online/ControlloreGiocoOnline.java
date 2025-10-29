@@ -36,6 +36,8 @@ public class ControlloreGiocoOnline implements StatoPartitaObserver {
 		cs.setStanzaObserver(null);
 		cs.setPartitaObserver(this);
 		aspettaAbbandona();
+		
+		aggiornaPartita(cs.getStatoPartita());
 	}
 	
 	/**
@@ -89,6 +91,7 @@ public class ControlloreGiocoOnline implements StatoPartitaObserver {
 	}
 	
 	private void scegliMossa(Carta cartaCorrente, List<Carta> carteMano) {
+		System.out.println("Scegli mossa...");
 		vg.scegliMossaAsync(cartaCorrente, carteMano, mossa->{
 			if(mossa.getTipoMossa()==onegame.modello.Mossa.TipoMossa.PESCA) {
 				//COME OTTENGO LA CARTA PESCATA????
@@ -103,7 +106,7 @@ public class ControlloreGiocoOnline implements StatoPartitaObserver {
 	}
 	
 	private void gestisciCartaScelta(Carta cartaScelta, List<Carta> carteMano, Carta cartaCorrente) {
-		
+		System.out.println("Carta scelta: "+cartaScelta);
 		//verifico subito se la cartascelta è un +4
 		if(cartaScelta instanceof CartaSpeciale && ((CartaSpeciale)cartaScelta).getTipo()==TipoSpeciale.PIU_QUATTRO) {
 			

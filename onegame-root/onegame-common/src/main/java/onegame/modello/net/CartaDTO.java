@@ -18,4 +18,11 @@ public class CartaDTO {
 		this.tipo = tipo;
 		this.colore = colore;
 	}
+
+	@Override
+	public String toString() {
+		return "CartaDTO [isCartaNumero=" + isCartaNumero + ", numero=" + numero + ", "
+				+ (tipo != null ? "tipo=" + tipo + ", " : "") + (colore != null ? "colore=" + colore : "") + "]";
+	}
+	
 }

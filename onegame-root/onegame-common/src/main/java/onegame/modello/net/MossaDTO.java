@@ -22,4 +22,12 @@ public class MossaDTO {
 		this.tipo = tipo;
 		this.carta = carta;
 	}
+
+	@Override
+	public String toString() {
+		return "MossaDTO [" + (tipo != null ? "tipo=" + tipo + ", " : "")
+				+ (carta != null ? "carta=" + carta + ", " : "")
+				+ (coloreScelto != null ? "coloreScelto=" + coloreScelto : "") + "]";
+	}
+
 }

@@ -57,6 +57,7 @@ public class GestoreConnessioni {
 
 			if (username == null || password == null || username.isEmpty() || password.isEmpty()) {
 				ackRequest.sendAckData(new RespAuth(false, null, "Credenziali mancanti", null, null));
+				logger.warn("Tentativo di login con credenziali mancanti");
 				return;
 			}
 
@@ -76,7 +77,7 @@ public class GestoreConnessioni {
 			logger.info("Login utente: username: {}, token: {}, session-id: {}", username, token,
 					client.getSessionId());
 		} catch (Exception e) {
-			logger.error("Errore durante il login: {}", e.getMessage());
+			logger.error("Errore durante il login: {}", e);
 			ackRequest.sendAckData(new RespAuth(false, null, "Errore interno", null, null));
 		}
 	}
@@ -95,6 +96,7 @@ public class GestoreConnessioni {
 
 			if (username == null || password == null || username.isEmpty() || password.isEmpty()) {
 				ackRequest.sendAckData(new RespAuth(false, null, "Credenziali mancanti", null, null));
+				logger.warn("Tentativo di registrazione con credenziali mancanti");
 				return;
 			}
 
@@ -122,7 +124,7 @@ public class GestoreConnessioni {
 			logger.info("Registrazione utente: username: {}, token: {}, session-id: {}", username, token,
 					client.getSessionId());
 		} catch (Exception e) {
-			logger.error("Errore durante la registrazione: {}", e.getMessage());
+			logger.error("Errore durante la registrazione: {}", e);
 			ackRequest.sendAckData(new RespAuth(false, null, "Errore interno", null, null));
 		}
 	}
@@ -139,6 +141,7 @@ public class GestoreConnessioni {
 
 			if (nickname == null || nickname.isEmpty() || !nickname.matches("^[a-zA-Z0-9_]{3,44}$")) {
 				ackRequest.sendAckData(new RespAuth(false, null, "Nickname non valido", null, null));
+				logger.warn("Tentativo di accesso anonimo con nickname non valido: {}", nickname);
 				return;
 			}
 
@@ -155,7 +158,7 @@ public class GestoreConnessioni {
 			logger.info("Accesso anonimo: nickname={} token={} sessionId={}", sessione.getNickname(), token,
 					client.getSessionId());
 		} catch (Exception e) {
-			logger.error("Errore durante l'accesso anonimo: {}", e.getMessage());
+			logger.error("Errore durante l'accesso anonimo: {}", e);
 			ackRequest.sendAckData(new RespAuth(false, null, "Errore interno", null, null));
 		}
 	}

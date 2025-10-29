@@ -40,7 +40,7 @@ public class ClientSocket {
 	private StatoStanzaObserver stanzaObserver;
 	private StatoPartitaObserver partitaObserver;
 	private StatoStanzaDTO statoStanza;
-	private StatoPartitaDTO statoPartita;
+	private MessStatoPartita statoPartita;
 
 	public ClientSocket(String url) throws Exception {
 		IO.Options opts = new IO.Options();
@@ -116,17 +116,18 @@ public class ClientSocket {
 		socket.on(MessaggiGioco.EVENT_INIZIATA_PARTITA, (args -> {
 			System.out.println("[client] ricevuto evento inizio partita");
 			MessStatoPartita mess = getPayload(MessStatoPartita.class, args);
-			this.statoPartita = mess.statoPartita;
+			this.statoPartita = mess;
 			System.out.println("Stato partita ricevuto: " + mess.statoPartita);
 
 			if (partitaObserver != null) {
 				partitaObserver.inizioPartita(mess);
+				partitaObserver.aggiornaPartita(mess);
 			}
 		}));
 		socket.on(MessaggiGioco.EVENT_AGGIORNATA_PARTITA, (args -> {
 			System.out.println("[client] ricevuto evento aggiornamento partita");
 			MessStatoPartita mess = getPayload(MessStatoPartita.class, args);
-			this.statoPartita = mess.statoPartita;
+			this.statoPartita = mess;
 
 			if (partitaObserver != null) {
 				partitaObserver.aggiornaPartita(mess);
@@ -135,7 +136,7 @@ public class ClientSocket {
 		socket.on(MessaggiGioco.EVENT_FINITA_PARTITA, (args -> {
 			System.out.println("[client] ricevuto evento fine partita");
 			MessStatoPartita mess = getPayload(MessStatoPartita.class, args);
-			this.statoPartita = mess.statoPartita;
+			this.statoPartita = mess;
 
 			if (partitaObserver != null) {
 				partitaObserver.finePartita(mess);
@@ -398,7 +399,8 @@ public class ClientSocket {
 		return DTOUtils.clone(this.statoStanza);
 	}
 
-	public StatoPartitaDTO getStatoPartita() {
+	public MessStatoPartita getStatoPartita() {
 		return statoPartita;
 	}
+
 }
