@@ -142,4 +142,5 @@ Esempio COMPLETO:
 - 23/10, Andrei, (collegamento persistenza client-server per salvataggi delle partite incomplete), null;
 - 23/10, Fabio, (aggiunto proprietario della stanza, ora solo il proprietario ha il diritto di avviare la partita), null;
 - 24/10, Andrei, (inizio collegamento client-server per la partita online), null;
-- 24/10, Giuseppe, (aggiornamento requisiti);
+- 24/10, Giuseppe, (aggiornamento requisiti), null;
+- 29/10, Andrei, (collegamento pesca carta per partita online + modifica gestione dialog di scelta nickname anonimo con relativi controlli), null;

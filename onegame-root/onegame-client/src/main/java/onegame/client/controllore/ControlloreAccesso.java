@@ -28,21 +28,7 @@ public class ControlloreAccesso {
 				return;
 			}
 			if (username == null && password == null) {
-				va.inserisciNickname("Scegli un nome utente").thenAccept(nickname->{
-					//se viene cliccato annulla o X
-					if(nickname==null) {
-						eseguiAccesso();
-						return;
-					}
-					if(nickname.isBlank())
-						cs.anonimo("anonimo", null);
-					else
-						cs.anonimo(nickname, null);
-					cs.setUtente(new Utente(true));
-					cs.getUtente().setUsername(nickname);
-					va.mostraHome();
-					return;
-				});
+				gestisciAccessoAnonimo();
 				return;
 			}
 			if (username.length() == 0 || password.length() == 0) {
@@ -68,6 +54,31 @@ public class ControlloreAccesso {
 
 			});
 		});
+	}
+	
+	private void gestisciAccessoAnonimo() {
+		va.mostraDialogNicknameOspite(contesto->{
+			if(!contesto.getNickname().matches("^[a-zA-Z0-9_]{3,44}$")) {
+				if(contesto.getNickname().length()<3)
+					contesto.getErroreLbl().setText("Almeno 3 caratteri");
+				else if (contesto.getNickname().length()>44)
+					contesto.getErroreLbl().setText("Meno di 44 caratteri");
+				else
+					contesto.getErroreLbl().setText("Formato non valido");
+				return;
+			}
+			if(contesto.getNickname().isBlank())
+				cs.anonimo("anonimo", null);
+			else
+				cs.anonimo(contesto.getNickname(), null);
+			cs.setUtente(new Utente(true));
+			cs.getUtente().setUsername(contesto.getNickname());
+			contesto.getDialog().close();
+			va.mostraHome();
+			return;
+		}, () -> {
+	        eseguiAccesso();
+	    });
 	}
 
 }

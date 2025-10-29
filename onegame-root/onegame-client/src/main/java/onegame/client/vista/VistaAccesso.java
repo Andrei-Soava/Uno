@@ -1,18 +1,21 @@
 package onegame.client.vista;
 
-import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
 
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
+import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
@@ -115,33 +118,63 @@ public class VistaAccesso {
 		passwordField.clear();
 	}
 	
-	/**
-     * metodo per inserire una stringa generica 
-     * 
+    /**
+     * classe ausiliaria per gestione callback nickname ospite dentro controllore
      */
-	public CompletableFuture<String> inserisciNickname(String message) {
-        CompletableFuture<String> future = new CompletableFuture<>();
-        Platform.runLater(() -> {
-            TextInputDialog dialog = new TextInputDialog();
-            dialog.setHeaderText(message);
-            dialog.setTitle(null);
-            dialog.setGraphic(null);
-            dialog.showingProperty().addListener((obs, oldVal, newVal) -> {
-                if (!newVal) {
-                    String result = dialog.getResult();
-                    if (result!=null && result.isBlank()) {
-                        result = "anonimo";
-                    }
-                    future.complete(result);
-                }
-            });
+    public static class ContestoNicknameOspite {
+        private final Dialog<?> dialog;
+        private final String nickname;
+        private final Label erroreLbl;
 
-            DialogPane dialogPane = dialog.getDialogPane();
-            dialogPane.getStylesheets().add(getClass().getResource("/stile/base.css").toExternalForm());
-            dialog.show();
+        private ContestoNicknameOspite(Dialog<?> dialog, String nuovoNome, Label erroreLbl) {
+            this.dialog = dialog;
+            this.nickname = nuovoNome;
+            this.erroreLbl = erroreLbl;
+        }
+
+        public Dialog<?> getDialog() { return dialog; }
+        public String getNickname() { return nickname; }
+        public Label getErroreLbl() { return erroreLbl; }
+    }
+
+    /**
+     * metodo asincrono che mostra una dialog di scelta nickname 
+     * SENZA però gestire gli effetti della sua chiusura
+     * 
+     * @param onConferma, callback contenente elementi per gestione scelta nickname
+     * @param onClose, runnable utilizzato da controllore durante la chiusura della dialog 
+     */
+    public void mostraDialogNicknameOspite(Consumer<ContestoNicknameOspite> onConferma, Runnable onClose) {
+        Dialog<Void> dialog = new Dialog<>();
+        dialog.setTitle("Scegli nickname");
+
+        Label lbl = new Label("Nickname:");
+        Label erroreLbl = new Label();
+        erroreLbl.setStyle("-fx-text-fill: red;");
+
+        TextField nicknameField = new TextField();
+        nicknameField.setPromptText("Scegli un nickname");
+
+        VBox content = new VBox(10, lbl, nicknameField, erroreLbl);
+        dialog.getDialogPane().setContent(content);
+
+        ButtonType confermaBtn = new ButtonType("Conferma", ButtonData.OK_DONE);
+        ButtonType annullaBtn = new ButtonType("Annulla", ButtonData.CANCEL_CLOSE);
+        dialog.getDialogPane().getButtonTypes().addAll(confermaBtn, annullaBtn);
+        Button conferma = (Button) dialog.getDialogPane().lookupButton(confermaBtn);
+        conferma.addEventFilter(ActionEvent.ACTION, ev -> {
+            String nuovoNome = nicknameField.getText().trim();
+            ContestoNicknameOspite ctx = new ContestoNicknameOspite(dialog, nuovoNome, erroreLbl);
+            onConferma.accept(ctx);
+            ev.consume();
         });
-
-        return future;
+        
+        dialog.setOnHidden(e -> {
+            if (onClose != null) onClose.run();
+        });
+        DialogPane dialogPane = dialog.getDialogPane();
+        dialogPane.getStylesheets().add(getClass().getResource("/stile/base.css").toExternalForm());
+        dialog.show();
     }
 	
 	/**
