@@ -158,7 +158,7 @@ public class VistaStanza {
     }
     
     public void mostraGiocoOnline() {
-    	//TODO in futuro prossimo
+    	app.mostraVistaGiocoOnline();
     }
     
 }
