@@ -3,10 +3,11 @@ package onegame.server;
 import java.util.List;
 import java.util.Map;
 
-import onegame.modello.carte.Carta;
-import onegame.modello.giocatori.Giocatore;
+import onegame.server.gioco.CartaNET;
+import onegame.server.gioco.GiocatoreNET;
+
 
 @FunctionalInterface
 public interface PartitaObserver {
-	public void partitaAggiornata(Map<Giocatore, List<Carta>> cartePescate);
+	public void partitaAggiornata(Map<GiocatoreNET, List<CartaNET>> cartePescate);
 }

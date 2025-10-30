@@ -4,9 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import onegame.modello.carte.Colore;
+import onegame.modello.net.CartaDTO;
 import onegame.modello.net.StatoStanzaDTO;
 import onegame.server.Sessione;
 import onegame.server.Stanza;
+import onegame.server.gioco.CartaNET;
 
 public class DTOServerUtils {
 	public static StatoStanzaDTO creaStanzaDTO(Stanza stanza) {
@@ -32,4 +35,36 @@ public class DTOServerUtils {
 				indiceProprietario);
 		return dto;
 	}
+
+	public static CartaNET fromCartaDTOtoNET(CartaDTO dto) {
+		if (dto == null || dto.colore == null)
+			return null;
+
+		if (dto.isCartaNumero) {
+			return CartaNET.numero(dto.colore, dto.numero);
+		} else if (dto.tipo != null) {
+			return CartaNET.cartaSpeciale(dto.colore, dto.tipo);
+		}
+		return null;
+	}
+
+	public static CartaDTO fromCartaNETtoDTO(CartaNET cartaNET) {
+		if (cartaNET == null)
+			return null;
+
+		if (cartaNET.isCartaNumero()) {
+			return new CartaDTO(true, cartaNET.getNumero(), null, cartaNET.getColore());
+		} else {
+			return new CartaDTO(false, -1, cartaNET.getTipo(), cartaNET.getColore());
+		}
+	}
+
+	public static List<CartaDTO> fromListaCarteNETtoDTO(List<CartaNET> carteNET) {
+		List<CartaDTO> carteDTO = new ArrayList<>();
+		for (CartaNET c : carteNET) {
+			carteDTO.add(fromCartaNETtoDTO(c));
+		}
+		return carteDTO;
+	}
+
 }

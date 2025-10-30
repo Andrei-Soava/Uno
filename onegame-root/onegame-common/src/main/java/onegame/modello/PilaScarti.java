@@ -6,8 +6,6 @@ package onegame.modello;
 
 import java.util.Stack;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import onegame.modello.carte.Carta;
 
 /************************************************************/
@@ -23,7 +21,7 @@ import onegame.modello.carte.Carta;
  */
 public class PilaScarti {
 	private Stack<Carta> scarti = new Stack<>();
-	
+
 	public Stack<Carta> getScarti() {
 		return scarti;
 	}
@@ -33,18 +31,13 @@ public class PilaScarti {
 	}
 
 	public PilaScarti() {
-		this.scarti=new Stack<>();
+		this.scarti = new Stack<>();
 	}
 
 	public void mettiCarta(Carta c) {
 		scarti.push(c);
 	}
-	
-	@JsonIgnore
-	public Carta getTop() {
-		return scarti.peek();
-	}
-	
+
 	@Override
 	public String toString() {
 		return "Pila [carte=" + scarti.size() + "]";
