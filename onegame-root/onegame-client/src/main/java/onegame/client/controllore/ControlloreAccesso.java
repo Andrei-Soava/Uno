@@ -45,6 +45,7 @@ public class ControlloreAccesso {
 					if (respAuth.success) {
 						Utente utente = new Utente(username, false);
 						cs.setUtente(utente);
+						cs.setIdentificatore(respAuth.username);
 						va.mostraHome();
 					} else {
 						va.compilaMessaggioErrore(respAuth.messaggio);
@@ -67,14 +68,16 @@ public class ControlloreAccesso {
 					contesto.getErroreLbl().setText("Formato non valido");
 				return;
 			}
-			if(contesto.getNickname().isBlank())
-				cs.anonimo("anonimo", null);
-			else
-				cs.anonimo(contesto.getNickname(), null);
-			cs.setUtente(new Utente(true));
-			cs.getUtente().setUsername(contesto.getNickname());
-			contesto.getDialog().close();
-			va.mostraHome();
+
+			cs.anonimo(contesto.getNickname(), respAnonimo -> {
+				Platform.runLater(()->{
+					cs.setIdentificatore(respAnonimo.username);
+					cs.setUtente(new Utente(true));
+					cs.getUtente().setUsername(contesto.getNickname());
+					contesto.getDialog().close();
+					va.mostraHome();
+				});
+			});
 			return;
 		}, () -> {
 	        eseguiAccesso();

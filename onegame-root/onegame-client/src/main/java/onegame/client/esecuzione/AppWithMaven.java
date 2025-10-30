@@ -1,7 +1,5 @@
 package onegame.client.esecuzione;
 
-import java.util.List;
-
 import org.apache.logging.log4j.*;
 
 import javafx.application.Application;
@@ -9,7 +7,6 @@ import javafx.stage.Stage;
 import onegame.client.controllore.*;
 import onegame.client.controllore.offline.*;
 import onegame.client.controllore.online.*;
-import onegame.client.controllore.online.stanza.*;
 import onegame.client.net.*;
 import onegame.client.vista.*;
 import onegame.client.vista.offline.*;
@@ -158,16 +155,9 @@ public class AppWithMaven extends Application {
 	public void mostraVistaStanza(String codice, boolean host) {
 		VistaStanza vista=new VistaStanza(this);
 		vista.compilaCodicePartia(codice);
-		ControlloreStanza cv;
-		if(host) {
-			cv=new ControlloreStanzaHost(vista,cs,cm);
-		}
-		else {
-			cv=new ControlloreStanzaOspite(vista,cs,cm);
-		}
+		ControlloreStanza cv = new ControlloreStanza(vista, cs, cm);
 		primaryStage.setScene(vista.getScene());
 		cv.aggiornaStanza(cs.getStatoStanza());
-		cv.aspetta();
 	}
 	
 	public void mostraVistaGiocoOnline() {

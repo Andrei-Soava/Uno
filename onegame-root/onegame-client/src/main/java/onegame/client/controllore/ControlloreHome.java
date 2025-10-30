@@ -13,7 +13,7 @@ public class ControlloreHome {
 		this.cs=cs;
 		
 		vh.aggiungiListener(cm, cs.getUtente());
-		System.out.println(cs.getUtente().getUsername() + " è " + cs.getUtente().isAnonimo());
+		System.out.println(cs.getUtente().getUsername() + " è " + cs.getUtente().isAnonimo()+" identificatore:"+cs.getIdentificatore());
 		
 		aspettaLogout();
 		aspettaStatistiche();

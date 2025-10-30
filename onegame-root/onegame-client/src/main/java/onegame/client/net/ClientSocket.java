@@ -37,6 +37,7 @@ public class ClientSocket {
 	private final Socket socket;
 	private String token;
 	private Utente utente;
+	private String identificatore;
 	private StatoStanzaObserver stanzaObserver;
 	private StatoPartitaObserver partitaObserver;
 	private StatoStanzaDTO statoStanza;
@@ -64,6 +65,23 @@ public class ClientSocket {
 	 */
 	public void setUtente(Utente utente) {
 		this.utente = utente;
+	}
+	
+	/**
+	 * Ottieni identificatore dal socket
+	 * @return identificatore del socket
+	 */
+	public String getIdentificatore() {
+		return identificatore;
+	}
+
+	
+	/**
+	 * Imposta identificatore dell'utente (diverso dal nickname nel caso dell'ospite)
+	 * @param utente
+	 */
+	public void setIdentificatore(String identificatore) {
+		this.identificatore = identificatore;
 	}
 
 	/**

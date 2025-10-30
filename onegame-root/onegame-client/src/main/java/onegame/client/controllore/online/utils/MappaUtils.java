@@ -40,6 +40,9 @@ public class MappaUtils {
 		
 		mappaGiocatoriDTO = ruotaMappa(mappaGiocatoriDTO, posizioneAssoluta);
 		rimuoviPrimoDaMappa(mappaGiocatoriDTO);
+		for(Map.Entry<StringWrapper, IntegerAndBooleanWrapper> entry : mappaGiocatoriDTO.entrySet()) {
+			System.out.println(entry.getKey().getValue());
+		}
 		return mappaGiocatoriDTO;
 	}
 	

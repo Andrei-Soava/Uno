@@ -143,6 +143,10 @@ public class VistaStanza {
     	avviaBtn.setVisible(true);
     }
     
+    public void nascodiAvviaBtn() {
+    	avviaBtn.setVisible(false);
+    }
+    
     public void disattivaAvviaBtn() {
     	avviaBtn.setDisable(true);
     	avviaBtn.setOpacity(0.5);
