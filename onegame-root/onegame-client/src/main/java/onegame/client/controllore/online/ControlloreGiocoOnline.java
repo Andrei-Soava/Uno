@@ -73,6 +73,7 @@ public class ControlloreGiocoOnline implements StatoPartitaObserver {
 		List<GiocatoreDTO> giocatori = statoPartita.giocatori;
 		List<Carta> carte = DTOUtils.convertiListaDTOinCarte(mess.carteInMano);
 		Carta cartaCorrente = DTOUtils.convertiDTOinCarta(statoPartita.cartaCorrente);
+		cartaCorrente.setColore(statoPartita.coloreCorrente);
 		boolean direzione = statoPartita.direzioneCrescente;
 		int posizioneAssoluta = mess.indiceGiocatoreLocale;
 		int posizioneTurnoCorrente = statoPartita.indiceGiocatoreCorrente;

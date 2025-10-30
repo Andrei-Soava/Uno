@@ -5,8 +5,7 @@ import java.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import onegame.modello.carte.Carta;
-import onegame.modello.giocatori.Giocatore;
+import onegame.modello.carte.Colore;
 import onegame.modello.net.CartaDTO;
 import onegame.modello.net.DTOUtils;
 import onegame.modello.net.GiocatoreDTO;
@@ -15,11 +14,14 @@ import onegame.modello.net.StatoPartitaDTO;
 import onegame.modello.net.messaggi.Messaggi.*;
 import onegame.modello.net.messaggi.MessaggiGioco;
 import onegame.modello.net.messaggi.MessaggiGioco.MessStatoPartita;
+import onegame.server.gioco.CartaNET;
+import onegame.server.gioco.GiocatoreNET;
 import onegame.server.gioco.PartitaNET;
+import onegame.server.utils.DTOServerUtils;
 
 public class StanzaPartita extends Stanza implements PartitaObserver {
 
-	private final Map<Sessione, Giocatore> giocatori = new LinkedHashMap<>();
+	private final Map<Sessione, GiocatoreNET> giocatori = new LinkedHashMap<>();
 
 	private PartitaNET partita;
 
@@ -39,11 +41,11 @@ public class StanzaPartita extends Stanza implements PartitaObserver {
 			giocatori.clear();
 			// Crea i giocatori
 			for (Sessione s : sessioni) {
-				giocatori.put(s, new Giocatore(s.getNickname()));
+				giocatori.put(s, new GiocatoreNET(s.getNickname()));
 			}
 
 			// Inizializza la partita
-			List<Giocatore> lista = new ArrayList<>(giocatori.values());
+			List<GiocatoreNET> lista = new ArrayList<>(giocatori.values());
 			Collections.shuffle(lista);
 			this.partita = new PartitaNET(lista, this);
 			this.partita.addObserver(this);
@@ -67,7 +69,7 @@ public class StanzaPartita extends Stanza implements PartitaObserver {
 	}
 
 	@Override
-	public void partitaAggiornata(Map<Giocatore, List<Carta>> cartePescate) {
+	public void partitaAggiornata(Map<GiocatoreNET, List<CartaNET>> cartePescate) {
 		if (partita == null) {
 			return;
 		}
@@ -80,41 +82,42 @@ public class StanzaPartita extends Stanza implements PartitaObserver {
 		}
 	}
 
-	private void inviaTurnoCorrente(String nomeEvento, Map<Giocatore, List<Carta>> cartePescateMap) {
+	private void inviaTurnoCorrente(String nomeEvento, Map<GiocatoreNET, List<CartaNET>> cartePescateMap) {
 		lock.lock();
 
 		try {
 			List<GiocatoreDTO> listaGiocatoriDTO = new ArrayList<>();
 
 			// Prepara i DTO dei giocatori
-			List<Giocatore> listaGiocatori = partita.getGiocatori();
+			List<GiocatoreNET> listaGiocatori = partita.getGiocatori();
 
-			for (Giocatore g : listaGiocatori) {
-				GiocatoreDTO gDTO = new GiocatoreDTO(g.getNome(), g.getMano().getNumCarte());
+			for (GiocatoreNET g : listaGiocatori) {
+				GiocatoreDTO gDTO = new GiocatoreDTO(g.getNickname(), g.getNumeroCarte());
 				listaGiocatoriDTO.add(gDTO);
 			}
 
-			CartaDTO cartaCorrente = DTOUtils.convertiCartaInDTO(partita.getCartaCorrente());
+			CartaDTO cartaCorrente = DTOServerUtils.fromCartaNETtoDTO(partita.getCartaCorrente());
+			Colore coloreCorrente = partita.getColoreCorrente();
 			int indiceGiocatoreCorrente = partita.getIndiceGiocatoreCorrente();
 			boolean direzione = partita.getDirezione();
 			int indiceVincitore = partita.getIndiceVincitore();
 			boolean finished = partita.isFinished();
 
-			logger.debug("Carta corrente: {}", cartaCorrente);
+			logger.debug("Carta corrente: {}, colore corrente: {}", cartaCorrente, coloreCorrente);
 
-			StatoPartitaDTO statoDTO = new StatoPartitaDTO(cartaCorrente, listaGiocatoriDTO, indiceGiocatoreCorrente,
-					direzione, finished, indiceVincitore);
+			StatoPartitaDTO statoDTO = new StatoPartitaDTO(cartaCorrente, coloreCorrente, listaGiocatoriDTO,
+					indiceGiocatoreCorrente, direzione, finished, indiceVincitore);
 
-			for (Map.Entry<Sessione, Giocatore> entry : giocatori.entrySet()) {
+			for (Map.Entry<Sessione, GiocatoreNET> entry : giocatori.entrySet()) {
 				Sessione s = entry.getKey();
-				Giocatore g = entry.getValue();
+				GiocatoreNET g = entry.getValue();
 
-				List<CartaDTO> manoDTO = DTOUtils.convertiListaCarteInDTO(g.getMano().getCarte());
+				List<CartaDTO> manoDTO = DTOServerUtils.fromListaCarteNETtoDTO(g.getMano());
 				int indiceGiocatoreLocale = listaGiocatori.indexOf(g);
 
 				List<CartaDTO> cartePescate;
 				if (cartePescateMap != null && cartePescateMap.containsKey(g)) {
-					cartePescate = DTOUtils.convertiListaCarteInDTO(cartePescateMap.get(g));
+					cartePescate = DTOServerUtils.fromListaCarteNETtoDTO(cartePescateMap.get(g));
 				} else {
 					cartePescate = new ArrayList<>();
 				}
@@ -134,7 +137,7 @@ public class StanzaPartita extends Stanza implements PartitaObserver {
 		boolean removed = super.rimuoviSessione(sessione);
 		lock.lock();
 		try {
-			Giocatore g = giocatori.remove(sessione);
+			GiocatoreNET g = giocatori.remove(sessione);
 			if (g != null) {
 				g.setBot(true);
 			}
@@ -152,7 +155,7 @@ public class StanzaPartita extends Stanza implements PartitaObserver {
 		return partita;
 	}
 
-	public Collection<Giocatore> getGiocatori() {
+	public Collection<GiocatoreNET> getGiocatori() {
 		lock.lock();
 		try {
 			return Collections.unmodifiableCollection(new ArrayList<>(giocatori.values()));
@@ -161,8 +164,8 @@ public class StanzaPartita extends Stanza implements PartitaObserver {
 		}
 	}
 
-	private Sessione trovaSessionePerGiocatore(Giocatore g) {
-		for (Map.Entry<Sessione, Giocatore> entry : giocatori.entrySet()) {
+	private Sessione trovaSessionePerGiocatore(GiocatoreNET g) {
+		for (Map.Entry<Sessione, GiocatoreNET> entry : giocatori.entrySet()) {
 			if (entry.getValue().equals(g)) {
 				return entry.getKey();
 			}
