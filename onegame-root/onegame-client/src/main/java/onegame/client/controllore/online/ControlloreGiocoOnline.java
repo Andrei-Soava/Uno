@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-import onegame.client.controllore.online.utils.MappaUtils;
+import onegame.client.controllore.utils.MappaUtils;
 import onegame.client.net.ClientSocket;
 import onegame.client.net.ConnectionMonitor;
 import onegame.client.vista.partita.VistaGioco;
@@ -208,7 +208,9 @@ public class ControlloreGiocoOnline implements StatoPartitaObserver {
 		cs.effettuaMossa(mossaDaInviare, null);
 		if(numeroCarteInMano==2) {
 			vg.mostraONEBtn().thenRun(()->{
+				System.out.println("CHIAMO UNO");
 				cs.effettuaMossa(new MossaDTO(TipoMossa.DICHIARA_UNO), null);
+				System.out.println("CHIAMATO UNO");
 			});
 		}
 	}

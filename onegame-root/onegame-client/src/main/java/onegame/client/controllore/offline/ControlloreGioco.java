@@ -1,6 +1,8 @@
 package onegame.client.controllore.offline;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -10,11 +12,9 @@ import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.util.Duration;
-import onegame.client.controllore.ControllorePersistenzaTEMP;
+import onegame.client.controllore.utils.MappaUtils;
 import onegame.client.net.ClientSocket;
-import onegame.client.persistenza_temporanea.ManagerPersistenza;
 import onegame.client.vista.partita.VistaGioco;
-import onegame.client.vista.partita.VistaSpettatore;
 import onegame.modello.Mossa;
 import onegame.modello.Partita;
 import onegame.modello.Mossa.TipoMossa;
@@ -22,6 +22,7 @@ import onegame.modello.carte.CartaSpeciale;
 import onegame.modello.carte.CartaSpeciale.TipoSpeciale;
 import onegame.modello.carte.Colore;
 import onegame.modello.giocatori.Giocatore;
+import onegame.modello.net.GiocatoreDTO;
 
 /**
  * classe centrale per l'esecuzione del gioco
@@ -41,7 +42,7 @@ import onegame.modello.giocatori.Giocatore;
  */
 public class ControlloreGioco {
 	private VistaGioco vg;
-	private VistaSpettatore vsp;
+	
 	private Partita partita;
 	private ControllorePersistenza cp;
 	private ClientSocket cs;
@@ -56,13 +57,40 @@ public class ControlloreGioco {
 			);
 
 
-	public ControlloreGioco(VistaGioco vg, VistaSpettatore vsp, ClientSocket cs, ControllorePersistenza cp) {
+	private ControlloreGioco(VistaGioco vg, ClientSocket cs, ControllorePersistenza cp) {
 		this.vg = vg;
-		this.vsp = vsp;
 		this.cs = cs;
 		this.cp = cp;
 		creaTimers();
 		aspettaAbbandona();
+	}
+	
+	/**
+	 * usato per partite NUOVE
+	 * @param vg
+	 * @param cs
+	 * @param cp
+	 * @param numGiocatori
+	 * @param salvataggio
+	 */
+	public ControlloreGioco(VistaGioco vg, ClientSocket cs, ControllorePersistenza cp, int numGiocatori, String salvataggio) {
+		this(vg, cs, cp);
+		configuraNuovaPartitaVsBot(numGiocatori, salvataggio);
+		avviaPartita();
+	}
+	
+	/**
+	 * usato per partite CARICATE
+	 * @param vg
+	 * @param cs
+	 * @param cp
+	 * @param nomeSalvataggio
+	 * @param partitaSerializzata
+	 */
+	public ControlloreGioco(VistaGioco vg, ClientSocket cs, ControllorePersistenza cp, String nomeSalvataggio, String partitaSerializzata) {
+		this(vg, cs, cp);
+		caricaPartita(nomeSalvataggio, partitaSerializzata);
+		avviaPartita();
 	}
 	
 	public VistaGioco getTv() {
@@ -162,6 +190,7 @@ public class ControlloreGioco {
 			g.cambiaModalita();
 			giocatori.add(g);
 		}
+		Collections.shuffle(giocatori);
 		partita = new Partita(giocatori);
 		partita.eseguiPrePartita();
 		//da fare solo se persona è loggata
@@ -185,6 +214,19 @@ public class ControlloreGioco {
 			}
 			
 		}
+	}
+	
+	/**
+	 * metodo che impacchetta giocatori della partita in una lista di giocatoriDTO
+	 * @return lista giocatoriDTO
+	 */
+	private List<GiocatoreDTO> creaGiocatoriDTO() {
+		List<GiocatoreDTO> giocatoriDTO = new ArrayList<>();
+		for(Giocatore g:partita.getGiocatori()) {
+			GiocatoreDTO gDTO = new GiocatoreDTO(g.getNome(),g.getMano().getNumCarte());
+			giocatoriDTO.add(gDTO);
+		}
+		return giocatoriDTO;
 	}
 	
 	/**
@@ -263,7 +305,7 @@ public class ControlloreGioco {
 	    vg.stampaTurnoCorrente(g.getNome());
 	    if (g.isBot()) {
 	    	// primo delay di 5 secondi prima di scegliere la mossa
-	    	vg.stampaTurnazione(partita.getTurnazioneDalGiocatore(cs.getUtente().getGiocatore()), partita.getDirezione());
+	    	vg.stampaTurnazione(MappaUtils.creaMappa(creaGiocatoriDTO(), partita.getIndiceGiocatore(partita.getGiocatoreCorrente()), partita.getIndiceGiocatore(cs.getUtente().getGiocatore())), partita.getDirezione());
 	    	vg.stampaManoReadOnly(partita.getCartaCorrente(), cs.getUtente().getGiocatore().getMano().getCarte());
 			timerPreMossaBot.setOnFinished(ev1 -> {
 				if (partitaAttiva) {
@@ -274,7 +316,7 @@ public class ControlloreGioco {
 					} else {
 						vg.stampaMessaggio(g.getNome() + " ha giocato la carta: " + m.getCartaScelta());
 					}
-					vg.stampaTurnazione(partita.getTurnazioneDalGiocatore(cs.getUtente().getGiocatore()), partita.getDirezione());
+					vg.stampaTurnazione(MappaUtils.creaMappa(creaGiocatoriDTO(), partita.getIndiceGiocatore(partita.getGiocatoreCorrente()), partita.getIndiceGiocatore(cs.getUtente().getGiocatore())), partita.getDirezione());
 			    	vg.stampaManoReadOnly(partita.getCartaCorrente(), cs.getUtente().getGiocatore().getMano().getCarte());
 					partita.passaTurno();
 					cp.salvaPartitaAutomatico(partita);
@@ -322,7 +364,7 @@ public class ControlloreGioco {
 	        });
 	        //DA COMMENTARE SE GIOCO SI ROMPE
 	        timerTurno.playFromStart();
-	        vg.stampaTurnazione(partita.getTurnazioneDalGiocatore(g), partita.getDirezione());
+	        vg.stampaTurnazione(MappaUtils.creaMappa(creaGiocatoriDTO(), partita.getIndiceGiocatore(partita.getGiocatoreCorrente()), partita.getIndiceGiocatore(cs.getUtente().getGiocatore())), partita.getDirezione());
 	    	//inizio turno vero e proprio (posso o pescare, o tentare di giocare una carta)
 	        vg.scegliMossaAsync(partita.getCartaCorrente(), g.getMano().getCarte(), m -> {
 	        	;//breakpoint

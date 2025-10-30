@@ -152,7 +152,7 @@ public class AppWithMaven extends Application {
 		//cc.eseguiAccesso();
 	}
 	
-	public void mostraVistaStanza(String codice, boolean host) {
+	public void mostraVistaStanza(String codice) {
 		VistaStanza vista=new VistaStanza(this);
 		vista.compilaCodicePartia(codice);
 		ControlloreStanza cv = new ControlloreStanza(vista, cs, cm);
@@ -191,44 +191,17 @@ public class AppWithMaven extends Application {
 		primaryStage.setScene(vista.getScene());
 		//ccoff.aspettaCreazionePartita();
 	}
-
-//	public void mostraVistaPartitaCaricata(String salvataggio) {
-//		VistaGioco vista = new VistaGioco(this);
-//		@SuppressWarnings("deprecation")
-//		ControlloreGioco controllore = new ControlloreGioco(vista, new VistaSpettatore(this), cs); // Passo la vista al controller
-//		controllore.caricaPartita(salvataggio);
-//		//primaryStage.setScene(vista.getScene());
-//		controllore.avviaPartita();
-//	}
 	
 	public void mostraVistaPartitaCaricata(String nomeSalvataggio, String partitaSerializzata) {
 		VistaGioco vista = new VistaGioco(this);
 		ControllorePersistenza cp = new ControllorePersistenza(cs,cm);
-		@SuppressWarnings("deprecation")
-		ControlloreGioco controllore = new ControlloreGioco(vista, new VistaSpettatore(this), cs, cp);
-		controllore.caricaPartita(nomeSalvataggio, partitaSerializzata);
-		controllore.avviaPartita();
+		ControlloreGioco controllore = new ControlloreGioco(vista, cs, cp, nomeSalvataggio, partitaSerializzata);
 	}
 
-//	public void mostraVistaPartitaNuova(int numGiocatori) {
-//		VistaGioco vista = new VistaGioco(this);
-//		@SuppressWarnings("deprecation")
-//		ControlloreGioco controllore = new ControlloreGioco(vista, new VistaSpettatore(this), cs); 
-//		// se si vuole giocatori tra persone umane toglie il "vsBot"
-//		controllore.configuraNuovaPartitaVsBot(numGiocatori);
-//		//primaryStage.setScene(vista.getScene());
-//		controllore.avviaPartita();
-//	}
-	
 	public void mostraVistaPartitaNuova(int numGiocatori, String salvataggio) {
 		VistaGioco vista = new VistaGioco(this);
 		ControllorePersistenza cp = new ControllorePersistenza(cs,cm);
-		@SuppressWarnings("deprecation")
-		ControlloreGioco controllore = new ControlloreGioco(vista, new VistaSpettatore(this), cs, cp);
-		// se si vuole giocatori tra persone umane toglie il "vsBot"
-		controllore.configuraNuovaPartitaVsBot(numGiocatori, salvataggio);
-		//primaryStage.setScene(vista.getScene());
-		controllore.avviaPartita();
+		ControlloreGioco controllore = new ControlloreGioco(vista, cs, cp, numGiocatori, salvataggio);
 	}
 	
 	//SEZIONE SET SCENA PARTITA (vale per vistaGioco e vistaSpettatore)

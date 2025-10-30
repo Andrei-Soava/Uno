@@ -100,6 +100,6 @@ public class VistaConfigurazioneOnline {
     }
     
     public void mostraStanza(String codiceStanza) {
-    	app.mostraVistaStanza(codiceStanza, true);
+    	app.mostraVistaStanza(codiceStanza);
     }
 }

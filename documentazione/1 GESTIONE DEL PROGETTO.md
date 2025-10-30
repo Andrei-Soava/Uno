@@ -144,3 +144,4 @@ Esempio COMPLETO:
 - 24/10, Andrei, (inizio collegamento client-server per la partita online), null;
 - 24/10, Giuseppe, (aggiornamento requisiti), null;
 - 29/10, Andrei, (collegamento pesca carta per partita online + modifica gestione dialog di scelta nickname anonimo con relativi controlli), null;
+- 29/10, Andrei, (implementazione switch host dopo che host abbandona + refactoring generale di varie classi + eliminazione codice superfluo), null;

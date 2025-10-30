@@ -92,7 +92,7 @@ public class VistaInserimentoCodice {
 	}
 	
 	public void mostraStanza(String codice) {
-		app.mostraVistaStanza(codice, false);
+		app.mostraVistaStanza(codice);
 	}
 	
 	public void mostraHome() {

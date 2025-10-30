@@ -5,10 +5,7 @@
 package onegame.modello;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -16,9 +13,6 @@ import onegame.modello.Mossa.TipoMossa;
 import onegame.modello.carte.*;
 import onegame.modello.carte.CartaSpeciale.TipoSpeciale;
 import onegame.modello.giocatori.Giocatore;
-import onegame.modello.util.Wrappers;
-import onegame.modello.util.Wrappers.IntegerAndBooleanWrapper;
-import onegame.modello.util.Wrappers.StringWrapper;
 
 /************************************************************/
 
@@ -126,6 +120,16 @@ public class Partita implements PartitaIF {
 	public Giocatore getGiocatoreCorrente() {
 		return navigatore.corrente();
 	}
+	
+	/**
+	 * metodo che restituisce indice assoluto di un giocatore in giocatori
+	 * @param giocatore
+	 * @return
+	 */
+	@JsonIgnore
+	public int getIndiceGiocatore(Giocatore giocatore) {
+		return giocatori.indexOf(giocatore);
+	}
 
 	/**
 	 * metodo che restituisce il vincitore (utile per gui)
@@ -170,46 +174,6 @@ public class Partita implements PartitaIF {
 	@JsonIgnore
 	public int getNumeroGiocatori() {
 		return this.giocatori.size();
-	}
-
-	/**
-	 * metodo che resituisce una mappa nomeGiocatore-numeroCarte
-	 * per tutti i giocatori TRANNE quello corrente (utile per gui)
-	 * 
-	 * @return mappa<StringWrapper,Integer> 
-	 */
-	@Deprecated
-	@JsonIgnore
-	public Map<StringWrapper,Integer> getTurnazioneGiocatori(){
-		List<Giocatore> giocatoriSuccessivi = navigatore.altriInOrdine();
-		Map<StringWrapper,Integer> turnazione = new LinkedHashMap<>();
-		for(int i=0; i<giocatoriSuccessivi.size(); i++) {
-			Wrappers.StringWrapper sr=new Wrappers.StringWrapper(giocatoriSuccessivi.get(i).getNome(),i);
-			turnazione.put(sr, giocatoriSuccessivi.get(i).getMano().getNumCarte());
-		}
-		return turnazione;
-	}
-	
-	/**
-	 * anoalogo di quello sopra ma dal punto di vista di un giocatore qualsiasi
-	 * @param giocatore
-	 * @return
-	 */
-	@JsonIgnore
-	public Map<StringWrapper,IntegerAndBooleanWrapper> getTurnazioneDalGiocatore(Giocatore giocatore){
-		List<Giocatore> giocatoriSuccessivi = navigatore.altriInSuccessione(giocatore);
-		Map<StringWrapper,IntegerAndBooleanWrapper> turnazione = new LinkedHashMap<>();
-		for(int i=0; i<giocatoriSuccessivi.size(); i++) {
-			boolean flag;
-			if(giocatoriSuccessivi.get(i).equals(getGiocatoreCorrente()))
-				flag=true;
-			else
-				flag=false;	
-			Wrappers.StringWrapper sr=new Wrappers.StringWrapper(giocatoriSuccessivi.get(i).getNome(),i);
-			Wrappers.IntegerAndBooleanWrapper info=new Wrappers.IntegerAndBooleanWrapper(giocatoriSuccessivi.get(i).getMano().getNumCarte(),flag);
-			turnazione.put(sr, info);
-		}
-		return turnazione;
 	}
 	
 	public Navigatore<Giocatore> getNavigatore() {

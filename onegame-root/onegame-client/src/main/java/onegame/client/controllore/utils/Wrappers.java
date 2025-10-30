@@ -1,4 +1,4 @@
-package onegame.modello.util;
+package onegame.client.controllore.utils;
 
 /**
  * classe che contiene wrappers utili in metodi della Partita

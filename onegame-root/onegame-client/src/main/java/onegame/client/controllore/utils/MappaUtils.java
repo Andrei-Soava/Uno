@@ -1,8 +1,7 @@
-package onegame.client.controllore.online.utils;
+package onegame.client.controllore.utils;
 
-import onegame.modello.util.Wrappers.StringWrapper;
-import onegame.modello.util.Wrappers;
-import onegame.modello.util.Wrappers.IntegerAndBooleanWrapper;
+import onegame.client.controllore.utils.Wrappers.IntegerAndBooleanWrapper;
+import onegame.client.controllore.utils.Wrappers.StringWrapper;
 import onegame.modello.net.GiocatoreDTO;
 
 import java.util.ArrayList;
@@ -37,12 +36,20 @@ public class MappaUtils {
 			mappaGiocatoriDTO.put(sr, info);
 			i++;
 		}
-		
+//		System.out.println("PRIMA DELLA ROTAZIONE " + posizioneAssoluta);
+//		for(Map.Entry<StringWrapper, IntegerAndBooleanWrapper> entry : mappaGiocatoriDTO.entrySet()) {
+//			System.out.println(entry.getKey().getValue());
+//		}
 		mappaGiocatoriDTO = ruotaMappa(mappaGiocatoriDTO, posizioneAssoluta);
+//		System.out.println("PRIMA DELLA DELETE");
+//		for(Map.Entry<StringWrapper, IntegerAndBooleanWrapper> entry : mappaGiocatoriDTO.entrySet()) {
+//			System.out.println(entry.getKey().getValue());
+//		}
 		rimuoviPrimoDaMappa(mappaGiocatoriDTO);
-		for(Map.Entry<StringWrapper, IntegerAndBooleanWrapper> entry : mappaGiocatoriDTO.entrySet()) {
-			System.out.println(entry.getKey().getValue());
-		}
+//		System.out.println("PRIMA DELLA return");
+//		for(Map.Entry<StringWrapper, IntegerAndBooleanWrapper> entry : mappaGiocatoriDTO.entrySet()) {
+//			System.out.println(entry.getKey().getValue());
+//		}
 		return mappaGiocatoriDTO;
 	}
 	
@@ -51,17 +58,17 @@ public class MappaUtils {
             return new LinkedHashMap<>();
         }
 
-        // Converto le entry in lista
+        //converto le entry in lista
         List<Map.Entry<StringWrapper, IntegerAndBooleanWrapper>> entries = new ArrayList<>(map.entrySet());
 
-        // Normalizzo l'offset (può essere > size o negativo)
+        //normalizzo l'offset (può essere > size o negativo)
         int size = entries.size();
         int shift = ((offset % size) + size) % size;
 
-        // Ruoto la lista
-        Collections.rotate(entries, shift);
+        //ruoto la lista in senso antiorario
+        Collections.rotate(entries, -shift);
 
-        // Ricostruisco la LinkedHashMap con il nuovo ordine
+        //ricostruisco la LinkedHashMap con il nuovo ordine
         LinkedHashMap<StringWrapper, IntegerAndBooleanWrapper> rotated = new LinkedHashMap<>();
         for (Map.Entry<StringWrapper, IntegerAndBooleanWrapper> e : entries) {
             rotated.put(e.getKey(), e.getValue());
