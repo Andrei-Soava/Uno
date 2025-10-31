@@ -26,6 +26,7 @@ public class ControlloreStanza implements StatoStanzaObserver, StatoPartitaObser
 		cs.setStanzaObserver(this);
 		cs.setPartitaObserver(this);
 		aspettaAbbandonaStanza();
+		aggiornaStanza(cs.getStatoStanza());
 	}
 	
 	public void aspettaAbbandonaStanza() {

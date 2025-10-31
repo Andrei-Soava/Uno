@@ -27,7 +27,7 @@ public class VistaStanza {
     private Button abbandonaBtn;
     private final Button avviaBtn;
 
-    public VistaStanza(AppWithMaven app) {
+    public VistaStanza(AppWithMaven app, String codice) {
         this.app = app;
         BorderPane root = new BorderPane();
 
@@ -74,20 +74,14 @@ public class VistaStanza {
         bottomBar.setPadding(new Insets(20));
 
         root.setBottom(bottomBar);
-
+        
+        compilaCodicePartita(codice);
+        
         scene = new Scene(root);
         scene.getStylesheets().add(
             getClass().getResource("/stile/base.css").toExternalForm()
         );
         
-        //prova
-//        ArrayList<String> giocatori=new ArrayList<>();
-//        giocatori.add("Luizoooooooooooooooooooooooooooooooooo");
-//        giocatori.add("Fabioooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
-//        giocatori.add("Matteo");
-//        giocatori.add("Andrei");
-//        
-//        aggiornaGiocatori(giocatori);
     }
 
     public Scene getScene() {
@@ -135,7 +129,7 @@ public class VistaStanza {
         }
     }
     
-    public void compilaCodicePartia(String codice) {
+    public void compilaCodicePartita(String codice) {
     	codiceLbl.setText("Codice partita: "+codice);
     }
     

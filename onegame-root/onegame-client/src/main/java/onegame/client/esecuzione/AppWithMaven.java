@@ -84,12 +84,9 @@ public class AppWithMaven extends Application {
 
 	//SEZIONE VISTE PRINCIPALI
 	public void mostraVistaAccesso(String username) {
-		VistaAccesso vista = new VistaAccesso(this);
-		vista.compilaUsername(username);
-		@SuppressWarnings("unused")
+		VistaAccesso vista = new VistaAccesso(this, username);
 		ControlloreAccesso ca = new ControlloreAccesso(vista, cs,cm);
 		primaryStage.setScene(vista.getScene());
-		//ca.eseguiAccesso();
 	}
 
 	public void mostraVistaAccesso() {
@@ -98,19 +95,14 @@ public class AppWithMaven extends Application {
 
 	public void mostraVistaRegistrazione() {
 		VistaRegistrazione vista = new VistaRegistrazione(this);
-		@SuppressWarnings("unused")
 		ControlloreRegistrazione cr = new ControlloreRegistrazione(vista, cs, cm);
 		primaryStage.setScene(vista.getScene());
-		//cr.eseguiRegistrazione();
 	}
 
 	public void mostraVistaHome() {
 		VistaHome vista = new VistaHome(this);
-		@SuppressWarnings("unused")
 		ControlloreHome ch = new ControlloreHome(vista, cs, cm);
 		primaryStage.setScene(vista.getScene());
-		//ch.aspettaLogout();
-		//ch.aspettaStatistiche();
 	}
 	
 	public void mostraVistaTutorial() {
@@ -120,49 +112,37 @@ public class AppWithMaven extends Application {
 	
 	public void mostraVistaImpostazioni() {
 		VistaImpostazioni vista = new VistaImpostazioni(this);
-		@SuppressWarnings("unused")
 		ControlloreImpostazioni ci = new ControlloreImpostazioni(vista,cs,cm);
 		primaryStage.setScene(vista.getScene());
-		//ci.aspettaLogout();
-		//ci.aspettaSelezione();
 	}
 
 	//SEZIONE VISTE GIOCO ONLINE
 	public void mostraVistaMenuOnline() {
 		VistaMenuOnline vista = new VistaMenuOnline(this);
-		@SuppressWarnings("unused")
 		ControlloreMenuOnline cmo=new ControlloreMenuOnline(vista, cs, cm);
 		primaryStage.setScene(vista.getScene());
-		//cmo.aspettaLogout();
 	}
 
 	public void mostraVistaConfigurazioneOnline() {
 		VistaConfigurazioneOnline vista = new VistaConfigurazioneOnline(this);
-		@SuppressWarnings("unused")
 		ControlloreConfigurazioneOnline cco= new ControlloreConfigurazioneOnline(vista, cs, cm);
 		primaryStage.setScene(vista.getScene());
-		//cco.aspettaCreazioneStanza();
 	}
 
 	public void mostraVistaInserimentoCodice() {
 		VistaInserimentoCodice vista = new VistaInserimentoCodice(this);
-		@SuppressWarnings("unused")
 		ControlloreCodicePartita cc = new ControlloreCodicePartita(vista, cs, cm);
 		primaryStage.setScene(vista.getScene());
-		//cc.eseguiAccesso();
 	}
 	
 	public void mostraVistaStanza(String codice) {
-		VistaStanza vista=new VistaStanza(this);
-		vista.compilaCodicePartia(codice);
-		ControlloreStanza cv = new ControlloreStanza(vista, cs, cm);
+		VistaStanza vista=new VistaStanza(this, codice);
 		primaryStage.setScene(vista.getScene());
-		cv.aggiornaStanza(cs.getStatoStanza());
+		ControlloreStanza cv = new ControlloreStanza(vista, cs, cm);
 	}
 	
 	public void mostraVistaGiocoOnline() {
 		VistaGioco vista = new VistaGioco(this);
-		@SuppressWarnings("unused")
 		ControlloreGiocoOnline cgo=new ControlloreGiocoOnline(cs,cm,vista);
 		primaryStage.setScene(vista.getScene());
 	}
@@ -170,26 +150,20 @@ public class AppWithMaven extends Application {
 	//SEZIONE VISTE GIOCO OFFLINE
 	public void mostraVistaMenuOffline() {
 		VistaMenuOffline vista = new VistaMenuOffline(this);
-		@SuppressWarnings("unused")
 		ControlloreMenuOffline cmo=new ControlloreMenuOffline(vista, cs, cm);
 		primaryStage.setScene(vista.getScene());
-		//cmo.aspettaLogout();
 	}
 
 	public void mostraVistaSalvataggi() {
 		VistaSalvataggi vista = new VistaSalvataggi(this);
-		@SuppressWarnings("unused")
 		ControlloreSalvataggi cslv=new ControlloreSalvataggi(vista, cs, cm);
 		primaryStage.setScene(vista.getScene());
-		//cslv.eseguiScelta();
 	}
 
 	public void mostraVistaConfigurazioneOffline() {
 		VistaConfigurazioneOffline vista = new VistaConfigurazioneOffline(this);
-		@SuppressWarnings("unused")
 		ControlloreConfigurazioneOffline ccoff=new ControlloreConfigurazioneOffline(vista, cs);
 		primaryStage.setScene(vista.getScene());
-		//ccoff.aspettaCreazionePartita();
 	}
 	
 	public void mostraVistaPartitaCaricata(String nomeSalvataggio, String partitaSerializzata) {

@@ -35,7 +35,7 @@ public class VistaAccesso {
 	private Button ospiteBtn;
 	private Label statoConnessioneLabel;
 
-	public VistaAccesso(AppWithMaven app) {
+	public VistaAccesso(AppWithMaven app, String username) {
 		this.app=app;
 		// titolo
 		Label titolo = new Label("Benvenuto su ONE! Scegli un opzione");
@@ -89,6 +89,7 @@ public class VistaAccesso {
 		BorderPane root=new BorderPane();
 		root.setCenter(centro);
 		root.setBottom(statoConnessioneLabel);
+		compilaUsername(username);
 		
 		scene = new Scene(root);
 		scene.getStylesheets().add(getClass().getResource("/stile/base.css").toExternalForm());
