@@ -5,18 +5,26 @@
 ## 1. Introduzione
 
 ### 1.1 Obiettivo del documento
-Il presente documento descrive in modo esaustivo e strutturato i requisiti funzionali e non funzionali del videogioco di carte “UNO-like” basato su Java.  
+Il presente documento descrive in modo esaustivo e strutturato i requisiti funzionali e non funzionali del videogioco di carte “ONE” basato su Java.  
 La specifica dei requisiti è redatta in conformità con lo standard IEEE 830 al fine di garantire una struttura chiara, tracciabile e comprensibile delle parti coinvolte.  
 Il presente documento rappresenta un riferimento ufficiale per tutte le fasi successive del ciclo di vita del software, includendo progettazione, implementazione, test, validazione e manutenzione. Esso mira a garantire una comprensione condivisa del sistema tra tutti gli stakeholder riducendo ambiguità e assicurando la tracciabilità dei requisiti.
 
-### 1.2 Scopo del gioco
+### 1.2 Elicitazione dei requisiti
+L'attuale documento adotterà la seguente strategia per elicitare i requisiti del gioco "ONE":
+- studio del gioco UNO (derivazione meccaniche di gioco dal corrispettivo originale);
+- prototipazione (per interfaccia utente);
+- discussioni tra membri (per specifiche più tecniche);
+
+### 1.3 Obiettivo generale
 Il gioco "ONE” (ispirato al classico gioco di carte “UNO”) è stato progettato per offrire un’esperienza interattiva, fluida e accessibile a qualsiasi tipo di utente.
 Il sistema ha l’obiettivo di fornire una piattaforma modulare e scalabile, che permetta l’integrazione di nuove funzionalità in futuro senza compromettere la stabilità e le prestazioni del software.    
 
-   - ### 1.2.1 Svolgimento del gioco
-   Il gioco consente ai giocatori di partecipare a partite in modalità offline (contro dei bot) oppure in modalità multigiocatore online contro altri utenti.
-   I giocatori possono scegliere se registrarsi o partecipare come utenti anonimi. Tuttavia, la modalità anonima comporta alcune limitazioni: i giocatori non registrati non possono accedere alle statistiche delle partite, né salvare le partite contro il coomputer.
-### 1.3 Definizioni, acronimi e abbreviazioni
+### 1.4 Panoramica generale
+Il gioco "ONE" consente ai giocatori di partecipare a partite in modalità offline (contro dei bot) oppure in modalità multigiocatore online contro altri utenti.
+I giocatori possono scegliere se registrarsi o partecipare come utenti anonimi. Tuttavia, la modalità anonima comporta alcune limitazioni: i giocatori non registrati non possono accedere alle statistiche delle partite, né salvare le partite contro il coomputer.
+
+
+### 1.5 Glossario
 - Bot: avversario controllato da un computer (cioè un computer imita le mosse che farebbe un umano);
 - Utente registrato: utente che, dopo l'avvio del gioco, effettua una registrazione (nel caso non fosse registrato) oppure un login (nel caso fosse già registrato). Esso può controllare le statistiche delle sue partite e può accedere ai salvataggi delle partite non terminate (solo quelle lato offline);
 - Utente anonimo: utente che non si è registrato prima di iniziare a giocare. Esso potrà scegliere un nome temporaneo, valido per quella sessione di gioco;
@@ -252,7 +260,7 @@ Il sistema ha l’obiettivo di fornire una piattaforma modulare e scalabile, che
    - ### 3.8.1 Usabilità
       - RNF1: l'interfaccia grafica deve essere intuitiva, colorata e di facile comprensione per gli utenti;
       - RNF2: i pulsanti devono avere un feedback visivo al passaggio del mouse o alla pressione;
-   - ### 3.8.2 Prestazioni
+   - ### 3.8.2 Efficienza
       - RFN3: il sistema deve avviarsi entro 5 secondi dall'esecuzione;
       - RFN4: le mosse di gioco devono essere elaborate in meno di 1 secondo;
    - ### 3.8.3 Affidabilità
