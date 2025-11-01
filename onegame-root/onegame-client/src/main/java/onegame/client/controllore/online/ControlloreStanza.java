@@ -1,20 +1,19 @@
 package onegame.client.controllore.online;
 
 import javafx.application.Platform;
+import onegame.client.controllore.Controllore;
 import onegame.client.net.ClientSocket;
 import onegame.client.net.ConnectionMonitor;
 import onegame.client.vista.online.VistaStanza;
 import onegame.modello.net.StatoStanzaDTO;
 import onegame.modello.net.messaggi.MessaggiGioco.MessStatoPartita;
 
-public class ControlloreStanza implements StatoStanzaObserver, StatoPartitaObserver{
-
+public class ControlloreStanza extends Controllore implements StatoStanzaObserver, StatoPartitaObserver{
 	private VistaStanza vs;
-	private ClientSocket cs;
 	
 	public ControlloreStanza(VistaStanza vs, ClientSocket cs, ConnectionMonitor cm) {
+		super(cs,cm);
 		this.vs=vs;
-		this.cs=cs;
 		
 		cm.connectedProperty().addListener((obs, oldVal, newVal) -> {
 	        if (Boolean.FALSE.equals(newVal)) {
@@ -29,14 +28,18 @@ public class ControlloreStanza implements StatoStanzaObserver, StatoPartitaObser
 		aggiornaStanza(cs.getStatoStanza());
 	}
 	
-	public void aspettaAbbandonaStanza() {
+	private void aspettaAbbandonaStanza() {
 		vs.waitForAbbandonaBtnClick().thenRun(()->{
 			cs.esciStanza(null);
 			vs.mostraMenuOnline();
 			});
 	}
 	
-	
+	private void aspettaAvviaPartita() {
+		vs.waitForAvviaBtnClick().thenRun(()->{
+			cs.iniziaPartita(null);
+		});
+	}
 	
 	@Override
 	public void inizioPartita(MessStatoPartita mess) {
@@ -73,11 +76,4 @@ public class ControlloreStanza implements StatoStanzaObserver, StatoPartitaObser
 			}
 		});
 	}
-	
-	private void aspettaAvviaPartita() {
-		vs.waitForAvviaBtnClick().thenRun(()->{
-			cs.iniziaPartita(null);
-		});
-	}
-	
 }

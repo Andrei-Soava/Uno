@@ -13,9 +13,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import onegame.client.esecuzione.AppWithMaven;
 
-public class VistaRegistrazione {
-	private AppWithMaven app;
-	private Scene scene;
+public class VistaRegistrazione extends Vista {
 	private TextField usernameField;
 	private PasswordField passwordField;
 	private PasswordField confermaPasswordField;
@@ -24,7 +22,7 @@ public class VistaRegistrazione {
 	
 	
 	public VistaRegistrazione(AppWithMaven app) {
-		this.app=app;
+		super(app);
 		// titolo
 		Label titolo = new Label("Compila i campi");
 		titolo.getStyleClass().add("titolo");
@@ -72,10 +70,6 @@ public class VistaRegistrazione {
 		scene = new Scene(root);
 		scene.getStylesheets().add(getClass().getResource("/stile/base.css").toExternalForm());
 		Platform.runLater(() -> root.requestFocus());
-	}
-	
-	public Scene getScene() {
-		return scene;
 	}
 	
 	public void mostraAccesso() {

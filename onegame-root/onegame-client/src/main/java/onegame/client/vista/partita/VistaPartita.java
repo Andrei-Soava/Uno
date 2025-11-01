@@ -14,7 +14,6 @@ import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
@@ -41,6 +40,7 @@ import javafx.util.Duration;
 import onegame.client.controllore.utils.Wrappers.IntegerAndBooleanWrapper;
 import onegame.client.controllore.utils.Wrappers.StringWrapper;
 import onegame.client.esecuzione.AppWithMaven;
+import onegame.client.vista.Vista;
 import onegame.client.vista.accessori.GestoreCallbackBottoni;
 import onegame.client.vista.accessori.GestoreEffettiGenerici;
 import onegame.client.vista.accessori.GestoreGraficaCarta;
@@ -49,9 +49,7 @@ import onegame.modello.carte.Carta;
 import onegame.modello.carte.CartaSpeciale;
 import onegame.modello.carte.Colore;
 
-public abstract class VistaPartita {
-	protected Scene scene;
-	protected AppWithMaven app;
+public abstract class VistaPartita extends Vista {
 	protected BorderPane root;
 	protected Button abbandonaBtn;
 	protected Label turnoCorrenteLbl;
@@ -66,7 +64,7 @@ public abstract class VistaPartita {
 
     
 	protected VistaPartita(AppWithMaven app) {
-		this.app=app;
+		super(app);
 		root=new BorderPane();
     	root.setPadding(new Insets(10));
     	
@@ -219,10 +217,6 @@ public abstract class VistaPartita {
 		app.aggiornaVistaPartita(this);
 	}
 	
-	
-	public Scene getScene() {
-		return scene;
-	}
 	
 	//---------------------------------------------------------------------------------
     /**

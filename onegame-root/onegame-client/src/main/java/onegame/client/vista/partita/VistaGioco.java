@@ -22,8 +22,6 @@ import onegame.modello.Mossa;
 import onegame.modello.Mossa.TipoMossa;
 import onegame.modello.carte.Carta;
 import onegame.modello.carte.Colore;
-import onegame.modello.giocatori.Giocatore;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;

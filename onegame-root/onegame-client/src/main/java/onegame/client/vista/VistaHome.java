@@ -22,9 +22,7 @@ import onegame.client.net.Utente;
 import onegame.client.vista.accessori.GestoreCallbackBottoni;
 import onegame.modello.giocatori.Statistica;
 
-public class VistaHome {
-	private Scene scene;
-	private AppWithMaven app;
+public class VistaHome extends Vista {
 
 	private Button giocaOnlineBtn;
 	private Button giocaOfflineBtn;
@@ -36,7 +34,8 @@ public class VistaHome {
 	private Button utenteBtn;
 
 	public VistaHome(AppWithMaven app) {
-		this.app = app;
+		super(app);
+		
 		Label titolo = new Label("Scegli modalità");
 		titolo.getStyleClass().add("titolo");
 
@@ -133,10 +132,6 @@ public class VistaHome {
 
 	        root.getChildren().add(overlay);
 	    });
-	}
-
-	public Scene getScene() {
-		return scene;
 	}
 	
 	/**

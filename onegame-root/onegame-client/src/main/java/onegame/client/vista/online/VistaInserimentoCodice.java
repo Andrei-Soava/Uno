@@ -13,17 +13,16 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import onegame.client.esecuzione.AppWithMaven;
+import onegame.client.vista.Vista;
 
 
-public class VistaInserimentoCodice {
-	private Scene scene;
-	AppWithMaven app;
+public class VistaInserimentoCodice extends Vista {
 	private TextField codiceField;
 	private Label erroreLabel;
 	private Button entraBtn;
 	
 	public VistaInserimentoCodice(AppWithMaven app) {
-		this.app=app;
+		super(app);
 		BorderPane root=new BorderPane();
 		
 		Button indietroBtn = new Button("Indietro");
@@ -81,10 +80,6 @@ public class VistaInserimentoCodice {
 		scene = new Scene(root);
 		scene.getStylesheets().add(getClass().getResource("/stile/base.css").toExternalForm());
 		Platform.runLater(() -> root.requestFocus());
-	}
-
-	public Scene getScene() {
-		return scene;
 	}
 
 	public void svuotaCampoCodice() {

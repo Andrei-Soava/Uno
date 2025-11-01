@@ -10,16 +10,15 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import onegame.client.esecuzione.AppWithMaven;
+import onegame.client.vista.Vista;
 import onegame.client.controllore.offline.EventoSalvataggio;
 
-public class VistaSalvataggi {
+public class VistaSalvataggi extends Vista {
 
-	private Scene scene;
-	private AppWithMaven app;
 	private VBox lista;
 
 	public VistaSalvataggi(AppWithMaven app) {
-		this.app = app;
+		super(app);
 		BorderPane root = new BorderPane();
 
 		Button indietroBtn = new Button("Indietro");
@@ -67,10 +66,6 @@ public class VistaSalvataggi {
 
 		scene = new Scene(root);
 		scene.getStylesheets().add(getClass().getResource("/stile/base.css").toExternalForm());
-	}
-
-	public Scene getScene() {
-		return scene;
 	}
 
 	public void mostraMenuOffline() {

@@ -145,3 +145,4 @@ Esempio COMPLETO:
 - 24/10, Giuseppe, (aggiornamento requisiti), null;
 - 29/10, Andrei, (collegamento pesca carta per partita online + modifica gestione dialog di scelta nickname anonimo con relativi controlli), null;
 - 29/10, Andrei, (implementazione switch host dopo che host abbandona + refactoring generale di varie classi + eliminazione codice superfluo), null;
+- 1/11, Andrei, (refactoring struttura gerarchica controllore e vista + eliminazione classi inutili + piccoli aggiornamenti a documentazione), documentazione e diagrammi;

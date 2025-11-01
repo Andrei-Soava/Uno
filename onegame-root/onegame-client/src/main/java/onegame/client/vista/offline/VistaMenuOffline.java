@@ -20,19 +20,18 @@ import javafx.scene.layout.VBox;
 import onegame.client.esecuzione.AppWithMaven;
 import onegame.client.net.ConnectionMonitor;
 import onegame.client.net.Utente;
+import onegame.client.vista.Vista;
 import onegame.client.vista.accessori.GestoreCallbackBottoni;
 
-public class VistaMenuOffline {
+public class VistaMenuOffline extends Vista {
 
-    private Scene scene;
-    private AppWithMaven app;
     private Button caricaBtn;
     private Button logoutBtn;
     private Label statoConnessioneLabel;
     private Button utenteBtn;
 
     public VistaMenuOffline(AppWithMaven app) {
-    	this.app=app;
+    	super(app);
         BorderPane root = new BorderPane();
         
         Button homeBtn = new Button("← Home");
@@ -94,10 +93,6 @@ public class VistaMenuOffline {
         scene.getStylesheets().add(
         	    getClass().getResource("/stile/base.css").toExternalForm()
         	);
-    }
-
-    public Scene getScene() {
-        return scene;
     }
     
     public CompletableFuture<Void> waitForLogoutBtnClick() {

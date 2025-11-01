@@ -23,10 +23,8 @@ import javafx.scene.layout.VBox;
 import onegame.client.esecuzione.AppWithMaven;
 import onegame.client.net.ConnectionMonitor;
 
-public class VistaAccesso {
+public class VistaAccesso extends Vista{
 
-	private Scene scene;
-	AppWithMaven app;
 	private TextField usernameField;
 	private PasswordField passwordField;
 	private Label erroreLabel;
@@ -36,7 +34,7 @@ public class VistaAccesso {
 	private Label statoConnessioneLabel;
 
 	public VistaAccesso(AppWithMaven app, String username) {
-		this.app=app;
+		super(app);
 		// titolo
 		Label titolo = new Label("Benvenuto su ONE! Scegli un opzione");
 		titolo.getStyleClass().add("titolo");
@@ -96,9 +94,6 @@ public class VistaAccesso {
 		Platform.runLater(() -> root.requestFocus());
 	}
 
-	public Scene getScene() {
-		return scene;
-	}
 
 	public void mostraHome() {
 		app.mostraVistaHome();

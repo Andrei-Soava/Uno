@@ -1,17 +1,17 @@
 package onegame.client.controllore.offline;
 
 import javafx.application.Platform;
+import onegame.client.controllore.Controllore;
 import onegame.client.net.ClientSocket;
 import onegame.client.net.ConnectionMonitor;
 import onegame.client.vista.offline.VistaSalvataggi;
 
-public class ControlloreSalvataggi {
+public class ControlloreSalvataggi extends Controllore{
 	private VistaSalvataggi vs;
-	private ClientSocket cs;
 	
 	public ControlloreSalvataggi(VistaSalvataggi vs, ClientSocket cs, ConnectionMonitor cm) {
+		super(cs,cm);
 		this.vs=vs;
-		this.cs=cs;
 		
 		cm.connectedProperty().addListener((obs, oldVal, newVal) -> {
 	        if (Boolean.FALSE.equals(newVal)) {
@@ -23,7 +23,7 @@ public class ControlloreSalvataggi {
 		eseguiSceltaWithDb();
 	}
 	
-	public void eseguiSceltaWithDb() {
+	private void eseguiSceltaWithDb() {
 		cs.listaPartite(respListaPartite -> {
 			if(respListaPartite.success) {
 				vs.scegliAzioneSalvataggiAsync(respListaPartite.nomiSalvataggi, event->{

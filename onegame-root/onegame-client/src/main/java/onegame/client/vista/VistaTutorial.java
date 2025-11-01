@@ -23,10 +23,8 @@ import onegame.modello.carte.CartaSpeciale;
 import onegame.modello.carte.CartaSpeciale.TipoSpeciale;
 import onegame.modello.carte.Colore;
 
-public class VistaTutorial {
+public class VistaTutorial extends Vista{
 
-	private Scene scene;
-	private AppWithMaven app;
 	private int slideIndex = 0;
     private final List<Node> slideViews = new ArrayList<>();
     private final StackPane slideContainer = new StackPane();
@@ -34,7 +32,7 @@ public class VistaTutorial {
     private final Button avantiBtn = new Button("Avanti ▶");
 	
     public VistaTutorial(AppWithMaven app) {
-    	this.app=app;
+    	super(app);
         BorderPane root = new BorderPane();
 
     	BorderPane topBar = new BorderPane();
@@ -92,10 +90,6 @@ public class VistaTutorial {
         scene.getStylesheets().add(
         	    getClass().getResource("/stile/base.css").toExternalForm()
         	);
-    }
-
-    public Scene getScene() {
-        return scene;
     }
     
     //SEZIONE SLIDE SINGOLE

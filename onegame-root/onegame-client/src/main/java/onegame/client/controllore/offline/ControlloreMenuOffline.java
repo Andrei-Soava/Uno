@@ -1,18 +1,17 @@
 package onegame.client.controllore.offline;
 
 
+import onegame.client.controllore.Controllore;
 import onegame.client.net.ClientSocket;
 import onegame.client.net.ConnectionMonitor;
 import onegame.client.vista.offline.VistaMenuOffline;
 
-public class ControlloreMenuOffline {
-
+public class ControlloreMenuOffline extends Controllore {
 	private VistaMenuOffline vmo;
-	private ClientSocket cs;
 
 	public ControlloreMenuOffline(VistaMenuOffline vmo, ClientSocket cs, ConnectionMonitor cm) {
+		super(cs,cm);
 		this.vmo = vmo;
-		this.cs = cs;
 
 		// sezione di verifica connessione
 		vmo.aggiungiListener(cm, cs.getUtente());
@@ -22,7 +21,7 @@ public class ControlloreMenuOffline {
 	
 	
 
-	public void aspettaLogout() {
+	private void aspettaLogout() {
 		vmo.waitForLogoutBtnClick().thenRun(() -> {
 			cs.setUtente(null);
 			vmo.mostraAccesso();

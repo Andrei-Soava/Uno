@@ -12,6 +12,7 @@ import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.util.Duration;
+import onegame.client.controllore.Controllore;
 import onegame.client.controllore.utils.MappaUtils;
 import onegame.client.net.ClientSocket;
 import onegame.client.vista.partita.VistaGioco;
@@ -40,12 +41,11 @@ import onegame.modello.net.GiocatoreDTO;
  * -eseguiTurno--> loop di gioco
  * 
  */
-public class ControlloreGioco {
+public class ControlloreGioco extends Controllore {
 	private VistaGioco vg;
-	
+
 	private Partita partita;
 	private ControllorePersistenza cp;
-	private ClientSocket cs;
 	private boolean partitaAttiva = false;
 	private PauseTransition timerTurno;
 	private PauseTransition timerPreMossaBot;
@@ -58,8 +58,8 @@ public class ControlloreGioco {
 
 
 	private ControlloreGioco(VistaGioco vg, ClientSocket cs, ControllorePersistenza cp) {
+		super(cs, null);
 		this.vg = vg;
-		this.cs = cs;
 		this.cp = cp;
 		creaTimers();
 		aspettaAbbandona();
@@ -145,7 +145,7 @@ public class ControlloreGioco {
 	 * funzione asincrona che capta quando viene premuto bottone di abbandono
 	 * DOPO che è stato premuto il logout btn (se viene premuto)
 	 */
-	public void aspettaAbbandona() {
+	private void aspettaAbbandona() {
 		vg.waitForAbbandonaBtnClick().thenRun(()->{
 			sospendiTimers();
 			CompletableFuture<Boolean> scelta = vg.stampaAbbandonaAlert();

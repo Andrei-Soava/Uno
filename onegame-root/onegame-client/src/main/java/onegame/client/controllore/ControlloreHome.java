@@ -4,16 +4,14 @@ import onegame.client.net.ClientSocket;
 import onegame.client.net.ConnectionMonitor;
 import onegame.client.vista.VistaHome;
 
-public class ControlloreHome {
-	private ClientSocket cs;
+public class ControlloreHome extends Controllore {
 	private VistaHome vh;
 	
 	public ControlloreHome(VistaHome vh, ClientSocket cs, ConnectionMonitor cm) {
+		super(cs,cm);
 		this.vh=vh;
-		this.cs=cs;
 		
 		vh.aggiungiListener(cm, cs.getUtente());
-		System.out.println(cs.getUtente().getUsername() + " è " + cs.getUtente().isAnonimo()+" identificatore:"+cs.getIdentificatore());
 		
 		aspettaLogout();
 		aspettaStatistiche();
@@ -31,14 +29,14 @@ public class ControlloreHome {
 	 * funzione asincrona che slogga utente e mostra vista accesso
 	 * DOPO che è stato premuto il logout btn (se viene premuto)
 	 */
-	public void aspettaLogout() {
+	private void aspettaLogout() {
 		vh.waitForLogoutBtnClick().thenRun(()->{
 			cs.setUtente(null);
 			vh.mostraAccesso();
 		});
 	}
 	
-	public void aspettaStatistiche() {
+	private void aspettaStatistiche() {
 		if(!cs.getUtente().isAnonimo()) {
 			vh.waitForStatisticheBtnClick().thenRun(()->{
 //				vh.compilaStatistiche(cs.getUtente().getUsername(), cs.getUtente().getStatistica());

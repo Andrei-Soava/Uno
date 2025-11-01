@@ -23,10 +23,8 @@ import javafx.scene.layout.VBox;
 import onegame.client.esecuzione.AppWithMaven;
 import onegame.client.vista.accessori.GestoreCallbackBottoni;
 
-public class VistaImpostazioni {
+public class VistaImpostazioni extends Vista{
 
-    private Scene scene;
-    private AppWithMaven app;
     private Label titolo;
     private Button modificaNomeBtn;
     private Button modificaPasswordBtn;
@@ -34,7 +32,7 @@ public class VistaImpostazioni {
     private Button logoutBtn;
 
     public VistaImpostazioni(AppWithMaven app) {
-    	this.app=app;
+    	super(app);
         BorderPane root = new BorderPane();
         
         Button homeBtn = new Button("← Home");
@@ -85,10 +83,6 @@ public class VistaImpostazioni {
         scene.getStylesheets().add(
         	    getClass().getResource("/stile/base.css").toExternalForm()
         	);
-    }
-
-    public Scene getScene() {
-        return scene;
     }
     
     public void mostraAccesso() {

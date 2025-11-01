@@ -12,19 +12,18 @@ import javafx.scene.control.*;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.layout.*;
 import onegame.client.esecuzione.AppWithMaven;
+import onegame.client.vista.Vista;
 import onegame.client.vista.VistaAccesso.DatiAccessoCallback;
 import onegame.client.vista.VistaImpostazioni.ContestoModificaNome;
 import onegame.client.vista.accessori.GestoreCallbackBottoni;
 
-public class VistaConfigurazioneOffline {
+public class VistaConfigurazioneOffline extends Vista {
 
-    private Scene scene;
-    private AppWithMaven app;
     private ComboBox<Integer> numGiocatori;
     private Button avviaBtn;
 
     public VistaConfigurazioneOffline(AppWithMaven app) {
-    	this.app=app;
+    	super(app);
     	BorderPane root = new BorderPane();
 
     	Button indietroBtn = new Button("Indietro");
@@ -71,10 +70,6 @@ public class VistaConfigurazioneOffline {
         scene.getStylesheets().add(
         	    getClass().getResource("/stile/base.css").toExternalForm()
         	);
-    }
-
-    public Scene getScene() {
-        return scene;
     }
     
     public CompletableFuture<Void> waitForAvviaBtnClick(){

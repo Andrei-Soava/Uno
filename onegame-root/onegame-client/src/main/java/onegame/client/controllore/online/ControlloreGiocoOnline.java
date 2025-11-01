@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+import onegame.client.controllore.Controllore;
 import onegame.client.controllore.utils.MappaUtils;
 import onegame.client.net.ClientSocket;
 import onegame.client.net.ConnectionMonitor;
@@ -19,12 +20,11 @@ import onegame.modello.net.MossaDTO.TipoMossa;
 import onegame.modello.net.StatoPartitaDTO;
 import onegame.modello.net.messaggi.MessaggiGioco.MessStatoPartita;
 
-public class ControlloreGiocoOnline implements StatoPartitaObserver {
-	private ClientSocket cs;
+public class ControlloreGiocoOnline extends Controllore implements StatoPartitaObserver {
 	private VistaGioco vg;
 	
-	public ControlloreGiocoOnline(ClientSocket cs, ConnectionMonitor cm, VistaGioco vg) {
-		this.cs=cs;
+	public ControlloreGiocoOnline(VistaGioco vg, ClientSocket cs, ConnectionMonitor cm) {
+		super(cs,cm);
 		this.vg=vg;
 		
 		cm.connectedProperty().addListener((obs, oldVal, newVal) -> {

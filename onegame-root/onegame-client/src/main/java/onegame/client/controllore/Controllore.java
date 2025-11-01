@@ -8,8 +8,9 @@ public abstract class Controllore {
 	protected ConnectionMonitor cm;
 	
 
-	public Controllore() {
-		// TODO Auto-generated constructor stub
+	protected Controllore(ClientSocket cs, ConnectionMonitor cm) {
+		this.cs = cs;
+		this.cm = cm;
 	}
 
 }

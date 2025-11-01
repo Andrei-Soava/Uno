@@ -1,6 +1,5 @@
 package onegame.client.vista.online;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -15,12 +14,11 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import onegame.client.esecuzione.AppWithMaven;
+import onegame.client.vista.Vista;
 import onegame.client.vista.accessori.GestoreCallbackBottoni;
 
-public class VistaStanza {
+public class VistaStanza extends Vista{
 
-    private final AppWithMaven app;
-    private final Scene scene;
     private Label numeroGiocatori;
     private Label codiceLbl;
     private final GridPane grigliaGiocatori;
@@ -28,7 +26,7 @@ public class VistaStanza {
     private final Button avviaBtn;
 
     public VistaStanza(AppWithMaven app, String codice) {
-        this.app = app;
+        super(app);
         BorderPane root = new BorderPane();
 
         BorderPane topBar = new BorderPane();
@@ -84,10 +82,6 @@ public class VistaStanza {
         
     }
 
-    public Scene getScene() {
-        return scene;
-    }
-    
     public void mostraMenuOnline() {
     	app.mostraVistaMenuOnline();
     }

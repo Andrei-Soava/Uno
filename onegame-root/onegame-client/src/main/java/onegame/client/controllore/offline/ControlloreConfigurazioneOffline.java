@@ -3,16 +3,16 @@ package onegame.client.controllore.offline;
 import java.util.UUID;
 
 import javafx.application.Platform;
+import onegame.client.controllore.Controllore;
 import onegame.client.net.ClientSocket;
 import onegame.client.vista.offline.VistaConfigurazioneOffline;
 
-public class ControlloreConfigurazioneOffline {
+public class ControlloreConfigurazioneOffline extends Controllore {
 	private VistaConfigurazioneOffline vcoff;
-	private ClientSocket cs;
 	
 	public ControlloreConfigurazioneOffline(VistaConfigurazioneOffline vcoff, ClientSocket cs) {
+		super(cs, null);
 		this.vcoff=vcoff;
-		this.cs=cs;
 		
 		aspettaCreazionePartita();
 	}
@@ -20,7 +20,7 @@ public class ControlloreConfigurazioneOffline {
 	/**
 	 * metodo per gestione creazione partita nel caso di utente anonimo e registrato
 	 */
-	public void aspettaCreazionePartita() {
+	private void aspettaCreazionePartita() {
 		vcoff.configuraPartita(numeroGiocatori->{
 			//entro dentro il menu speciale SOLO se sono connesso E sono registrato
 			if(cs.getUtente()!=null && (!cs.getUtente().isAnonimo())){

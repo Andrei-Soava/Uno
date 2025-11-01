@@ -4,7 +4,7 @@
 - Verificare la correttezza della logica di gioco (regole, turni, effetti carte)
 - Assicurare la stabilità e l’assenza di errori runtime
 - Validare l’integrazione progressiva di GUI, rete e persistenza
-- Garantire la coerenza con i requisiti funzionali RF1–RF25
+- Garantire la coerenza con i requisiti funzionali del documento 1 REQUISITI
 
 ---
 
@@ -18,7 +18,7 @@ Per ogni fase di sviluppo verranno elencati:
 ---
 
 ## **Metodologie**
-- I test verranno eseguiti in parte manualmente (GUI, UX) e in parte automatizzati (JUnit 4 per Model e DAO).
+- I test verranno eseguiti in parte manualmente (GUI, UX) e in parte automatizzati (JUnit 4 per Model).
 - I test automatizzati verranno messi nella cartella "tests" del progetto Maven.
 - La colonna “Risultati” di ogni tabella verrà compilata man mano che si sa va avanti con l'implementazione delle fasi.
 
@@ -89,19 +89,19 @@ Per ogni fase di sviluppo verranno elencati:
 **Tabella riassuntiva**
 | ID Test | Fase di sviluppo | Descrizione test | Input / Azione | Output atteso | Risultato |
 |---------|------------------|------------------|----------------|---------------|-----------|
-| T3.1    | Fase 3 – Persistenza locale | Salvataggio partita | Stato partita in corso | File/JSON creato con dati corretti | Testato manualmente; positivo e TBP |
-| T3.2    | Fase 3 – Persistenza locale | Caricamento partita | File/JSON valido | Stato partita ripristinato | Testato manualmente; positivo e TBP |
+| T3.1    | Fase 3 – Persistenza locale | Salvataggio partita | Stato partita in corso | File/JSON creato con dati corretti | Testato manualmente; positivo (ad ora NON esiste più persistenza locale nel branch default --> utilizzare eventualmente branch `ONEversioneJavaFX`) |
+| T3.2    | Fase 3 – Persistenza locale | Caricamento partita | File/JSON valido | Stato partita ripristinato | Testato manualmente; positivo (ad ora NON esiste più persistenza locale nel branch default --> utilizzare eventualmente branch `ONEversioneJavaFX`) |
 | T3.3    | Fase 3 – Persistenza locale | Caricamento file corrotto | File non valido | Messaggio di errore | TBE |
 ---
 
-### **Fase 4 – GUI Swing (offline)**
+### **Fase 4 – GUI JavaFX (offline)**
 **Ambito**: classi `view` e collegamento con Controller.
 
 **Casi di test**
 1. Navigazione tra schermate (Login → Home → Game)
 2. Aggiornamento grafico mano giocatore dopo pesca/giocata
 3. Visualizzazione notifiche di turno
-4. Dialog “ONE!” e selezione colore funzionanti
+4. Bottone “ONE!” e selezione colore funzionanti
 
 **Criteri di superamento**
 - Eventi GUI correttamente instradati al Controller
@@ -110,10 +110,10 @@ Per ogni fase di sviluppo verranno elencati:
 **Tabella riassuntiva**
 | ID Test | Fase di sviluppo | Descrizione test | Input / Azione | Output atteso | Risultato |
 |---------|------------------|------------------|----------------|---------------|-----------|
-| T4.1    | Fase 4 – GUI Swing | Navigazione schermate | Click pulsanti menu | Apertura schermata corretta | Testato manualmente; positivo |
-| T4.2    | Fase 4 – GUI Swing | Aggiornamento mano grafica | Pesca o gioca carta | GUI aggiornata con nuove carte | Testato manualmente; positivo |
-| T4.3    | Fase 4 – GUI Swing | Notifica turno | Cambio turno | Messaggio “È il tuo turno” aggiornato | Testato manualmente; positivo |
-| T4.4    | Fase 4 – GUI Swing | Dialog ONE! | Penultima carta | Dialog mostrato, penalità se non premuto | Testato manualmente; positivo |
+| T4.1    | Fase 4 – GUI JavaFX | Navigazione schermate | Click pulsanti menu | Apertura schermata corretta | Testato manualmente; positivo |
+| T4.2    | Fase 4 – GUI JavaFX | Aggiornamento mano grafica | Pesca o gioca carta | GUI aggiornata con nuove carte | Testato manualmente; positivo |
+| T4.3    | Fase 4 – GUI JavaFX | Notifica turno | Cambio turno | Messaggio “È il tuo turno” aggiornato | Testato manualmente; positivo |
+| T4.4    | Fase 4 – GUI JavaFX | Dialog ONE! | Penultima carta | Dialog mostrato, penalità se non premuto | Testato manualmente; positivo |
 ---
 
 ### **Fase 5 – Server e multiplayer**

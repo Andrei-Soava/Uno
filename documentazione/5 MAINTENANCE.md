@@ -41,6 +41,7 @@ In questo progetto, questo tipo di manutenzione verrà utilizzato per:
 3. Ottimizzazione delle query SQL per migliorare le prestazioni del database;
 4. Revisione e aggiornamento periodico dei test automatizzati;
 ### Log messaggi:
+- 1/11, Andrei, (miglioramento struttura gerarchica dei pacchetti controllore e vista--> eliminazione duplicazione di codice + migliore coesione);
 
 ## Manutenzione perfettiva
 Questo tipo di manutenzione si occupa principalmente di soddisfare i requisiti degli utenti nuovi o modificati. Si tratta di miglioramenti funzionali al sistema. La manutenzione perfettiva include anche attività volte ad aumentare le prestazioni del sistema o a migliorarne l'interfaccia utente.

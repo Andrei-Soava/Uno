@@ -6,17 +6,16 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import onegame.client.esecuzione.AppWithMaven;
+import onegame.client.vista.Vista;
 
-public class VistaConfigurazioneOnline {
+public class VistaConfigurazioneOnline extends Vista {
 
-    private Scene scene;
-    private AppWithMaven app;
     private ComboBox<Integer> numGiocatori;
     private TextField nomeStanza;
     private Button creaBtn;
     
     public VistaConfigurazioneOnline(AppWithMaven app) {
-    	this.app=app;
+    	super(app);
     	
     	BorderPane root = new BorderPane();
 
@@ -70,10 +69,6 @@ public class VistaConfigurazioneOnline {
         	    getClass().getResource("/stile/base.css").toExternalForm()
         	);
     }
-
-    public Scene getScene() {
-        return scene;
-    }
     
     @FunctionalInterface
     public interface ConfiguraPartitaCallback {
@@ -82,7 +77,6 @@ public class VistaConfigurazioneOnline {
     
     public void configuraPartita(ConfiguraPartitaCallback callback) {
     	creaBtn.setOnAction(e->{
-    		// Recupero valori
     		String nomePartita = nomeStanza.getText();
     		if (nomePartita == null || nomePartita.isBlank()) {
     			nomePartita = "Partita senza nome"; // default
@@ -90,7 +84,6 @@ public class VistaConfigurazioneOnline {
     		
     		int giocatori = numGiocatori.getValue();
     		
-    		// Invoco la callback
     		callback.onConfigura(nomePartita, giocatori);
     	});
     }

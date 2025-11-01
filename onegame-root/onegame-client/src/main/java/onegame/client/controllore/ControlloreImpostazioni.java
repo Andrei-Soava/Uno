@@ -5,14 +5,12 @@ import onegame.client.net.ClientSocket;
 import onegame.client.net.ConnectionMonitor;
 import onegame.client.vista.VistaImpostazioni;
 
-public class ControlloreImpostazioni {
-
+public class ControlloreImpostazioni extends Controllore{
 	private VistaImpostazioni vi;
-	private ClientSocket cs;
 	
 	public ControlloreImpostazioni(VistaImpostazioni vi, ClientSocket cs, ConnectionMonitor cm) {
+		super(cs,cm);
 		this.vi=vi;
-		this.cs=cs;
 		
 		cm.connectedProperty().addListener((obs, oldVal, newVal) -> {
 	        if (Boolean.FALSE.equals(newVal)) {
@@ -25,7 +23,7 @@ public class ControlloreImpostazioni {
 		aspettaSelezione();
 	}
 
-	public void aspettaSelezione() {
+	private void aspettaSelezione() {
 		vi.compilaNomeTitolo(cs.getUtente().getUsername());
 		vi.waitForModificaNomeClick().thenRun(()->{gestisciModificaNome();});
 		vi.waitForModificaPasswordClick().thenRun(()->{gestisciModificaPassword();});
@@ -109,7 +107,7 @@ public class ControlloreImpostazioni {
 		});
 	}
 	
-	public void aspettaLogout() {
+	private void aspettaLogout() {
 		vi.waitForLogoutBtnClick().thenRun(()->{
 			cs.setUtente(null);
 			vi.mostraAccesso();

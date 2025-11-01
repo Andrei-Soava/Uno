@@ -1,7 +1,5 @@
 package onegame.client.esecuzione;
 
-import org.apache.logging.log4j.*;
-
 import javafx.application.Application;
 import javafx.stage.Stage;
 import onegame.client.controllore.*;
@@ -18,7 +16,6 @@ import onegame.client.vista.partita.*;
  *
  */
 public class AppWithMaven extends Application {
-	public static Logger logger = LogManager.getLogger();
 
 	public static void main(String[] args) {
 		launch(args);
@@ -27,6 +24,8 @@ public class AppWithMaven extends Application {
 	private Stage primaryStage;
 	private ClientSocket cs;
 	private ConnectionMonitor cm;
+	@SuppressWarnings("unused")
+	private Controllore controlloreCorrente;
 
 	/**
 	 * metodo chiamato per aprire interfaccia grafica
@@ -72,8 +71,9 @@ public class AppWithMaven extends Application {
 		}
 	}
 
-
+	//---------------------
 	//SEZIONE GETTER GLOBALI
+	//---------------------
 	public Stage getPrimaryStage() {
 		return this.primaryStage;
 	}
@@ -82,10 +82,12 @@ public class AppWithMaven extends Application {
 		return this.cs;
 	}
 
+	//---------------------
 	//SEZIONE VISTE PRINCIPALI
+	//---------------------
 	public void mostraVistaAccesso(String username) {
 		VistaAccesso vista = new VistaAccesso(this, username);
-		ControlloreAccesso ca = new ControlloreAccesso(vista, cs,cm);
+		controlloreCorrente = new ControlloreAccesso(vista, cs,cm);
 		primaryStage.setScene(vista.getScene());
 	}
 
@@ -95,13 +97,13 @@ public class AppWithMaven extends Application {
 
 	public void mostraVistaRegistrazione() {
 		VistaRegistrazione vista = new VistaRegistrazione(this);
-		ControlloreRegistrazione cr = new ControlloreRegistrazione(vista, cs, cm);
+		controlloreCorrente = new ControlloreRegistrazione(vista, cs, cm);
 		primaryStage.setScene(vista.getScene());
 	}
 
 	public void mostraVistaHome() {
 		VistaHome vista = new VistaHome(this);
-		ControlloreHome ch = new ControlloreHome(vista, cs, cm);
+		controlloreCorrente = new ControlloreHome(vista, cs, cm);
 		primaryStage.setScene(vista.getScene());
 	}
 	
@@ -112,73 +114,77 @@ public class AppWithMaven extends Application {
 	
 	public void mostraVistaImpostazioni() {
 		VistaImpostazioni vista = new VistaImpostazioni(this);
-		ControlloreImpostazioni ci = new ControlloreImpostazioni(vista,cs,cm);
+		controlloreCorrente = new ControlloreImpostazioni(vista,cs,cm);
 		primaryStage.setScene(vista.getScene());
 	}
 
+	//---------------------
 	//SEZIONE VISTE GIOCO ONLINE
+	//---------------------
 	public void mostraVistaMenuOnline() {
 		VistaMenuOnline vista = new VistaMenuOnline(this);
-		ControlloreMenuOnline cmo=new ControlloreMenuOnline(vista, cs, cm);
+		controlloreCorrente=new ControlloreMenuOnline(vista, cs, cm);
 		primaryStage.setScene(vista.getScene());
 	}
 
 	public void mostraVistaConfigurazioneOnline() {
 		VistaConfigurazioneOnline vista = new VistaConfigurazioneOnline(this);
-		ControlloreConfigurazioneOnline cco= new ControlloreConfigurazioneOnline(vista, cs, cm);
+		controlloreCorrente= new ControlloreConfigurazioneOnline(vista, cs, cm);
 		primaryStage.setScene(vista.getScene());
 	}
 
 	public void mostraVistaInserimentoCodice() {
 		VistaInserimentoCodice vista = new VistaInserimentoCodice(this);
-		ControlloreCodicePartita cc = new ControlloreCodicePartita(vista, cs, cm);
+		controlloreCorrente = new ControlloreCodicePartita(vista, cs, cm);
 		primaryStage.setScene(vista.getScene());
 	}
 	
 	public void mostraVistaStanza(String codice) {
 		VistaStanza vista=new VistaStanza(this, codice);
 		primaryStage.setScene(vista.getScene());
-		ControlloreStanza cv = new ControlloreStanza(vista, cs, cm);
+		controlloreCorrente = new ControlloreStanza(vista, cs, cm);
 	}
 	
 	public void mostraVistaGiocoOnline() {
 		VistaGioco vista = new VistaGioco(this);
-		ControlloreGiocoOnline cgo=new ControlloreGiocoOnline(cs,cm,vista);
+		controlloreCorrente=new ControlloreGiocoOnline(vista,cs,cm);
 		primaryStage.setScene(vista.getScene());
 	}
 
+	//---------------------
 	//SEZIONE VISTE GIOCO OFFLINE
+	//---------------------
 	public void mostraVistaMenuOffline() {
 		VistaMenuOffline vista = new VistaMenuOffline(this);
-		ControlloreMenuOffline cmo=new ControlloreMenuOffline(vista, cs, cm);
+		controlloreCorrente=new ControlloreMenuOffline(vista, cs, cm);
 		primaryStage.setScene(vista.getScene());
 	}
 
 	public void mostraVistaSalvataggi() {
 		VistaSalvataggi vista = new VistaSalvataggi(this);
-		ControlloreSalvataggi cslv=new ControlloreSalvataggi(vista, cs, cm);
+		controlloreCorrente=new ControlloreSalvataggi(vista, cs, cm);
 		primaryStage.setScene(vista.getScene());
 	}
 
 	public void mostraVistaConfigurazioneOffline() {
 		VistaConfigurazioneOffline vista = new VistaConfigurazioneOffline(this);
-		ControlloreConfigurazioneOffline ccoff=new ControlloreConfigurazioneOffline(vista, cs);
+		controlloreCorrente=new ControlloreConfigurazioneOffline(vista, cs);
 		primaryStage.setScene(vista.getScene());
 	}
 	
 	public void mostraVistaPartitaCaricata(String nomeSalvataggio, String partitaSerializzata) {
 		VistaGioco vista = new VistaGioco(this);
-		ControllorePersistenza cp = new ControllorePersistenza(cs,cm);
-		ControlloreGioco controllore = new ControlloreGioco(vista, cs, cp, nomeSalvataggio, partitaSerializzata);
+		controlloreCorrente = new ControlloreGioco(vista, cs, new ControllorePersistenza(cs,cm), nomeSalvataggio, partitaSerializzata);
 	}
 
 	public void mostraVistaPartitaNuova(int numGiocatori, String salvataggio) {
 		VistaGioco vista = new VistaGioco(this);
-		ControllorePersistenza cp = new ControllorePersistenza(cs,cm);
-		ControlloreGioco controllore = new ControlloreGioco(vista, cs, cp, numGiocatori, salvataggio);
+		controlloreCorrente = new ControlloreGioco(vista, cs, new ControllorePersistenza(cs,cm), numGiocatori, salvataggio);
 	}
 	
-	//SEZIONE SET SCENA PARTITA (vale per vistaGioco e vistaSpettatore)
+	//---------------------
+	//SEZIONE SET SCENA PARTITA (vale per VistaGioco e VistaSpettatore)
+	//---------------------
 	public void aggiornaVistaPartita(VistaPartita vp) {
 		primaryStage.setScene(vp.getScene());
 	}

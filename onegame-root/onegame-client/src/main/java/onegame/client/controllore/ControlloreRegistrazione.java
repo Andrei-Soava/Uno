@@ -6,13 +6,12 @@ import onegame.client.net.ConnectionMonitor;
 import onegame.client.net.Utente;
 import onegame.client.vista.VistaRegistrazione;
 
-public class ControlloreRegistrazione {
+public class ControlloreRegistrazione extends Controllore{
 	private VistaRegistrazione vr;
-	private ClientSocket cs;
 	
 	public ControlloreRegistrazione(VistaRegistrazione vr, ClientSocket cs, ConnectionMonitor cm) {
+		super(cs,cm);
 		this.vr=vr;
-		this.cs=cs;
 		
 		cm.connectedProperty().addListener((obs, oldVal, newVal) -> {
 	        if (Boolean.FALSE.equals(newVal)) {
@@ -24,7 +23,7 @@ public class ControlloreRegistrazione {
 		eseguiRegistrazione();
 	}
 	
-	public void eseguiRegistrazione() {
+	private void eseguiRegistrazione() {
 		vr.ottieniDati((username,password,confermaPassword)->{
 			System.out.println(username);
 			System.out.println(password);

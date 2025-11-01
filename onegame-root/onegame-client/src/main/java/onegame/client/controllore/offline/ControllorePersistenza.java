@@ -1,5 +1,6 @@
 package onegame.client.controllore.offline;
 
+import onegame.client.controllore.Controllore;
 import onegame.client.net.ClientSocket;
 import onegame.client.net.ConnectionMonitor;
 import onegame.modello.Partita;
@@ -8,15 +9,11 @@ import onegame.modello.net.util.JsonHelper;
 /**
  * classe DEFINITIVA per la gestione del salvataggio delle partite durante il gioco
  */
-public class ControllorePersistenza {
-	private ClientSocket cs;
-	private ConnectionMonitor cm;
-	
+public class ControllorePersistenza extends Controllore{
 	String salvataggioCorrente;
 	
 	public ControllorePersistenza(ClientSocket cs, ConnectionMonitor cm) {
-		this.cs=cs;
-		this.cm=cm;
+		super(cs,cm);
 	}
 	
 	/**

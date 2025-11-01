@@ -1,17 +1,17 @@
 package onegame.client.controllore.online;
 
 import javafx.application.Platform;
+import onegame.client.controllore.Controllore;
 import onegame.client.net.ClientSocket;
 import onegame.client.net.ConnectionMonitor;
 import onegame.client.vista.online.VistaConfigurazioneOnline;
 
-public class ControlloreConfigurazioneOnline {
+public class ControlloreConfigurazioneOnline extends Controllore {
 	private VistaConfigurazioneOnline vco;
-	private ClientSocket cs;
 	
 	public ControlloreConfigurazioneOnline(VistaConfigurazioneOnline vco, ClientSocket cs, ConnectionMonitor cm) {
+		super(cs,cm);
 		this.vco=vco;
-		this.cs=cs;
 		
 		cm.connectedProperty().addListener((obs, oldVal, newVal) -> {
 	        if (Boolean.FALSE.equals(newVal)) {
@@ -23,7 +23,7 @@ public class ControlloreConfigurazioneOnline {
 		aspettaCreazioneStanza();
 	}
 	
-	public void aspettaCreazioneStanza() {
+	private void aspettaCreazioneStanza() {
 		vco.configuraPartita((nomeStanza,numeroGiocatori)-> {
 			cs.creaStanza(nomeStanza, numeroGiocatori, respCreaStanza -> {
 				Platform.runLater(()->{

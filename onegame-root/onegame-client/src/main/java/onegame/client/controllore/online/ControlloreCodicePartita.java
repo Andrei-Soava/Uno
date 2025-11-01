@@ -1,17 +1,17 @@
 package onegame.client.controllore.online;
 
 import javafx.application.Platform;
+import onegame.client.controllore.Controllore;
 import onegame.client.net.ClientSocket;
 import onegame.client.net.ConnectionMonitor;
 import onegame.client.vista.online.VistaInserimentoCodice;
 
-public class ControlloreCodicePartita {
+public class ControlloreCodicePartita extends Controllore {
 	private VistaInserimentoCodice vic;
-	private ClientSocket cs;
 	
 	public ControlloreCodicePartita(VistaInserimentoCodice vic, ClientSocket cs, ConnectionMonitor cm) {
+		super(cs,cm);
 		this.vic=vic;
-		this.cs=cs;
 		
 		cm.connectedProperty().addListener((obs, oldVal, newVal) -> {
 	        if (Boolean.FALSE.equals(newVal)) {
@@ -23,7 +23,7 @@ public class ControlloreCodicePartita {
 		eseguiAccesso();
 	}
 	
-	public void eseguiAccesso() {
+	private void eseguiAccesso() {
 		vic.ottieniCodice((codice)->{
 			System.out.println(codice);
 			if(codice.length()==0) {

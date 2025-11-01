@@ -7,22 +7,18 @@ import onegame.client.net.ConnectionMonitor;
 import onegame.client.net.Utente;
 import onegame.client.vista.VistaAccesso;
 
-public class ControlloreAccesso {
+public class ControlloreAccesso extends Controllore {
 	private VistaAccesso va;
-	private ClientSocket cs;
 
 	public ControlloreAccesso(VistaAccesso va, ClientSocket cs, ConnectionMonitor cm) {
+		super(cs, cm);
 		this.va = va;
-		this.cs = cs;
-		
 		va.aggiungiListener(cm);
 		eseguiAccesso();
 	}
 
-	public void eseguiAccesso() {
+	private void eseguiAccesso() {
 		va.ottieniDati((username, password) -> {
-			System.out.println(username);
-			System.out.println(password);
 			if (!cs.isConnected()) {
 				va.mostraHome();
 				return;
@@ -37,8 +33,6 @@ public class ControlloreAccesso {
 				return;
 			}
 
-			// condizionale (sarà dentro una send asincrona al server e se la response ==
-			// true, si va alla vista successiva)
 			cs.login(username, password, respAuth -> {
 
 				Platform.runLater(() -> {
