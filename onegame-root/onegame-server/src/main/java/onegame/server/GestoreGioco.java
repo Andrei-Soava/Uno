@@ -10,6 +10,7 @@ import onegame.modello.net.messaggi.MessaggiGioco.ReqEffettuaMossa;
 import onegame.modello.net.messaggi.MessaggiGioco.RespEffettuaMossa;
 import onegame.modello.net.messaggi.MessaggiGioco.RespIniziaPartita;
 import onegame.modello.net.util.JsonHelper;
+import onegame.server.eccezioni.EccezionePartita;
 
 public class GestoreGioco {
 	private final GestoreStanzePartita gestoreStanze;
@@ -52,15 +53,12 @@ public class GestoreGioco {
 				return;
 			}
 
-			boolean avviata = stanza.avviaPartita();
-			if (avviata) {
-				logger.info("Partita avviata nella stanza {} da utente {}", stanza.getNome(), sessione.getUsername());
-				ack.sendAckData(new RespIniziaPartita(true, "Partita avviata con successo"));
-			} else {
-				logger.warn("Impossibile avviare la partita nella stanza {} da utente {}", stanza.getNome(),
-						sessione.getUsername());
-				ack.sendAckData(new RespIniziaPartita(false, "Impossibile avviare la partita"));
-			}
+			stanza.avviaPartita();
+			logger.info("Partita avviata nella stanza {} da utente {}", stanza.getNome(), sessione.getUsername());
+			ack.sendAckData(new RespIniziaPartita(true, "Partita avviata con successo"));
+		} catch (EccezionePartita e) {
+			logger.warn("Errore di stanza: {}", e.getMessage());
+			ack.sendAckData(new RespIniziaPartita(false, e.getMessage()));
 		} catch (Exception e) {
 			logger.error("Errore durante l'elaborazione della richiesta di inizio partita", e);
 			ack.sendAckData(new RespIniziaPartita(false, "Errore interno del server"));
@@ -88,6 +86,9 @@ public class GestoreGioco {
 			stanza.riceviMossa(sessione, mossa);
 			ack.sendAckData(new RespEffettuaMossa(true, "Mossa effettuata con successo"));
 			logger.info("Mossa ricevuta da utente {}: {}", sessione.getUsername(), mossa);
+		} catch (EccezionePartita e) {
+			logger.warn("Errore di gioco: {}", e.getMessage());
+			ack.sendAckData(new RespEffettuaMossa(false, e.getMessage()));
 		} catch (Exception e) {
 			logger.error("Errore durante l'elaborazione della mossa", e);
 			ack.sendAckData(new RespEffettuaMossa(false, "Errore interno del server"));

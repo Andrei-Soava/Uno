@@ -41,6 +41,12 @@ public abstract class Stanza {
 			if (!isAperta || sessioni.size() >= maxSessioni || sessioni.contains(sessione))
 				return false;
 
+			for (Sessione s : sessioni) {
+				if (s.getUsername().equals(sessione.getUsername())) {
+					return false; // L'utente è già presente nella stanza
+				}
+			}
+
 			boolean added = sessioni.add(sessione);
 			if (added && proprietario == null) {
 				proprietario = sessione;

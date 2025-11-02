@@ -11,11 +11,15 @@ import onegame.modello.net.DTOUtils;
 import onegame.modello.net.GiocatoreDTO;
 import onegame.modello.net.MossaDTO;
 import onegame.modello.net.StatoPartitaDTO;
-import onegame.modello.net.messaggi.Messaggi.*;
 import onegame.modello.net.messaggi.MessaggiGioco;
 import onegame.modello.net.messaggi.MessaggiGioco.MessStatoPartita;
+import onegame.server.eccezioni.EccezionePartita;
+import onegame.server.eccezioni.GiocatoriInsufficientiException;
+import onegame.server.eccezioni.PartitaGiaAvviataException;
 import onegame.server.gioco.CartaNET;
 import onegame.server.gioco.GiocatoreNET;
+import onegame.server.gioco.MazzoONEFactory;
+import onegame.server.gioco.MazzoWildFactory;
 import onegame.server.gioco.PartitaNET;
 import onegame.server.utils.DTOServerUtils;
 
@@ -31,11 +35,14 @@ public class StanzaPartita extends Stanza implements PartitaObserver {
 		super(codice, nome, maxUtenti);
 	}
 
-	public boolean avviaPartita() {
+	public void avviaPartita() throws EccezionePartita {
 		lock.lock();
 		try {
-			if ((partita != null && isPartitaInCorso()) || sessioni.size() < 2) {
-				return false;
+			if ((partita != null && isPartitaInCorso())) {
+				throw new PartitaGiaAvviataException();
+			}
+			if (sessioni.size() < 2) {
+				throw new GiocatoriInsufficientiException();
 			}
 
 			giocatori.clear();
@@ -47,25 +54,32 @@ public class StanzaPartita extends Stanza implements PartitaObserver {
 			// Inizializza la partita
 			List<GiocatoreNET> lista = new ArrayList<>(giocatori.values());
 			Collections.shuffle(lista);
-			this.partita = new PartitaNET(lista, this);
+			this.partita = new PartitaNET(lista, this, MazzoONEFactory.getInstance());
 			this.partita.addObserver(this);
 
 			inviaTurnoCorrente(MessaggiGioco.EVENT_INIZIATA_PARTITA, Map.of());
 
 			this.isAperta = false;
-			return true;
 		} finally {
 			lock.unlock();
 		}
 	}
 
-	public void riceviMossa(Sessione sessione, MossaDTO mossa) {
+	public void riceviMossa(Sessione sessione, MossaDTO mossa) throws EccezionePartita {
 		if (partita == null || !giocatori.containsKey(sessione)) {
 			return;
 		}
 
-		partita.effettuaMossa(mossa, giocatori.get(sessione));
-
+		if (mossa.tipo == MossaDTO.TipoMossa.GIOCA_CARTA) {
+			CartaNET cartaGiocata = DTOServerUtils.fromCartaDTOtoNET(mossa.carta);
+			partita.giocaCarta(cartaGiocata, mossa.coloreScelto, giocatori.get(sessione));
+		} else if (mossa.tipo == MossaDTO.TipoMossa.PESCA) {
+			partita.pesca(giocatori.get(sessione));
+		} else if (mossa.tipo == MossaDTO.TipoMossa.PASSA) {
+			partita.passa(giocatori.get(sessione));
+		} else if (mossa.tipo == MossaDTO.TipoMossa.DICHIARA_UNO) {
+			partita.dichiaraUno(giocatori.get(sessione));
+		}
 	}
 
 	@Override
@@ -124,7 +138,6 @@ public class StanzaPartita extends Stanza implements PartitaObserver {
 
 				MessStatoPartita mess = new MessStatoPartita(statoDTO, indiceGiocatoreLocale, manoDTO, cartePescate);
 				s.sendEvent(nomeEvento, mess);
-				logger.debug("Stato inviato a utente {}: {}", s.getNickname(), statoDTO);
 			}
 			logger.debug("Stato partita inviato a tutti i giocatori nella stanza {}", codice);
 		} finally {

@@ -11,13 +11,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import onegame.modello.carte.Colore;
-import onegame.modello.net.DTOUtils;
-import onegame.modello.net.MossaDTO;
-import onegame.modello.net.MossaDTO.TipoMossa;
-import onegame.modello.net.util.JsonHelper;
 import onegame.server.PartitaObserver;
 import onegame.server.StanzaPartita;
-import onegame.server.utils.DTOServerUtils;
+import onegame.server.eccezioni.CartaNonPossedutaException;
+import onegame.server.eccezioni.ColoreNonValidoException;
+import onegame.server.eccezioni.EccezionePartita;
+import onegame.server.eccezioni.MossaNonValidaException;
+import onegame.server.eccezioni.PartitaGiaFinitaException;
+import onegame.server.eccezioni.TurnoNonValidoException;
 
 public final class PartitaNET {
 	private final List<GiocatoreNET> giocatori = new ArrayList<>();
@@ -49,9 +50,9 @@ public final class PartitaNET {
 
 	private ReentrantLock lock = new ReentrantLock();
 
-	public PartitaNET(List<GiocatoreNET> giocatori, StanzaPartita stanza) {
+	public PartitaNET(List<GiocatoreNET> giocatori, StanzaPartita stanza, MazzoFactory mazzoFactory) {
 		this.giocatori.addAll(giocatori);
-		this.mazzo = new MazzoNET(new MazzoONEFactory());
+		this.mazzo = new MazzoNET(mazzoFactory);
 		init();
 	}
 
@@ -93,165 +94,190 @@ public final class PartitaNET {
 		return this.giocatori.size();
 	}
 
-	public boolean effettuaMossa(MossaDTO mossa, GiocatoreNET giocatore) {
+	public void giocaCarta(CartaNET cartaGiocata, Colore coloreScelto, GiocatoreNET giocatore) throws EccezionePartita {
 		lock.lock();
 		try {
-			if (mossa == null || giocatore == null || partitaFinita) {
-				logger.warn("Mossa o giocatore nulli, o partita già finita");
-				return false;
-			}
+			verificaPartitaFinita();
+
 			// verifica il turno
 			if (!Objects.equals(giocatore, getCurrentPlayer())) {
 				logger.warn("Non è il turno del giocatore {}", giocatore.getNickname());
-				return false;
+				throw new TurnoNonValidoException();
 			}
 
-			switch (mossa.tipo) {
-			case GIOCA_CARTA: {
-				CartaNET cartaGiocata = DTOServerUtils.fromCartaDTOtoNET(mossa.carta);
+			// verifica che il giocatore possieda la carta
+			if (!giocatore.hasCarta(cartaGiocata)) {
+				logger.warn("Il giocatore {} non possiede la carta giocata", giocatore.getNickname());
+				throw new CartaNonPossedutaException();
+			}
 
-				if (cartaGiocata == null) {
-					return false;
-				}
+			// Se ha appena pescato, può giocare al più la carta pescata
+			if (haPescatoNelTurno && cartaPescataCorrente != null && !cartaGiocata.equals(cartaPescataCorrente)) {
+				logger.warn("Il giocatore {} ha pescato e può giocare solo la carta pescata", giocatore.getNickname());
+				throw new MossaNonValidaException();
+			}
 
-				// verifica che il giocatore possieda la carta
-				if (!giocatore.hasCarta(cartaGiocata)) {
-					logger.warn("Il giocatore {} non possiede la carta giocata", giocatore.getNickname());
-					return false;
-				}
-
-				// Se ha appena pescato, può giocare al più la carta pescata
-				if (haPescatoNelTurno && cartaPescataCorrente != null && !cartaGiocata.equals(cartaPescataCorrente)) {
-					logger.warn("Il giocatore {} ha pescato e può giocare solo la carta pescata",
-							giocatore.getNickname());
-					return false;
-				}
-
-				// Se è una carta nera, deve essere scelto il colore della carta
-				if (cartaGiocata.getColore() == Colore.NERO) {
-					if (mossa.coloreScelto == null || mossa.coloreScelto == Colore.NERO) {
-						logger.error("Colore scelto non valido per carta nera");
-						return false;
-					} else {
-						this.coloreCorrente = mossa.coloreScelto;
-					}
+			// Se è una carta nera, deve essere scelto il colore della carta
+			if (cartaGiocata.getColore() == Colore.NERO) {
+				if (coloreScelto == null || coloreScelto == Colore.NERO) {
+					logger.error("Colore scelto non valido per carta nera");
+					throw new ColoreNonValidoException();
 				} else {
-					this.coloreCorrente = cartaGiocata.getColore();
+					this.coloreCorrente = coloreScelto;
 				}
-
-				// Verifica se la carta sia giocabile
-				if (!this.isCartaGiocabile(cartaGiocata)) {
-					logger.warn("La carta giocata da {} non è valida", giocatore.getNickname());
-					return false;
-				}
-
-				// rimuove la carta dalla mano e la mette negli scarti
-				giocatore.rimuoviCarta(cartaGiocata);
-				this.cartaCorrente = cartaGiocata;
-
-				// applica l'effetto della carta giocata
-				List<CartaNET> cartePescate = giocaCarta(cartaGiocata);
-
-				// Regola dell'UNO: se ha una sola carta, deve dichiarare UNO
-				if (giocatore.getNumeroCarte() == 1) {
-					avviaTimerDichiaraUNO(giocatore);
-					logger.info("Il giocatore {} deve dichiarare UNO!", giocatore.getNickname());
-				} else {
-					giocatore.setHaDichiaratoUNO(false);
-				}
-
-				checkWinCondition(giocatore);
-				// prima controlla che la partita non sia finita, e se non lo è passa il turno al prossimo giocatore
-				if (!partitaFinita) {
-					passaTurno(1);
-				}
-//				notifyObserverspartitaAggiornata(Map.of(giocatore, cartePescate));
-				notifyObserverspartitaAggiornata(Map.of());
-				logger.info("Il giocatore {} ha giocato la carta {}", giocatore.getNickname(), cartaGiocata.toString());
-
-				return true;
+			} else {
+				this.coloreCorrente = cartaGiocata.getColore();
 			}
 
-			case PESCA: {
-				// Impedisce la doppia pescata
-				if (haPescatoNelTurno) {
-					logger.warn("Il giocatore {} ha già pescato in questo turno", giocatore.getNickname());
-					return false;
-				}
-
-				CartaNET cartaPescata = pesca(giocatore);
-				if (cartaPescata != null) {
-					cartaPescataCorrente = cartaPescata;
-					haPescatoNelTurno = true;
-					giocatore.setHaDichiaratoUNO(false);
-					logger.info("Il giocatore {} ha pescato una carta", giocatore.getNickname());
-				}
-				avviaTimerTurno();
-
-				notifyObserverspartitaAggiornata(Map.of(giocatore, List.of(cartaPescata)));
-				return true;
+			// Verifica se la carta sia giocabile
+			if (!this.isCartaGiocabile(cartaGiocata)) {
+				logger.warn("La carta giocata da {} non è valida", giocatore.getNickname());
+				throw new MossaNonValidaException();
 			}
 
-			case PASSA: {
-				// Non può passare se non ha pescato né giocato
-				if (!haPescatoNelTurno) {
-					logger.warn("Il giocatore {} non può passare senza aver pescato", giocatore.getNickname());
-					return false;
-				}
+			// rimuove la carta dalla mano e la mette negli scarti
+			giocatore.rimuoviCarta(cartaGiocata);
+			this.cartaCorrente = cartaGiocata;
+
+			// applica l'effetto della carta giocata
+			List<CartaNET> cartePescate = applicaEffettoCarta(cartaGiocata);
+
+			// Regola dell'UNO: se ha una sola carta, deve dichiarare UNO
+			if (giocatore.getNumeroCarte() == 1) {
+				avviaTimerDichiaraUNO(giocatore);
+				logger.info("Il giocatore {} deve dichiarare UNO!", giocatore.getNickname());
+			} else {
+				giocatore.setHaDichiaratoUNO(false);
+			}
+
+			checkWinCondition(giocatore);
+			// prima controlla che la partita non sia finita, e se non lo è passa il turno al prossimo giocatore
+			if (!partitaFinita) {
 				passaTurno(1);
-				avviaTimerTurno();
-
-				notifyObserverspartitaAggiornata(Map.of());
-				return true;
 			}
-			case DICHIARA_UNO: {
-				if (giocatore.getNumeroCarte() == 1) {
-					giocatore.setHaDichiaratoUNO(true);
-					cancellaTimer();
-					logger.info("Il giocatore {} ha dichiarato UNO!", giocatore.getNickname());
-					return true;
-				}
-				return false;
-			}
-			case PESCA_E_PASSA: {
-				if (!haPescatoNelTurno) {
-					pesca(giocatore);
-				} else {
-					logger.warn("Il giocatore {} non può pescare di nuovo prima di passare", giocatore.getNickname());
-				}
-
-				passaTurno(1);
-
-				notifyObserverspartitaAggiornata(Map.of());
-				return true;
-			}
-			}
-			return false;
-		} catch (Exception e) {
-			logger.error("Errore durante l'effettuazione della mossa: {}", e);
-			return false;
+//		notifyObserverspartitaAggiornata(Map.of(giocatore, cartePescate));
+			notifyObserverspartitaAggiornata(Map.of());
+			logger.info("Il giocatore {} ha giocato la carta {}", giocatore.getNickname(), cartaGiocata.toString());
 		} finally {
 			lock.unlock();
 		}
 	}
 
-	private void effettuaMossaAutomatica() {
-		GiocatoreNET g = getCurrentPlayer();
-		for (CartaNET c : g.getMano()) {
-			if (isCartaGiocabile(c)) {
-				MossaDTO mossa = new MossaDTO(TipoMossa.GIOCA_CARTA);
-				mossa.carta = DTOServerUtils.fromCartaNETtoDTO(c);
-				if (c.getColore() == Colore.NERO) {
-					mossa.coloreScelto = Colore.ROSSO; // o scegli dinamicamente
-				}
-				effettuaMossa(mossa, g);
-				return;
+	public void pesca(GiocatoreNET giocatore) throws EccezionePartita {
+		lock.lock();
+		try {
+			verificaPartitaFinita();
+
+			// verifica il turno
+			if (!Objects.equals(giocatore, getCurrentPlayer())) {
+				logger.warn("Non è il turno del giocatore {}", giocatore.getNickname());
+				throw new TurnoNonValidoException();
 			}
+
+			// Impedisce la doppia pescata
+			if (haPescatoNelTurno) {
+				logger.warn("Il giocatore {} ha già pescato in questo turno", giocatore.getNickname());
+				throw new MossaNonValidaException();
+			}
+
+			CartaNET cartaPescata = mazzo.pesca();
+			if (cartaPescata != null) {
+				giocatore.aggiungiCarta(cartaPescata);
+				logger.info("Il giocatore {} ha pescato una carta e passa il turno", giocatore.getNickname());
+			} else {
+				logger.info("Il mazzo è vuoto", giocatore.getNickname());
+			}
+
+			if (cartaPescata != null) {
+				cartaPescataCorrente = cartaPescata;
+				haPescatoNelTurno = true;
+				giocatore.setHaDichiaratoUNO(false);
+				logger.info("Il giocatore {} ha pescato una carta", giocatore.getNickname());
+			}
+			avviaTimerTurno();
+
+			notifyObserverspartitaAggiornata(Map.of(giocatore, List.of(cartaPescata)));
+		} finally {
+			lock.unlock();
 		}
-		effettuaMossa(new MossaDTO(TipoMossa.PESCA_E_PASSA), g);
 	}
-	
-	private List<CartaNET> giocaCarta(CartaNET carta) {
+
+	public void passa(GiocatoreNET giocatore) throws EccezionePartita {
+		lock.lock();
+		try {
+			verificaPartitaFinita();
+
+			// verifica il turno
+			if (!Objects.equals(giocatore, getCurrentPlayer())) {
+				logger.warn("Non è il turno del giocatore {}", giocatore.getNickname());
+				throw new TurnoNonValidoException();
+			}
+
+			// Non può passare se non ha pescato né giocato
+			if (!haPescatoNelTurno) {
+				logger.warn("Il giocatore {} non può passare senza aver pescato", giocatore.getNickname());
+				throw new MossaNonValidaException();
+			}
+			passaTurno(1);
+			avviaTimerTurno();
+
+			notifyObserverspartitaAggiornata(Map.of());
+		} finally {
+			lock.unlock();
+		}
+	}
+
+	public void dichiaraUno(GiocatoreNET giocatore) throws EccezionePartita {
+		lock.lock();
+		try {
+			verificaPartitaFinita();
+
+//		// verifica il turno
+//		if (!Objects.equals(giocatore, getCurrentPlayer())) {
+//			logger.warn("Non è il turno del giocatore {}", giocatore.getNickname());
+//			throw new TurnoNonValidoException();
+//		}
+
+			if (giocatore.getNumeroCarte() == 1) {
+				giocatore.setHaDichiaratoUNO(true);
+				cancellaTimer();
+				logger.info("Il giocatore {} ha dichiarato UNO!", giocatore.getNickname());
+			} else {
+				logger.warn("Il giocatore {} non può dichiarare UNO con {} carte", giocatore.getNickname(),
+						giocatore.getNumeroCarte());
+				throw new MossaNonValidaException();
+			}
+		} finally {
+			lock.unlock();
+		}
+	}
+
+	private void verificaPartitaFinita() throws EccezionePartita {
+		if (partitaFinita) {
+			logger.warn("Partita già finita");
+			throw new PartitaGiaFinitaException();
+		}
+	}
+
+	private void effettuaMossaAutomatica() throws EccezionePartita {
+		lock.lock();
+		try {
+			GiocatoreNET g = getCurrentPlayer();
+			for (CartaNET c : g.getMano()) {
+				if (isCartaGiocabile(c)) {
+					giocaCarta(c, this.coloreCorrente, g);
+				}
+			}
+			if (!haPescatoNelTurno) {
+				pesca(g);
+			}
+			passa(g);
+		} finally {
+			lock.unlock();
+		}
+	}
+
+	private List<CartaNET> applicaEffettoCarta(CartaNET carta) {
 		if (!carta.isCartaNumero) {
 			switch (carta.getTipo()) {
 			case BLOCCA:
@@ -289,7 +315,7 @@ public final class PartitaNET {
 			return List.of();
 		}
 	}
-	
+
 	private boolean isCartaGiocabile(CartaNET carta) {
 		if (carta.getColore() == Colore.NERO) {
 			return true;
@@ -307,17 +333,6 @@ public final class PartitaNET {
 		return false;
 	}
 
-	private CartaNET pesca(GiocatoreNET giocatore) {
-		CartaNET pescata = mazzo.pesca();
-		if (pescata != null) {
-			giocatore.aggiungiCarta(pescata);
-			logger.info("Il giocatore {} ha pescato una carta e passa il turno", giocatore.getNickname());
-		} else {
-			logger.info("Il mazzo è vuoto", giocatore.getNickname());
-		}
-		return pescata;
-	}
-
 	private void cancellaTimer() {
 		if (timer != null) {
 			timer.cancel(false);
@@ -333,7 +348,8 @@ public final class PartitaNET {
 				if (!giocatore.haDichiaratoUNO()) {
 					List<CartaNET> cartePescate = mazzo.pescaN(2);
 					giocatore.aggiungiCarte(cartePescate);
-					logger.info("Il giocatore {} non ha dichiarato UNO in tempo e pesca 2 carte", giocatore.getNickname());
+					logger.info("Il giocatore {} non ha dichiarato UNO in tempo e pesca 2 carte",
+							giocatore.getNickname());
 					notifyObserverspartitaAggiornata(Map.of(giocatore, cartePescate));
 				}
 			} finally {
@@ -346,7 +362,11 @@ public final class PartitaNET {
 		cancellaTimer();
 		timer = scheduler.schedule(() -> {
 			logger.info("Il giocatore {} non ha effettuato la mossa in tempo", getCurrentPlayer().getNickname());
-			effettuaMossaAutomatica();
+			try {
+				effettuaMossaAutomatica();
+			} catch (EccezionePartita e) {
+				logger.error("Errore nell'esecuzione della mossa automatica");
+			}
 		}, TEMPO_MAX_MOSSA + TEMPO_DI_GUARDIA, TimeUnit.MILLISECONDS);
 	}
 
@@ -356,10 +376,6 @@ public final class PartitaNET {
 
 		int dir = direzioneCrescente ? 1 : -1;
 		currentPlayerIndex = Math.floorMod(currentPlayerIndex + dir * step, giocatori.size());
-	}
-
-	public void prossimoGiocatore() {
-		passaTurno(1);
 	}
 
 	private void checkWinCondition(GiocatoreNET giocatore) {
@@ -382,11 +398,7 @@ public final class PartitaNET {
 		return indiceVincitore;
 	}
 
-	public MazzoNET getMazzo() {
-		return mazzo;
-	}
-
-	public void cambiaDirezione() {
+	private void cambiaDirezione() {
 		direzioneCrescente = !direzioneCrescente;
 	}
 

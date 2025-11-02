@@ -8,6 +8,15 @@ import onegame.modello.carte.Colore;
 
 public class MazzoONEFactory implements MazzoFactory {
 
+	private static MazzoONEFactory instance = new MazzoONEFactory();
+
+	private MazzoONEFactory() {
+	}
+
+	public static MazzoONEFactory getInstance() {
+		return instance;
+	}
+
 	@Override
 	public List<CartaNET> creaCarte() {
 		List<CartaNET> all = new ArrayList<>();
