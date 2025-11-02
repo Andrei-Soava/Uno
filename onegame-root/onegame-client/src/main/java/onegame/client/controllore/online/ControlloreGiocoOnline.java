@@ -83,10 +83,10 @@ public class ControlloreGiocoOnline extends Controllore implements StatoPartitaO
 		//turno giocante
 		if(posizioneAssoluta == posizioneTurnoCorrente) {
 			vg.evidenziaTurnoCorrente();
-			if(mess.cartePescate.size()==0)
+			if(mess.cartaPescata==null)
 				scegliMossa(cartaCorrente, carte);
 			else
-				gestisciCartaPescata(DTOUtils.convertiDTOinCarta(mess.cartePescate.getFirst()), carte, cartaCorrente);
+				gestisciCartaPescata(DTOUtils.convertiDTOinCarta(mess.cartaPescata), carte, cartaCorrente);
 		} 
 		else //turno spettatore
 		{

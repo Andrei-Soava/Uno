@@ -83,7 +83,7 @@ public class StanzaPartita extends Stanza implements PartitaObserver {
 	}
 
 	@Override
-	public void partitaAggiornata(Map<GiocatoreNET, List<CartaNET>> cartePescate) {
+	public void partitaAggiornata(Map<GiocatoreNET, CartaNET> cartePescate) {
 		if (partita == null) {
 			return;
 		}
@@ -96,7 +96,7 @@ public class StanzaPartita extends Stanza implements PartitaObserver {
 		}
 	}
 
-	private void inviaTurnoCorrente(String nomeEvento, Map<GiocatoreNET, List<CartaNET>> cartePescateMap) {
+	private void inviaTurnoCorrente(String nomeEvento, Map<GiocatoreNET, CartaNET> cartePescateMap) {
 		lock.lock();
 
 		try {
@@ -129,14 +129,12 @@ public class StanzaPartita extends Stanza implements PartitaObserver {
 				List<CartaDTO> manoDTO = DTOServerUtils.fromListaCarteNETtoDTO(g.getMano());
 				int indiceGiocatoreLocale = listaGiocatori.indexOf(g);
 
-				List<CartaDTO> cartePescate;
+				CartaDTO cartaPescata = null;
 				if (cartePescateMap != null && cartePescateMap.containsKey(g)) {
-					cartePescate = DTOServerUtils.fromListaCarteNETtoDTO(cartePescateMap.get(g));
-				} else {
-					cartePescate = new ArrayList<>();
+					cartaPescata = DTOServerUtils.fromCartaNETtoDTO(cartePescateMap.get(g));
 				}
 
-				MessStatoPartita mess = new MessStatoPartita(statoDTO, indiceGiocatoreLocale, manoDTO, cartePescate);
+				MessStatoPartita mess = new MessStatoPartita(statoDTO, indiceGiocatoreLocale, manoDTO, cartaPescata);
 				s.sendEvent(nomeEvento, mess);
 			}
 			logger.debug("Stato partita inviato a tutti i giocatori nella stanza {}", codice);

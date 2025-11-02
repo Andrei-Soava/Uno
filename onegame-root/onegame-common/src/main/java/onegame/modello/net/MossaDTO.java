@@ -4,7 +4,7 @@ import onegame.modello.carte.Colore;
 
 public class MossaDTO {
 	public enum TipoMossa {
-		GIOCA_CARTA, PESCA, PASSA, DICHIARA_UNO, PESCA_E_PASSA
+		GIOCA_CARTA, PESCA, PASSA, DICHIARA_UNO
 	}
 
 	public TipoMossa tipo;

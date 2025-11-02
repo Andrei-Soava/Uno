@@ -56,17 +56,18 @@ public class MessaggiGioco {
 		// indice del giocatore locale che riceve questo stato in statoPartita.giocatori
 		public int indiceGiocatoreLocale;
 		public List<CartaDTO> carteInMano; // carte del giocatore locale
-		public List<CartaDTO> cartePescate; // carte pescate dal giocatore locale nell'ultimo turno (vuota se nessuna)
+		// carta pescata dal giocatore locale a seguito di una mossa di pesca, null altrimenti
+		public CartaDTO cartaPescata;
 
 		public MessStatoPartita() {
 		}
 
 		public MessStatoPartita(StatoPartitaDTO statoPartita, int indiceGiocatoreLocale, List<CartaDTO> carteInMano,
-				List<CartaDTO> cartePescate) {
+				CartaDTO cartaPescata) {
 			this.statoPartita = statoPartita;
 			this.indiceGiocatoreLocale = indiceGiocatoreLocale;
 			this.carteInMano = carteInMano;
-			this.cartePescate = cartePescate;
+			this.cartaPescata = cartaPescata;
 		}
 
 	}

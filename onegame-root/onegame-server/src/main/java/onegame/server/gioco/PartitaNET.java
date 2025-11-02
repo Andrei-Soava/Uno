@@ -4,12 +4,14 @@ import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import onegame.modello.carte.CartaSpeciale.TipoSpeciale;
 import onegame.modello.carte.Colore;
 import onegame.server.PartitaObserver;
 import onegame.server.StanzaPartita;
@@ -35,11 +37,12 @@ public final class PartitaNET {
 
 	// stato del turno corrente
 	private boolean haPescatoNelTurno = false;
+	private boolean haGiocatoNelTurno = false;
 	private CartaNET cartaPescataCorrente = null;
 
-	private final int TEMPO_DICHIARAZIONE_UNO = 3000; // ms
-	private final int TEMPO_DI_GUARDIA = 3000; // ms
-	private final int TEMPO_MAX_MOSSA = 10000; // ms
+	private final int TEMPO_DICHIARAZIONE_UNO = 2500; // ms
+	private final int TEMPO_DI_GUARDIA = 2000; // ms
+	private final int TEMPO_MAX_MOSSA = 8000; // ms
 
 	// gestione timer
 	private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
@@ -111,6 +114,11 @@ public final class PartitaNET {
 				throw new CartaNonPossedutaException();
 			}
 
+			if (haGiocatoNelTurno) {
+				logger.warn("Il giocatore {} ha già giocato in questo turno", giocatore.getNickname());
+				throw new MossaNonValidaException();
+			}
+
 			// Se ha appena pescato, può giocare al più la carta pescata
 			if (haPescatoNelTurno && cartaPescataCorrente != null && !cartaGiocata.equals(cartaPescataCorrente)) {
 				logger.warn("Il giocatore {} ha pescato e può giocare solo la carta pescata", giocatore.getNickname());
@@ -131,7 +139,7 @@ public final class PartitaNET {
 
 			// Verifica se la carta sia giocabile
 			if (!this.isCartaGiocabile(cartaGiocata)) {
-				logger.warn("La carta giocata da {} non è valida", giocatore.getNickname());
+				logger.warn("Carta giocata da {} non valida", giocatore.getNickname());
 				throw new MossaNonValidaException();
 			}
 
@@ -139,8 +147,8 @@ public final class PartitaNET {
 			giocatore.rimuoviCarta(cartaGiocata);
 			this.cartaCorrente = cartaGiocata;
 
-			// applica l'effetto della carta giocata
-			List<CartaNET> cartePescate = applicaEffettoCarta(cartaGiocata);
+//			// applica l'effetto della carta giocata
+			applicaEffettoCarta(cartaGiocata);
 
 			// Regola dell'UNO: se ha una sola carta, deve dichiarare UNO
 			if (giocatore.getNumeroCarte() == 1) {
@@ -148,14 +156,16 @@ public final class PartitaNET {
 				logger.info("Il giocatore {} deve dichiarare UNO!", giocatore.getNickname());
 			} else {
 				giocatore.setHaDichiaratoUNO(false);
+				if (!partitaFinita) {
+					passaTurno(1);
+					avviaTimerTurno();
+				}
 			}
 
 			checkWinCondition(giocatore);
+
 			// prima controlla che la partita non sia finita, e se non lo è passa il turno al prossimo giocatore
-			if (!partitaFinita) {
-				passaTurno(1);
-			}
-//		notifyObserverspartitaAggiornata(Map.of(giocatore, cartePescate));
+
 			notifyObserverspartitaAggiornata(Map.of());
 			logger.info("Il giocatore {} ha giocato la carta {}", giocatore.getNickname(), cartaGiocata.toString());
 		} finally {
@@ -196,7 +206,7 @@ public final class PartitaNET {
 			}
 			avviaTimerTurno();
 
-			notifyObserverspartitaAggiornata(Map.of(giocatore, List.of(cartaPescata)));
+			notifyObserverspartitaAggiornata(Map.of(giocatore, cartaPescata));
 		} finally {
 			lock.unlock();
 		}
@@ -232,15 +242,14 @@ public final class PartitaNET {
 		try {
 			verificaPartitaFinita();
 
-//		// verifica il turno
-//		if (!Objects.equals(giocatore, getCurrentPlayer())) {
-//			logger.warn("Non è il turno del giocatore {}", giocatore.getNickname());
-//			throw new TurnoNonValidoException();
-//		}
-
 			if (giocatore.getNumeroCarte() == 1) {
 				giocatore.setHaDichiaratoUNO(true);
 				cancellaTimer();
+				if (!partitaFinita) {
+					passaTurno(1);
+					avviaTimerTurno();
+				}
+				notifyObserverspartitaAggiornata(Map.of());
 				logger.info("Il giocatore {} ha dichiarato UNO!", giocatore.getNickname());
 			} else {
 				logger.warn("Il giocatore {} non può dichiarare UNO con {} carte", giocatore.getNickname(),
@@ -277,47 +286,45 @@ public final class PartitaNET {
 		}
 	}
 
-	private List<CartaNET> applicaEffettoCarta(CartaNET carta) {
+	private void applicaEffettoCarta(CartaNET carta) {
 		if (!carta.isCartaNumero) {
 			switch (carta.getTipo()) {
 			case BLOCCA:
 				passaTurno(1);
-				return List.of();
+				break;
 			case INVERTI:
 				if (giocatori.size() == 2) {
 					// con 2 giocatori, l'inverti funziona come il blocca
 					passaTurno(1);
-					return List.of();
 				}
 				cambiaDirezione();
-				return List.of();
+				break;
 			case PIU_DUE:
 				passaTurno(1);
 				GiocatoreNET prossimoGiocatore = getCurrentPlayer();
-				List<CartaNET> cartePescate = mazzo.pescaN(2);
-				prossimoGiocatore.aggiungiCarte(cartePescate);
-				return cartePescate;
+				prossimoGiocatore.aggiungiCarte(mazzo.pescaN(2));
+				break;
 			case JOLLY:
 				// il colore è già stato cambiato in effettuaMossa
-				return List.of();
+				break;
 			case PIU_QUATTRO:
 				// il colore è già stato cambiato in effettuaMossa
 				passaTurno(1);
 				GiocatoreNET prossimo = getCurrentPlayer();
 				List<CartaNET> cartePescate4 = mazzo.pescaN(4);
 				prossimo.aggiungiCarte(cartePescate4);
-				return cartePescate4;
+				break;
 			default:
-				return List.of();
+				break;
 			}
-		} else {
-			// carta numero, nessun effetto speciale
-			return List.of();
 		}
 	}
 
 	private boolean isCartaGiocabile(CartaNET carta) {
 		if (carta.getColore() == Colore.NERO) {
+			if (carta.getTipo() == TipoSpeciale.PIU_QUATTRO) {
+				return verificaPiuQuattroBluff(getCurrentPlayer());
+			}
 			return true;
 		}
 		if (carta.getColore() == this.coloreCorrente) {
@@ -333,6 +340,25 @@ public final class PartitaNET {
 		return false;
 	}
 
+	public boolean verificaPiuQuattroBluff(GiocatoreNET g) {
+		if (!getGiocatori().contains(g))
+			return false;
+		else {
+			ArrayList<CartaNET> carteInMano = new ArrayList<>();
+			carteInMano.addAll(g.getMano());
+			// istruzione in cui vengono rimossi tutti i +4 dalla mano di una giocatore per fare controlli
+			carteInMano.removeIf(carta -> !carta.isCartaNumero && carta.getTipo() == TipoSpeciale.PIU_QUATTRO);
+
+			// ciclo di verifica possibilità di giocare altre carte oltre ai +4
+			for (CartaNET carta : carteInMano) {
+				if (isCartaGiocabile(carta))
+					return false;
+			}
+			// si arriva qui solo se nessuna delle carte in mano OLTRE ai +4 è giocabile
+			return true;
+		}
+	}
+
 	private void cancellaTimer() {
 		if (timer != null) {
 			timer.cancel(false);
@@ -346,12 +372,19 @@ public final class PartitaNET {
 			lock.lock();
 			try {
 				if (!giocatore.haDichiaratoUNO()) {
-					List<CartaNET> cartePescate = mazzo.pescaN(2);
-					giocatore.aggiungiCarte(cartePescate);
+					verificaPartitaFinita();
+					giocatore.aggiungiCarte(mazzo.pescaN(2));
 					logger.info("Il giocatore {} non ha dichiarato UNO in tempo e pesca 2 carte",
 							giocatore.getNickname());
-					notifyObserverspartitaAggiornata(Map.of(giocatore, cartePescate));
+					notifyObserverspartitaAggiornata(Map.of());
 				}
+				if (!partitaFinita) {
+					passaTurno(1);
+					avviaTimerTurno();
+					notifyObserverspartitaAggiornata(Map.of());
+				}
+			} catch (Exception e) {
+				logger.error("Errore durante il timer di dichiarazione UNO", e);
 			} finally {
 				lock.unlock();
 			}
@@ -372,6 +405,7 @@ public final class PartitaNET {
 
 	private void passaTurno(int step) {
 		haPescatoNelTurno = false;
+		haGiocatoNelTurno = false;
 		cartaPescataCorrente = null;
 
 		int dir = direzioneCrescente ? 1 : -1;
@@ -414,7 +448,7 @@ public final class PartitaNET {
 		return observers.remove(ob);
 	}
 
-	private void notifyObserverspartitaAggiornata(Map<GiocatoreNET, List<CartaNET>> cartePescate) {
+	private void notifyObserverspartitaAggiornata(Map<GiocatoreNET, CartaNET> cartePescate) {
 		for (PartitaObserver ob : observers) {
 			ob.partitaAggiornata(cartePescate);
 		}

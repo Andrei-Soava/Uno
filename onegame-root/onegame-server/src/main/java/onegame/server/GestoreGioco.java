@@ -34,14 +34,14 @@ public class GestoreGioco {
 			StanzaPartita stanza = gestoreStanze.getStanzaPerSessione(sessione);
 			if (stanza == null) {
 				ack.sendAckData(new RespIniziaPartita(false, "Stanza non trovata"));
-				logger.warn("Sessione {} non è associata a nessuna stanza", sessione.getToken());
+				logger.warn("Sessione {} non associata a nessuna stanza", sessione.getToken());
 				return;
 			}
 
 			if (!sessione.equals(stanza.getProprietario())) {
 				ack.sendAckData(
 						new RespIniziaPartita(false, "Solo il proprietario della stanza può avviare la partita"));
-				logger.warn("Utente {} non è il proprietario della stanza {}", sessione.getUsername(),
+				logger.warn("Utente {} non proprietario della stanza {}", sessione.getUsername(),
 						stanza.getNome());
 				return;
 			}
@@ -79,7 +79,7 @@ public class GestoreGioco {
 			StanzaPartita stanza = gestoreStanze.getStanzaPerSessione(sessione);
 			if (stanza == null) {
 				ack.sendAckData(new RespEffettuaMossa(false, "Stanza non trovata"));
-				logger.warn("Sessione {} non è associata a nessuna stanza", sessione.getToken());
+				logger.warn("Sessione {} non associata a nessuna stanza", sessione.getToken());
 				return;
 			}
 
