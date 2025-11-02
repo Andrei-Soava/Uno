@@ -147,3 +147,4 @@ Esempio COMPLETO:
 - 29/10, Andrei, (implementazione switch host dopo che host abbandona + refactoring generale di varie classi + eliminazione codice superfluo), null;
 - 1/11, Andrei, (refactoring struttura gerarchica controllore e vista + eliminazione classi inutili + piccoli aggiornamenti a documentazione), documentazione e diagrammi;
 - 1/11, **AVVISO**, Andrei, (documento 2 REQUISITI è stato formalmente completato);
+- 2/11, Andrei, (completato class/package diagram lato client), continuazione documentazione e diagrammi;
