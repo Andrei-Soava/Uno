@@ -41,10 +41,10 @@ public class DTOUtils {
 			return new CartaNumero(dto.colore, dto.numero);
 		}
 	}
-	
-	public static List<Carta> convertiListaDTOinCarte(List<CartaDTO> carteDTO){
+
+	public static List<Carta> convertiListaDTOinCarte(List<CartaDTO> carteDTO) {
 		List<Carta> carte = new ArrayList<>();
-		for(CartaDTO c : carteDTO) {
+		for (CartaDTO c : carteDTO) {
 			carte.add(convertiDTOinCarta(c));
 		}
 		return carte;
@@ -79,6 +79,7 @@ public class DTOUtils {
 // @formatter:off
 	public static StatoStanzaDTO clone(StatoStanzaDTO dto) {
 	    return new StatoStanzaDTO(
+	    	dto.nomeStanza,
 	        dto.codiceStanza,
 	        dto.maxUtenti,
 	        dto.nicknames != null ? List.copyOf(dto.nicknames) : null,

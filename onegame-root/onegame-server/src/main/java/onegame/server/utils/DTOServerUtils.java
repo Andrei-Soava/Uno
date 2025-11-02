@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import onegame.modello.carte.Colore;
 import onegame.modello.net.CartaDTO;
 import onegame.modello.net.StatoStanzaDTO;
 import onegame.server.Sessione;
@@ -31,8 +30,8 @@ public class DTOServerUtils {
 			i++;
 		}
 
-		StatoStanzaDTO dto = new StatoStanzaDTO(stanza.getCodice(), stanza.getMaxSessioni(), nicknames, usernames,
-				indiceProprietario);
+		StatoStanzaDTO dto = new StatoStanzaDTO(stanza.getNome(), stanza.getCodice(), stanza.getMaxSessioni(),
+				nicknames, usernames, indiceProprietario);
 		return dto;
 	}
 

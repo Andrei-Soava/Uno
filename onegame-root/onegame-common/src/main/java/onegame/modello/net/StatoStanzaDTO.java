@@ -3,6 +3,7 @@ package onegame.modello.net;
 import java.util.List;
 
 public class StatoStanzaDTO {
+	public String nomeStanza;
 	public int codiceStanza;
 	public int maxUtenti;
 	public List<String> nicknames;
@@ -12,8 +13,9 @@ public class StatoStanzaDTO {
 	public StatoStanzaDTO() {
 	}
 
-	public StatoStanzaDTO(int codiceStanza, int maxUtenti, List<String> nicknames, List<String> usernames,
-			int indiceProprietario) {
+	public StatoStanzaDTO(String nomeStanza, int codiceStanza, int maxUtenti, List<String> nicknames,
+			List<String> usernames, int indiceProprietario) {
+		this.nomeStanza = nomeStanza;
 		this.codiceStanza = codiceStanza;
 		this.maxUtenti = maxUtenti;
 		this.nicknames = nicknames;
