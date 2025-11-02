@@ -28,7 +28,7 @@ public class VistaMenuOnline extends Vista {
         Button homeBtn = new Button("← Home");
     	homeBtn.setOnAction(e -> app.mostraVistaHome());
 
-    	Label titolo = new Label("Gioca contro amici");
+    	Label titolo = new Label("GIOCA CONTRO AMICI");
     	titolo.getStyleClass().add("titolo");
 
     	Region leftSpacer = new Region();

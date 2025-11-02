@@ -20,6 +20,7 @@ import onegame.client.vista.accessori.GestoreCallbackBottoni;
 public class VistaStanza extends Vista{
 
     private Label numeroGiocatori;
+    private Label nomeLbl;
     private Label codiceLbl;
     private final GridPane grigliaGiocatori;
     private Button abbandonaBtn;
@@ -34,7 +35,7 @@ public class VistaStanza extends Vista{
 
         abbandonaBtn = new Button("Abbandona");
 
-        Label titolo = new Label("Benvenuto nella lobby");
+        Label titolo = new Label("BENVENUTO NELLA STANZA");
         titolo.getStyleClass().add("titolo");
         titolo.setTranslateX(-40);
         
@@ -48,7 +49,14 @@ public class VistaStanza extends Vista{
 
         root.setTop(topBar);
 
-        // --- CODICE PARTITA ---
+        //nome partita
+        nomeLbl = new Label("prova");
+        nomeLbl.setPadding(new Insets(10));
+        nomeLbl.getStyleClass().add("titolo");
+        BorderPane.setAlignment(nomeLbl, Pos.CENTER);
+
+        
+        //codice partita
         codiceLbl = new Label("Codice partita: " + "prova");
         codiceLbl.setPadding(new Insets(10));
         codiceLbl.getStyleClass().add("titolo");
@@ -60,7 +68,7 @@ public class VistaStanza extends Vista{
         grigliaGiocatori.setVgap(20);
         grigliaGiocatori.setAlignment(Pos.TOP_CENTER);
         grigliaGiocatori.setPadding(new Insets(20));
-        VBox centro = new VBox(20, codiceLbl, grigliaGiocatori);
+        VBox centro = new VBox(20, nomeLbl, codiceLbl, grigliaGiocatori);
         centro.setAlignment(Pos.TOP_CENTER);
         root.setCenter(centro);
 
@@ -125,6 +133,10 @@ public class VistaStanza extends Vista{
     
     public void compilaCodicePartita(String codice) {
     	codiceLbl.setText("Codice partita: "+codice);
+    }
+    
+    public void compilaNomePartita(String nome) {
+    	nomeLbl.setText(nome);
     }
     
     public void mostraAvviaBtn() {

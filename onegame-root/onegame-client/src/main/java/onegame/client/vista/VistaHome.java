@@ -36,7 +36,7 @@ public class VistaHome extends Vista {
 	public VistaHome(AppWithMaven app) {
 		super(app);
 		
-		Label titolo = new Label("Scegli modalità");
+		Label titolo = new Label("SCEGLI MODALITÀ");
 		titolo.getStyleClass().add("titolo");
 
 		Region spacer0 = new Region();

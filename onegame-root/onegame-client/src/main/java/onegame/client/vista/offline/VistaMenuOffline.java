@@ -37,7 +37,7 @@ public class VistaMenuOffline extends Vista {
         Button homeBtn = new Button("← Home");
     	homeBtn.setOnAction(e -> app.mostraVistaHome());
 
-    	Label titolo = new Label("Gioca contro computer");
+    	Label titolo = new Label("GIOCA CONTRO COMPUTER");
     	titolo.getStyleClass().add("titolo");
 
     	Region leftSpacer = new Region();

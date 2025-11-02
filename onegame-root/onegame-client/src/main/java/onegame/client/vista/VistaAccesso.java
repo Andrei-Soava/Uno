@@ -36,7 +36,7 @@ public class VistaAccesso extends Vista{
 	public VistaAccesso(AppWithMaven app, String username) {
 		super(app);
 		// titolo
-		Label titolo = new Label("Benvenuto su ONE! Scegli un opzione");
+		Label titolo = new Label("BENVENUTO SU ONE! SCEGLI UN OPZIONE");
 		titolo.getStyleClass().add("titolo");
 
 		// spaziatore
@@ -168,6 +168,7 @@ public class VistaAccesso extends Vista{
         dialog.setOnHidden(e -> {
             if (onClose != null) onClose.run();
         });
+        Platform.runLater(()->nicknameField.requestFocus());
         DialogPane dialogPane = dialog.getDialogPane();
         dialogPane.getStylesheets().add(getClass().getResource("/stile/base.css").toExternalForm());
         dialog.show();

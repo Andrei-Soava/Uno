@@ -28,7 +28,7 @@ public class VistaInserimentoCodice extends Vista {
 		Button indietroBtn = new Button("Indietro");
     	indietroBtn.setOnAction(e -> app.mostraVistaMenuOnline());
 
-    	Label titolo = new Label("Unisciti a partita esistente");
+    	Label titolo = new Label("UNISCITI A PARTITA ESISTENTE");
     	titolo.getStyleClass().add("titolo");
 
     	Region leftSpacer = new Region();

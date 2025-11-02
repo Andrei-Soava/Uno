@@ -13,8 +13,6 @@ import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.layout.*;
 import onegame.client.esecuzione.AppWithMaven;
 import onegame.client.vista.Vista;
-import onegame.client.vista.VistaAccesso.DatiAccessoCallback;
-import onegame.client.vista.VistaImpostazioni.ContestoModificaNome;
 import onegame.client.vista.accessori.GestoreCallbackBottoni;
 
 public class VistaConfigurazioneOffline extends Vista {

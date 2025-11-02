@@ -24,7 +24,7 @@ public class VistaRegistrazione extends Vista {
 	public VistaRegistrazione(AppWithMaven app) {
 		super(app);
 		// titolo
-		Label titolo = new Label("Compila i campi");
+		Label titolo = new Label("COMPILA I CAMPI");
 		titolo.getStyleClass().add("titolo");
 
 		// spaziatore

@@ -4,6 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.PauseTransition;
+import javafx.animation.Timeline;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.util.Duration;
 import onegame.client.controllore.Controllore;
 import onegame.client.controllore.utils.MappaUtils;
 import onegame.client.net.ClientSocket;
@@ -22,6 +27,12 @@ import onegame.modello.net.messaggi.MessaggiGioco.MessStatoPartita;
 
 public class ControlloreGiocoOnline extends Controllore implements StatoPartitaObserver {
 	private VistaGioco vg;
+	private PauseTransition timerTurno;
+	private PauseTransition timerONE;
+	private SimpleIntegerProperty secondsLeft = new SimpleIntegerProperty(8);
+	private Timeline countdownTurno = new Timeline(
+			new KeyFrame(Duration.seconds(1), e -> secondsLeft.set(secondsLeft.get() - 1))
+			);
 	
 	public ControlloreGiocoOnline(VistaGioco vg, ClientSocket cs, ConnectionMonitor cm) {
 		super(cs,cm);
@@ -32,7 +43,7 @@ public class ControlloreGiocoOnline extends Controllore implements StatoPartitaO
 	            vg.mostraHome();
 	        }
 	    });
-		
+		creaTimers();
 		cs.setStanzaObserver(null);
 		cs.setPartitaObserver(this);
 		aspettaAbbandona();
@@ -60,6 +71,58 @@ public class ControlloreGiocoOnline extends Controllore implements StatoPartitaO
 	        });
 		});
 	}
+	
+	/**
+	 * metodo di creazione timers e countdown per turno
+	 */
+	private void creaTimers() {
+		timerTurno = new PauseTransition(Duration.seconds(8));
+		timerONE = new PauseTransition(Duration.seconds(2));
+		countdownTurno.setCycleCount(8);
+		vg.stampaTimerTurno(secondsLeft);
+	}
+	
+	/**
+	 * metodo che avvia timerTurno
+	 */
+	private void avviaTimerTurno() {
+		secondsLeft.set(8);
+    	countdownTurno.play();
+    	timerTurno.setOnFinished(fine->{
+    		timerTurno.setOnFinished(null);
+    		vg.chiudiFinestraAperta();
+    		bloccaTimerTurno();
+    	});
+    	timerTurno.play();
+    	vg.mostraTimerTurno(true);
+	}
+	
+	/**
+	 * metodo che interrompe timerTurno
+	 */
+	private void bloccaTimerTurno() {
+		countdownTurno.stop();
+		timerTurno.stop();
+		vg.mostraTimerTurno(false);
+	}
+	
+	/**
+	 * metodo che avvia timerONE ed imposta il setOnFinished se scade
+	 */
+	private void avviaTimerONE() {
+		timerONE.setOnFinished(fine->{
+			bloccaTimerONE();
+		});
+    	timerONE.play();
+	}
+	
+	/**
+	 * metodo che interrompe timerONE
+	 */
+	private void bloccaTimerONE() {
+		timerONE.stop();
+		vg.nascondiONEBtn();
+	}
 
 	@Override
 	public void inizioPartita(MessStatoPartita mess) {
@@ -83,6 +146,8 @@ public class ControlloreGiocoOnline extends Controllore implements StatoPartitaO
 		//turno giocante
 		if(posizioneAssoluta == posizioneTurnoCorrente) {
 			vg.evidenziaTurnoCorrente();
+
+			avviaTimerTurno();
 			if(mess.cartaPescata==null)
 				scegliMossa(cartaCorrente, carte);
 			else
@@ -103,6 +168,7 @@ public class ControlloreGiocoOnline extends Controllore implements StatoPartitaO
 			// se ci sono carte giocabili esclusi i +4, allora passo subito
 			if (!verificaPiuQuattroGiocabile(cartaCorrente, carteMano)) {
 				cs.effettuaMossa(new MossaDTO(TipoMossa.PASSA), null);
+				bloccaTimerTurno();
 				return;
 			}
 
@@ -132,6 +198,7 @@ public class ControlloreGiocoOnline extends Controllore implements StatoPartitaO
 		} else // carta non giocabile
 		{
 			cs.effettuaMossa(new MossaDTO(TipoMossa.PASSA), null);
+			bloccaTimerTurno();
 			return;
 		}	
 	}
@@ -206,11 +273,12 @@ public class ControlloreGiocoOnline extends Controllore implements StatoPartitaO
 		}
 		mossaDaInviare.carta = DTOUtils.convertiCartaInDTO(cartaDaInviare);
 		cs.effettuaMossa(mossaDaInviare, null);
+		bloccaTimerTurno();
 		if(numeroCarteInMano==2) {
+			avviaTimerONE();
 			vg.mostraONEBtn().thenRun(()->{
-				System.out.println("CHIAMO UNO");
 				cs.effettuaMossa(new MossaDTO(TipoMossa.DICHIARA_UNO), null);
-				System.out.println("CHIAMATO UNO");
+				bloccaTimerONE();
 			});
 		}
 	}
@@ -219,6 +287,7 @@ public class ControlloreGiocoOnline extends Controllore implements StatoPartitaO
 	public void finePartita(MessStatoPartita mess) {
 		vg.stampaFinePartita(mess.statoPartita.giocatori.get(mess.statoPartita.indiceVincitore).nickname, ()->{
 			vg.mostraMenuOnline();
+			cs.esciStanza(null);
 		});
 		
 	}

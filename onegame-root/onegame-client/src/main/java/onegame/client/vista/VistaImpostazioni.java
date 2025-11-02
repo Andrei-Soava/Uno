@@ -90,7 +90,7 @@ public class VistaImpostazioni extends Vista{
     }
     
     public void compilaNomeTitolo(String nome) {
-    	titolo.setText("Impostazioni di "+nome);
+    	titolo.setText("IMPOSTAZIONI DI "+nome);
     }
     
     public CompletableFuture<Void> waitForLogoutBtnClick() {

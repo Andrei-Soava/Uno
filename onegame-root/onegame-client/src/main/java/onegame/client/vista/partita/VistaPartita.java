@@ -343,11 +343,23 @@ public abstract class VistaPartita extends Vista {
      * @param secondsLeft
      */
     public void stampaTimerTurno(SimpleIntegerProperty secondsLeft) {
-    	Label timerLabel = new Label();
-		timerLabel.setStyle("-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: red;");
-		timerLabel.textProperty().bind(secondsLeft.asString("Tempo: %d s"));
-    	timerBox.getChildren().clear();
-    	timerBox.getChildren().add(timerLabel);
+    	Platform.runLater(()->{
+    		Label timerLabel = new Label();
+    		timerLabel.setStyle("-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: red;");
+    		timerLabel.textProperty().bind(secondsLeft.asString("Tempo: %d s"));
+    		timerBox.getChildren().clear();
+    		timerBox.getChildren().add(timerLabel);
+    	});
+    }
+    
+    /**
+     * metodo che mostra o meno timerBox per turno (potrebbe servire)
+     * @param visible
+     */
+    public void mostraTimerTurno(boolean visible) {
+    	Platform.runLater(()->{
+    		timerBox.setVisible(visible);
+    	});
     }
     
     /**
