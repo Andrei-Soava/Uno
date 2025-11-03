@@ -145,7 +145,10 @@ Esempio COMPLETO:
 - 24/10, Giuseppe, (aggiornamento requisiti), null;
 - 29/10, Andrei, (collegamento pesca carta per partita online + modifica gestione dialog di scelta nickname anonimo con relativi controlli), null;
 - 29/10, Andrei, (implementazione switch host dopo che host abbandona + refactoring generale di varie classi + eliminazione codice superfluo), null;
+- 29/10, Fabio, (refactoring messaggi di gioco e struttura messaggi per la carta pescata), null;
+- 30/10, Fabio, (refactoring del modello di gioco per ottimizzazione e indipendenza), null;
 - 1/11, Andrei, (refactoring struttura gerarchica controllore e vista + eliminazione classi inutili + piccoli aggiornamenti a documentazione), documentazione e diagrammi;
 - 1/11, **AVVISO**, Andrei, (documento 2 REQUISITI è stato formalmente completato);
 - 2/11, Andrei, (completato class/package diagram lato client), continuazione documentazione e diagrammi;
+- 2/11, Fabio, (introdotte eccezioni in PartitaNET, creati mazzi alternativi (anche per i test), aggiunto vincolo di unicità dell'utente registrato in una stanza, integrato pesca_e_passa (mossa automatica)), null; 
 - 3/11, Andrei, integrazione timer partita (turno e chiamata ONE) online lato client + piccole modifiche, null;

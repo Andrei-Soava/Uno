@@ -40,8 +40,8 @@ public final class PartitaNET {
 	private boolean haGiocatoNelTurno = false;
 	private CartaNET cartaPescataCorrente = null;
 
-	private final int TEMPO_DICHIARAZIONE_UNO = 2500; // ms
-	private final int TEMPO_DI_GUARDIA = 2000; // ms
+	private final int TEMPO_DICHIARAZIONE_UNO = 2000; // ms
+	private final int TEMPO_DI_GUARDIA = 3000; // ms
 	private final int TEMPO_MAX_MOSSA = 8000; // ms
 
 	// gestione timer
@@ -149,6 +149,7 @@ public final class PartitaNET {
 
 //			// applica l'effetto della carta giocata
 			applicaEffettoCarta(cartaGiocata);
+			this.haGiocatoNelTurno = true;
 
 			// Regola dell'UNO: se ha una sola carta, deve dichiarare UNO
 			if (giocatore.getNumeroCarte() == 1) {
@@ -268,19 +269,25 @@ public final class PartitaNET {
 		}
 	}
 
-	private void effettuaMossaAutomatica() throws EccezionePartita {
+	public void pescaEPassa(GiocatoreNET giocatore) throws EccezionePartita {
 		lock.lock();
 		try {
-			GiocatoreNET g = getCurrentPlayer();
-			for (CartaNET c : g.getMano()) {
-				if (isCartaGiocabile(c)) {
-					giocaCarta(c, this.coloreCorrente, g);
-				}
-			}
+			verificaPartitaFinita();
+
 			if (!haPescatoNelTurno) {
-				pesca(g);
+				CartaNET cartaPescata = mazzo.pesca();
+				if (cartaPescata != null) {
+					giocatore.aggiungiCarta(cartaPescata);
+					logger.info("Il giocatore {} ha pescato una carta e passa il turno", giocatore.getNickname());
+				} else {
+					logger.info("Il mazzo è vuoto", giocatore.getNickname());
+				}
+
+				cartaPescataCorrente = null;
 			}
-			passa(g);
+			passaTurno(1);
+			avviaTimerTurno();
+			notifyObserverspartitaAggiornata(Map.of());
 		} finally {
 			lock.unlock();
 		}
@@ -321,10 +328,23 @@ public final class PartitaNET {
 	}
 
 	private boolean isCartaGiocabile(CartaNET carta) {
-		if (carta.getColore() == Colore.NERO) {
-			if (carta.getTipo() == TipoSpeciale.PIU_QUATTRO) {
-				return verificaPiuQuattroBluff(getCurrentPlayer());
+		// verifica se la carta è un +4 e se il giocatore può giocarlo
+		if (!carta.isCartaNumero && carta.getTipo() == TipoSpeciale.PIU_QUATTRO) {
+			GiocatoreNET giocatoreCorrente = getCurrentPlayer();
+			if (!verificaPiuQuattroBluff(giocatoreCorrente)) {
+				return false;
 			}
+		}
+		return isCartaCompatibile(carta);
+	}
+
+	/**
+	 * Verifica se la carta è compatibile con la carta corrente in base alle regole del gioco
+	 * @param carta la carta da verificare
+	 * @return true se la carta è compatibile, false altrimenti
+	 */
+	private boolean isCartaCompatibile(CartaNET carta) {
+		if (carta.getColore() == Colore.NERO) {
 			return true;
 		}
 		if (carta.getColore() == this.coloreCorrente) {
@@ -340,7 +360,7 @@ public final class PartitaNET {
 		return false;
 	}
 
-	public boolean verificaPiuQuattroBluff(GiocatoreNET g) {
+	private boolean verificaPiuQuattroBluff(GiocatoreNET g) {
 		if (!getGiocatori().contains(g))
 			return false;
 		else {
@@ -396,7 +416,7 @@ public final class PartitaNET {
 		timer = scheduler.schedule(() -> {
 			logger.info("Il giocatore {} non ha effettuato la mossa in tempo", getCurrentPlayer().getNickname());
 			try {
-				effettuaMossaAutomatica();
+				pescaEPassa(getGiocatoreCorrente());
 			} catch (EccezionePartita e) {
 				logger.error("Errore nell'esecuzione della mossa automatica");
 			}

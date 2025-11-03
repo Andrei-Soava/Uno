@@ -18,6 +18,7 @@ import onegame.server.eccezioni.GiocatoriInsufficientiException;
 import onegame.server.eccezioni.PartitaGiaAvviataException;
 import onegame.server.gioco.CartaNET;
 import onegame.server.gioco.GiocatoreNET;
+import onegame.server.gioco.MazzoBlackFactory;
 import onegame.server.gioco.MazzoONEFactory;
 import onegame.server.gioco.MazzoWildFactory;
 import onegame.server.gioco.PartitaNET;
@@ -79,6 +80,8 @@ public class StanzaPartita extends Stanza implements PartitaObserver {
 			partita.passa(giocatori.get(sessione));
 		} else if (mossa.tipo == MossaDTO.TipoMossa.DICHIARA_UNO) {
 			partita.dichiaraUno(giocatori.get(sessione));
+		} else if (mossa.tipo == MossaDTO.TipoMossa.PESCA_E_PASSA) {
+			partita.pescaEPassa(giocatori.get(sessione));
 		}
 	}
 
