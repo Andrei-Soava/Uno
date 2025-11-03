@@ -44,10 +44,14 @@ Rappresenta i principali flussi e interazioni concorrenti:
 - Partita contro bot e gestione salvataggi locali/remoti.
 - Eventi asincroni (notifiche turno, ONE!, aggiornamenti stato).
 
+#### Diagrammi di sequenza (accesso lato client)
+![Sequence](../UMLDiagrams/ONEsequenceDiagramAccesso.PNG)
+![Sequence](../UMLDiagrams/ONEsequenceDiagramAnonimo.PNG)
+
 
 ### 3. Vista fisica
 Mostra la distribuzione sui nodi:
-- Postazioni client (Java + Swing) sui PC degli utenti.
+- Postazioni client (Java + JavaFX) sui PC degli utenti.
 - Server applicativo centralizzato.
 - Database su macchina dedicata o cluster.
 - Connessioni sicure client–server e P2P client–client per la fase di gioco.
