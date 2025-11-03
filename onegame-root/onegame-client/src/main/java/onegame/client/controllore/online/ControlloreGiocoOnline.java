@@ -7,6 +7,7 @@ import java.util.concurrent.CompletableFuture;
 import javafx.animation.KeyFrame;
 import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.util.Duration;
 import onegame.client.controllore.Controllore;
@@ -27,6 +28,7 @@ import onegame.modello.net.messaggi.MessaggiGioco.MessStatoPartita;
 
 public class ControlloreGiocoOnline extends Controllore implements StatoPartitaObserver {
 	private VistaGioco vg;
+	private boolean mossaInviata;
 	private PauseTransition timerTurno;
 	private PauseTransition timerONE;
 	private SimpleIntegerProperty secondsLeft = new SimpleIntegerProperty(8);
@@ -86,16 +88,19 @@ public class ControlloreGiocoOnline extends Controllore implements StatoPartitaO
 	 * metodo che avvia timerTurno
 	 */
 	private void avviaTimerTurno() {
-		secondsLeft.set(8);
-    	countdownTurno.play();
-    	timerTurno.setOnFinished(fine->{
-    		cs.effettuaMossa(new MossaDTO(TipoMossa.PESCA_E_PASSA), null);
-    		timerTurno.setOnFinished(null);
-    		vg.chiudiFinestraAperta();
-    		bloccaTimerTurno();
-    	});
-    	timerTurno.play();
-    	vg.mostraTimerTurno(true);
+		Platform.runLater(()->{
+			secondsLeft.set(8);
+			countdownTurno.play();
+			timerTurno.setOnFinished(fine->{
+				cs.effettuaMossa(new MossaDTO(TipoMossa.PESCA_E_PASSA), null);
+				timerTurno.setOnFinished(null);
+				vg.chiudiFinestraAperta();
+				bloccaTimerTurno();
+			});
+			timerTurno.play();
+			vg.mostraTimerTurno(true);
+			
+		});
 	}
 	
 	/**
@@ -132,6 +137,7 @@ public class ControlloreGiocoOnline extends Controllore implements StatoPartitaO
 
 	@Override
 	public void aggiornaPartita(MessStatoPartita mess) {
+		mossaInviata = false;
 		vg.chiudiFinestraAperta();
 		StatoPartitaDTO statoPartita = mess.statoPartita;
 		List<GiocatoreDTO> giocatori = statoPartita.giocatori;
@@ -193,6 +199,7 @@ public class ControlloreGiocoOnline extends Controllore implements StatoPartitaO
 				} else //tengo la carta pescata
 				{
 					cs.effettuaMossa(new MossaDTO(TipoMossa.PASSA), null);
+					bloccaTimerTurno();
 				}
 			});
 			
@@ -264,13 +271,18 @@ public class ControlloreGiocoOnline extends Controllore implements StatoPartitaO
 	}
 	
 	private void gestisciInviaCarta(Carta cartaDaInviare, int numeroCarteInMano) {
+		if (mossaInviata) return;
+	    mossaInviata = true;
 		MossaDTO mossaDaInviare = new MossaDTO((TipoMossa.GIOCA_CARTA));
 		if(cartaDaInviare instanceof CartaSpeciale && 
 				(((CartaSpeciale)cartaDaInviare).getTipo()==TipoSpeciale.JOLLY ||
 				((CartaSpeciale)cartaDaInviare).getTipo()==TipoSpeciale.PIU_QUATTRO
 				)) {
+			System.out.println("cartaaaaaaaaaaaaaaaaaaaaa "+cartaDaInviare);
 			mossaDaInviare.coloreScelto = cartaDaInviare.getColore();
+			System.out.println("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbINVIANDO CARTA NERA DA "+mossaDaInviare.coloreScelto);
 			cartaDaInviare.setColore(Colore.NERO);
+			System.out.println("cccccccccccccccccccccccccccccccccINVIANDO CARTA NERA DA dopo");
 		}
 		mossaDaInviare.carta = DTOUtils.convertiCartaInDTO(cartaDaInviare);
 		cs.effettuaMossa(mossaDaInviare, null);
