@@ -53,7 +53,9 @@ public class StanzaPartita extends Stanza implements PartitaObserver {
 			// Crea i giocatori
 			for (Sessione s : sessioni) {
 				try {
-					utenteDb.incrementaPartiteGiocate(s.getUsername());
+					if (!s.isAnonimo()) {
+						utenteDb.incrementaPartiteGiocate(s.getUsername());
+					}
 				} catch (Exception e) {
 					logger.error("Errore nell'aggiornamento delle statistiche per l'utente {}: {}", s.getUsername(),
 							e.getMessage());
@@ -108,8 +110,14 @@ public class StanzaPartita extends Stanza implements PartitaObserver {
 				GiocatoreNET vincitore = partita.getVincitore();
 				try {
 					if (vincitore != null) {
-						utenteDb.incrementaPartiteVinte(vincitore.getNickname());
-						logger.debug("Statistiche aggiornate per l'utente vincitore {}", vincitore.getNickname());
+						Sessione s = trovaSessionePerGiocatore(vincitore);
+						if (s != null && !s.isAnonimo()) {
+							utenteDb.incrementaPartiteVinte(s.getUsername());
+							logger.debug("Statistiche aggiornate per l'utente vincitore {}", vincitore.getNickname());
+						} else {
+							logger.debug("Utente vincitore {} anonimo o non connesso, statistiche non aggiornate",
+									vincitore.getNickname());
+						}
 					}
 				} catch (Exception e) {
 					logger.error("Errore nell'aggiornamento delle statistiche per l'utente {}: {}",
