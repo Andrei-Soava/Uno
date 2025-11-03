@@ -89,6 +89,7 @@ public class ControlloreGiocoOnline extends Controllore implements StatoPartitaO
 		secondsLeft.set(8);
     	countdownTurno.play();
     	timerTurno.setOnFinished(fine->{
+    		cs.effettuaMossa(new MossaDTO(TipoMossa.PESCA_E_PASSA), null);
     		timerTurno.setOnFinished(null);
     		vg.chiudiFinestraAperta();
     		bloccaTimerTurno();

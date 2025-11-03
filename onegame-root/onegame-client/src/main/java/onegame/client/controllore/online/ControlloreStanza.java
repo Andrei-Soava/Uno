@@ -62,7 +62,7 @@ public class ControlloreStanza extends Controllore implements StatoStanzaObserve
 	public void aggiornaStanza(StatoStanzaDTO stato) {
 		Platform.runLater(()->{
 			vs.aggiornaGiocatori(stato.nicknames, stato.maxUtenti);
-			vs.compilaNomePartita("da mettere");
+			vs.compilaNomePartita(stato.nomeStanza);
 			if(stato.usernames.get(stato.indiceProprietario).equals(cs.getIdentificatore())) {
 				vs.mostraAvviaBtn();
 				if(stato.nicknames.size()>1) {
