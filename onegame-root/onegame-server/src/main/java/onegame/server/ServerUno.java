@@ -54,81 +54,81 @@ public class ServerUno {
 		registraEventi();
 	}
 
+	/**
+	 * Registra gli eventi di connessione, disconnessione e messaggi vari
+	 */
 	private void registraEventi() {
-		// connessione
+		// Connessione
 		server.addConnectListener(client -> gestoreConnessioni.handleConnessione(client));
 
-		// disconnessione
+		// Disconnessione
 		server.addDisconnectListener(client -> gestoreConnessioni.handleDisconnessione(client));
 
-		// auth:login
+		// Autenticazione
 		server.addEventListener(Messaggi.EVENT_AUTH_LOGIN, String.class,
 				(client, reqAuth, ack) -> gestoreConnessioni.handleLogin(client, reqAuth, ack));
-
-		// auth:register
 		server.addEventListener(Messaggi.EVENT_AUTH_REGISTER, String.class,
 				(client, reqAuth, ack) -> gestoreConnessioni.handleRegister(client, reqAuth, ack));
-
-		// auth:anonimo
 		server.addEventListener(Messaggi.EVENT_AUTH_ANONIMO, String.class,
 				(client, reqAuth, ack) -> gestoreConnessioni.handleAnonimo(client, reqAuth, ack));
 
-		// stanza:crea
+		// Stanze
 		server.addEventListener(Messaggi.EVENT_STANZA_CREA, String.class,
 				(client, data, ack) -> gestoreStanze.handleCreaStanza(getSessione(client), data, ack));
-
-		// stanza:entra
 		server.addEventListener(Messaggi.EVENT_STANZA_ENTRA, String.class,
 				(client, data, ack) -> gestoreStanze.handleEntraStanza(getSessione(client), data, ack));
-
 		server.addEventListener(Messaggi.EVENT_STANZA_DETTAGLI, String.class,
 				(client, data, ack) -> gestoreStanze.handleDettagliStanza(getSessione(client), ack));
-
 		server.addEventListener(Messaggi.EVENT_STANZA_ESCI, Void.class,
 				(client, data, ack) -> gestoreStanze.handleAbbandonaStanza(getSessione(client), ack));
 
 		// Salvataggi partite offline
 		server.addEventListener(MessaggiSalvataggioPartite.EVENT_SALVA_SALVATAGGIO, String.class,
 				(client, data, ack) -> gestorePartiteOffline.handleSalvaPartita(getSessione(client), data, ack));
-
 		server.addEventListener(MessaggiSalvataggioPartite.EVENT_CARICA_SALVATAGGIO, String.class,
 				(client, data, ack) -> gestorePartiteOffline.handleCaricaPartita(getSessione(client), data, ack));
-
 		server.addEventListener(MessaggiSalvataggioPartite.EVENT_LISTA_SALVATAGGI, Void.class,
 				(client, data, ack) -> gestorePartiteOffline.handleListaSalvataggi(getSessione(client), ack));
-
 		server.addEventListener(MessaggiSalvataggioPartite.EVENT_ELIMINA_SALVATAGGIO, String.class,
 				(client, data, ack) -> gestorePartiteOffline.handleEliminaSalvataggio(getSessione(client), data, ack));
-
 		server.addEventListener(MessaggiSalvataggioPartite.EVENT_RINOMINA_SALVATAGGIO, String.class,
 				(client, data, ack) -> gestorePartiteOffline.handleRinominaSalvataggio(getSessione(client), data, ack));
 
+		// Utente
 		server.addEventListener(MessaggiUtente.EVENT_CAMBIO_USERNAME, String.class,
 				(client, data, ack) -> gestoreUtenti.handleCambioUsername(getSessione(client), data, ack));
-
 		server.addEventListener(MessaggiUtente.EVENT_CAMBIO_PASSWORD, String.class,
 				(client, data, ack) -> gestoreUtenti.handleCambioPassword(getSessione(client), data, ack));
-
 		server.addEventListener(MessaggiUtente.EVENT_ELIMINA_ACCOUNT, String.class,
 				(client, data, ack) -> gestoreUtenti.handleEliminaAccount(getSessione(client), data, ack));
 
+		// Gioco
 		server.addEventListener(MessaggiGioco.EVENT_INIZIA_PARTITA, String.class,
 				(client, data, ack) -> gestoreGioco.handleIniziaPartita(getSessione(client), ack));
-
 		server.addEventListener(MessaggiGioco.EVENT_EFFETTUA_MOSSA_PARTITA, String.class,
 				(client, data, ack) -> gestoreGioco.handleEffettuaMossa(getSessione(client), data, ack));
 
+		// Statistiche
 		server.addEventListener(MessaggiStatistiche.EVENT_CARICA_STATISTICHE, Void.class,
 				(client, data, ack) -> gestoreStatistiche.handleCaricaStatistiche(getSessione(client), ack));
 
 		logger.debug("Eventi registrati");
 	}
 
+	/**
+	 * Avvia il server
+	 */
 	public void avvia() {
 		server.start();
 		logger.info("Avviato su {}:{}", server.getConfiguration().getHostname(), server.getConfiguration().getPort());
 	}
 
+	/**
+	 * Recupera la sessione associata al client, aggiornandone il ping
+	 * @param client Il client Socket.IO
+	 * @return La sessione associata
+	 * @throws IllegalStateException Se la sessione non viene trovata
+	 */
 	private Sessione getSessione(SocketIOClient client) {
 		Sessione s = gestoreSessioni.getSessione(client.get("token"));
 		if (s == null) {

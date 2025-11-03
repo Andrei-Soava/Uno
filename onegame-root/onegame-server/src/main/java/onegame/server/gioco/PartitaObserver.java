@@ -1,9 +1,6 @@
-package onegame.server;
+package onegame.server.gioco;
 
 import java.util.Map;
-
-import onegame.server.gioco.CartaNET;
-import onegame.server.gioco.GiocatoreNET;
 
 @FunctionalInterface
 public interface PartitaObserver {

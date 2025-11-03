@@ -3,6 +3,9 @@ package onegame.server.gioco;
 import onegame.modello.carte.CartaSpeciale.TipoSpeciale;
 import onegame.modello.carte.Colore;
 
+/**
+ * Rappresenta una carta di ONE
+ */
 public class CartaNET {
 
 	public final boolean isCartaNumero;
@@ -11,8 +14,7 @@ public class CartaNET {
 	public final Colore colore;
 
 	private static CartaNET[][] cacheCarteNumeri = new CartaNET[10][Colore.values().length];
-	private static CartaNET[][] cacheCarteSpeciali = new CartaNET[TipoSpeciale.values().length][Colore
-			.values().length];
+	private static CartaNET[][] cacheCarteSpeciali = new CartaNET[TipoSpeciale.values().length][Colore.values().length];
 
 	private CartaNET(boolean isCartaNumero, int numero, TipoSpeciale tipo, Colore colore) {
 		this.isCartaNumero = isCartaNumero;

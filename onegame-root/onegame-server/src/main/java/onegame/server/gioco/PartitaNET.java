@@ -4,7 +4,6 @@ import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -13,7 +12,6 @@ import org.slf4j.LoggerFactory;
 
 import onegame.modello.carte.CartaSpeciale.TipoSpeciale;
 import onegame.modello.carte.Colore;
-import onegame.server.PartitaObserver;
 import onegame.server.StanzaPartita;
 import onegame.server.eccezioni.CartaNonPossedutaException;
 import onegame.server.eccezioni.ColoreNonValidoException;
@@ -22,6 +20,9 @@ import onegame.server.eccezioni.MossaNonValidaException;
 import onegame.server.eccezioni.PartitaGiaFinitaException;
 import onegame.server.eccezioni.TurnoNonValidoException;
 
+/**
+ * Gestisce lo stato di una partita di Uno tra più giocatori
+ */
 public final class PartitaNET {
 	private final List<GiocatoreNET> giocatori = new ArrayList<>();
 	private final MazzoNET mazzo;
@@ -53,6 +54,12 @@ public final class PartitaNET {
 
 	private ReentrantLock lock = new ReentrantLock();
 
+	/**
+	 * Crea una nuova partita con i giocatori specificati
+	 * @param giocatori la lista dei giocatori partecipanti
+	 * @param stanza la stanza di appartenenza della partita
+	 * @param mazzoFactory la fabbrica per creare il mazzo di carte
+	 */
 	public PartitaNET(List<GiocatoreNET> giocatori, StanzaPartita stanza, MazzoFactory mazzoFactory) {
 		this.giocatori.addAll(giocatori);
 		this.mazzo = new MazzoNET(mazzoFactory);
@@ -97,6 +104,13 @@ public final class PartitaNET {
 		return this.giocatori.size();
 	}
 
+	/**
+	 * Esegue la mossa di giocare una carta
+	 * @param cartaGiocata la carta da giocare
+	 * @param coloreScelto il colore scelto (se la carta è nera)
+	 * @param giocatore il giocatore che effettua la mossa
+	 * @throws EccezionePartita se la mossa non è valida o la partita è finita
+	 */
 	public void giocaCarta(CartaNET cartaGiocata, Colore coloreScelto, GiocatoreNET giocatore) throws EccezionePartita {
 		lock.lock();
 		try {
@@ -174,6 +188,11 @@ public final class PartitaNET {
 		}
 	}
 
+	/**
+	 * Esegue la mossa di pescare una carta
+	 * @param giocatore il giocatore che effettua la mossa
+	 * @throws EccezionePartita se la mossa non è valida o la partita è finita
+	 */
 	public void pesca(GiocatoreNET giocatore) throws EccezionePartita {
 		lock.lock();
 		try {
@@ -213,6 +232,11 @@ public final class PartitaNET {
 		}
 	}
 
+	/**
+	 * Esegue la mossa di passare il turno
+	 * @param giocatore il giocatore che effettua la mossa
+	 * @throws EccezionePartita se la mossa non è valida o la partita è finita
+	 */
 	public void passa(GiocatoreNET giocatore) throws EccezionePartita {
 		lock.lock();
 		try {
@@ -238,6 +262,11 @@ public final class PartitaNET {
 		}
 	}
 
+	/**
+	 * Esegue la mossa di dichiarare UNO
+	 * @param giocatore il giocatore che effettua la mossa
+	 * @throws EccezionePartita se la mossa non è valida o la partita è finita
+	 */
 	public void dichiaraUno(GiocatoreNET giocatore) throws EccezionePartita {
 		lock.lock();
 		try {
@@ -269,6 +298,11 @@ public final class PartitaNET {
 		}
 	}
 
+	/**
+	 * Esegue la mossa di pescare una carta e passare il turno
+	 * @param giocatore il giocatore che effettua la mossa
+	 * @throws EccezionePartita se la mossa non è valida o la partita è finita
+	 */
 	public void pescaEPassa(GiocatoreNET giocatore) throws EccezionePartita {
 		lock.lock();
 		try {
@@ -293,6 +327,10 @@ public final class PartitaNET {
 		}
 	}
 
+	/**
+	 * Applica l'effetto della carta giocata
+	 * @param carta la carta giocata
+	 */
 	private void applicaEffettoCarta(CartaNET carta) {
 		if (!carta.isCartaNumero) {
 			switch (carta.getTipo()) {
@@ -327,6 +365,11 @@ public final class PartitaNET {
 		}
 	}
 
+	/**
+	 * Verifica se la carta può essere giocata in base alle regole del gioco
+	 * @param carta la carta da verificare
+	 * @return true se la carta è giocabile, false altrimenti
+	 */
 	private boolean isCartaGiocabile(CartaNET carta) {
 		// verifica se la carta è un +4 e se il giocatore può giocarlo
 		if (!carta.isCartaNumero && carta.getTipo() == TipoSpeciale.PIU_QUATTRO) {
@@ -360,6 +403,11 @@ public final class PartitaNET {
 		return false;
 	}
 
+	/**
+	 * Verifica se il giocatore può giocare un +4 in base alle regole del gioco
+	 * @param g il giocatore da verificare
+	 * @return true se il giocatore può giocare un +4, false altrimenti
+	 */
 	private boolean verificaPiuQuattroBluff(GiocatoreNET g) {
 		if (!getGiocatori().contains(g))
 			return false;
@@ -386,6 +434,10 @@ public final class PartitaNET {
 		}
 	}
 
+	/**
+	 * Avvia il timer per la dichiarazione di UNO
+	 * @param giocatore il giocatore che deve dichiarare UNO
+	 */
 	private void avviaTimerDichiaraUNO(GiocatoreNET giocatore) {
 		cancellaTimer();
 		timer = scheduler.schedule(() -> {
@@ -411,6 +463,9 @@ public final class PartitaNET {
 		}, TEMPO_DICHIARAZIONE_UNO + TEMPO_DI_GUARDIA, TimeUnit.MILLISECONDS);
 	}
 
+	/**
+	 * Avvia il timer per il turno del giocatore corrente
+	 */
 	private void avviaTimerTurno() {
 		cancellaTimer();
 		timer = scheduler.schedule(() -> {
@@ -423,6 +478,10 @@ public final class PartitaNET {
 		}, TEMPO_MAX_MOSSA + TEMPO_DI_GUARDIA, TimeUnit.MILLISECONDS);
 	}
 
+	/**
+	 * Passa il turno al prossimo giocatore
+	 * @param step il numero di posizioni da saltare
+	 */
 	private void passaTurno(int step) {
 		haPescatoNelTurno = false;
 		haGiocatoNelTurno = false;
@@ -482,6 +541,10 @@ public final class PartitaNET {
 		return observers.remove(ob);
 	}
 
+	/**
+	 * Notifica gli osservatori che la partita è stata aggiornata
+	 * @param cartePescate le carte pescate dai giocatori durante l'ultimo aggiornamento
+	 */
 	private void notifyObserverspartitaAggiornata(Map<GiocatoreNET, CartaNET> cartePescate) {
 		for (PartitaObserver ob : observers) {
 			ob.partitaAggiornata(cartePescate);

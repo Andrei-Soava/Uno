@@ -11,6 +11,9 @@ import com.corundumstudio.socketio.AckRequest;
 import onegame.modello.net.messaggi.MessaggiStatistiche.RespCaricaStatistiche;
 import onegame.server.db.UtenteDb;
 
+/**
+ * Gestore delle statistiche degli utenti
+ */
 public class GestoreStatistiche {
 	private final UtenteDb utenteDb;
 
@@ -20,6 +23,11 @@ public class GestoreStatistiche {
 		this.utenteDb = new UtenteDb();
 	}
 
+	/**
+	 * Gestisce la richiesta di caricamento delle statistiche di un utente
+	 * @param sessione la sessione dell'utente che richiede le statistiche
+	 * @param ackRequest l'oggetto per inviare la risposta di ack
+	 */
 	public void handleCaricaStatistiche(Sessione sessione, AckRequest ackRequest) {
 		if (sessione == null || sessione.isAnonimo()) {
 			ackRequest.sendAckData(new RespCaricaStatistiche(false, -1, -1, "Accesso negato"));

@@ -12,6 +12,9 @@ import onegame.modello.net.messaggi.MessaggiGioco.RespIniziaPartita;
 import onegame.modello.net.util.JsonHelper;
 import onegame.server.eccezioni.EccezionePartita;
 
+/**
+ * Gestisce le operazioni di gioco come l'inizio della partita e l'effettuazione delle mosse.
+ */
 public class GestoreGioco {
 	private final GestoreStanzePartita gestoreStanze;
 
@@ -21,6 +24,11 @@ public class GestoreGioco {
 		this.gestoreStanze = gestoreStanze;
 	}
 
+	/**
+	 * Gestisce la richiesta di inizio partita da parte di un utente.
+	 * @param sessione la sessione dell'utente che richiede l'inizio della partita
+	 * @param ack l'oggetto per inviare la risposta di ack
+	 */
 	public void handleIniziaPartita(Sessione sessione, AckRequest ack) {
 		try {
 			logger.debug("Richiesta di inizio partita da utente {}",
@@ -41,8 +49,7 @@ public class GestoreGioco {
 			if (!sessione.equals(stanza.getProprietario())) {
 				ack.sendAckData(
 						new RespIniziaPartita(false, "Solo il proprietario della stanza può avviare la partita"));
-				logger.warn("Utente {} non proprietario della stanza {}", sessione.getUsername(),
-						stanza.getNome());
+				logger.warn("Utente {} non proprietario della stanza {}", sessione.getUsername(), stanza.getNome());
 				return;
 			}
 			if (stanza.getNumSessioni() < 2) {
@@ -65,6 +72,12 @@ public class GestoreGioco {
 		}
 	}
 
+	/**
+	 * Gestisce la richiesta di effettuare una mossa da parte di un utente.
+	 * @param sessione la sessione dell'utente che richiede di effettuare la mossa
+	 * @param str la stringa JSON contenente i dati della mossa
+	 * @param ack l'oggetto per inviare la risposta di ack
+	 */
 	public void handleEffettuaMossa(Sessione sessione, String str, AckRequest ack) {
 		if (sessione == null) {
 			ack.sendAckData(new RespEffettuaMossa(false, "Utente non valido"));

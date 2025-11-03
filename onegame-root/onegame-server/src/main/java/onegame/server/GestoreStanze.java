@@ -41,6 +41,8 @@ public abstract class GestoreStanze<Stanzz extends Stanza> implements SessioneOb
 
 	/**
 	 * Crea una nuova stanza e aggiunge l'utente che ha fatto la richiesta.
+	 * @param sessione la sessione dell'utente che richiede la creazione della stanza
+	 * @param str la stringa JSON della richiesta
 	 */
 	public void handleCreaStanza(Sessione sessione, String str, AckRequest ack) {
 		try {
@@ -78,6 +80,8 @@ public abstract class GestoreStanze<Stanzz extends Stanza> implements SessioneOb
 
 	/**
 	 * Aggiunge l'utente autenticato alla stanza richiesta.
+	 * @param sessione la sessione dell'utente che richiede di entrare nella stanza
+	 * @param str la stringa JSON della richiesta
 	 */
 	public void handleEntraStanza(Sessione sessione, String str, AckRequest ack) {
 		try {
@@ -115,6 +119,10 @@ public abstract class GestoreStanze<Stanzz extends Stanza> implements SessioneOb
 		}
 	}
 
+	/**
+	 * Fornisce i dettagli della stanza in cui si trova l'utente.
+	 * @param sessione la sessione dell'utente che richiede i dettagli della stanza
+	 */
 	public void handleDettagliStanza(Sessione sessione, AckRequest ack) {
 		try {
 			Stanza stanzz = mappaSessioneAStanza.get(sessione);
@@ -135,6 +143,7 @@ public abstract class GestoreStanze<Stanzz extends Stanza> implements SessioneOb
 
 	/**
 	 * Rimuove la sessione dalla stanza e la stanza se è vuota.
+	 * @param sessione la sessione da rimuovere
 	 */
 	private void rimuoviUtenteDaSistema(Sessione sessione) {
 		Stanzz stanza = mappaSessioneAStanza.remove(sessione);
@@ -170,6 +179,8 @@ public abstract class GestoreStanze<Stanzz extends Stanza> implements SessioneOb
 
 	/**
 	 * Permette all'utente di abbandonare la stanza in cui si trova.
+	 * @param sessione la sessione dell'utente che richiede di abbandonare la stanza
+	 * @param ack l'oggetto per inviare la risposta di ack
 	 */
 	public void handleAbbandonaStanza(Sessione sessione, AckRequest ack) {
 		if (!mappaSessioneAStanza.containsKey(sessione)) {
@@ -190,6 +201,10 @@ public abstract class GestoreStanze<Stanzz extends Stanza> implements SessioneOb
 
 	protected abstract Stanzz creaStanza(int codice, String nome, int maxUtenti);
 
+	/**
+	 * Genera il prossimo codice univoco per una nuova stanza.
+	 * @return il codice univoco generato
+	 */
 	private synchronized int nextCodice() {
 		int codice;
 		do {

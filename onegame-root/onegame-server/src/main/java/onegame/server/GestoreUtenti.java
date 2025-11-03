@@ -11,6 +11,9 @@ import onegame.server.db.UtenteDb;
 import onegame.server.utils.PasswordUtils;
 import onegame.server.utils.UsernameValidator;
 
+/**
+ * Gestore delle operazioni sugli utenti come cambio username, cambio password ed eliminazione account
+ */
 public class GestoreUtenti {
 
 	private final GestoreSessioni gestoreSessioni;

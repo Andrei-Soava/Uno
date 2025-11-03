@@ -22,6 +22,7 @@ import onegame.server.gioco.MazzoBlackFactory;
 import onegame.server.gioco.MazzoONEFactory;
 import onegame.server.gioco.MazzoWildFactory;
 import onegame.server.gioco.PartitaNET;
+import onegame.server.gioco.PartitaObserver;
 import onegame.server.utils.DTOServerUtils;
 
 public class StanzaPartita extends Stanza implements PartitaObserver {

@@ -46,7 +46,7 @@ public class GestoreConnessioni {
 	/**
 	 * Gestisce la richiesta di login di un utente
 	 * @param client Il client che effettua la richiesta
-	 * @param req La richiesta di autenticazione (username e password)
+	 * @param str La richiesta di autenticazione
 	 * @param ackRequest L'oggetto per inviare la risposta di ack
 	 */
 	public void handleLogin(SocketIOClient client, String str, AckRequest ackRequest) {
@@ -85,7 +85,7 @@ public class GestoreConnessioni {
 	/**
 	 * Gestisce la richiesta di registrazione di un nuovo utente
 	 * @param client Il client che effettua la richiesta
-	 * @param req La richiesta di autenticazione (username e password)
+	 * @param str La richiesta di registrazione
 	 * @param ackRequest L'oggetto per inviare la risposta di ack
 	 */
 	public void handleRegister(SocketIOClient client, String str, AckRequest ackRequest) {
@@ -132,6 +132,7 @@ public class GestoreConnessioni {
 	/**
 	 * Gestisce la richiesta di accesso anonimo
 	 * @param client Il client che effettua la richiesta
+	 * @param str La richiesta di accesso anonimo
 	 * @param ackRequest L'oggetto per inviare la risposta di ack
 	 */
 	public void handleAnonimo(SocketIOClient client, String str, AckRequest ackRequest) {
@@ -163,6 +164,10 @@ public class GestoreConnessioni {
 		}
 	}
 
+	/**
+	 * Gestisce una nuova connessione Socket.IO
+	 * @param client Il client che si è connesso
+	 */
 	public void handleConnessione(SocketIOClient client) {
 		HandshakeData hd = client.getHandshakeData();
 		String addr = "unknown";
@@ -189,6 +194,10 @@ public class GestoreConnessioni {
 		}
 	}
 
+	/**
+	 * Gestisce la disconnessione di un client Socket.IO
+	 * @param client Il client che si è disconnesso
+	 */
 	public void handleDisconnessione(SocketIOClient client) {
 		gestoreSessioni.marcaDisconnesso(client);
 	}

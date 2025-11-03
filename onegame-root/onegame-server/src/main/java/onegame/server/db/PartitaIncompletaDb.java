@@ -11,12 +11,6 @@ import java.util.ArrayList;
  * dagli utenti registrati.
  */
 public class PartitaIncompletaDb {
-//	private final UtenteDb utenteDb = new UtenteDb();
-
-//	public boolean createPartita(String username, String nomeSalvataggio, String partitaSerializzata) throws SQLException {
-//		long utenteId = utenteDb.getIdByUsername(username);
-//		return createPartita(utenteId, nomeSalvataggio, partitaSerializzata);
-//	}
 
 	public boolean esistePartita(long utenteId, String nomeSalvataggio) throws SQLException {
 		String sql = "SELECT 1 FROM partita_incompleta WHERE utente_id = ? AND nome_salvataggio = ?";
@@ -47,11 +41,6 @@ public class PartitaIncompletaDb {
 			return ps.getUpdateCount() > 0;
 		}
 	}
-
-//	public ArrayList<String> getPartiteByUtente(String username) throws SQLException {
-//		long utenteId = utenteDb.getIdByUsername(username);
-//		return getPartiteByUtente(utenteId);
-//	}
 
 	/**
 	 * Recupera la lista dei nomi dei salvataggi delle partite incomplete per un
@@ -126,11 +115,6 @@ public class PartitaIncompletaDb {
 			return ps.executeUpdate() > 0;
 		}
 	}
-
-//	public boolean rinominaSalvataggio(String username, String vecchioNome, String nuovoNome) throws SQLException {
-//		long utenteId = utenteDb.getIdByUsername(username);
-//		return rinominaSalvataggio(utenteId, vecchioNome, nuovoNome);
-//	}
 
 	public boolean rinominaSalvataggio(long utenteId, String vecchioNome, String nuovoNome) throws SQLException {
 		String sql = "UPDATE partita_incompleta SET nome_salvataggio = ? WHERE utente_id = ? AND nome_salvataggio = ?";

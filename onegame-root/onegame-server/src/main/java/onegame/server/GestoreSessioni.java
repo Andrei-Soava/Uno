@@ -48,21 +48,6 @@ public class GestoreSessioni {
 		return getSessione(token);
 	}
 
-//	/**
-//	 * Recupera l'utente autenticato associato al client
-//	 * @param client Il client
-//	 * @return L'utente autenticato o null se non valido
-//	 */
-//	public Sessione getSessioneAutenticato(SocketIOClient client) {
-//		Sessione sessione = getSessioneByClient(client);
-//
-//		if (sessione == null || sessione.isAnonimo()) {
-//			logger.warn("Accesso negato: token non valido o utente anonimo");
-//			return null;
-//		}
-//		return sessione;
-//	}
-
 	public void aggiornaPing(String token) {
 		Sessione s = getSessione(token);
 		if (s != null) {
