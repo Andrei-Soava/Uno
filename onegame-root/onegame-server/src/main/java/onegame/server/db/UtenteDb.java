@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Gestisce le operazioni sul database relative agli utenti
@@ -129,6 +131,88 @@ public class UtenteDb {
 			int deleted = ps.executeUpdate();
 			return deleted > 0;
 		}
+	}
+
+	/**
+	 * Incrementa il contatore delle partite giocate per l'utente specificato
+	 * @param utenteId ID dell'utente
+	 * @return true se l'aggiornamento è riuscito, false altrimenti
+	 * @throws SQLException
+	 */
+	public boolean incrementaPartiteGiocate(long utenteId) throws SQLException {
+		String sql = "UPDATE utente SET partite_giocate = partite_giocate + 1 WHERE id=?";
+		try (Connection conn = GestoreDatabase.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+			ps.setLong(1, utenteId);
+			int updated = ps.executeUpdate();
+			return updated > 0;
+		}
+	}
+
+	/**
+	 * Incrementa il contatore delle partite vinte per l'utente specificato
+	 * @param utenteId ID dell'utente
+	 * @return true se l'aggiornamento è riuscito, false altrimenti
+	 * @throws SQLException
+	 */
+	public boolean incrementaPartiteVinte(long utenteId) throws SQLException {
+		String sql = "UPDATE utente SET partite_vinte = partite_vinte + 1 WHERE id=?";
+		try (Connection conn = GestoreDatabase.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+			ps.setLong(1, utenteId);
+			int updated = ps.executeUpdate();
+			return updated > 0;
+		}
+	}
+
+	/**
+	 * Incrementa il contatore delle partite giocate per l'utente specificato
+	 * @param username username dell'utente
+	 * @return true se l'aggiornamento è riuscito, false altrimenti
+	 * @throws SQLException
+	 */
+	public boolean incrementaPartiteGiocate(String username) throws SQLException {
+		String sql = "UPDATE utente SET partite_giocate = partite_giocate + 1 WHERE username=?";
+		try (Connection conn = GestoreDatabase.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+			ps.setString(1, username);
+			int updated = ps.executeUpdate();
+			return updated > 0;
+		}
+	}
+
+	/**
+	 * Incrementa il contatore delle partite vinte per l'utente specificato
+	 * @param username username dell'utente
+	 * @return true se l'aggiornamento è riuscito, false altrimenti
+	 * @throws SQLException
+	 */
+	public boolean incrementaPartiteVinte(String username) throws SQLException {
+		String sql = "UPDATE utente SET partite_vinte = partite_vinte + 1 WHERE username=?";
+		try (Connection conn = GestoreDatabase.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+			ps.setString(1, username);
+			int updated = ps.executeUpdate();
+			return updated > 0;
+		}
+	}
+
+	/**
+	 * Recupera le statistiche di gioco dell'utente specificato
+	 * @param username lo username dell'utente
+	 * @return una mappa con le statistiche (partite_giocate, partite_vinte), o null se l'utente non esiste
+	 * @throws SQLException
+	 */
+	public Map<String, Integer> getStatisticheUtente(String username) throws SQLException {
+		String sql = "SELECT partite_giocate, partite_vinte FROM utente WHERE username=?";
+		try (Connection conn = GestoreDatabase.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+			ps.setString(1, username);
+			try (ResultSet rs = ps.executeQuery()) {
+				if (rs.next()) {
+					Map<String, Integer> stats = new HashMap<>();
+					stats.put("partite_giocate", rs.getInt("partite_giocate"));
+					stats.put("partite_vinte", rs.getInt("partite_vinte"));
+					return stats;
+				}
+			}
+		}
+		return null;
 	}
 
 }

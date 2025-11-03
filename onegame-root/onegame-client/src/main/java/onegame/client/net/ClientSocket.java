@@ -12,10 +12,11 @@ import onegame.client.controllore.online.StatoPartitaObserver;
 import onegame.client.controllore.online.StatoStanzaObserver;
 import onegame.modello.net.DTOUtils;
 import onegame.modello.net.MossaDTO;
-import onegame.modello.net.StatoPartitaDTO;
 import onegame.modello.net.StatoStanzaDTO;
 import onegame.modello.net.messaggi.MessaggiSalvataggioPartite;
 import onegame.modello.net.messaggi.MessaggiSalvataggioPartite.*;
+import onegame.modello.net.messaggi.MessaggiStatistiche;
+import onegame.modello.net.messaggi.MessaggiStatistiche.RespCaricaStatistiche;
 import onegame.modello.net.messaggi.MessaggiUtente;
 import onegame.modello.net.messaggi.MessaggiUtente.*;
 import onegame.modello.net.messaggi.Messaggi;
@@ -66,7 +67,7 @@ public class ClientSocket {
 	public void setUtente(Utente utente) {
 		this.utente = utente;
 	}
-	
+
 	/**
 	 * Ottieni identificatore dal socket
 	 * @return identificatore del socket
@@ -75,7 +76,6 @@ public class ClientSocket {
 		return identificatore;
 	}
 
-	
 	/**
 	 * Imposta identificatore dell'utente (diverso dal nickname nel caso dell'ospite)
 	 * @param utente
@@ -382,6 +382,12 @@ public class ClientSocket {
 		System.out.println("[CLIENT] Invio richiesta mossa: " + mossa);
 
 		socketEmitEvent(MessaggiGioco.EVENT_EFFETTUA_MOSSA_PARTITA, req, callback, RespEffettuaMossa.class);
+	}
+
+	public void caricaStatistiche(Callback<RespCaricaStatistiche> callback) {
+		System.out.println("[CLIENT] Invio richiesta caricamento statistiche");
+
+		socketEmitEvent(MessaggiStatistiche.EVENT_CARICA_STATISTICHE, null, callback, RespCaricaStatistiche.class);
 	}
 
 	/**

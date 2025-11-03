@@ -452,6 +452,20 @@ public final class PartitaNET {
 		return indiceVincitore;
 	}
 
+	/**
+	 * Restituisce il giocatore vincitore della partita, o null se la partita non è ancora finita
+	 * @return il giocatore vincitore, o null se la partita non è finita
+	 */
+	public GiocatoreNET getVincitore() {
+		if (indiceVincitore >= 0 && indiceVincitore < giocatori.size()) {
+			return giocatori.get(indiceVincitore);
+		}
+		return null;
+	}
+
+	/**
+	 * Cambia la direzione del gioco
+	 */
 	private void cambiaDirezione() {
 		direzioneCrescente = !direzioneCrescente;
 	}

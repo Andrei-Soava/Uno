@@ -8,6 +8,7 @@ import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.SocketIOServer;
 
 import onegame.modello.net.messaggi.MessaggiSalvataggioPartite;
+import onegame.modello.net.messaggi.MessaggiStatistiche;
 import onegame.modello.net.messaggi.MessaggiUtente;
 import onegame.modello.net.messaggi.Messaggi;
 import onegame.modello.net.messaggi.MessaggiGioco;
@@ -27,6 +28,7 @@ public class ServerUno {
 	private final GestoreGioco gestoreGioco;
 	private final GestoreSessioni gestoreSessioni;
 	private final GestoreUtenti gestoreUtenti;
+	private final GestoreStatistiche gestoreStatistiche;
 
 	private static final Logger logger = LoggerFactory.getLogger(ServerUno.class);
 
@@ -45,6 +47,7 @@ public class ServerUno {
 		this.gestorePartiteOffline = new GestorePartiteOffline();
 		this.gestoreGioco = new GestoreGioco(gestoreStanze);
 		this.gestoreUtenti = new GestoreUtenti(gestoreSessioni);
+		this.gestoreStatistiche = new GestoreStatistiche();
 
 		this.gestoreSessioni.addObserver(gestoreStanze);
 
@@ -115,18 +118,11 @@ public class ServerUno {
 		server.addEventListener(MessaggiGioco.EVENT_EFFETTUA_MOSSA_PARTITA, String.class,
 				(client, data, ack) -> gestoreGioco.handleEffettuaMossa(getSessione(client), data, ack));
 
-		// Test
-		server.addEventListener("test", String.class, (client, data, ack) -> {
-			boolean tmp = ServerUno.testClient == client;
-			logger.debug(tmp ? "True" : "False");
-			ServerUno.testClient = client;
-		});
+		server.addEventListener(MessaggiStatistiche.EVENT_CARICA_STATISTICHE, Void.class,
+				(client, data, ack) -> gestoreStatistiche.handleCaricaStatistiche(getSessione(client), ack));
 
 		logger.debug("Eventi registrati");
 	}
-
-	// Test
-	private static SocketIOClient testClient;
 
 	public void avvia() {
 		server.start();

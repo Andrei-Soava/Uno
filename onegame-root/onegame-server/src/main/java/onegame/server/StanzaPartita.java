@@ -7,12 +7,12 @@ import org.slf4j.LoggerFactory;
 
 import onegame.modello.carte.Colore;
 import onegame.modello.net.CartaDTO;
-import onegame.modello.net.DTOUtils;
 import onegame.modello.net.GiocatoreDTO;
 import onegame.modello.net.MossaDTO;
 import onegame.modello.net.StatoPartitaDTO;
 import onegame.modello.net.messaggi.MessaggiGioco;
 import onegame.modello.net.messaggi.MessaggiGioco.MessStatoPartita;
+import onegame.server.db.UtenteDb;
 import onegame.server.eccezioni.EccezionePartita;
 import onegame.server.eccezioni.GiocatoriInsufficientiException;
 import onegame.server.eccezioni.PartitaGiaAvviataException;
@@ -27,9 +27,11 @@ import onegame.server.utils.DTOServerUtils;
 public class StanzaPartita extends Stanza implements PartitaObserver {
 
 	private final Map<Sessione, GiocatoreNET> giocatori = new LinkedHashMap<>();
+	private boolean vincitoreAggiornato = false;
 
 	private PartitaNET partita;
 
+	private static final UtenteDb utenteDb = new UtenteDb();
 	private static final Logger logger = LoggerFactory.getLogger(StanzaPartita.class);
 
 	public StanzaPartita(int codice, String nome, int maxUtenti) {
@@ -49,8 +51,15 @@ public class StanzaPartita extends Stanza implements PartitaObserver {
 			giocatori.clear();
 			// Crea i giocatori
 			for (Sessione s : sessioni) {
+				try {
+					utenteDb.incrementaPartiteGiocate(s.getUsername());
+				} catch (Exception e) {
+					logger.error("Errore nell'aggiornamento delle statistiche per l'utente {}: {}", s.getUsername(),
+							e.getMessage());
+				}
 				giocatori.put(s, new GiocatoreNET(s.getNickname()));
 			}
+			vincitoreAggiornato = false;
 
 			// Inizializza la partita
 			List<GiocatoreNET> lista = new ArrayList<>(giocatori.values());
@@ -94,11 +103,29 @@ public class StanzaPartita extends Stanza implements PartitaObserver {
 		if (partita.isFinished()) {
 			inviaTurnoCorrente(MessaggiGioco.EVENT_FINITA_PARTITA, cartePescate);
 			this.isAperta = true;
+			if (!vincitoreAggiornato) {
+				GiocatoreNET vincitore = partita.getVincitore();
+				try {
+					if (vincitore != null) {
+						utenteDb.incrementaPartiteVinte(vincitore.getNickname());
+						logger.debug("Statistiche aggiornate per l'utente vincitore {}", vincitore.getNickname());
+					}
+				} catch (Exception e) {
+					logger.error("Errore nell'aggiornamento delle statistiche per l'utente {}: {}",
+							vincitore.getNickname(), e.getMessage());
+				}
+				vincitoreAggiornato = true;
+			}
 		} else {
 			inviaTurnoCorrente(MessaggiGioco.EVENT_AGGIORNATA_PARTITA, cartePescate);
 		}
 	}
 
+	/**
+	 * Invia lo stato corrente della partita a tutti i giocatori nella stanza
+	 * @param nomeEvento nome dell'evento da inviare
+	 * @param cartePescateMap mappa delle carte pescate dai giocatori in questo turno
+	 */
 	private void inviaTurnoCorrente(String nomeEvento, Map<GiocatoreNET, CartaNET> cartePescateMap) {
 		lock.lock();
 

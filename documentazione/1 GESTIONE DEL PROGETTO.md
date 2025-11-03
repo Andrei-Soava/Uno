@@ -153,3 +153,4 @@ Esempio COMPLETO:
 - 2/11, Fabio, (introdotte eccezioni in PartitaNET, creati mazzi alternativi (anche per i test), aggiunto vincolo di unicità dell'utente registrato in una stanza, integrato pesca_e_passa (mossa automatica)), null; 
 - 3/11, Andrei, integrazione timer partita (turno e chiamata ONE) online lato client + piccole modifiche, null;
 - 3/11, Andrei, creazione sequence diagrams per mostrare logica CLIENT di login (accessoClient) ed accesso ospite (accessoAnonimo) + aggiornamento documento 3 con i loro .PNG, continuazione documentazione e diagrammi;
+- 3/11, Fabio, aggiunto tracciamento statistiche e recupero, null;

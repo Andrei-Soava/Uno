@@ -23,20 +23,22 @@ public class GestoreDatabase {
 
 	private static final String[] DDL = { """
 			CREATE TABLE IF NOT EXISTS utente (
-			    id IDENTITY PRIMARY KEY,
-			    username VARCHAR(50) UNIQUE NOT NULL,
-			    password VARCHAR(200) NOT NULL,
-			    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+				id IDENTITY PRIMARY KEY,
+				username VARCHAR(50) UNIQUE NOT NULL,
+				password VARCHAR(200) NOT NULL,
+				partite_giocate INT DEFAULT 0 NOT NULL,
+				partite_vinte INT DEFAULT 0 NOT NULL,
+				created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 			)
 			""", """
 			CREATE TABLE IF NOT EXISTS partita_incompleta (
-			    id IDENTITY PRIMARY KEY,
-			    utente_id BIGINT NOT NULL,
-			    nome_salvataggio VARCHAR(100) NOT NULL,
-			    partita_serializzata CLOB NOT NULL,
-			    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-			    FOREIGN KEY (utente_id) REFERENCES utente(id) ON DELETE CASCADE,
-			    UNIQUE (utente_id, nome_salvataggio)
+				id IDENTITY PRIMARY KEY,
+				utente_id BIGINT NOT NULL,
+				nome_salvataggio VARCHAR(100) NOT NULL,
+				partita_serializzata CLOB NOT NULL,
+				created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+				FOREIGN KEY (utente_id) REFERENCES utente(id) ON DELETE CASCADE,
+				UNIQUE (utente_id, nome_salvataggio)
 			)
 			""" };
 
