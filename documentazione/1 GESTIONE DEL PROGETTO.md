@@ -154,4 +154,5 @@ Esempio COMPLETO:
 - 3/11, Andrei, integrazione timer partita (turno e chiamata ONE) online lato client + piccole modifiche, null;
 - 3/11, Andrei, creazione sequence diagrams per mostrare logica CLIENT di login (accessoClient) ed accesso ospite (accessoAnonimo) + aggiornamento documento 3 con i loro .PNG, continuazione documentazione e diagrammi;
 - 3/11, Fabio, aggiunto tracciamento statistiche e recupero, null;
-- 4/11, Andrei, bugfixing + collegamento parte di statistiche + eliminazione ruota direzione per quando ci sono solo 2 giocatori, null; 
+- 4/11, Andrei, bugfixing + collegamento parte di statistiche + eliminazione ruota direzione per quando ci sono solo 2 giocatori, null;
+- 4/11, Fabio, (refactoring e fix PartitaNET, aggiornate eccezioni), null;

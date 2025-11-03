@@ -1,5 +1,7 @@
 package onegame.server.gioco;
 
+import java.util.Objects;
+
 import onegame.modello.carte.CartaSpeciale.TipoSpeciale;
 import onegame.modello.carte.Colore;
 
@@ -80,6 +82,47 @@ public class CartaNET {
 
 	public Colore getColore() {
 		return colore;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(colore, isCartaNumero, numero, tipo);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		CartaNET other = (CartaNET) obj;
+		return colore == other.colore && isCartaNumero == other.isCartaNumero && numero == other.numero
+				&& tipo == other.tipo;
+	}
+
+	/**
+	 * Verifica se la carta corrente è compatibile con la carta di
+	 * riferimento e il colore corrente del gioco.
+	 * @param coloreCorrente Il colore corrente del gioco.
+	 * @param cartaCorrente La carta di riferimento sul tavolo.
+	 * @return true se la carta è compatibile, false altrimenti.
+	 */
+	public boolean isCartaCompatibile(Colore coloreCorrente, CartaNET cartaCorrente) {
+		if (this.colore == Colore.NERO) {
+			return true;
+		}
+		if (this.colore == coloreCorrente) {
+			return true;
+		}
+		if (this.isCartaNumero && this.numero == cartaCorrente.getNumero()) {
+			return true;
+		}
+		if (!isCartaNumero && !cartaCorrente.isCartaNumero() && tipo == cartaCorrente.getTipo()) {
+			return true;
+		}
+		return false;
 	}
 
 }

@@ -42,7 +42,7 @@ public class StanzaPartita extends Stanza implements PartitaObserver {
 	public void avviaPartita() throws EccezionePartita {
 		lock.lock();
 		try {
-			if ((partita != null && isPartitaInCorso())) {
+			if (partita != null && isPartitaInCorso()) {
 				throw new PartitaGiaAvviataException();
 			}
 			if (sessioni.size() < 2) {
@@ -70,7 +70,7 @@ public class StanzaPartita extends Stanza implements PartitaObserver {
 			this.partita = new PartitaNET(lista, this, MazzoONEFactory.getInstance());
 			this.partita.addObserver(this);
 
-			inviaTurnoCorrente(MessaggiGioco.EVENT_INIZIATA_PARTITA, Map.of());
+			inviaTurnoCorrente(MessaggiGioco.EVENT_INIZIATA_PARTITA, null);
 
 			this.isAperta = false;
 		} finally {
@@ -98,13 +98,13 @@ public class StanzaPartita extends Stanza implements PartitaObserver {
 	}
 
 	@Override
-	public void partitaAggiornata(Map<GiocatoreNET, CartaNET> cartePescate) {
+	public void partitaAggiornata(CartaNET cartaPescata) {
 		if (partita == null) {
 			return;
 		}
 
 		if (partita.isFinished()) {
-			inviaTurnoCorrente(MessaggiGioco.EVENT_FINITA_PARTITA, cartePescate);
+			inviaTurnoCorrente(MessaggiGioco.EVENT_FINITA_PARTITA, cartaPescata);
 			this.isAperta = true;
 			if (!vincitoreAggiornato) {
 				GiocatoreNET vincitore = partita.getVincitore();
@@ -126,7 +126,7 @@ public class StanzaPartita extends Stanza implements PartitaObserver {
 				vincitoreAggiornato = true;
 			}
 		} else {
-			inviaTurnoCorrente(MessaggiGioco.EVENT_AGGIORNATA_PARTITA, cartePescate);
+			inviaTurnoCorrente(MessaggiGioco.EVENT_AGGIORNATA_PARTITA, cartaPescata);
 		}
 	}
 
@@ -135,7 +135,7 @@ public class StanzaPartita extends Stanza implements PartitaObserver {
 	 * @param nomeEvento nome dell'evento da inviare
 	 * @param cartePescateMap mappa delle carte pescate dai giocatori in questo turno
 	 */
-	private void inviaTurnoCorrente(String nomeEvento, Map<GiocatoreNET, CartaNET> cartePescateMap) {
+	private void inviaTurnoCorrente(String nomeEvento, CartaNET cartaPescata) {
 		lock.lock();
 
 		try {
@@ -151,7 +151,7 @@ public class StanzaPartita extends Stanza implements PartitaObserver {
 
 			CartaDTO cartaCorrente = DTOServerUtils.fromCartaNETtoDTO(partita.getCartaCorrente());
 			Colore coloreCorrente = partita.getColoreCorrente();
-			int indiceGiocatoreCorrente = partita.getIndiceGiocatoreCorrente();
+			int indiceGiocatoreCorrente = partita.getIndiceGiocatoreCorrenteMostrato();
 			boolean direzione = partita.getDirezione();
 			int indiceVincitore = partita.getIndiceVincitore();
 			boolean finished = partita.isFinished();
@@ -168,12 +168,12 @@ public class StanzaPartita extends Stanza implements PartitaObserver {
 				List<CartaDTO> manoDTO = DTOServerUtils.fromListaCarteNETtoDTO(g.getMano());
 				int indiceGiocatoreLocale = listaGiocatori.indexOf(g);
 
-				CartaDTO cartaPescata = null;
-				if (cartePescateMap != null && cartePescateMap.containsKey(g)) {
-					cartaPescata = DTOServerUtils.fromCartaNETtoDTO(cartePescateMap.get(g));
+				CartaDTO cartaPescataDTO = null;
+				if (cartaPescata != null) {
+					cartaPescataDTO = DTOServerUtils.fromCartaNETtoDTO(cartaPescata);
 				}
 
-				MessStatoPartita mess = new MessStatoPartita(statoDTO, indiceGiocatoreLocale, manoDTO, cartaPescata);
+				MessStatoPartita mess = new MessStatoPartita(statoDTO, indiceGiocatoreLocale, manoDTO, cartaPescataDTO);
 				s.sendEvent(nomeEvento, mess);
 			}
 			logger.debug("Stato partita inviato a tutti i giocatori nella stanza {}", codice);
