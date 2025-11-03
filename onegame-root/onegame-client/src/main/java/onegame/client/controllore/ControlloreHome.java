@@ -1,8 +1,10 @@
 package onegame.client.controllore;
 
+import javafx.application.Platform;
 import onegame.client.net.ClientSocket;
 import onegame.client.net.ConnectionMonitor;
 import onegame.client.vista.VistaHome;
+import onegame.modello.giocatori.Statistica;
 
 public class ControlloreHome extends Controllore {
 	private VistaHome vh;
@@ -39,7 +41,17 @@ public class ControlloreHome extends Controllore {
 	private void aspettaStatistiche() {
 		if(!cs.getUtente().isAnonimo()) {
 			vh.waitForStatisticheBtnClick().thenRun(()->{
-//				vh.compilaStatistiche(cs.getUtente().getUsername(), cs.getUtente().getStatistica());
+				cs.caricaStatistiche(respStats->{
+					Platform.runLater(()->{
+						if(respStats.success) {
+							Statistica temp = new Statistica();
+							temp.setPartiteGiocate(respStats.partiteGiocate);
+							temp.setVittorie(respStats.partiteVinte);
+							temp.setSconfitte(respStats.partiteGiocate-respStats.partiteVinte);
+							vh.compilaStatistiche(cs.getUtente().getUsername(), temp);
+						}
+					});
+				});
 			});
 		}
 	}

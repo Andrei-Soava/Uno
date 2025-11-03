@@ -162,6 +162,7 @@ public class ControlloreGiocoOnline extends Controllore implements StatoPartitaO
 		} 
 		else //turno spettatore
 		{
+			bloccaTimerTurno();
 			vg.stampaManoReadOnly(cartaCorrente, carte);
 		}
 		

@@ -286,7 +286,7 @@ public abstract class VistaPartita extends Vista {
      * metodo che imposta l'immagine che indica la direzione (orario/antiorario)
      * @param direzione, true=orario, false=antiorario
      */
-    private void stampaDirezione(boolean direzione) {
+    private void stampaDirezione(boolean direzione, int numAvversari) {
     	String percorso="/immagini/";
     	if(direzione)
     		percorso+="orario.png";
@@ -300,7 +300,8 @@ public abstract class VistaPartita extends Vista {
      	    BackgroundPosition.CENTER,
      	    new BackgroundSize(350, 350, false, false, false, false)
      	);
-     	centroPane.setBackground(new Background(immagineSfondo));
+     	if(numAvversari>1)
+     		centroPane.setBackground(new Background(immagineSfondo));
     }
     
     /**
@@ -315,7 +316,7 @@ public abstract class VistaPartita extends Vista {
     	Platform.runLater(()->{
     		for(Label l:giocatoriLbl)
     			l.setEffect(null);
-    		stampaDirezione(direzione);
+    		stampaDirezione(direzione, turnazione.size());
     		int size=turnazione.size();
     		String campo="";
     		int i=0;

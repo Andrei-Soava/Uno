@@ -144,8 +144,7 @@ public class VistaHome extends Vista {
 		titoloStatisticheLabel.setText("Statistiche di "+ utente);
 		contenutoStatisticheLabel.setText("Partite giocate: "+statistica.getPartiteGiocate()+"\n"
 				+ "Vittorie: "+statistica.getVittorie()+"\n"
-				+ "Sconfitte: "+statistica.getSconfitte()+"\n"
-				+ "Punti totali: "+statistica.getPuntiTotali()+"\n");
+				+ "Sconfitte: "+statistica.getSconfitte()+"\n");
 	}
 	
 	/**
