@@ -1,4 +1,4 @@
-# 🃏 ONE – Gioco di Carte Multiplayer
+# <img src="onegame-root/onegame-client/src/main/resources/immagini/logo.png" alt="emoji" width="20" height="20" style="vertical-align:middle;" />ONE – Gioco di Carte Multiplayer
 
 Benvenuto nel progetto **ONE**, un gioco di carte multiplayer ispirato a UNO, sviluppato in Java con architettura modulare Maven e supporto per partite client-server.
 
@@ -57,26 +57,26 @@ Tutti i file di esecuzione si trovano nella cartella `onegame-root`.
    Esegui lo script per installare tutti i moduli Maven:
 
    ```bash
-   mvn clean install.bat
+   mvn_clean_install.bat
    ```
 
 2. **Avvio del server**  
    Avvia il server con:
 
    ```bash
-   run server.bat
+   run_server.bat
    ```
 
 3. **Avvio del client**  
    Avvia uno o più client desktop con:
 
    ```bash
-   run client.vbs
+   run_client.vbs
    ```
 
    Alternativamente usa:
    ```bash
-   run client.bat
+   run_client.bat
    ```
 
 ---
