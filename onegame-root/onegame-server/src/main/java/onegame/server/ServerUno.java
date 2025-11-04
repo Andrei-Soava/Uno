@@ -15,9 +15,8 @@ import onegame.modello.net.messaggi.MessaggiGioco;
 import onegame.server.db.GestoreDatabase;
 
 /**
- * ServerUno - registra eventi di connessione/disconnessione - instrada eventi
- * di autenticazione e gestione stanze verso i gestori - instrada eventi di
- * gioco ("partita:mossa") verso la StanzaPartita corretta
+ * Server principale per il gioco Uno. Gestisce le connessioni, le sessioni e instrada gli eventi ai gestori
+ * appropriati.
  */
 public class ServerUno {
 

@@ -11,6 +11,9 @@ import com.corundumstudio.socketio.listener.ExceptionListener;
 
 import io.netty.channel.ChannelHandlerContext;
 
+/**
+ * Gestore delle eccezioni per il server Uno.
+ */
 public class ServerUnoExceptionListener implements ExceptionListener {
 
 	private static Logger logger = LoggerFactory.getLogger(ServerUnoExceptionListener.class);

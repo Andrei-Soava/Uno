@@ -16,6 +16,9 @@ import com.corundumstudio.socketio.SocketIOClient;
 
 import onegame.modello.net.messaggi.Messaggi;
 
+/**
+ * Gestore delle sessioni utente.
+ */
 public class GestoreSessioni {
 	// token -> Utente
 	private final Map<String, Sessione> sessioni = new ConcurrentHashMap<>();
@@ -30,6 +33,12 @@ public class GestoreSessioni {
 		avviaControlloTimeout();
 	}
 
+	/**
+	 * Associa un token a una sessione e a un client SocketIO.
+	 * @param token il token di autenticazione
+	 * @param sessione la sessione utente
+	 * @param client il client SocketIO
+	 */
 	public void associaToken(String token, Sessione sessione, SocketIOClient client) {
 		sessioni.put(token, sessione);
 		sessione.setClient(client);
@@ -46,13 +55,6 @@ public class GestoreSessioni {
 	public Sessione getSessioneByClient(SocketIOClient client) {
 		String token = client.get("token");
 		return getSessione(token);
-	}
-
-	public void aggiornaPing(String token) {
-		Sessione s = getSessione(token);
-		if (s != null) {
-			s.aggiornaPing();
-		}
 	}
 
 	public void rimuoviSessione(Sessione sessione) {
@@ -89,6 +91,9 @@ public class GestoreSessioni {
 		return Collections.unmodifiableCollection(sessioni.values());
 	}
 
+	/**
+	 * Avvia un task periodico per controllare e rimuovere le sessioni scadute.
+	 */
 	private void avviaControlloTimeout() {
 		ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 		scheduler.scheduleAtFixedRate(() -> {
@@ -99,14 +104,11 @@ public class GestoreSessioni {
 		}, 0, 5, TimeUnit.MINUTES);
 	}
 
-	public boolean addObserver(SessioneObserver observer) {
-		return observers.add(observer);
-	}
-
-	public boolean removeObserver(SessioneObserver observer) {
-		return observers.remove(observer);
-	}
-
+	/**
+	 * Rimuove la sessione se è scaduta per inattività.
+	 * @param sessione La sessione da controllare
+	 * @param now Il timestamp corrente
+	 */
 	private void rimuoviSeScaduta(Sessione sessione, long now) {
 		String token = sessione.getToken();
 		if (!sessione.isConnesso() && now - sessione.getUltimoPing() > SESSION_EXPIRATION_MS) {
@@ -119,4 +121,11 @@ public class GestoreSessioni {
 		}
 	}
 
+	public boolean addObserver(SessioneObserver observer) {
+		return observers.add(observer);
+	}
+
+	public boolean removeObserver(SessioneObserver observer) {
+		return observers.remove(observer);
+	}
 }

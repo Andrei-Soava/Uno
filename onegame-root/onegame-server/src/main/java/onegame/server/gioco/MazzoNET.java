@@ -6,6 +6,9 @@ import java.util.Stack;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+/**
+ * Rappresenta un mazzo di carte nel gioco.
+ */
 public class MazzoNET {
 	private final Stack<CartaNET> carte = new Stack<>();
 	private final MazzoFactory factory;

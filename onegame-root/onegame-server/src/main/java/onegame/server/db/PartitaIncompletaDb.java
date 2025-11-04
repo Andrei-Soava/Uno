@@ -153,11 +153,6 @@ public class PartitaIncompletaDb {
 		}
 	}
 
-//	public boolean deletePartitaByUtenteAndNome(String username, String nomeSalvataggio) throws SQLException {
-//		long utenteId = utenteDb.getIdByUsername(username);
-//		return deletePartitaByUtenteAndNome(utenteId, nomeSalvataggio);
-//	}
-
 	/**
 	 * Elimina una partita incompleta di un utente dato il nome del salvataggio
 	 * @param utenteId ID dell'utente

@@ -52,9 +52,7 @@ public class GestoreDatabase {
 	}
 
 	/**
-	 * Restituisce una connessione JDBC attiva verso il database H2. Se il database
-	 * non esiste, lo crea automaticamente.
-	 *
+	 * Restituisce una connessione JDBC attiva verso il database H2.
 	 * @return {@link Connection} aperta verso il database
 	 * @throws SQLException in caso di errori di connessione
 	 */

@@ -21,6 +21,9 @@ import onegame.server.eccezioni.MossaNonValidaException;
 import onegame.server.eccezioni.MossaNonValidaException.TipoMossaNonValida;
 import onegame.server.eccezioni.PartitaGiaFinitaException;
 
+/**
+ * Rappresenta una partita di UNO gestita dal server.
+ */
 public class PartitaNET {
 	private final List<GiocatoreNET> giocatori = new ArrayList<>();
 	private final MazzoNET mazzo;
@@ -98,6 +101,13 @@ public class PartitaNET {
 		aggiornaGiocatoreCorrenteMostrato();
 	}
 
+	/**
+	 * Esegue la mossa di giocare una carta
+	 * @param cartaGiocata la carta giocata
+	 * @param coloreScelto il colore scelto (se la carta è nera)
+	 * @param giocatore il giocatore che effettua la mossa
+	 * @throws EccezionePartita se la mossa non è valida o la partita è finita
+	 */
 	public void giocaCarta(CartaNET cartaGiocata, Colore coloreScelto, GiocatoreNET giocatore) throws EccezionePartita {
 		lock.lock();
 		try {
@@ -262,6 +272,11 @@ public class PartitaNET {
 		}
 	}
 
+	/**
+	 * Effettua una mossa automatica
+	 * @param giocatore il giocatore che effettua la mossa
+	 * @throws EccezionePartita se la mossa non è valida o la partita è finita
+	 */
 	private void effettuaMossaAutomatica(GiocatoreNET giocatore) throws EccezionePartita {
 		lock.lock();
 		try {
@@ -417,6 +432,10 @@ public class PartitaNET {
 		return Collections.unmodifiableList(giocatori);
 	}
 
+	/**
+	 * Restituisce il giocatore corrente
+	 * @return il giocatore corrente
+	 */
 	private GiocatoreNET getGiocatoreCorrente() {
 		return giocatori.get(indiceGiocatoreCorrente);
 	}
@@ -433,6 +452,10 @@ public class PartitaNET {
 		return partitaFinita;
 	}
 
+	/**
+	 * Restituisce il giocatore corrente da mostrare nel client
+	 * @return il giocatore corrente mostrato
+	 */
 	public GiocatoreNET getGiocatoreCorrenteMostrato() {
 		return giocatori.get(indiceGiocatoreCorrenteMostrato);
 	}
@@ -456,9 +479,9 @@ public class PartitaNET {
 	}
 
 	/**
-	 * 
-	 * @param g
-	 * @throws EccezionePartita
+	 * Verifica se è il turno del giocatore
+	 * @param g il giocatore da verificare
+	 * @throws EccezionePartita se non è il turno del giocatore
 	 */
 	private void verificaTurno(GiocatoreNET g) throws EccezionePartita {
 		if (!Objects.equals(g, getGiocatoreCorrente())) {
@@ -587,6 +610,9 @@ public class PartitaNET {
 		}
 	}
 
+	/**
+	 * Interrompe la partita in corso
+	 */
 	public void interrompiPartita() {
 		lock.lock();
 		try {

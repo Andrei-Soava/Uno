@@ -20,9 +20,9 @@ import onegame.modello.net.util.JsonHelper;
 import onegame.server.utils.DTOServerUtils;
 
 /**
- * Gestisce creazione, ingresso e gestione delle stanze di gioco. Una stanza è
- * rappresentata da un'istanza di StanzaPartita. Ogni stanza ha un id univoco
- * (long) e un codice (int). Ogni sessione può essere in al più una stanza alla volta.
+ * Gestisce creazione, ingresso e gestione delle stanze.
+ * Ogni stanza ha un un codice univoco (int).
+ * Ogni sessione può essere al più in una stanza alla volta.
  */
 public abstract class GestoreStanze<Stanzz extends Stanza> implements SessioneObserver {
 

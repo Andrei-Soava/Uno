@@ -27,6 +27,12 @@ public class GestorePartiteOffline {
 		this.utenteDb = new UtenteDb();
 	}
 
+	/**
+	 * Gestisce la richiesta di salvataggio della partita da parte di un utente.
+	 * @param sessione la sessione dell'utente che richiede il salvataggio
+	 * @param str la stringa JSON della richiesta
+	 * @param ackRequest l'oggetto per inviare la risposta di ack
+	 */
 	public void handleSalvaPartita(Sessione sessione, String str, AckRequest ackRequest) {
 		if (sessione == null || sessione.isAnonimo()) {
 			ackRequest.sendAckData(new RespCreaSalvataggio(false, -1, "Utente non valido"));
@@ -84,6 +90,12 @@ public class GestorePartiteOffline {
 		}
 	}
 
+	/**
+	 * Gestisce la richiesta di salvataggio della partita da parte di un utente.
+	 * @param sessione la sessione dell'utente che richiede il salvataggio
+	 * @param str la stringa JSON della richiesta
+	 * @param ackRequest l'oggetto per inviare la risposta di ack
+	 */
 	public void handleCaricaPartita(Sessione sessione, String str, AckRequest ackRequest) {
 		if (sessione == null || sessione.isAnonimo()) {
 			ackRequest.sendAckData(new RespCaricaSalvataggio(false, "", "Utente non valido"));
@@ -113,6 +125,11 @@ public class GestorePartiteOffline {
 		}
 	}
 
+	/**
+	 * Gestisce la richiesta di lista dei salvataggi da parte di un utente.
+	 * @param sessione la sessione dell'utente che richiede la lista
+	 * @param ackRequest l'oggetto per inviare la risposta di ack
+	 */
 	public void handleListaSalvataggi(Sessione sessione, AckRequest ackRequest) {
 		if (sessione == null || sessione.isAnonimo()) {
 			ackRequest.sendAckData(new RespListaSalvataggi(false, null, "Utente non valido"));
@@ -132,6 +149,12 @@ public class GestorePartiteOffline {
 		}
 	}
 
+	/**
+	 * Gestisce la richiesta di eliminazione di un salvataggio da parte di un utente.
+	 * @param sessione la sessione dell'utente che richiede l'eliminazione
+	 * @param str la stringa JSON della richiesta
+	 * @param ackRequest l'oggetto per inviare la risposta di ack
+	 */
 	public void handleEliminaSalvataggio(Sessione sessione, String str, AckRequest ackRequest) {
 		if (sessione == null || sessione.isAnonimo()) {
 			ackRequest.sendAckData(new RespEliminaSalvataggio(false, "Utente non valido"));
@@ -159,6 +182,12 @@ public class GestorePartiteOffline {
 		}
 	}
 
+	/**
+	 * Gestisce la richiesta di rinomina di un salvataggio da parte di un utente.
+	 * @param sessione la sessione dell'utente che richiede la rinomina
+	 * @param str la stringa JSON della richiesta
+	 * @param ackRequest l'oggetto per inviare la risposta di ack
+	 */
 	public void handleRinominaSalvataggio(Sessione sessione, String str, AckRequest ackRequest) {
 		if (sessione == null || sessione.isAnonimo()) {
 			ackRequest.sendAckData(new RespRinominaSalvataggio(false, "Utente non valido"));
@@ -207,6 +236,11 @@ public class GestorePartiteOffline {
 		}
 	}
 
+	/**
+	 * Verifica se il nome del salvataggio è valido.
+	 * @param nomeSalvataggio Il nome del salvataggio da verificare
+	 * @return true se il nome è valido, false altrimenti
+	 */
 	private boolean isNomeSalvataggioValido(String nomeSalvataggio) {
 		return (nomeSalvataggio != null && !nomeSalvataggio.trim().isEmpty() && nomeSalvataggio.length() <= 100);
 	}

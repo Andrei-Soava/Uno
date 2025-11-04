@@ -24,7 +24,6 @@ public abstract class Stanza {
 	protected final ReentrantLock lock = new ReentrantLock();
 
 	protected final Set<Sessione> sessioni = new LinkedHashSet<>();
-	// Aggiungere un identificatore univoco di ogni sessione nella stanza
 	protected Sessione proprietario = null;
 
 	private static final Logger logger = LoggerFactory.getLogger(Stanza.class);
@@ -131,6 +130,9 @@ public abstract class Stanza {
 		}
 	}
 
+	/**
+	 * Notifica a tutte le sessioni nella stanza lo stato attuale della stanza.
+	 */
 	public void notificaStato() {
 		lock.lock();
 		try {
@@ -150,6 +152,11 @@ public abstract class Stanza {
 		return proprietario;
 	}
 
+	/**
+	 * Trasferisce la proprietà della stanza a una nuova sessione.
+	 * @param nuovoProprietario la sessione che diventerà il nuovo proprietario
+	 * @return true se il trasferimento è avvenuto con successo, false altrimenti
+	 */
 	public boolean trasferisciProprietario(Sessione nuovoProprietario) {
 		lock.lock();
 		try {
