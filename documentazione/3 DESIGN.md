@@ -48,6 +48,9 @@ Rappresenta i principali flussi e interazioni concorrenti:
 ![Sequence](../UMLDiagrams/ONEsequenceDiagramAccesso.PNG)
 ![Sequence](../UMLDiagrams/ONEsequenceDiagramAnonimo.PNG)
 
+#### Diagramma di comunicazione (gestione salvataggi lato client)
+![Communication](../UMLDiagrams/ONEcommunicationDiagram.PNG)
+
 
 ### 3. Vista fisica
 Mostra la distribuzione sui nodi:

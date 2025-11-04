@@ -20,10 +20,10 @@ public class ControlloreSalvataggi extends Controllore{
 	        }
 	    });
 		
-		eseguiSceltaWithDb();
+		eseguiScelta();
 	}
 	
-	private void eseguiSceltaWithDb() {
+	private void eseguiScelta() {
 		cs.listaPartite(respListaPartite -> {
 			if(respListaPartite.success) {
 				vs.scegliAzioneSalvataggiAsync(respListaPartite.nomiSalvataggi, event->{
@@ -35,7 +35,7 @@ public class ControlloreSalvataggi extends Controllore{
 	                				vs.mostraGiocoCaricato(event.getNomeOriginale(), respCaricaPartita.partitaSerializzata);
 	                			}
 	                			else {
-	                				eseguiSceltaWithDb();
+	                				eseguiScelta();
 	                			}
 	                		});
 	                	});
@@ -46,21 +46,21 @@ public class ControlloreSalvataggi extends Controllore{
 	                	cs.rinominaPartita(event.getNomeOriginale(), event.getNuovoNome(), respRinominaPartita ->{
 	                		Platform.runLater(()->{
 	                			if(respRinominaPartita.success) {
-	                				eseguiSceltaWithDb();
+	                				eseguiScelta();
 	                			}
 	                			else {
 	                				System.out.println("Errore durante la rinomina del salvataggio");
 	                			}
 	                		});
 	                	});
-	                    eseguiSceltaWithDb();
+	                    eseguiScelta();
 	                    break;
 	                }
 	                case ELIMINA: {
 	                    cs.eliminaPartita(event.getNomeOriginale(), respEliminaPartita -> {
 	                    	Platform.runLater(()->{
 	                    		if (respEliminaPartita.success) {
-	                    			eseguiSceltaWithDb();
+	                    			eseguiScelta();
 	                    		}
 	                    		else {
 	                    			System.out.println("Errore durante l'eliminazione");

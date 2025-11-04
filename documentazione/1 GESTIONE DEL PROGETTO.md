@@ -157,3 +157,4 @@ Esempio COMPLETO:
 - 4/11, Andrei, bugfixing + collegamento parte di statistiche + eliminazione ruota direzione per quando ci sono solo 2 giocatori, null;
 - 4/11, Fabio, (refactoring e fix PartitaNET, aggiornate eccezioni), null;
 - 4/11, Fabio, (aggiunti bot automatico e pulizia partita con stanza vuota), null;
+- 4/11, Andrei, creazione communication diagram per mostrare logica di gestione dei salvataggio lato CLIENT (con particolare enfasi su il caricamento di una partita) + aggiornamento documento 3 con .PNG, continuazione documentazione e diagrammi;
