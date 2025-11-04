@@ -7,7 +7,7 @@ package onegame.modello.carte;
 import java.util.List;
 import java.util.Objects;
 
-import onegame.modello.PartitaIF;
+import onegame.modello.Partita;
 
 /************************************************************/
 
@@ -36,7 +36,7 @@ public class CartaNumero extends Carta {
 	 * se la carta è una CartaNumero, non ci sono effetti
 	 */
 	@Override
-	public List<Carta> applicaEffetto(PartitaIF p) {
+	public List<Carta> applicaEffetto(Partita p) {
 		return null;
 	}
 

@@ -44,7 +44,7 @@ import onegame.modello.giocatori.Giocatore;
  * giocatore, per ora)
  * 
  */
-public class Partita implements PartitaIF {
+public class Partita {
 	private final static int NUMERO_CARTE_INIZIALI = 7;
 
 	private ArrayList<Giocatore> giocatori;
@@ -168,9 +168,6 @@ public class Partita implements PartitaIF {
 		}
 	}
 	
-	
-	
-	@Override
 	@JsonIgnore
 	public int getNumeroGiocatori() {
 		return this.giocatori.size();
@@ -294,13 +291,6 @@ public class Partita implements PartitaIF {
 	 */
 	public void cambiaDirezione() {
 		direzione = !direzione;
-	}
-	
-	public Mossa applicaMossaSafe(Giocatore g, Mossa mossa) throws Exception {
-		if (g != getGiocatoreCorrente()) {
-			throw new Exception("Giocatore non valido");
-		}
-		return applicaMossa(g, mossa);
 	}
 
 	/**
@@ -487,12 +477,39 @@ public class Partita implements PartitaIF {
 		return m;
 	}
 	
-	public Mossa scegliMossaAutomatica(Giocatore giocatore) {
-		Giocatore g = this.getGiocatoreCorrente();
-		if (giocatore != g) {
-			return null;
+	/**
+	 * metodo di verifica su un +4 giocabile o meno
+	 * 
+	 * @param g, giocatore su cui si svolge la verifica
+	 * @return true se il +4 è lecito da giocare, false altrimenti
+	 */
+	public boolean verificaPiuQuattroGiocabile() {
+		Giocatore g = getGiocatoreCorrente();
+		if (!getGiocatori().contains(g))
+			return false;
+		else {
+			ArrayList<Carta> carteInMano = new ArrayList<>();
+			carteInMano.addAll(g.getMano().getCarte());
+			// istruzione in cui vengono rimossi tutti i +4 dalla mano di una giocatore per fare controlli
+			carteInMano.removeIf(carta -> carta instanceof CartaSpeciale
+					&& ((CartaSpeciale) carta).getTipo() == TipoSpeciale.PIU_QUATTRO);
+			// ciclo di verifica possibilità di giocare altre carte oltre ai +4
+			for (Carta carta : carteInMano) {
+				if (carta.giocabileSu(getCartaCorrente()))
+					return false;
+			}
+			// si arriva qui solo se nessuna delle carte in mano OLTRE ai +4 è giocabile
+			return true;
 		}
-		return scegliMossaAutomatica();
+	}
+
+	public boolean isCartaGiocabile(Carta carta) {
+		if (carta == null)
+			return false;
+		if (carta instanceof CartaSpeciale cs && cs.getTipo() == TipoSpeciale.PIU_QUATTRO) {
+			return verificaPiuQuattroGiocabile();
+		}
+		return carta.giocabileSu(getCartaCorrente());
 	}
 
 }

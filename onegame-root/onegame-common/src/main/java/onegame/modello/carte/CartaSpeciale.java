@@ -7,7 +7,7 @@ package onegame.modello.carte;
 import java.util.List;
 import java.util.Objects;
 
-import onegame.modello.PartitaIF;
+import onegame.modello.Partita;
 
 /************************************************************/
 /**
@@ -59,7 +59,7 @@ public class CartaSpeciale extends Carta {
 	 * turno
 	 */
 	@Override
-	public List<Carta> applicaEffetto(PartitaIF partita) {
+	public List<Carta> applicaEffetto(Partita partita) {
 		List<Carta> cartePescate = null;
 		switch (this.getTipo()) {
 		case PIU_DUE:

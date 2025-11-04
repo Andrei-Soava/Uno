@@ -30,7 +30,7 @@ package onegame.modello.carte;
  */
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
-import onegame.modello.PartitaIF;
+import onegame.modello.Partita;
 import onegame.modello.carte.CartaSpeciale.TipoSpeciale;
 
 import java.util.List;
@@ -111,7 +111,7 @@ public abstract class Carta {
 	 * 
 	 * @param p la partita su cui applicare l'effetto
 	 */
-	public abstract List<Carta> applicaEffetto(PartitaIF p);
+	public abstract List<Carta> applicaEffetto(Partita p);
 
 	/**
 	 * Determina se la carta può essere giocata sopra la carta specificata.
