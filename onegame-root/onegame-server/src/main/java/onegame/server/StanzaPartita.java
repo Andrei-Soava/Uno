@@ -6,12 +6,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import onegame.modello.carte.Colore;
-import onegame.modello.net.CartaDTO;
-import onegame.modello.net.GiocatoreDTO;
-import onegame.modello.net.MossaDTO;
-import onegame.modello.net.StatoPartitaDTO;
-import onegame.modello.net.messaggi.MessaggiGioco;
-import onegame.modello.net.messaggi.MessaggiGioco.MessStatoPartita;
+import onegame.net.CartaDTO;
+import onegame.net.GiocatoreDTO;
+import onegame.net.MossaDTO;
+import onegame.net.StatoPartitaDTO;
+import onegame.net.messaggi.MessaggiGioco;
+import onegame.net.messaggi.MessaggiGioco.MessStatoPartita;
 import onegame.server.db.UtenteDb;
 import onegame.server.eccezioni.EccezionePartita;
 import onegame.server.eccezioni.GiocatoriInsufficientiException;

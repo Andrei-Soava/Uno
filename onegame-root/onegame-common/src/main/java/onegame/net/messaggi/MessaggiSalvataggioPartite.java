@@ -1,4 +1,4 @@
-package onegame.modello.net.messaggi;
+package onegame.net.messaggi;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package onegame.modello.net;
+package onegame.net;
 
 public class GiocatoreDTO {
 	public String nickname;

@@ -6,8 +6,8 @@ import java.util.concurrent.locks.ReentrantLock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import onegame.modello.net.StatoStanzaDTO;
-import onegame.modello.net.messaggi.Messaggi;
+import onegame.net.StatoStanzaDTO;
+import onegame.net.messaggi.Messaggi;
 import onegame.server.utils.DTOServerUtils;
 
 /**

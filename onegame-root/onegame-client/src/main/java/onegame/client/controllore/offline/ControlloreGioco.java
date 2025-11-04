@@ -23,7 +23,7 @@ import onegame.modello.carte.CartaSpeciale;
 import onegame.modello.carte.CartaSpeciale.TipoSpeciale;
 import onegame.modello.carte.Colore;
 import onegame.modello.giocatori.Giocatore;
-import onegame.modello.net.GiocatoreDTO;
+import onegame.net.GiocatoreDTO;
 
 /**
  * classe centrale per l'esecuzione del gioco

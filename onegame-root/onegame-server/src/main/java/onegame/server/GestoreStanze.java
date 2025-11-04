@@ -9,14 +9,14 @@ import org.slf4j.LoggerFactory;
 
 import com.corundumstudio.socketio.AckRequest;
 
-import onegame.modello.net.StatoStanzaDTO;
-import onegame.modello.net.messaggi.Messaggi.ReqCreaStanza;
-import onegame.modello.net.messaggi.Messaggi.ReqEntraStanza;
-import onegame.modello.net.messaggi.Messaggi.RespAbbandonaStanza;
-import onegame.modello.net.messaggi.Messaggi.RespCreaStanza;
-import onegame.modello.net.messaggi.Messaggi.RespDettagliStanza;
-import onegame.modello.net.messaggi.Messaggi.RespEntraStanza;
-import onegame.modello.net.util.JsonHelper;
+import onegame.net.StatoStanzaDTO;
+import onegame.net.messaggi.Messaggi.ReqCreaStanza;
+import onegame.net.messaggi.Messaggi.ReqEntraStanza;
+import onegame.net.messaggi.Messaggi.RespAbbandonaStanza;
+import onegame.net.messaggi.Messaggi.RespCreaStanza;
+import onegame.net.messaggi.Messaggi.RespDettagliStanza;
+import onegame.net.messaggi.Messaggi.RespEntraStanza;
+import onegame.net.util.JsonHelper;
 import onegame.server.utils.DTOServerUtils;
 
 /**

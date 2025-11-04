@@ -10,21 +10,21 @@ import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 import onegame.client.controllore.online.StatoPartitaObserver;
 import onegame.client.controllore.online.StatoStanzaObserver;
-import onegame.modello.net.DTOUtils;
-import onegame.modello.net.MossaDTO;
-import onegame.modello.net.StatoStanzaDTO;
-import onegame.modello.net.messaggi.MessaggiSalvataggioPartite;
-import onegame.modello.net.messaggi.MessaggiSalvataggioPartite.*;
-import onegame.modello.net.messaggi.MessaggiStatistiche;
-import onegame.modello.net.messaggi.MessaggiStatistiche.RespCaricaStatistiche;
-import onegame.modello.net.messaggi.MessaggiUtente;
-import onegame.modello.net.messaggi.MessaggiUtente.*;
-import onegame.modello.net.messaggi.Messaggi;
-import onegame.modello.net.messaggi.Messaggi.*;
-import onegame.modello.net.messaggi.MessaggiGioco;
-import onegame.modello.net.messaggi.MessaggiGioco.*;
-import onegame.modello.net.util.Callback;
-import onegame.modello.net.util.JsonHelper;
+import onegame.net.DTOUtils;
+import onegame.net.MossaDTO;
+import onegame.net.StatoStanzaDTO;
+import onegame.net.messaggi.Messaggi;
+import onegame.net.messaggi.MessaggiGioco;
+import onegame.net.messaggi.MessaggiSalvataggioPartite;
+import onegame.net.messaggi.MessaggiStatistiche;
+import onegame.net.messaggi.MessaggiUtente;
+import onegame.net.messaggi.Messaggi.*;
+import onegame.net.messaggi.MessaggiGioco.*;
+import onegame.net.messaggi.MessaggiSalvataggioPartite.*;
+import onegame.net.messaggi.MessaggiStatistiche.RespCaricaStatistiche;
+import onegame.net.messaggi.MessaggiUtente.*;
+import onegame.net.util.Callback;
+import onegame.net.util.JsonHelper;
 
 /**
  * ClientSocket

@@ -8,8 +8,8 @@ import org.slf4j.LoggerFactory;
 
 import com.corundumstudio.socketio.AckRequest;
 
-import onegame.modello.net.messaggi.MessaggiSalvataggioPartite.*;
-import onegame.modello.net.util.JsonHelper;
+import onegame.net.messaggi.MessaggiSalvataggioPartite.*;
+import onegame.net.util.JsonHelper;
 import onegame.server.db.PartitaIncompletaDb;
 import onegame.server.db.UtenteDb;
 

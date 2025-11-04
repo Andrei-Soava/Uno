@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import com.corundumstudio.socketio.SocketIOClient;
 
-import onegame.modello.net.messaggi.Messaggi;
+import onegame.net.messaggi.Messaggi;
 
 /**
  * Gestore delle sessioni utente.

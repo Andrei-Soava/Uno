@@ -1,4 +1,4 @@
-package onegame.modello.net.messaggi;
+package onegame.net.messaggi;
 
 public class MessaggiStatistiche {
 	public static final String EVENT_CARICA_STATISTICHE = "statistiche:carica";

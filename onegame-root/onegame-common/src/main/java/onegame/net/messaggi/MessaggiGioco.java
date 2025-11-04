@@ -1,10 +1,10 @@
-package onegame.modello.net.messaggi;
+package onegame.net.messaggi;
 
 import java.util.List;
 
-import onegame.modello.net.CartaDTO;
-import onegame.modello.net.MossaDTO;
-import onegame.modello.net.StatoPartitaDTO;
+import onegame.net.CartaDTO;
+import onegame.net.MossaDTO;
+import onegame.net.StatoPartitaDTO;
 
 public class MessaggiGioco {
 

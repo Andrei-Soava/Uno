@@ -4,7 +4,7 @@ import onegame.client.controllore.Controllore;
 import onegame.client.net.ClientSocket;
 import onegame.client.net.ConnectionMonitor;
 import onegame.modello.Partita;
-import onegame.modello.net.util.JsonHelper;
+import onegame.net.util.JsonHelper;
 
 /**
  * classe DEFINITIVA per la gestione del salvataggio delle partite durante il gioco

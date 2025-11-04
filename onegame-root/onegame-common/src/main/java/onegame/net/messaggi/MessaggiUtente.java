@@ -1,4 +1,4 @@
-package onegame.modello.net.messaggi;
+package onegame.net.messaggi;
 
 public class MessaggiUtente {
 	public static final String EVENT_CAMBIO_USERNAME = "utente:cambio_username";

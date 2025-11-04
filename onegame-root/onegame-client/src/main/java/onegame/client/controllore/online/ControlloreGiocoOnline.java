@@ -19,13 +19,13 @@ import onegame.modello.carte.Carta;
 import onegame.modello.carte.CartaComparator;
 import onegame.modello.carte.CartaSpeciale;
 import onegame.modello.carte.CartaSpeciale.TipoSpeciale;
+import onegame.net.DTOUtils;
+import onegame.net.GiocatoreDTO;
+import onegame.net.MossaDTO;
+import onegame.net.StatoPartitaDTO;
+import onegame.net.MossaDTO.TipoMossa;
+import onegame.net.messaggi.MessaggiGioco.MessStatoPartita;
 import onegame.modello.carte.Colore;
-import onegame.modello.net.DTOUtils;
-import onegame.modello.net.GiocatoreDTO;
-import onegame.modello.net.MossaDTO;
-import onegame.modello.net.MossaDTO.TipoMossa;
-import onegame.modello.net.StatoPartitaDTO;
-import onegame.modello.net.messaggi.MessaggiGioco.MessStatoPartita;
 
 public class ControlloreGiocoOnline extends Controllore implements StatoPartitaObserver {
 	private VistaGioco vg;

@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import onegame.modello.net.CartaDTO;
-import onegame.modello.net.StatoStanzaDTO;
+import onegame.net.CartaDTO;
+import onegame.net.StatoStanzaDTO;
 import onegame.server.Sessione;
 import onegame.server.Stanza;
 import onegame.server.gioco.CartaNET;

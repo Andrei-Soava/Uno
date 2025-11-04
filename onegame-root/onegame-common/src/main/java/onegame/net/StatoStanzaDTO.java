@@ -1,4 +1,4 @@
-package onegame.modello.net;
+package onegame.net;
 
 import java.util.List;
 

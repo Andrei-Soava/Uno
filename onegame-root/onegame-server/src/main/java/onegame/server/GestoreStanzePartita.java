@@ -5,11 +5,11 @@ import org.slf4j.LoggerFactory;
 
 import com.corundumstudio.socketio.AckRequest;
 
-import onegame.modello.net.MossaDTO;
-import onegame.modello.net.messaggi.MessaggiGioco.ReqEffettuaMossa;
-import onegame.modello.net.messaggi.MessaggiGioco.RespEffettuaMossa;
-import onegame.modello.net.messaggi.MessaggiGioco.RespIniziaPartita;
-import onegame.modello.net.util.JsonHelper;
+import onegame.net.MossaDTO;
+import onegame.net.messaggi.MessaggiGioco.ReqEffettuaMossa;
+import onegame.net.messaggi.MessaggiGioco.RespEffettuaMossa;
+import onegame.net.messaggi.MessaggiGioco.RespIniziaPartita;
+import onegame.net.util.JsonHelper;
 import onegame.server.eccezioni.EccezionePartita;
 
 /**

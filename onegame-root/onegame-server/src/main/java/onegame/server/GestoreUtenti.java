@@ -5,8 +5,8 @@ import org.slf4j.LoggerFactory;
 
 import com.corundumstudio.socketio.AckRequest;
 
-import onegame.modello.net.messaggi.MessaggiUtente.*;
-import onegame.modello.net.util.JsonHelper;
+import onegame.net.messaggi.MessaggiUtente.*;
+import onegame.net.util.JsonHelper;
 import onegame.server.db.UtenteDb;
 import onegame.server.utils.PasswordUtils;
 import onegame.server.utils.UsernameValidator;

@@ -2,7 +2,7 @@ package onegame.client.controllore.utils;
 
 import onegame.client.controllore.utils.Wrappers.IntegerAndBooleanWrapper;
 import onegame.client.controllore.utils.Wrappers.StringWrapper;
-import onegame.modello.net.GiocatoreDTO;
+import onegame.net.GiocatoreDTO;
 
 import java.util.ArrayList;
 import java.util.Collections;

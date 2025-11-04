@@ -7,11 +7,11 @@ import com.corundumstudio.socketio.Configuration;
 import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.SocketIOServer;
 
-import onegame.modello.net.messaggi.MessaggiSalvataggioPartite;
-import onegame.modello.net.messaggi.MessaggiStatistiche;
-import onegame.modello.net.messaggi.MessaggiUtente;
-import onegame.modello.net.messaggi.Messaggi;
-import onegame.modello.net.messaggi.MessaggiGioco;
+import onegame.net.messaggi.Messaggi;
+import onegame.net.messaggi.MessaggiGioco;
+import onegame.net.messaggi.MessaggiSalvataggioPartite;
+import onegame.net.messaggi.MessaggiStatistiche;
+import onegame.net.messaggi.MessaggiUtente;
 import onegame.server.db.GestoreDatabase;
 
 /**

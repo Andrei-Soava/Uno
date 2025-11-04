@@ -5,8 +5,8 @@ import onegame.client.controllore.Controllore;
 import onegame.client.net.ClientSocket;
 import onegame.client.net.ConnectionMonitor;
 import onegame.client.vista.online.VistaStanza;
-import onegame.modello.net.StatoStanzaDTO;
-import onegame.modello.net.messaggi.MessaggiGioco.MessStatoPartita;
+import onegame.net.StatoStanzaDTO;
+import onegame.net.messaggi.MessaggiGioco.MessStatoPartita;
 
 public class ControlloreStanza extends Controllore implements StatoStanzaObserver, StatoPartitaObserver{
 	private VistaStanza vs;

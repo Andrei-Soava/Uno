@@ -1,6 +1,6 @@
 package onegame.client.controllore.online;
 
-import onegame.modello.net.messaggi.MessaggiGioco.MessStatoPartita;
+import onegame.net.messaggi.MessaggiGioco.MessStatoPartita;
 
 public interface StatoPartitaObserver {
 	public void inizioPartita(MessStatoPartita stato);

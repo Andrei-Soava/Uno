@@ -11,7 +11,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import onegame.modello.giocatori.Giocatore;
-import onegame.modello.net.util.JsonHelper;
+import onegame.net.util.JsonHelper;
 
 public class PartitaSerializzazioneTest {
 	private Partita partita;

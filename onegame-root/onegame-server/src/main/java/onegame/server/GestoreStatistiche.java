@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import com.corundumstudio.socketio.AckRequest;
 
-import onegame.modello.net.messaggi.MessaggiStatistiche.RespCaricaStatistiche;
+import onegame.net.messaggi.MessaggiStatistiche.RespCaricaStatistiche;
 import onegame.server.db.UtenteDb;
 
 /**

@@ -1,6 +1,6 @@
-package onegame.modello.net.messaggi;
+package onegame.net.messaggi;
 
-import onegame.modello.net.StatoStanzaDTO;
+import onegame.net.StatoStanzaDTO;
 
 public class Messaggi {
 

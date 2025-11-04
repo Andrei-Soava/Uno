@@ -1,4 +1,4 @@
-package onegame.modello.net.util;
+package onegame.net.util;
 
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.databind.DeserializationFeature;

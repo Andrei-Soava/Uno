@@ -1,6 +1,6 @@
 package onegame.client.controllore.online;
 
-import onegame.modello.net.StatoStanzaDTO;
+import onegame.net.StatoStanzaDTO;
 
 public interface StatoStanzaObserver {
 	public void aggiornaStanza(StatoStanzaDTO stato);
