@@ -25,7 +25,6 @@ public class ServerUno {
 	private final GestoreConnessioni gestoreConnessioni;
 	private final GestoreStanzePartita gestoreStanze;
 	private final GestorePartiteOffline gestorePartiteOffline;
-	private final GestoreGioco gestoreGioco;
 	private final GestoreSessioni gestoreSessioni;
 	private final GestoreUtenti gestoreUtenti;
 	private final GestoreStatistiche gestoreStatistiche;
@@ -45,7 +44,6 @@ public class ServerUno {
 		this.gestoreConnessioni = new GestoreConnessioni(gestoreSessioni);
 		this.gestoreStanze = new GestoreStanzePartita();
 		this.gestorePartiteOffline = new GestorePartiteOffline();
-		this.gestoreGioco = new GestoreGioco(gestoreStanze);
 		this.gestoreUtenti = new GestoreUtenti(gestoreSessioni);
 		this.gestoreStatistiche = new GestoreStatistiche();
 
@@ -104,9 +102,9 @@ public class ServerUno {
 
 		// Gioco
 		server.addEventListener(MessaggiGioco.EVENT_INIZIA_PARTITA, String.class,
-				(client, data, ack) -> gestoreGioco.handleIniziaPartita(getSessione(client), ack));
+				(client, data, ack) -> gestoreStanze.handleIniziaPartita(getSessione(client), ack));
 		server.addEventListener(MessaggiGioco.EVENT_EFFETTUA_MOSSA_PARTITA, String.class,
-				(client, data, ack) -> gestoreGioco.handleEffettuaMossa(getSessione(client), data, ack));
+				(client, data, ack) -> gestoreStanze.handleEffettuaMossa(getSessione(client), data, ack));
 
 		// Statistiche
 		server.addEventListener(MessaggiStatistiche.EVENT_CARICA_STATISTICHE, Void.class,
