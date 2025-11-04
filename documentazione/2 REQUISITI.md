@@ -216,12 +216,14 @@ I giocatori possono scegliere se registrarsi o partecipare come utenti anonimi. 
    - ### 3.6.2 Struttura delle tabelle
    | Tabella               | Campo                | Tipo          | Descrizione                                               |
    |-----------------------|----------------------|---------------|-----------------------------------------------------------|
-   | UTENTE                | id                   | IDENTITY      | Identificativo univoco dell'utente                        |
-   |                       | username             | VARCHAR(50)   | Nome utente scelto dall’utente                            |
-   |                       | password             | VARCHAR(250)  | Password crittografata dell’utente                        |
+   | UTENTE                | id                   | IDENTITY      | Identificatore univoco dell'utente                        |
+   |                       | username             | VARCHAR(50)   | Nome utente univoco scelto dall’utente                    |
+   |                       | password             | VARCHAR(200)  | Password crittografata dell’utente                        |
+   |                       | partite_giocate      | INT           | Numero partite giocate dall’utente                        |
+   |                       | partite_vinte        | INT           | Numero partite vinte dall’utente                          |
    |                       | created_at           | TIMESTAMP     | Data e ora di creazione dell' account                     |
-   | PARTITA_INCOMPLETA    | id                   | IDENTITY      | Identificativo univoco della partita                      |
-   |                       | utente_id            | BIGINT        | Riferimento all’utente proprietario                       |
+   | PARTITA_INCOMPLETA    | id                   | IDENTITY      | Identificatore univoco del salvataggio della partita      |
+   |                       | utente_id            | BIGINT        | Riferimento all’utente proprietario del salvataggio       |
    |                       | nome_salvataggio     | VARCHAR(100)  | Nome assegnato al salvataggio                             |
    |                       | partita_serializzata | CLOB          | Dati della partita salvata in formato serializzato        |
    |                       | created_at           | TIMESTAMP     | Data e ora del salvataggio della partita                  |
