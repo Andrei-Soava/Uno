@@ -87,7 +87,7 @@
       </plugin>
 
       <!-- Plugin per generare un JAR eseguibile con manifest -->
-      <plugin>
+      <!-- <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
         <version>3.2.2</version>
@@ -98,10 +98,10 @@
             </manifest>
           </archive>
         </configuration>
-      </plugin>
+      </plugin> -->
 
       <!-- Plugin per creare un fat jar con tutte le dipendenze -->
-      <plugin>
+      <!-- <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
         <version>3.4.1</version>
@@ -121,7 +121,7 @@
             </configuration>
           </execution>
         </executions>
-      </plugin>
+      </plugin> -->
 
     </plugins>
   </build>
