@@ -41,7 +41,7 @@ public class PartitaNET {
 	private CartaNET cartaPescataCorrente = null;
 
 	private final int TEMPO_DICHIARAZIONE_UNO = 2000; // ms
-	private final int TEMPO_DI_GUARDIA = 3000; // ms
+	private final int TEMPO_DI_GUARDIA = 4000; // ms
 	private final int TEMPO_MAX_MOSSA = 8000; // ms
 
 	// gestione timer
@@ -128,7 +128,7 @@ public class PartitaNET {
 
 			// Verifica se la carta sia giocabile
 			if (!this.isCartaGiocabile(cartaGiocata)) {
-				logger.warn("Carta giocata da {} non valida", giocatore.getNickname());
+				logger.warn("Carta {} giocata da {} non valida", cartaGiocata, giocatore.getNickname());
 				throw new MossaNonValidaException(TipoMossaNonValida.CARTA_NON_GIOCABILE);
 			}
 
@@ -334,11 +334,9 @@ public class PartitaNET {
 		// verifica se la carta è un +4 e se il giocatore può giocarlo
 		if (!carta.isCartaNumero && carta.getTipo() == TipoSpeciale.PIU_QUATTRO) {
 			GiocatoreNET giocatoreCorrente = getGiocatoreCorrente();
-			if (!verificaPiuQuattroBluff(giocatoreCorrente)) {
-				return false;
-			}
+			return verificaPiuQuattroBluff(giocatoreCorrente);
 		}
-		return carta.isCartaCompatibile(coloreCorrente, cartaCorrente);
+		return carta.isCartaCompatibile(getColoreCorrente(), cartaCorrente);
 	}
 
 	/**
@@ -347,9 +345,9 @@ public class PartitaNET {
 	 * @return true se il giocatore può giocare un +4, false altrimenti
 	 */
 	private boolean verificaPiuQuattroBluff(GiocatoreNET g) {
-		if (!giocatori.contains(g))
+		if (!giocatori.contains(g)) {
 			return false;
-		else {
+		} else {
 			ArrayList<CartaNET> carteInMano = new ArrayList<>();
 			carteInMano.addAll(g.getMano());
 			// istruzione in cui vengono rimossi tutti i +4 dalla mano di una giocatore per fare controlli
@@ -357,10 +355,13 @@ public class PartitaNET {
 
 			// ciclo di verifica possibilità di giocare altre carte oltre ai +4
 			for (CartaNET carta : carteInMano) {
-				if (isCartaGiocabile(carta))
+				if (carta.isCartaCompatibile(getColoreCorrente(), getCartaCorrente())) {
+					logger.error("Verifica bluff +4: non valido, carta in mano: {}", carta);
 					return false;
+				}
 			}
 			// si arriva qui solo se nessuna delle carte in mano OLTRE ai +4 è giocabile
+			logger.debug("Verifica bluff +4: valido");
 			return true;
 		}
 	}
