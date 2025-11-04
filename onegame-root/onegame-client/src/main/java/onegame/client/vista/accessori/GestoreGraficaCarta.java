@@ -14,7 +14,7 @@ import onegame.modello.carte.Carta;
 import onegame.modello.carte.CartaNumero;
 import onegame.modello.carte.CartaSpeciale;
 import onegame.modello.carte.Colore;
-import onegame.modello.carte.CartaSpeciale.TipoSpeciale;
+import onegame.modello.carte.TipoSpeciale;
 import javafx.scene.control.Label;
 
 public class GestoreGraficaCarta {

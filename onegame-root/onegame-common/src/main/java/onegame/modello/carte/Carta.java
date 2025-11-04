@@ -31,7 +31,6 @@ package onegame.modello.carte;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import onegame.modello.Partita;
-import onegame.modello.carte.CartaSpeciale.TipoSpeciale;
 
 import java.util.List;
 

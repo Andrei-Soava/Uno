@@ -2,8 +2,8 @@ package onegame.server.gioco;
 
 import java.util.Objects;
 
-import onegame.modello.carte.CartaSpeciale.TipoSpeciale;
 import onegame.modello.carte.Colore;
+import onegame.modello.carte.TipoSpeciale;
 
 /**
  * Rappresenta una carta di ONE

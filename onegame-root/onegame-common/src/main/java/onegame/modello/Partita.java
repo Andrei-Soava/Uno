@@ -11,7 +11,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import onegame.modello.Mossa.TipoMossa;
 import onegame.modello.carte.*;
-import onegame.modello.carte.CartaSpeciale.TipoSpeciale;
 import onegame.modello.giocatori.Giocatore;
 
 /************************************************************/

@@ -38,8 +38,8 @@ public class CartaComparator implements Comparator<Carta> {
 			int numero2 = ((CartaNumero) carta2).getNumero();
 			return Integer.compare(numero1, numero2);
 		} else if (carta1 instanceof CartaSpeciale && carta2 instanceof CartaSpeciale) {
-			CartaSpeciale.TipoSpeciale tipo1 = ((CartaSpeciale) carta1).getTipo();
-			CartaSpeciale.TipoSpeciale tipo2 = ((CartaSpeciale) carta2).getTipo();
+			TipoSpeciale tipo1 = ((CartaSpeciale) carta1).getTipo();
+			TipoSpeciale tipo2 = ((CartaSpeciale) carta2).getTipo();
 			return tipo1.compareTo(tipo2);
 		} else if (carta1 instanceof CartaNumero) {
 			return -1; // Le carte numero precedono le carte speciali

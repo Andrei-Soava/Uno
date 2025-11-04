@@ -20,19 +20,6 @@ import onegame.modello.Partita;
  * semantica)
  */
 public class CartaSpeciale extends Carta {
-	public enum TipoSpeciale {
-
-		PIU_DUE,
-
-		PIU_QUATTRO,
-
-		BLOCCA,
-
-		INVERTI,
-
-		JOLLY;
-	}
-
 	private TipoSpeciale tipo;
 
 	// costruttore vuoto per Jackson

@@ -53,10 +53,11 @@ public class MessaggiGioco {
 
 	public static class MessStatoPartita {
 		public StatoPartitaDTO statoPartita;
-		// indice del giocatore locale che riceve questo stato in statoPartita.giocatori
+		/** Indice del giocatore locale che riceve questo stato in statoPartita.giocatori */
 		public int indiceGiocatoreLocale;
-		public List<CartaDTO> carteInMano; // carte del giocatore locale
-		// carta pescata dal giocatore locale a seguito di una mossa di pesca, null altrimenti
+		/** Carte in mano al giocatore locale */
+		public List<CartaDTO> carteInMano;
+		/** Carta pescata dal giocatore locale a seguito di una mossa di pesca, null altrimenti */
 		public CartaDTO cartaPescata;
 
 		public MessStatoPartita() {

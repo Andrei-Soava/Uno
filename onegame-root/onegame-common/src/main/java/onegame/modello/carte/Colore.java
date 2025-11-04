@@ -5,7 +5,6 @@
 package onegame.modello.carte;
 
 import java.util.Random;
-import java.util.Scanner;
 
 /************************************************************/
 
@@ -17,49 +16,7 @@ import java.util.Scanner;
  *
  */
 public enum Colore {
-	/**
-	 * 
-	 */
-	ROSSO,
-	/**
-	 * 
-	 */
-	BLU,
-	/**
-	 * 
-	 */
-	GIALLO,
-	/**
-	 * 
-	 */
-	VERDE,
-	/**
-	 * 
-	 */
-	NERO;
-
-	/**
-	 * Metodo che permette di scegliere un colore da tastiera
-	 * 
-	 * @param sc Scanner da cui leggere l'input
-	 * @return Colore scelto
-	 */
-	@SuppressWarnings("unused")
-	@Deprecated
-	private static Colore scegliColore(Scanner sc) {
-		int index = -1;
-		while (index < 0 || index > 3) {
-			try {
-				System.out.println("Scegli un colore: 0->Rosso, 1->Blu, 2->Giallo, 3->Verde");
-				String input = sc.nextLine();
-				index = Integer.parseInt(input);
-			} catch (Exception e) {
-				System.out.println("Errore. Riprovare");
-				index = -1;
-			}
-		}
-		return Colore.values()[index];
-	}
+	ROSSO, BLU, GIALLO, VERDE, NERO;
 
 	/**
 	 * Metodo che genera un colore casuale (ROSSO, BLU, GIALLO, VERDE)

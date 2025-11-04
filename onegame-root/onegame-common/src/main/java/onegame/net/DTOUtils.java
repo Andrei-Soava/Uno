@@ -50,32 +50,6 @@ public class DTOUtils {
 		return carte;
 	}
 
-	@Deprecated
-	public static PartitaOfflineDTO creaPartitaOfflineDTO(Partita partita) {
-		boolean direzione = partita.getDirezione();
-		int indiceGiocatoreCorrente = partita.getNavigatore().getIndiceCorrente();
-		CartaDTO topCarta = convertiCartaInDTO(partita.getCartaCorrente());
-
-		List<String> usernames = new ArrayList<String>();
-		List<ArrayList<CartaDTO>> mani = new ArrayList<ArrayList<CartaDTO>>();
-		for (Giocatore g : partita.getGiocatori()) {
-			usernames.add(g.getNome());
-			ArrayList<CartaDTO> mano = new ArrayList<>();
-			for (Carta c : g.getMano().getCarte()) {
-				mano.add(convertiCartaInDTO(c));
-			}
-			mani.add(mano);
-		}
-
-		List<CartaDTO> scarti = new ArrayList<CartaDTO>();
-		for (Carta c : partita.getPilaScarti().getScarti()) {
-			scarti.add(convertiCartaInDTO(c));
-		}
-
-		return new PartitaOfflineDTO(usernames, mani, scarti, topCarta, direzione, indiceGiocatoreCorrente);
-
-	}
-
 // @formatter:off
 	public static StatoStanzaDTO clone(StatoStanzaDTO dto) {
 	    return new StatoStanzaDTO(

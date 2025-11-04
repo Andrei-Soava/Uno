@@ -116,13 +116,8 @@ public class ClientSocket {
 		});
 
 		socket.on(Socket.EVENT_DISCONNECT, args -> System.out.println("[client] disconnesso dal server"));
-		socket.on("connect_error", args -> System.out.println("[client] errore connessione: " + args[0]));
+		socket.on(Socket.EVENT_CONNECT_ERROR, args -> System.out.println("[client] errore connessione: " + args[0]));
 
-//		socket.on("stanza:aggiornamento", args -> System.out.println("[server][stanza:aggiornamento] " + args[0]));
-//		socket.on("partita:inizia", args -> System.out.println("[server][partita:inizia] " + args[0]));
-//		socket.on("partita:turno", args -> System.out.println("[server][partita:turno] " + args[0]));
-//		socket.on("partita:mossa", args -> System.out.println("[server][partita:mossa] " + args[0]));
-//		socket.on("partita:terminata", args -> System.out.println("[server][partita:terminata] " + args[0]));
 		socket.on(Messaggi.EVENT_STANZA_AGGIORNAMENTO, (args -> {
 			StatoStanzaDTO stato = getPayload(StatoStanzaDTO.class, args);
 			this.statoStanza = DTOUtils.clone(stato);
@@ -282,7 +277,7 @@ public class ClientSocket {
 
 	/**
 	 * Invia la richiesta di ingresso in una stanza
-	 * @param idStanza ID della stanza
+	 * @param codice Codice della stanza
 	 * @param callback Callback per la risposta del server
 	 * @throws Exception
 	 */
@@ -304,13 +299,6 @@ public class ClientSocket {
 
 		socketEmitEvent(Messaggi.EVENT_STANZA_DETTAGLI, null, callback, RespDettagliStanza.class);
 	}
-
-//	public void inviaMossa(MossaDTO mossa, Callback<RespEffettuaMossa> callback) {
-//		ReqEffettuaMossa req = new ReqEffettuaMossa(mossa);
-//		System.out.println("[CLIENT] Invio richiesta mossa: " + mossa);
-//
-//		socketEmitEvent(Messaggi.EVENT_AGGIORNATA_PARTITA, req, callback, RespEffettuaMossa.class);
-//	}
 
 	public void listaPartite(Callback<RespListaSalvataggi> callback) {
 		System.out.println("[CLIENT] Invio richiesta lista partite salvate");
@@ -388,15 +376,6 @@ public class ClientSocket {
 		System.out.println("[CLIENT] Invio richiesta caricamento statistiche");
 
 		socketEmitEvent(MessaggiStatistiche.EVENT_CARICA_STATISTICHE, null, callback, RespCaricaStatistiche.class);
-	}
-
-	/**
-	 * Registra un nuovo handler
-	 * @param evento Nome dell'evento
-	 * @param handler Handler dell'evento
-	 */
-	public void on(String evento, Emitter.Listener handler) {
-		socket.on(evento, handler);
 	}
 
 	public static <T> T getPayload(Class<T> clazz, Object... args) {

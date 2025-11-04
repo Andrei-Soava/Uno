@@ -127,20 +127,6 @@ public class PartitaIncompletaDb {
 		}
 	}
 
-	/**
-	 * Elimina una partita incompleta dal database
-	 * @param partitaId ID della partita da eliminare
-	 * @throws SQLException
-	 */
-	@Deprecated
-	public void deletePartita(long partitaId) throws SQLException {
-		String sql = "DELETE FROM partita_incompleta WHERE id = ?";
-		try (Connection conn = GestoreDatabase.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
-			ps.setLong(1, partitaId);
-			ps.executeUpdate();
-		}
-	}
-
 	public boolean updatePartita(long utenteId, String nomeSalvataggio, String partitaSerializzata)
 			throws SQLException {
 		String sql = "UPDATE partita_incompleta SET partita_serializzata = ?, created_at = CURRENT_TIMESTAMP "

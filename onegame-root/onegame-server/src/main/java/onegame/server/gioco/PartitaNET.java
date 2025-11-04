@@ -14,7 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import onegame.modello.carte.Colore;
-import onegame.modello.carte.CartaSpeciale.TipoSpeciale;
+import onegame.modello.carte.TipoSpeciale;
 import onegame.server.StanzaPartita;
 import onegame.server.eccezioni.EccezionePartita;
 import onegame.server.eccezioni.MossaNonValidaException;

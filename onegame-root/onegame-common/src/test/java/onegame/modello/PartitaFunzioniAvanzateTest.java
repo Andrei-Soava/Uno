@@ -10,9 +10,9 @@ import onegame.modello.Mossa.TipoMossa;
 import onegame.modello.carte.Carta;
 import onegame.modello.carte.CartaNumero;
 import onegame.modello.carte.CartaSpeciale;
-import onegame.modello.carte.CartaSpeciale.TipoSpeciale;
 import onegame.modello.giocatori.Giocatore;
 import onegame.modello.carte.Colore;
+import onegame.modello.carte.TipoSpeciale;
 
 public class PartitaFunzioniAvanzateTest {
 	int numGiocatori = 2;

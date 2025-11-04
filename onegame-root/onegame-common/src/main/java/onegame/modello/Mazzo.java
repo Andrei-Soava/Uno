@@ -16,7 +16,6 @@ import java.util.Stack;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import onegame.modello.carte.*;
-import onegame.modello.carte.CartaSpeciale.TipoSpeciale;
 
 /************************************************************/
 
@@ -39,9 +38,6 @@ public class Mazzo {
 	private Stack<Carta> carte;
 	@JsonIgnore
 	private PilaScarti pila;
-
-//	private final Deque<Carta> carte = new ArrayDeque<>();
-//	private final List<Carta> pila = new ArrayList<>();
 
 	//costruttore vuoto per Jackson
 	public Mazzo() {

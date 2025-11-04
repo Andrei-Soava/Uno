@@ -10,6 +10,9 @@ import onegame.server.Sessione;
 import onegame.server.Stanza;
 import onegame.server.gioco.CartaNET;
 
+/**
+ * Classe di utilità per la conversione tra DTO e oggetti del server.
+ */
 public class DTOServerUtils {
 	public static StatoStanzaDTO creaStanzaDTO(Stanza stanza) {
 		if (stanza == null) {

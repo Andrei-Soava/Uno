@@ -20,8 +20,8 @@ import onegame.modello.Mossa;
 import onegame.modello.Partita;
 import onegame.modello.Mossa.TipoMossa;
 import onegame.modello.carte.CartaSpeciale;
-import onegame.modello.carte.CartaSpeciale.TipoSpeciale;
 import onegame.modello.carte.Colore;
+import onegame.modello.carte.TipoSpeciale;
 import onegame.modello.giocatori.Giocatore;
 import onegame.net.GiocatoreDTO;
 

@@ -16,13 +16,6 @@ public class Messaggi {
 	public static final String EVENT_STANZA_DETTAGLI = "stanza:dettagli";
 	public static final String EVENT_STANZA_AGGIORNAMENTO = "stanza:aggiornamento";
 
-//    //Risposte partite offline
-//    public static final String EVENT_PARTITA_OK = "partita:ok";
-//    public static final String EVENT_PARTITA_FAIL = "partita:fail";
-//
-//    public static final String EVENT_STANZA_OK = "stanza:ok";
-//    public static final String EVENT_STANZA_FAIL = "stanza:fail";
-
 	// Richiesta di login / register
 	public static class ReqAuth {
 		public String username;

@@ -42,6 +42,10 @@ public class GestoreDatabase {
 			)
 			""" };
 
+	/**
+	 * Costruisce l'URL di connessione al database H2.
+	 * @return l'URL di connessione
+	 */
 	private static String buildUrl() {
 		File dir = new File(DB_DIR);
 		if (!dir.exists()) {

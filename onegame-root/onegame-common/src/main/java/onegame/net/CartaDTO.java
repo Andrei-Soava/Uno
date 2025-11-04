@@ -1,7 +1,7 @@
 package onegame.net;
 
 import onegame.modello.carte.Colore;
-import onegame.modello.carte.CartaSpeciale.TipoSpeciale;
+import onegame.modello.carte.TipoSpeciale;
 
 public class CartaDTO {
 	public boolean isCartaNumero;
