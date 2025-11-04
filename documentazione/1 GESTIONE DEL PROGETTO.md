@@ -158,4 +158,4 @@ Esempio COMPLETO:
 - 4/11, Fabio, (refactoring e fix PartitaNET, aggiornate eccezioni), null;
 - 4/11, Fabio, (aggiunti bot automatico e pulizia partita con stanza vuota), null;
 - 4/11, Andrei, creazione communication diagram per mostrare logica di gestione dei salvataggio lato CLIENT (con particolare enfasi su il caricamento di una partita) + aggiornamento documento 3 con .PNG, continuazione documentazione e diagrammi;
-- 4/11, Fabio, (creati file bat e vbs per esecuzione di client e server con maven, aggiornati plugin), null;
+- 4/11, Fabio, (creati file bat e vbs per esecuzione di client e server con maven, aggiornati plugin, scrittura del readme.md), null;
