@@ -43,6 +43,7 @@ public class PartitaNET {
 	private final int TEMPO_DICHIARAZIONE_UNO = 2000; // ms
 	private final int TEMPO_DI_GUARDIA = 4000; // ms
 	private final int TEMPO_MAX_MOSSA = 8000; // ms
+	private final int TEMPO_MOSSA_BOT = 3000; // ms
 
 	// gestione timer
 	private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
@@ -259,6 +260,27 @@ public class PartitaNET {
 		}
 	}
 
+	private void effettuaMossaAutomatica(GiocatoreNET giocatore) throws EccezionePartita {
+		lock.lock();
+		try {
+			verificaPartitaFinita();
+			verificaTurno(giocatore);
+
+			// Logica semplice per i bot: se possono giocare, giocano la prima carta valida
+			for (CartaNET carta : giocatore.getMano()) {
+				if (isCartaGiocabile(carta)) {
+					giocaCarta(carta, carta.getColore() == Colore.NERO ? Colore.ROSSO : null, giocatore);
+					return;
+				}
+			}
+
+			// Se non possono giocare, pescano e passano
+			pescaEPassa(giocatore);
+		} finally {
+			lock.unlock();
+		}
+	}
+
 	/**
 	 * Esegue la mossa di dichiarare UNO
 	 * @param giocatore il giocatore che effettua la mossa
@@ -276,8 +298,8 @@ public class PartitaNET {
 					passaTurno();
 					avviaTimerTurno();
 					aggiornaGiocatoreCorrenteMostrato();
+					notifyObserverspartitaAggiornata(null);
 				}
-				notifyObserverspartitaAggiornata(null);
 				logger.info("Il giocatore {} ha dichiarato UNO!", giocatore.getNickname());
 			} else {
 				logger.warn("Il giocatore {} non può dichiarare UNO con {} carte", giocatore.getNickname(),
@@ -464,14 +486,28 @@ public class PartitaNET {
 	 */
 	private void avviaTimerTurno() {
 		cancellaTimer();
-		timer = scheduler.schedule(() -> {
-			logger.info("Il giocatore {} non ha effettuato la mossa in tempo", getGiocatoreCorrente().getNickname());
-			try {
-				pescaEPassa(getGiocatoreCorrente());
-			} catch (EccezionePartita e) {
-				logger.error("Errore nell'esecuzione della mossa automatica");
-			}
-		}, TEMPO_MAX_MOSSA + TEMPO_DI_GUARDIA, TimeUnit.MILLISECONDS);
+		if (getGiocatoreCorrente().isBot()) {
+			// Timer per bot
+			timer = scheduler.schedule(() -> {
+				logger.info("Esecuzione mossa automatica per il bot {}", getGiocatoreCorrente().getNickname());
+				try {
+					effettuaMossaAutomatica(getGiocatoreCorrente());
+				} catch (EccezionePartita e) {
+					logger.error("Errore nell'esecuzione della mossa automatica del bot", e);
+				}
+			}, TEMPO_MOSSA_BOT, TimeUnit.MILLISECONDS);
+		} else {
+			// Timer per giocatore umano
+			timer = scheduler.schedule(() -> {
+				logger.info("Il giocatore {} non ha effettuato la mossa in tempo",
+						getGiocatoreCorrente().getNickname());
+				try {
+					pescaEPassa(getGiocatoreCorrente());
+				} catch (EccezionePartita e) {
+					logger.error("Errore nell'esecuzione della mossa automatica");
+				}
+			}, TEMPO_MAX_MOSSA + TEMPO_DI_GUARDIA, TimeUnit.MILLISECONDS);
+		}
 	}
 
 	/**
@@ -480,27 +516,50 @@ public class PartitaNET {
 	 */
 	private void avviaTimerDichiaraUNO(GiocatoreNET giocatore) {
 		cancellaTimer();
-		timer = scheduler.schedule(() -> {
-			lock.lock();
-			try {
-				if (!giocatore.haDichiaratoUNO()) {
-					verificaPartitaFinita();
-					giocatore.aggiungiCarte(mazzo.pescaN(2));
-					logger.info("Il giocatore {} non ha dichiarato UNO in tempo e pesca 2 carte",
-							giocatore.getNickname());
+		if (giocatore.isBot()) {
+			// I bot dichiarano sempre UNO immediatamente
+			timer = scheduler.schedule(() -> {
+				lock.lock();
+				try {
+					giocatore.setHaDichiaratoUNO(true);
+					logger.info("Il bot {} ha dichiarato UNO automaticamente", giocatore.getNickname());
+					if (!partitaFinita) {
+						passaTurno();
+						avviaTimerTurno();
+						aggiornaGiocatoreCorrenteMostrato();
+						notifyObserverspartitaAggiornata(null);
+					}
+				} catch (Exception e) {
+					logger.error("Errore durante la dichiarazione automatica di UNO del bot", e);
+				} finally {
+					lock.unlock();
 				}
-				if (!partitaFinita) {
-					passaTurno();
-					avviaTimerTurno();
-					aggiornaGiocatoreCorrenteMostrato();
-					notifyObserverspartitaAggiornata(null);
+			}, 800, TimeUnit.MILLISECONDS);
+			return;
+		} else {
+			// Timer dichiara UNO per giocatore umano
+			timer = scheduler.schedule(() -> {
+				lock.lock();
+				try {
+					if (!giocatore.haDichiaratoUNO()) {
+						verificaPartitaFinita();
+						giocatore.aggiungiCarte(mazzo.pescaN(2));
+						logger.info("Il giocatore {} non ha dichiarato UNO in tempo e pesca 2 carte",
+								giocatore.getNickname());
+					}
+					if (!partitaFinita) {
+						passaTurno();
+						avviaTimerTurno();
+						aggiornaGiocatoreCorrenteMostrato();
+						notifyObserverspartitaAggiornata(null);
+					}
+				} catch (Exception e) {
+					logger.error("Errore durante il timer di dichiarazione UNO", e);
+				} finally {
+					lock.unlock();
 				}
-			} catch (Exception e) {
-				logger.error("Errore durante il timer di dichiarazione UNO", e);
-			} finally {
-				lock.unlock();
-			}
-		}, TEMPO_DICHIARAZIONE_UNO + TEMPO_DI_GUARDIA, TimeUnit.MILLISECONDS);
+			}, TEMPO_DICHIARAZIONE_UNO + TEMPO_DI_GUARDIA, TimeUnit.MILLISECONDS);
+		}
 	}
 
 	private void cancellaTimer() {
@@ -527,6 +586,17 @@ public class PartitaNET {
 	private void notifyObserverspartitaAggiornata(CartaNET cartaPescata) {
 		for (PartitaObserver ob : observers) {
 			ob.partitaAggiornata(cartaPescata);
+		}
+	}
+
+	public void interrompiPartita() {
+		lock.lock();
+		try {
+			partitaFinita = true;
+			cancellaTimer();
+			notifyObserverspartitaAggiornata(null);
+		} finally {
+			lock.unlock();
 		}
 	}
 

@@ -188,6 +188,10 @@ public class StanzaPartita extends Stanza implements PartitaObserver {
 		lock.lock();
 		try {
 			GiocatoreNET g = giocatori.remove(sessione);
+			if (giocatori.isEmpty() && partita != null && isPartitaInCorso()) {
+				partita.interrompiPartita();
+				partita = null;
+			}
 			if (g != null) {
 				g.setBot(true);
 			}
