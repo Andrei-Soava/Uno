@@ -55,7 +55,7 @@ public class VistaConfigurazioneOnline extends Vista {
 
     	creaBtn = new Button("Crea stanza");
 
-    	HBox pulsanti = new HBox(10, annullaBtn, creaBtn);
+    	HBox pulsanti = new HBox(10, creaBtn, annullaBtn);
     	pulsanti.setAlignment(Pos.CENTER);
 
     	VBox centro = new VBox(20, lblNomeStanza, nomeStanza, lblNumGiocatori, numGiocatori, pulsanti);

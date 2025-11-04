@@ -107,9 +107,11 @@ public class ControlloreGiocoOnline extends Controllore implements StatoPartitaO
 	 * metodo che interrompe timerTurno
 	 */
 	private void bloccaTimerTurno() {
-		countdownTurno.stop();
-		timerTurno.stop();
-		vg.mostraTimerTurno(false);
+		Platform.runLater(()->{
+			countdownTurno.stop();
+			timerTurno.stop();
+			vg.mostraTimerTurno(false);
+		});
 	}
 	
 	/**
@@ -126,8 +128,10 @@ public class ControlloreGiocoOnline extends Controllore implements StatoPartitaO
 	 * metodo che interrompe timerONE
 	 */
 	private void bloccaTimerONE() {
-		timerONE.stop();
-		vg.nascondiONEBtn();
+		Platform.runLater(()->{
+			timerONE.stop();
+			vg.nascondiONEBtn();
+		});
 	}
 
 	@Override
@@ -188,8 +192,7 @@ public class ControlloreGiocoOnline extends Controllore implements StatoPartitaO
 					// se è una carta nera, devo prima cambiare il colore
 					if (cartaPescata.getColore() == Colore.NERO) {
 						vg.stampaColoriAsync(coloreScelto -> {
-							cartaPescata.setColore(coloreScelto);
-							gestisciInviaCarta(cartaPescata, carteMano.size());
+							gestisciInviaCarta(cartaPescata, carteMano.size(),coloreScelto);
 							return;
 						});
 					} else // carta NON nera
@@ -241,8 +244,7 @@ public class ControlloreGiocoOnline extends Controllore implements StatoPartitaO
 			// se è una carta nera, devo prima cambiare il colore
 			if (cartaScelta.getColore() == Colore.NERO) {
 				vg.stampaColoriAsync(coloreScelto -> {
-					cartaScelta.setColore(coloreScelto);
-					gestisciInviaCarta(cartaScelta, carteMano.size());
+					gestisciInviaCarta(cartaScelta, carteMano.size(),coloreScelto);
 					return;
 				});
 			} else // carta NON nera
@@ -271,20 +273,12 @@ public class ControlloreGiocoOnline extends Controllore implements StatoPartitaO
 		return true;
 	}
 	
-	private void gestisciInviaCarta(Carta cartaDaInviare, int numeroCarteInMano) {
+	private void gestisciInviaCarta(Carta cartaDaInviare, int numeroCarteInMano, Colore coloreScelto) {
 		if (mossaInviata) return;
 	    mossaInviata = true;
 		MossaDTO mossaDaInviare = new MossaDTO((TipoMossa.GIOCA_CARTA));
-		if(cartaDaInviare instanceof CartaSpeciale && 
-				(((CartaSpeciale)cartaDaInviare).getTipo()==TipoSpeciale.JOLLY ||
-				((CartaSpeciale)cartaDaInviare).getTipo()==TipoSpeciale.PIU_QUATTRO
-				)) {
-			System.out.println("cartaaaaaaaaaaaaaaaaaaaaa "+cartaDaInviare);
-			mossaDaInviare.coloreScelto = cartaDaInviare.getColore();
-			System.out.println("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbINVIANDO CARTA NERA DA "+mossaDaInviare.coloreScelto);
-			cartaDaInviare.setColore(Colore.NERO);
-			System.out.println("cccccccccccccccccccccccccccccccccINVIANDO CARTA NERA DA dopo");
-		}
+		if(coloreScelto!=null)
+			mossaDaInviare.coloreScelto = coloreScelto;
 		mossaDaInviare.carta = DTOUtils.convertiCartaInDTO(cartaDaInviare);
 		cs.effettuaMossa(mossaDaInviare, null);
 		bloccaTimerTurno();
@@ -295,6 +289,10 @@ public class ControlloreGiocoOnline extends Controllore implements StatoPartitaO
 				bloccaTimerONE();
 			});
 		}
+	}
+	
+	private void gestisciInviaCarta(Carta cartaDaInviare, int numeroCarteInMano) {
+		this.gestisciInviaCarta(cartaDaInviare, numeroCarteInMano, null);
 	}
 
 	@Override

@@ -55,7 +55,7 @@ public class VistaConfigurazioneOffline extends Vista {
 
     	avviaBtn = new Button("Avvia Partita");
 
-    	HBox pulsanti = new HBox(10, annullaBtn, avviaBtn);
+    	HBox pulsanti = new HBox(10, avviaBtn, annullaBtn);
     	pulsanti.setAlignment(Pos.CENTER);
 
     	VBox centro = new VBox(20, lblNumGiocatori, numGiocatori, pulsanti);
