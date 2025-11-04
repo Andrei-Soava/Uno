@@ -84,12 +84,18 @@ public class PartitaNET {
 	 * Passa il turno al prossimo giocatore
 	 */
 	private void passaTurno() {
+		int dir = direzioneCrescente ? 1 : -1;
+		indiceGiocatoreCorrente = Math.floorMod(indiceGiocatoreCorrente + dir, giocatori.size());
+	}
+
+	private void passaTurnoGiocatoreSuccessivo() {
 		haPescatoNelTurno = false;
 		haGiocatoNelTurno = false;
 		cartaPescataCorrente = null;
 
-		int dir = direzioneCrescente ? 1 : -1;
-		indiceGiocatoreCorrente = Math.floorMod(indiceGiocatoreCorrente + dir, giocatori.size());
+		passaTurno();
+		avviaTimerTurno();
+		aggiornaGiocatoreCorrenteMostrato();
 	}
 
 	public void giocaCarta(CartaNET cartaGiocata, Colore coloreScelto, GiocatoreNET giocatore) throws EccezionePartita {
@@ -151,9 +157,8 @@ public class PartitaNET {
 					logger.info("Il giocatore {} deve dichiarare UNO!", giocatore.getNickname());
 				} else {
 					giocatore.setHaDichiaratoUNO(false);
-					passaTurno();
-					avviaTimerTurno();
-					aggiornaGiocatoreCorrenteMostrato();
+
+					passaTurnoGiocatoreSuccessivo();
 				}
 			}
 
@@ -218,9 +223,8 @@ public class PartitaNET {
 				throw new MossaNonValidaException(TipoMossaNonValida.GIOCATORE_DEVE_PESCARE);
 			}
 			// Qui il giocatore può passare
-			passaTurno();
-			avviaTimerTurno();
-			aggiornaGiocatoreCorrenteMostrato();
+
+			passaTurnoGiocatoreSuccessivo();
 
 			notifyObserverspartitaAggiornata(null);
 		} finally {
@@ -250,9 +254,7 @@ public class PartitaNET {
 
 				cartaPescataCorrente = null;
 			}
-			passaTurno();
-			avviaTimerTurno();
-			aggiornaGiocatoreCorrenteMostrato();
+			passaTurnoGiocatoreSuccessivo();
 
 			notifyObserverspartitaAggiornata(null);
 		} finally {
@@ -295,9 +297,7 @@ public class PartitaNET {
 				giocatore.setHaDichiaratoUNO(true);
 				cancellaTimer();
 				if (!partitaFinita) {
-					passaTurno();
-					avviaTimerTurno();
-					aggiornaGiocatoreCorrenteMostrato();
+					passaTurnoGiocatoreSuccessivo();
 					notifyObserverspartitaAggiornata(null);
 				}
 				logger.info("Il giocatore {} ha dichiarato UNO!", giocatore.getNickname());
@@ -524,9 +524,8 @@ public class PartitaNET {
 					giocatore.setHaDichiaratoUNO(true);
 					logger.info("Il bot {} ha dichiarato UNO automaticamente", giocatore.getNickname());
 					if (!partitaFinita) {
-						passaTurno();
-						avviaTimerTurno();
-						aggiornaGiocatoreCorrenteMostrato();
+						passaTurnoGiocatoreSuccessivo();
+
 						notifyObserverspartitaAggiornata(null);
 					}
 				} catch (Exception e) {
@@ -548,9 +547,8 @@ public class PartitaNET {
 								giocatore.getNickname());
 					}
 					if (!partitaFinita) {
-						passaTurno();
-						avviaTimerTurno();
-						aggiornaGiocatoreCorrenteMostrato();
+						passaTurnoGiocatoreSuccessivo();
+
 						notifyObserverspartitaAggiornata(null);
 					}
 				} catch (Exception e) {
