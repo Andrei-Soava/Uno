@@ -1,4 +1,4 @@
-# <img src="onegame-root/onegame-client/src/main/resources/immagini/logo.png" alt="emoji" width="20" height="20" style="vertical-align:middle;" />ONE – Gioco di Carte Multiplayer
+# 🃏 ONE – Gioco di Carte Multiplayer
 
 Benvenuto nel progetto **ONE**, un gioco di carte multiplayer ispirato a UNO, sviluppato in Java con architettura modulare Maven e supporto per partite client-server.
 
