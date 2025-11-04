@@ -109,21 +109,16 @@ public class CartaNET {
 	 * @return true se la carta è compatibile, false altrimenti.
 	 */
 	public boolean isCartaCompatibile(Colore coloreCorrente, CartaNET cartaCorrente) {
-		System.err.println("Colore corrente: " + coloreCorrente);
 		if (this.colore == Colore.NERO) {
-			System.err.println(1);
 			return true;
 		}
 		if (this.colore == coloreCorrente) {
-			System.err.println(2);
 			return true;
 		}
 		if (this.isCartaNumero && this.numero == cartaCorrente.getNumero()) {
-			System.err.println(3);
 			return true;
 		}
 		if (!isCartaNumero && !cartaCorrente.isCartaNumero() && tipo == cartaCorrente.getTipo()) {
-			System.err.println(4);
 			return true;
 		}
 		return false;

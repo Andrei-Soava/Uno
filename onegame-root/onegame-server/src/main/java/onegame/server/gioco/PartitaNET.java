@@ -119,11 +119,7 @@ public class PartitaNET {
 				if (coloreScelto == null || coloreScelto == Colore.NERO) {
 					logger.error("Colore scelto non valido per carta nera");
 					throw new MossaNonValidaException(TipoMossaNonValida.COLORE_SCELTO_NON_VALIDO);
-				} else {
-					this.coloreCorrente = coloreScelto;
 				}
-			} else {
-				this.coloreCorrente = cartaGiocata.getColore();
 			}
 
 			// Verifica se la carta sia giocabile
@@ -136,6 +132,12 @@ public class PartitaNET {
 			giocatore.rimuoviCarta(cartaGiocata);
 			this.cartaCorrente = cartaGiocata;
 			haGiocatoNelTurno = true;
+
+			if (cartaGiocata.getColore() == Colore.NERO) {
+				this.coloreCorrente = coloreScelto;
+			} else {
+				this.coloreCorrente = cartaGiocata.getColore();
+			}
 
 			checkWinCondition(giocatore);
 
@@ -356,7 +358,7 @@ public class PartitaNET {
 			// ciclo di verifica possibilità di giocare altre carte oltre ai +4
 			for (CartaNET carta : carteInMano) {
 				if (carta.isCartaCompatibile(getColoreCorrente(), getCartaCorrente())) {
-					logger.error("Verifica bluff +4: non valido, carta in mano: {}", carta);
+					logger.debug("Verifica bluff +4: non valido, carta in mano: {}", carta);
 					return false;
 				}
 			}
