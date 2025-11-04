@@ -16,6 +16,7 @@ import onegame.client.net.ClientSocket;
 import onegame.client.net.ConnectionMonitor;
 import onegame.client.vista.partita.VistaGioco;
 import onegame.modello.carte.Carta;
+import onegame.modello.carte.CartaComparator;
 import onegame.modello.carte.CartaSpeciale;
 import onegame.modello.carte.CartaSpeciale.TipoSpeciale;
 import onegame.modello.carte.Colore;
@@ -29,6 +30,7 @@ import onegame.modello.net.messaggi.MessaggiGioco.MessStatoPartita;
 public class ControlloreGiocoOnline extends Controllore implements StatoPartitaObserver {
 	private VistaGioco vg;
 	private boolean mossaInviata;
+	private static final CartaComparator cartaComparator = new CartaComparator();
 	private PauseTransition timerTurno;
 	private PauseTransition timerONE;
 	private SimpleIntegerProperty secondsLeft = new SimpleIntegerProperty(8);
@@ -146,6 +148,7 @@ public class ControlloreGiocoOnline extends Controllore implements StatoPartitaO
 		StatoPartitaDTO statoPartita = mess.statoPartita;
 		List<GiocatoreDTO> giocatori = statoPartita.giocatori;
 		List<Carta> carte = DTOUtils.convertiListaDTOinCarte(mess.carteInMano);
+		carte.sort(cartaComparator);
 		Carta cartaCorrente = DTOUtils.convertiDTOinCarta(statoPartita.cartaCorrente);
 		cartaCorrente.setColore(statoPartita.coloreCorrente);
 		boolean direzione = statoPartita.direzioneCrescente;
