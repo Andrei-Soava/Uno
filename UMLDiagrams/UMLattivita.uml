@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_eUd8kLowEfCCjrZwUz80-w" name="UMLattivita">
+  <packageImport xmi:type="uml:PackageImport" xmi:id="_eYbPgLowEfCCjrZwUz80-w">
+    <importedPackage xmi:type="uml:Model" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#_0"/>
+  </packageImport>
+  <packagedElement xmi:type="uml:Activity" xmi:id="_hS3AULowEfCCjrZwUz80-w" name="aggiornaPartita" node="_BwvgkLo0EfCCjrZwUz80-w _EzkYYLo0EfCCjrZwUz80-w _QN_0ULo0EfCCjrZwUz80-w _S_zNkLo0EfCCjrZwUz80-w _XTnMILo0EfCCjrZwUz80-w _dbxdMLo0EfCCjrZwUz80-w _rt10oLo0EfCCjrZwUz80-w _ea3QwLo2EfCCjrZwUz80-w _0GC1sLo0EfCCjrZwUz80-w _mZLVsLo3EfCCjrZwUz80-w _j26s8Lo6EfCCjrZwUz80-w _V2rP4Lo7EfCCjrZwUz80-w" group="_ea3QwLo2EfCCjrZwUz80-w">
+    <ownedComment xmi:type="uml:Comment" xmi:id="_Nt6KQLpBEfCCjrZwUz80-w">
+      <body>zona interrompibile&#xD;
+</body>
+    </ownedComment>
+    <ownedBehavior xmi:type="uml:Activity" xmi:id="_VxTIALo4EfCCjrZwUz80-w" name="gestisci invia carta"/>
+    <ownedBehavior xmi:type="uml:Activity" xmi:id="_oxc30Lo7EfCCjrZwUz80-w" name="gestisci avvio timer" node="_4EZdcLo7EfCCjrZwUz80-w _8u758Lo7EfCCjrZwUz80-w _DiUSQLo8EfCCjrZwUz80-w _I2gIsLo8EfCCjrZwUz80-w">
+      <edge xmi:type="uml:ControlFlow" xmi:id="_A-o3wLpAEfCCjrZwUz80-w" target="_DiUSQLo8EfCCjrZwUz80-w" source="_8u758Lo7EfCCjrZwUz80-w"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="_C_kNsLpAEfCCjrZwUz80-w" name="[sì]" target="_4EZdcLo7EfCCjrZwUz80-w" source="_DiUSQLo8EfCCjrZwUz80-w"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="_GRKhULpAEfCCjrZwUz80-w" name="[no]" target="_I2gIsLo8EfCCjrZwUz80-w" source="_DiUSQLo8EfCCjrZwUz80-w"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="_IJAzwLpAEfCCjrZwUz80-w" target="_4EZdcLo7EfCCjrZwUz80-w" source="_I2gIsLo8EfCCjrZwUz80-w"/>
+      <node xmi:type="uml:ActivityFinalNode" xmi:id="_4EZdcLo7EfCCjrZwUz80-w" name="" incoming="_C_kNsLpAEfCCjrZwUz80-w _IJAzwLpAEfCCjrZwUz80-w"/>
+      <node xmi:type="uml:InitialNode" xmi:id="_8u758Lo7EfCCjrZwUz80-w" name="" outgoing="_A-o3wLpAEfCCjrZwUz80-w"/>
+      <node xmi:type="uml:DecisionNode" xmi:id="_DiUSQLo8EfCCjrZwUz80-w" name="già avviato?" incoming="_A-o3wLpAEfCCjrZwUz80-w" outgoing="_C_kNsLpAEfCCjrZwUz80-w _GRKhULpAEfCCjrZwUz80-w"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="_I2gIsLo8EfCCjrZwUz80-w" name="avvia timer" incoming="_GRKhULpAEfCCjrZwUz80-w" outgoing="_IJAzwLpAEfCCjrZwUz80-w"/>
+    </ownedBehavior>
+    <ownedBehavior xmi:type="uml:Activity" xmi:id="_tdcs4Lo7EfCCjrZwUz80-w" name="gestisci invia carta" node="_7HTNwLo7EfCCjrZwUz80-w _9nQCALo7EfCCjrZwUz80-w _WKixoLo8EfCCjrZwUz80-w _Zsz-gLo8EfCCjrZwUz80-w _fh2fQLo8EfCCjrZwUz80-w _jqg9wLo8EfCCjrZwUz80-w _msPpYLo8EfCCjrZwUz80-w _sJhKYLo8EfCCjrZwUz80-w _yc4l4Lo8EfCCjrZwUz80-w _2Gr-ILo8EfCCjrZwUz80-w _9061ILo8EfCCjrZwUz80-w _Dhjn0Lo9EfCCjrZwUz80-w _Ioaz8Lo9EfCCjrZwUz80-w _O8CHELo9EfCCjrZwUz80-w _X0i_4Lo9EfCCjrZwUz80-w">
+      <edge xmi:type="uml:ControlFlow" xmi:id="_PpMnsLpAEfCCjrZwUz80-w" target="_Zsz-gLo8EfCCjrZwUz80-w" source="_9nQCALo7EfCCjrZwUz80-w"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="_QlDzALpAEfCCjrZwUz80-w" target="_WKixoLo8EfCCjrZwUz80-w" source="_Zsz-gLo8EfCCjrZwUz80-w"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="_S6DUcLpAEfCCjrZwUz80-w" name="[no]" target="_sJhKYLo8EfCCjrZwUz80-w" source="_WKixoLo8EfCCjrZwUz80-w"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="_VpTI8LpAEfCCjrZwUz80-w" name="[sì]" target="_msPpYLo8EfCCjrZwUz80-w" source="_WKixoLo8EfCCjrZwUz80-w"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="_XnZNULpAEfCCjrZwUz80-w" target="_sJhKYLo8EfCCjrZwUz80-w" source="_msPpYLo8EfCCjrZwUz80-w"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="_Y33WsLpAEfCCjrZwUz80-w" target="_yc4l4Lo8EfCCjrZwUz80-w" source="_sJhKYLo8EfCCjrZwUz80-w"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="_aH-6wLpAEfCCjrZwUz80-w" target="_2Gr-ILo8EfCCjrZwUz80-w" source="_yc4l4Lo8EfCCjrZwUz80-w"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="_bP16sLpAEfCCjrZwUz80-w" target="_9061ILo8EfCCjrZwUz80-w" source="_2Gr-ILo8EfCCjrZwUz80-w"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="_eNzgoLpAEfCCjrZwUz80-w" name="[no]" target="_X0i_4Lo9EfCCjrZwUz80-w" source="_9061ILo8EfCCjrZwUz80-w"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="_gNjK0LpAEfCCjrZwUz80-w" name="[sì]" target="_Dhjn0Lo9EfCCjrZwUz80-w" source="_9061ILo8EfCCjrZwUz80-w"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="_iUQYoLpAEfCCjrZwUz80-w" target="_Ioaz8Lo9EfCCjrZwUz80-w" source="_Dhjn0Lo9EfCCjrZwUz80-w"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="_kX6ScLpAEfCCjrZwUz80-w" name="[sì]" target="_O8CHELo9EfCCjrZwUz80-w" source="_Ioaz8Lo9EfCCjrZwUz80-w"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="_mkWU0LpAEfCCjrZwUz80-w" name="[no]" target="_X0i_4Lo9EfCCjrZwUz80-w" source="_Ioaz8Lo9EfCCjrZwUz80-w"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="_r8tgoLpAEfCCjrZwUz80-w" target="_X0i_4Lo9EfCCjrZwUz80-w" source="_O8CHELo9EfCCjrZwUz80-w"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="_x2ae8LpAEfCCjrZwUz80-w" target="_7HTNwLo7EfCCjrZwUz80-w" source="_X0i_4Lo9EfCCjrZwUz80-w"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="_0Kjr0LpAEfCCjrZwUz80-w" target="_Zsz-gLo8EfCCjrZwUz80-w" source="_fh2fQLo8EfCCjrZwUz80-w"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="_1fooYLpAEfCCjrZwUz80-w" target="_msPpYLo8EfCCjrZwUz80-w" source="_jqg9wLo8EfCCjrZwUz80-w"/>
+      <node xmi:type="uml:ActivityFinalNode" xmi:id="_7HTNwLo7EfCCjrZwUz80-w" name="" incoming="_x2ae8LpAEfCCjrZwUz80-w"/>
+      <node xmi:type="uml:InitialNode" xmi:id="_9nQCALo7EfCCjrZwUz80-w" name="" outgoing="_PpMnsLpAEfCCjrZwUz80-w"/>
+      <node xmi:type="uml:DecisionNode" xmi:id="_WKixoLo8EfCCjrZwUz80-w" name="carta colorata?" incoming="_QlDzALpAEfCCjrZwUz80-w" outgoing="_S6DUcLpAEfCCjrZwUz80-w _VpTI8LpAEfCCjrZwUz80-w"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="_Zsz-gLo8EfCCjrZwUz80-w" name="crea mossa" incoming="_PpMnsLpAEfCCjrZwUz80-w _0Kjr0LpAEfCCjrZwUz80-w" outgoing="_QlDzALpAEfCCjrZwUz80-w"/>
+      <node xmi:type="uml:ActivityParameterNode" xmi:id="_fh2fQLo8EfCCjrZwUz80-w" name="cartaDaInviare " outgoing="_0Kjr0LpAEfCCjrZwUz80-w">
+        <upperBound xmi:type="uml:LiteralInteger" xmi:id="_fh3tYLo8EfCCjrZwUz80-w" value="1"/>
+      </node>
+      <node xmi:type="uml:ActivityParameterNode" xmi:id="_jqg9wLo8EfCCjrZwUz80-w" name="colore" outgoing="_1fooYLpAEfCCjrZwUz80-w">
+        <upperBound xmi:type="uml:LiteralInteger" xmi:id="_jqhk0Lo8EfCCjrZwUz80-w" value="1"/>
+      </node>
+      <node xmi:type="uml:OpaqueAction" xmi:id="_msPpYLo8EfCCjrZwUz80-w" name="imposta colore in mossa" incoming="_VpTI8LpAEfCCjrZwUz80-w _1fooYLpAEfCCjrZwUz80-w" outgoing="_XnZNULpAEfCCjrZwUz80-w"/>
+      <node xmi:type="uml:MergeNode" xmi:id="_sJhKYLo8EfCCjrZwUz80-w" name="" incoming="_S6DUcLpAEfCCjrZwUz80-w _XnZNULpAEfCCjrZwUz80-w" outgoing="_Y33WsLpAEfCCjrZwUz80-w"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="_yc4l4Lo8EfCCjrZwUz80-w" name="blocca timer" incoming="_Y33WsLpAEfCCjrZwUz80-w" outgoing="_aH-6wLpAEfCCjrZwUz80-w"/>
+      <node xmi:type="uml:SendSignalAction" xmi:id="_2Gr-ILo8EfCCjrZwUz80-w" name="invia mossa GIOCA_CARTA" incoming="_aH-6wLpAEfCCjrZwUz80-w" outgoing="_bP16sLpAEfCCjrZwUz80-w" signal="_2U29ALo8EfCCjrZwUz80-w"/>
+      <node xmi:type="uml:DecisionNode" xmi:id="_9061ILo8EfCCjrZwUz80-w" name="penultima carta?" incoming="_bP16sLpAEfCCjrZwUz80-w" outgoing="_eNzgoLpAEfCCjrZwUz80-w _gNjK0LpAEfCCjrZwUz80-w"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="_Dhjn0Lo9EfCCjrZwUz80-w" name="mostra bottone ONE" incoming="_gNjK0LpAEfCCjrZwUz80-w" outgoing="_iUQYoLpAEfCCjrZwUz80-w"/>
+      <node xmi:type="uml:DecisionNode" xmi:id="_Ioaz8Lo9EfCCjrZwUz80-w" name="premuto?" incoming="_iUQYoLpAEfCCjrZwUz80-w" outgoing="_kX6ScLpAEfCCjrZwUz80-w _mkWU0LpAEfCCjrZwUz80-w"/>
+      <node xmi:type="uml:SendSignalAction" xmi:id="_O8CHELo9EfCCjrZwUz80-w" name="invia mossa DICHIARA_UNO" incoming="_kX6ScLpAEfCCjrZwUz80-w" outgoing="_r8tgoLpAEfCCjrZwUz80-w" signal="_PsJ8cLo9EfCCjrZwUz80-w"/>
+      <node xmi:type="uml:MergeNode" xmi:id="_X0i_4Lo9EfCCjrZwUz80-w" name="" incoming="_eNzgoLpAEfCCjrZwUz80-w _mkWU0LpAEfCCjrZwUz80-w _r8tgoLpAEfCCjrZwUz80-w" outgoing="_x2ae8LpAEfCCjrZwUz80-w"/>
+    </ownedBehavior>
+    <ownedOperation xmi:type="uml:Operation" xmi:id="_wnZkkLo0EfCCjrZwUz80-w" name="gestisci avvia timer"/>
+    <ownedOperation xmi:type="uml:Operation" xmi:id="_xzfK8Lo5EfCCjrZwUz80-w" name="Operation12"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_wRf28Lo9EfCCjrZwUz80-w" target="_QN_0ULo0EfCCjrZwUz80-w" source="_EzkYYLo0EfCCjrZwUz80-w"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_2dllwLo9EfCCjrZwUz80-w" target="_QN_0ULo0EfCCjrZwUz80-w" source="_BwvgkLo0EfCCjrZwUz80-w"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_4juL0Lo9EfCCjrZwUz80-w" target="_S_zNkLo0EfCCjrZwUz80-w" source="_QN_0ULo0EfCCjrZwUz80-w"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_5nQFYLo9EfCCjrZwUz80-w" target="_XTnMILo0EfCCjrZwUz80-w" source="_S_zNkLo0EfCCjrZwUz80-w"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_6ka4QLo9EfCCjrZwUz80-w" name="[no]" target="_dbxdMLo0EfCCjrZwUz80-w" source="_XTnMILo0EfCCjrZwUz80-w"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_8xmhgLo9EfCCjrZwUz80-w" target="_mZLVsLo3EfCCjrZwUz80-w" source="_dbxdMLo0EfCCjrZwUz80-w"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_CCUNMLo-EfCCjrZwUz80-w" name="[sì]" target="_rt10oLo0EfCCjrZwUz80-w" source="_XTnMILo0EfCCjrZwUz80-w"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_EQkNcLo-EfCCjrZwUz80-w" target="_0GC1sLo0EfCCjrZwUz80-w" source="_rt10oLo0EfCCjrZwUz80-w"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_HrO9gLo-EfCCjrZwUz80-w" target="_tj3awLo3EfCCjrZwUz80-w" source="_0GC1sLo0EfCCjrZwUz80-w"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_5rBqwLpAEfCCjrZwUz80-w" target="_V2rP4Lo7EfCCjrZwUz80-w" source="_j26s8Lo6EfCCjrZwUz80-w"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_-4kGoLpAEfCCjrZwUz80-w" name="&lt;&lt;exception>>" target="_j26s8Lo6EfCCjrZwUz80-w" source="_YG3mULo6EfCCjrZwUz80-w"/>
+    <structuredNode xmi:type="uml:StructuredActivityNode" xmi:id="_ea3QwLo2EfCCjrZwUz80-w">
+      <edge xmi:type="uml:ControlFlow" xmi:id="_QfEKoLo-EfCCjrZwUz80-w" name="[no]" target="_4fgB4Lo3EfCCjrZwUz80-w" source="_tj3awLo3EfCCjrZwUz80-w"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="_S8-XgLo-EfCCjrZwUz80-w" name="[sì]" target="_ODG30Lo5EfCCjrZwUz80-w" source="_tj3awLo3EfCCjrZwUz80-w"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="_Ym2KELo-EfCCjrZwUz80-w" target="_8O_ycLo3EfCCjrZwUz80-w" source="_4fgB4Lo3EfCCjrZwUz80-w"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="_Z_jpcLo-EfCCjrZwUz80-w" target="_4fgB4Lo3EfCCjrZwUz80-w" source="_JENxYLo4EfCCjrZwUz80-w"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="_bstHwLo-EfCCjrZwUz80-w" target="__2caQLo3EfCCjrZwUz80-w" source="_8O_ycLo3EfCCjrZwUz80-w"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="_dBVYYLo-EfCCjrZwUz80-w" name="[pesca]" target="_vRm5gLo4EfCCjrZwUz80-w" source="__2caQLo3EfCCjrZwUz80-w"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="_jFJU8Lo-EfCCjrZwUz80-w" name="[gioca carta]" target="_C9VSsLo4EfCCjrZwUz80-w" source="__2caQLo3EfCCjrZwUz80-w"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="_mBbf4Lo-EfCCjrZwUz80-w" target="_GVEDgLo4EfCCjrZwUz80-w" source="_C9VSsLo4EfCCjrZwUz80-w"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="_nG-LoLo-EfCCjrZwUz80-w" name="[no]" target="_JENxYLo4EfCCjrZwUz80-w" source="_GVEDgLo4EfCCjrZwUz80-w"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="_okEbwLo-EfCCjrZwUz80-w" name="[sì]" target="_Lkgj4Lo4EfCCjrZwUz80-w" source="_GVEDgLo4EfCCjrZwUz80-w"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="_qtTZILo-EfCCjrZwUz80-w" name="[sì]" target="_gTi-wLo4EfCCjrZwUz80-w" source="_Lkgj4Lo4EfCCjrZwUz80-w"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="_sX1oULo-EfCCjrZwUz80-w" name="[no]" target="_P3dm0Lo4EfCCjrZwUz80-w" source="_Lkgj4Lo4EfCCjrZwUz80-w"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="_u4x7ELo-EfCCjrZwUz80-w" target="_P3dm0Lo4EfCCjrZwUz80-w" source="_gTi-wLo4EfCCjrZwUz80-w"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="_v9p4cLo-EfCCjrZwUz80-w" target="_kqbfcLo4EfCCjrZwUz80-w" source="_P3dm0Lo4EfCCjrZwUz80-w"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="_0hsrYLo-EfCCjrZwUz80-w" target="_-iiF4Lo4EfCCjrZwUz80-w" source="_Tmy_ULo4EfCCjrZwUz80-w"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="_1MIvgLo-EfCCjrZwUz80-w" target="_-iiF4Lo4EfCCjrZwUz80-w" source="_AhBy4Lo5EfCCjrZwUz80-w"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="_2GTRsLo-EfCCjrZwUz80-w" target="_-iiF4Lo4EfCCjrZwUz80-w" source="_IHZHULo5EfCCjrZwUz80-w"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="_68C4oLo-EfCCjrZwUz80-w" target="_KrjtMLo5EfCCjrZwUz80-w" source="_-iiF4Lo4EfCCjrZwUz80-w"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="_8gl0kLo-EfCCjrZwUz80-w" target="_KrjtMLo5EfCCjrZwUz80-w" source="_vRm5gLo4EfCCjrZwUz80-w"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="_AkfH0Lo_EfCCjrZwUz80-w" target="_VYUx4Lo5EfCCjrZwUz80-w" source="_ODG30Lo5EfCCjrZwUz80-w"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="_DrZOYLo_EfCCjrZwUz80-w" name="[sì]" target="_ZcnGsLo5EfCCjrZwUz80-w" source="_VYUx4Lo5EfCCjrZwUz80-w"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="_IJRu8Lo_EfCCjrZwUz80-w" name="[no]" target="_e_W9kLo5EfCCjrZwUz80-w" source="_VYUx4Lo5EfCCjrZwUz80-w"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="_fujXILo_EfCCjrZwUz80-w" name="[sì]" target="_atzaELo_EfCCjrZwUz80-w" source="_ZcnGsLo5EfCCjrZwUz80-w"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="_jWr7cLo_EfCCjrZwUz80-w" name="[no]" target="_e_W9kLo5EfCCjrZwUz80-w" source="_ZcnGsLo5EfCCjrZwUz80-w"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="_mKxzsLo_EfCCjrZwUz80-w" target="_kf4m4Lo5EfCCjrZwUz80-w" source="_e_W9kLo5EfCCjrZwUz80-w"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="_oRb-MLo_EfCCjrZwUz80-w" target="_8ecRwLo5EfCCjrZwUz80-w" source="_kf4m4Lo5EfCCjrZwUz80-w"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="_pV2okLo_EfCCjrZwUz80-w" target="_CloScLo6EfCCjrZwUz80-w" source="_8ecRwLo5EfCCjrZwUz80-w"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="_wASgQLo_EfCCjrZwUz80-w" name="[sì]" target="_nIdysLo5EfCCjrZwUz80-w" source="_atzaELo_EfCCjrZwUz80-w"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="_zvnRsLo_EfCCjrZwUz80-w" name="[no]" target="_sNVawLo5EfCCjrZwUz80-w" source="_atzaELo_EfCCjrZwUz80-w"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="_3pS5ALo_EfCCjrZwUz80-w" target="_x0TDQLo5EfCCjrZwUz80-w" source="_sNVawLo5EfCCjrZwUz80-w"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="_5V1TULo_EfCCjrZwUz80-w" target="_KrjtMLo5EfCCjrZwUz80-w" source="_xgZ24Lo5EfCCjrZwUz80-w"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="_eCPUYLpBEfCCjrZwUz80-w" target="_sNVawLo5EfCCjrZwUz80-w" source="_nIdysLo5EfCCjrZwUz80-w"/>
+      <node xmi:type="uml:DecisionNode" xmi:id="_tj3awLo3EfCCjrZwUz80-w" name="rientro dopo PESCA?" incoming="_HrO9gLo-EfCCjrZwUz80-w" outgoing="_QfEKoLo-EfCCjrZwUz80-w _S8-XgLo-EfCCjrZwUz80-w"/>
+      <node xmi:type="uml:MergeNode" xmi:id="_4fgB4Lo3EfCCjrZwUz80-w" name="" incoming="_QfEKoLo-EfCCjrZwUz80-w _Z_jpcLo-EfCCjrZwUz80-w" outgoing="_Ym2KELo-EfCCjrZwUz80-w"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="_8O_ycLo3EfCCjrZwUz80-w" name="scegli mossa" incoming="_Ym2KELo-EfCCjrZwUz80-w" outgoing="_bstHwLo-EfCCjrZwUz80-w"/>
+      <node xmi:type="uml:DecisionNode" xmi:id="__2caQLo3EfCCjrZwUz80-w" name="mossa?" incoming="_bstHwLo-EfCCjrZwUz80-w" outgoing="_dBVYYLo-EfCCjrZwUz80-w _jFJU8Lo-EfCCjrZwUz80-w"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="_C9VSsLo4EfCCjrZwUz80-w" name="verifica carta selezionata" incoming="_jFJU8Lo-EfCCjrZwUz80-w" outgoing="_mBbf4Lo-EfCCjrZwUz80-w"/>
+      <node xmi:type="uml:DecisionNode" xmi:id="_GVEDgLo4EfCCjrZwUz80-w" name="valida?" incoming="_mBbf4Lo-EfCCjrZwUz80-w" outgoing="_nG-LoLo-EfCCjrZwUz80-w _okEbwLo-EfCCjrZwUz80-w"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="_JENxYLo4EfCCjrZwUz80-w" name="stampa messaggio errore" incoming="_nG-LoLo-EfCCjrZwUz80-w" outgoing="_Z_jpcLo-EfCCjrZwUz80-w"/>
+      <node xmi:type="uml:DecisionNode" xmi:id="_Lkgj4Lo4EfCCjrZwUz80-w" name="carta nera?" incoming="_okEbwLo-EfCCjrZwUz80-w" outgoing="_qtTZILo-EfCCjrZwUz80-w _sX1oULo-EfCCjrZwUz80-w"/>
+      <node xmi:type="uml:MergeNode" xmi:id="_P3dm0Lo4EfCCjrZwUz80-w" name="" incoming="_sX1oULo-EfCCjrZwUz80-w _u4x7ELo-EfCCjrZwUz80-w" outgoing="_v9p4cLo-EfCCjrZwUz80-w"/>
+      <node xmi:type="uml:CallBehaviorAction" xmi:id="_Tmy_ULo4EfCCjrZwUz80-w" name="gestisci invia carta" outgoing="_0hsrYLo-EfCCjrZwUz80-w" behavior="_VxTIALo4EfCCjrZwUz80-w">
+        <argument xmi:type="uml:InputPin" xmi:id="_kqbfcLo4EfCCjrZwUz80-w" name="" incoming="_v9p4cLo-EfCCjrZwUz80-w">
+          <upperBound xmi:type="uml:LiteralInteger" xmi:id="_kqctkLo4EfCCjrZwUz80-w" value="1"/>
+        </argument>
+      </node>
+      <node xmi:type="uml:OpaqueAction" xmi:id="_gTi-wLo4EfCCjrZwUz80-w" name="scegli colore" incoming="_qtTZILo-EfCCjrZwUz80-w" outgoing="_u4x7ELo-EfCCjrZwUz80-w"/>
+      <node xmi:type="uml:SendSignalAction" xmi:id="_vRm5gLo4EfCCjrZwUz80-w" name="invia mossa PESCA" incoming="_dBVYYLo-EfCCjrZwUz80-w" outgoing="_8gl0kLo-EfCCjrZwUz80-w" signal="_xEZs0Lo4EfCCjrZwUz80-w"/>
+      <node xmi:type="uml:MergeNode" xmi:id="_-iiF4Lo4EfCCjrZwUz80-w" name="" incoming="_0hsrYLo-EfCCjrZwUz80-w _1MIvgLo-EfCCjrZwUz80-w _2GTRsLo-EfCCjrZwUz80-w" outgoing="_68C4oLo-EfCCjrZwUz80-w"/>
+      <node xmi:type="uml:FlowFinalNode" xmi:id="_AhBy4Lo5EfCCjrZwUz80-w" name="A" outgoing="_1MIvgLo-EfCCjrZwUz80-w"/>
+      <node xmi:type="uml:FlowFinalNode" xmi:id="_IHZHULo5EfCCjrZwUz80-w" name="B" outgoing="_2GTRsLo-EfCCjrZwUz80-w"/>
+      <node xmi:type="uml:ActivityFinalNode" xmi:id="_KrjtMLo5EfCCjrZwUz80-w" name="" incoming="_68C4oLo-EfCCjrZwUz80-w _8gl0kLo-EfCCjrZwUz80-w _5V1TULo_EfCCjrZwUz80-w"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="_ODG30Lo5EfCCjrZwUz80-w" name="verifica carta pescata" incoming="_S8-XgLo-EfCCjrZwUz80-w" outgoing="_AkfH0Lo_EfCCjrZwUz80-w"/>
+      <node xmi:type="uml:DecisionNode" xmi:id="_VYUx4Lo5EfCCjrZwUz80-w" name="giocabile?" incoming="_AkfH0Lo_EfCCjrZwUz80-w" outgoing="_DrZOYLo_EfCCjrZwUz80-w _IJRu8Lo_EfCCjrZwUz80-w"/>
+      <node xmi:type="uml:DecisionNode" xmi:id="_ZcnGsLo5EfCCjrZwUz80-w" name="giocarla?" incoming="_DrZOYLo_EfCCjrZwUz80-w" outgoing="_fujXILo_EfCCjrZwUz80-w _jWr7cLo_EfCCjrZwUz80-w"/>
+      <node xmi:type="uml:MergeNode" xmi:id="_e_W9kLo5EfCCjrZwUz80-w" name="" incoming="_IJRu8Lo_EfCCjrZwUz80-w _jWr7cLo_EfCCjrZwUz80-w" outgoing="_mKxzsLo_EfCCjrZwUz80-w"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="_kf4m4Lo5EfCCjrZwUz80-w" name="blocca timer" incoming="_mKxzsLo_EfCCjrZwUz80-w" outgoing="_oRb-MLo_EfCCjrZwUz80-w"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="_nIdysLo5EfCCjrZwUz80-w" name="scegli colore" incoming="_wASgQLo_EfCCjrZwUz80-w" outgoing="_eCPUYLpBEfCCjrZwUz80-w"/>
+      <node xmi:type="uml:MergeNode" xmi:id="_sNVawLo5EfCCjrZwUz80-w" name="" incoming="_zvnRsLo_EfCCjrZwUz80-w _eCPUYLpBEfCCjrZwUz80-w" outgoing="_3pS5ALo_EfCCjrZwUz80-w"/>
+      <node xmi:type="uml:CallOperationAction" xmi:id="_xgZ24Lo5EfCCjrZwUz80-w" name="gestisci invia carta" outgoing="_5V1TULo_EfCCjrZwUz80-w" operation="_xzfK8Lo5EfCCjrZwUz80-w">
+        <target xmi:type="uml:InputPin" xmi:id="_x0TDQLo5EfCCjrZwUz80-w" name="" incoming="_3pS5ALo_EfCCjrZwUz80-w" type="_hS3AULowEfCCjrZwUz80-w">
+          <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_x0TqULo5EfCCjrZwUz80-w" value="1"/>
+          <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_x0TqUbo5EfCCjrZwUz80-w" value="1"/>
+        </target>
+      </node>
+      <node xmi:type="uml:SendSignalAction" xmi:id="_8ecRwLo5EfCCjrZwUz80-w" name="invia mossa PASSA" incoming="_oRb-MLo_EfCCjrZwUz80-w" outgoing="_pV2okLo_EfCCjrZwUz80-w" signal="_9GGusLo5EfCCjrZwUz80-w"/>
+      <node xmi:type="uml:FlowFinalNode" xmi:id="_CloScLo6EfCCjrZwUz80-w" name="B" incoming="_pV2okLo_EfCCjrZwUz80-w"/>
+      <node xmi:type="uml:AcceptEventAction" xmi:id="_YG3mULo6EfCCjrZwUz80-w" name="dopo 8 secondi" outgoing="_-4kGoLpAEfCCjrZwUz80-w">
+        <handler xmi:type="uml:ExceptionHandler" xmi:id="_7tlYYLpAEfCCjrZwUz80-w"/>
+        <handler xmi:type="uml:ExceptionHandler" xmi:id="_8tG7sLpAEfCCjrZwUz80-w"/>
+        <handler xmi:type="uml:ExceptionHandler" xmi:id="_9yXTkLpAEfCCjrZwUz80-w"/>
+      </node>
+      <node xmi:type="uml:DecisionNode" xmi:id="_atzaELo_EfCCjrZwUz80-w" name="carta nera?" incoming="_fujXILo_EfCCjrZwUz80-w" outgoing="_wASgQLo_EfCCjrZwUz80-w _zvnRsLo_EfCCjrZwUz80-w"/>
+    </structuredNode>
+    <node xmi:type="uml:ActivityParameterNode" xmi:id="_BwvgkLo0EfCCjrZwUz80-w" name="MessStatoPartita" outgoing="_2dllwLo9EfCCjrZwUz80-w">
+      <upperBound xmi:type="uml:LiteralInteger" xmi:id="_Bw0ZELo0EfCCjrZwUz80-w" value="1"/>
+    </node>
+    <node xmi:type="uml:InitialNode" xmi:id="_EzkYYLo0EfCCjrZwUz80-w" name="" outgoing="_wRf28Lo9EfCCjrZwUz80-w"/>
+    <node xmi:type="uml:OpaqueAction" xmi:id="_QN_0ULo0EfCCjrZwUz80-w" name="carica informazioni" incoming="_wRf28Lo9EfCCjrZwUz80-w _2dllwLo9EfCCjrZwUz80-w" outgoing="_4juL0Lo9EfCCjrZwUz80-w"/>
+    <node xmi:type="uml:OpaqueAction" xmi:id="_S_zNkLo0EfCCjrZwUz80-w" name="stampa turnazione" incoming="_4juL0Lo9EfCCjrZwUz80-w" outgoing="_5nQFYLo9EfCCjrZwUz80-w"/>
+    <node xmi:type="uml:DecisionNode" xmi:id="_XTnMILo0EfCCjrZwUz80-w" name="turno giocante?" incoming="_5nQFYLo9EfCCjrZwUz80-w" outgoing="_6ka4QLo9EfCCjrZwUz80-w _CCUNMLo-EfCCjrZwUz80-w"/>
+    <node xmi:type="uml:OpaqueAction" xmi:id="_dbxdMLo0EfCCjrZwUz80-w" name="stampa mano read_only" incoming="_6ka4QLo9EfCCjrZwUz80-w" outgoing="_8xmhgLo9EfCCjrZwUz80-w"/>
+    <node xmi:type="uml:CallOperationAction" xmi:id="_rt10oLo0EfCCjrZwUz80-w" name="gestisci avvia timer" incoming="_CCUNMLo-EfCCjrZwUz80-w" outgoing="_EQkNcLo-EfCCjrZwUz80-w" operation="_wnZkkLo0EfCCjrZwUz80-w"/>
+    <node xmi:type="uml:OpaqueAction" xmi:id="_0GC1sLo0EfCCjrZwUz80-w" name="stampa mano" incoming="_EQkNcLo-EfCCjrZwUz80-w" outgoing="_HrO9gLo-EfCCjrZwUz80-w"/>
+    <node xmi:type="uml:FlowFinalNode" xmi:id="_mZLVsLo3EfCCjrZwUz80-w" name="A" incoming="_8xmhgLo9EfCCjrZwUz80-w"/>
+    <node xmi:type="uml:SendSignalAction" xmi:id="_j26s8Lo6EfCCjrZwUz80-w" name="invia mossa PESCA_E_PASSA" incoming="_-4kGoLpAEfCCjrZwUz80-w" outgoing="_5rBqwLpAEfCCjrZwUz80-w" signal="_kKr9gLo6EfCCjrZwUz80-w"/>
+    <node xmi:type="uml:ActivityFinalNode" xmi:id="_V2rP4Lo7EfCCjrZwUz80-w" name="" incoming="_5rBqwLpAEfCCjrZwUz80-w"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Signal" xmi:id="_xEZs0Lo4EfCCjrZwUz80-w" name="invia mossa pesca"/>
+  <packagedElement xmi:type="uml:Signal" xmi:id="_9GGusLo5EfCCjrZwUz80-w" name="Signal3"/>
+  <packagedElement xmi:type="uml:Signal" xmi:id="_kKr9gLo6EfCCjrZwUz80-w" name="Signal4"/>
+  <packagedElement xmi:type="uml:Signal" xmi:id="_2U29ALo8EfCCjrZwUz80-w" name="Signal5"/>
+  <packagedElement xmi:type="uml:Signal" xmi:id="_PsJ8cLo9EfCCjrZwUz80-w" name="Signal6"/>
+</uml:Model>

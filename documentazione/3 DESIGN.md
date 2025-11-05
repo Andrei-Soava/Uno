@@ -35,7 +35,7 @@ Mostra la suddivisione in macro‑blocchi:
 #### Diagramma delle classi (incompleto)
 ![Class](../UMLDiagrams/ONEclassDiagram.PNG)
 
-#### Macchina degli stati finiti (incompleto)
+#### Macchina degli stati finiti
 ![StateMachine](../UMLDiagrams/ONEstateMachineDiagram.PNG)
 
 ### 2. Vista di processo
@@ -51,6 +51,8 @@ Rappresenta i principali flussi e interazioni concorrenti:
 #### Diagramma di comunicazione (gestione salvataggi lato client)
 ![Communication](../UMLDiagrams/ONEcommunicationDiagram.PNG)
 
+#### Diagramma di attività (gestione partita online lato client)
+![Activity](../UMLDiagrams/ONEactivityDiagram.PNG)
 
 ### 3. Vista fisica
 Mostra la distribuzione sui nodi:
