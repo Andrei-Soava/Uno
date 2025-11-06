@@ -27,6 +27,16 @@
         <ownedOperation xmi:type="uml:Operation" xmi:id="_-ySngLd3EfCAJ7rgUb4xBA" name="giocaCarta(c:Carta):void"/>
         <ownedOperation xmi:type="uml:Operation" xmi:id="_COJDULd4EfCAJ7rgUb4xBA" name="scegliMossaAutomatica():void"/>
         <ownedOperation xmi:type="uml:Operation" xmi:id="_NwtuoLd4EfCAJ7rgUb4xBA" name="verificaFinePartita():boolean"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_TYPy0LsxEfCfUPbOmzyLRA" name="getGiocatoreCorrente():Giocatore"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_XKrioLsxEfCfUPbOmzyLRA" name="getMazzo():Mazzo"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_Y6odULsxEfCfUPbOmzyLRA" name="cambiaDirezione():void"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_ax2doLsxEfCfUPbOmzyLRA" name="prossimoGiocatore():void"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_cWA_ELsxEfCfUPbOmzyLRA" name="getDirezione():boolean"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_fpN1MLsxEfCfUPbOmzyLRA" name="getNumeroGiocatori():int"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_hPf2gLsxEfCfUPbOmzyLRA" name="getGiocatori():List&lt;Giocatore>"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_jww5YLsxEfCfUPbOmzyLRA" name="getCartaCorrente():Carta"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_m9mBwLsxEfCfUPbOmzyLRA" name="verificaPiuQuattroGiocabile():boolean"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_oOELILsxEfCfUPbOmzyLRA" name="isCartaGiocabile():boolean"/>
       </packagedElement>
       <packagedElement xmi:type="uml:Class" xmi:id="_NbZVALdvEfCAJ7rgUb4xBA" name="Mazzo">
         <ownedAttribute xmi:type="uml:Property" xmi:id="_85mPQrdxEfCAJ7rgUb4xBA" name="pilascarti" type="_OerW8LdvEfCAJ7rgUb4xBA" association="_85loMLdxEfCAJ7rgUb4xBA">
@@ -120,20 +130,7 @@
           <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_tEkTdLd1EfCAJ7rgUb4xBA" value="1"/>
         </ownedAttribute>
       </packagedElement>
-      <packagedElement xmi:type="uml:Realization" xmi:id="_xmnxELdvEfCAJ7rgUb4xBA" client="_KmI_ILdvEfCAJ7rgUb4xBA" supplier="_R5l-oLdvEfCAJ7rgUb4xBA"/>
       <packagedElement xmi:type="uml:Enumeration" xmi:id="_XDJqsLd1EfCAJ7rgUb4xBA" name="TipoMossa"/>
-      <packagedElement xmi:type="uml:Interface" xmi:id="_R5l-oLdvEfCAJ7rgUb4xBA" name="PartitaIF">
-        <ownedOperation xmi:type="uml:Operation" xmi:id="_axLUQLd4EfCAJ7rgUb4xBA" name="getGiocatoreCorrente():Giocatore" isAbstract="true"/>
-        <ownedOperation xmi:type="uml:Operation" xmi:id="_f_S-8Ld4EfCAJ7rgUb4xBA" name="getMazzo():Mazzo" isAbstract="true"/>
-        <ownedOperation xmi:type="uml:Operation" xmi:id="_iDHQ0Ld4EfCAJ7rgUb4xBA" name="cambiaDirezione():void" isAbstract="true"/>
-        <ownedOperation xmi:type="uml:Operation" xmi:id="_kchYMLd4EfCAJ7rgUb4xBA" name="prossimoGIocatore():void" isAbstract="true"/>
-        <ownedOperation xmi:type="uml:Operation" xmi:id="_qcldMLd4EfCAJ7rgUb4xBA" name="getDirezione():boolean" isAbstract="true"/>
-        <ownedOperation xmi:type="uml:Operation" xmi:id="_skSJgLd4EfCAJ7rgUb4xBA" name="getNumeroGiocatori():int" isAbstract="true"/>
-        <ownedOperation xmi:type="uml:Operation" xmi:id="_0LdWQLd4EfCAJ7rgUb4xBA" name="getGiocatori():List&lt;Giocatore>" isAbstract="true"/>
-        <ownedOperation xmi:type="uml:Operation" xmi:id="_6ivocLd4EfCAJ7rgUb4xBA" name="getCartaCorrente():Carta" isAbstract="true"/>
-        <ownedOperation xmi:type="uml:Operation" xmi:id="_MvGrMLd5EfCAJ7rgUb4xBA" name="verificaPiuQuattroGiocabile():boolean"/>
-        <ownedOperation xmi:type="uml:Operation" xmi:id="_RIftULd5EfCAJ7rgUb4xBA" name="isCartaGiocabile():boolean"/>
-      </packagedElement>
       <packagedElement xmi:type="uml:Class" xmi:id="_BrXmELd7EfCAJ7rgUb4xBA" name="CartaComparator">
         <ownedOperation xmi:type="uml:Operation" xmi:id="_HfVv0Ld7EfCAJ7rgUb4xBA" name="compare(c1:Carta, c2:Carta):int"/>
       </packagedElement>
