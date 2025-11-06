@@ -160,3 +160,4 @@ Esempio COMPLETO:
 - 4/11, Andrei, creazione communication diagram per mostrare logica di gestione dei salvataggio lato CLIENT (con particolare enfasi su il caricamento di una partita) + aggiornamento documento 3 con .PNG, continuazione documentazione e diagrammi;
 - 4/11, Fabio, (creati file bat e vbs per esecuzione di client e server con maven, aggiornati plugin, scrittura del readme.md), null;
 - 5/11, Andrei, creazione activity diagram per mostrare flusso della partita online lato CLIENT (con la funzione aggiornaPartita) + aggiornamento documento 3 con .PNG, null;
+- 6/11, Giuseppe, (aggiornamento diagramma UML delle classi, non ancora terminato);
