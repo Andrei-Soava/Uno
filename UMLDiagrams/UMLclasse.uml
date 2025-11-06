@@ -489,6 +489,12 @@
         <ownedOperation xmi:type="uml:Operation" xmi:id="_s0GUYLssEfCC2_ot-L-QRw" name="isNomeSalvataggioValido(): boolean" visibility="private"/>
       </packagedElement>
       <packagedElement xmi:type="uml:Class" xmi:id="_vxrnMLspEfCC2_ot-L-QRw" name="GestoreStanze">
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_S_RtoLs7EfCC2_ot-L-QRw" name="handleCreaStanza(): void"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_anxJALs7EfCC2_ot-L-QRw" name="handleEntraStanza(): void"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_dkk4YLs7EfCC2_ot-L-QRw" name="handleDettagliStanza(): void"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_iipU4Ls7EfCC2_ot-L-QRw" name="handleAbbandonaStanza(): void"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_lMfE8Ls7EfCC2_ot-L-QRw" name="onSessioneInnativa(): void"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_pTWzsLs7EfCC2_ot-L-QRw" name="creaStanza(): abstract" visibility="protected"/>
         <nestedClassifier xmi:type="uml:Class" xmi:id="_jSefELsqEfCC2_ot-L-QRw" name="GestoreStanze"/>
       </packagedElement>
       <packagedElement xmi:type="uml:Class" xmi:id="_7KhHsLspEfCC2_ot-L-QRw" name="GestoreSessioni">
@@ -501,17 +507,66 @@
         <ownedOperation xmi:type="uml:Operation" xmi:id="_caVbMLstEfCC2_ot-L-QRw" name="addObServer(): boolean"/>
         <ownedOperation xmi:type="uml:Operation" xmi:id="_gc0ZMLstEfCC2_ot-L-QRw" name="removeObServer(): boolean"/>
       </packagedElement>
-      <packagedElement xmi:type="uml:Class" xmi:id="_LQcCYLsqEfCC2_ot-L-QRw" name="GestoreStanzaPartita"/>
-      <packagedElement xmi:type="uml:Class" xmi:id="_N0HgELsqEfCC2_ot-L-QRw" name="GestoreStatistiche"/>
-      <packagedElement xmi:type="uml:Class" xmi:id="_QrJ-oLsqEfCC2_ot-L-QRw" name="GestoreUtenti"/>
-      <packagedElement xmi:type="uml:Class" xmi:id="_t9M8YLsqEfCC2_ot-L-QRw" name="Sessione"/>
-      <packagedElement xmi:type="uml:Class" xmi:id="_vYyJkLsqEfCC2_ot-L-QRw" name="Stanza"/>
-      <packagedElement xmi:type="uml:Class" xmi:id="_w9AVYLsqEfCC2_ot-L-QRw" name="StanzaPartita"/>
+      <packagedElement xmi:type="uml:Class" xmi:id="_LQcCYLsqEfCC2_ot-L-QRw" name="GestoreStanzaPartita">
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_20ePULs7EfCC2_ot-L-QRw" name="creaStanza(): StanzaPartita" visibility="protected"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_8bqhULs7EfCC2_ot-L-QRw" name="handleIniziaPartita(): void"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="__fjwILs7EfCC2_ot-L-QRw" name="handleEffettuaMossa(): void"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="_N0HgELsqEfCC2_ot-L-QRw" name="GestoreStatistiche">
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_QhSbsLtQEfCC2_ot-L-QRw" name="handleCaricaStatistiche(): void"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="_QrJ-oLsqEfCC2_ot-L-QRw" name="GestoreUtenti">
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_VxqJILtQEfCC2_ot-L-QRw" name="handleCambioUsername(): void"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_a86tELtQEfCC2_ot-L-QRw" name="handleCambioPassword(): void"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_d1GbILtQEfCC2_ot-L-QRw" name="handleEliminaAccount(): void"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="_t9M8YLsqEfCC2_ot-L-QRw" name="Sessione">
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_DQISMLtREfCC2_ot-L-QRw" name="createSessione(): Sessione"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_GPmUALtREfCC2_ot-L-QRw" name="createSessioneAnonimo(): Sessione"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_JdgacLtREfCC2_ot-L-QRw" name="getUsername(): String"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_MOsvsLtREfCC2_ot-L-QRw" name="setUsername(): void"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_OxfckLtREfCC2_ot-L-QRw" name="getNickname(): String"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_Ua6jMLtREfCC2_ot-L-QRw" name="isAnonimo(): boolean"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_W-LxMLtREfCC2_ot-L-QRw" name="isConnesso(): boolean"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_ZYaX8LtREfCC2_ot-L-QRw" name="setConnesso(): void"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_gtvmwLtREfCC2_ot-L-QRw" name="aggiornaPing(): void"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_jQQm0LtREfCC2_ot-L-QRw" name="getUltimoPing(): long"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_oJN50LtREfCC2_ot-L-QRw" name="getToken(): String"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_qFfZQLtREfCC2_ot-L-QRw" name="sendEvent(): boolean"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="_vYyJkLsqEfCC2_ot-L-QRw" name="Stanza">
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_HGki0LtSEfCC2_ot-L-QRw" name="aggiungiSessione(): boolean"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_JhkloLtSEfCC2_ot-L-QRw" name="rimuoviSessione(): boolean"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_OCDHMLtSEfCC2_ot-L-QRw" name="isVuota(): boolean"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_QSITcLtSEfCC2_ot-L-QRw" name="isPiena(): boolean"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_TJsWcLtSEfCC2_ot-L-QRw" name="broadcast(): void"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_VQ0bALtSEfCC2_ot-L-QRw" name="getCodice: int"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_W_j0wLtSEfCC2_ot-L-QRw" name="getNome(): String"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_Zi3fALtSEfCC2_ot-L-QRw" name="getMaxSessioni(): int"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_dgHXsLtSEfCC2_ot-L-QRw" name="getNumSessioni(): int"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_hiMGALtSEfCC2_ot-L-QRw" name="hasSessione(): boolean"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_k1BIsLtSEfCC2_ot-L-QRw" name="getSessioni(): Set&lt;Sessioni>"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_pd1G4LtSEfCC2_ot-L-QRw" name="notificaStato(): void"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_sZhb8LtSEfCC2_ot-L-QRw" name="getProprietario(): Sessione"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_v9Aw0LtSEfCC2_ot-L-QRw" name="trasferisciProprietario(): boolean()"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="_nGgVELtQEfCC2_ot-L-QRw" name="ServerUnoExceptionListener"/>
+      <packagedElement xmi:type="uml:Interface" xmi:id="_xLgZsLtREfCC2_ot-L-QRw" name="SessioneObserver">
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_8bguULtREfCC2_ot-L-QRw" name="onSessioneAttiva(): void"/>
+      </packagedElement>
     </packagedElement>
     <packagedElement xmi:type="uml:Class" xmi:id="_3HkowLr_EfCC2_ot-L-QRw" name="GestoreStanze">
       <ownedAttribute xmi:type="uml:Property" xmi:id="_Jli_8LsAEfCC2_ot-L-QRw" name="gestoreStanze"/>
     </packagedElement>
     <packagedElement xmi:type="uml:Class" xmi:id="_BVDwcLsAEfCC2_ot-L-QRw" name="GestorePartiteOffline"/>
+    <packagedElement xmi:type="uml:Class" xmi:id="_w9AVYLsqEfCC2_ot-L-QRw" name="StanzaPartita">
+      <ownedOperation xmi:type="uml:Operation" xmi:id="_5F8EMLtSEfCC2_ot-L-QRw" name="avviaPartita(): void"/>
+      <ownedOperation xmi:type="uml:Operation" xmi:id="_72k_0LtSEfCC2_ot-L-QRw" name="riceviMossa(): void"/>
+      <ownedOperation xmi:type="uml:Operation" xmi:id="_-cJT4LtSEfCC2_ot-L-QRw" name="partitaAggiornata(): void"/>
+      <ownedOperation xmi:type="uml:Operation" xmi:id="_CclDcLtTEfCC2_ot-L-QRw" name="isPartitaInCorso(): boolean"/>
+      <ownedOperation xmi:type="uml:Operation" xmi:id="_GCqZULtTEfCC2_ot-L-QRw" name="getPartita(): PartitaNet"/>
+      <ownedOperation xmi:type="uml:Operation" xmi:id="_Jh5gULtTEfCC2_ot-L-QRw" name="getGiocatori(): Collection&lt;GiocatoreNet>"/>
+    </packagedElement>
     <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_VQGfYLr8EfCC2_ot-L-QRw">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_VQN0ILr8EfCC2_ot-L-QRw" source="http://www.eclipse.org/uml2/2.0.0/UML">
         <references xmi:type="ecore:EPackage" href="pathmap://PAPYRUS_ACTIONLANGUAGE_PROFILE/ActionLanguage-Profile.profile.uml#_Kv8EIKFXEeS_KNX0nfvIVQ"/>
