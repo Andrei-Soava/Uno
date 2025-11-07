@@ -1,7 +1,68 @@
 # Specifica dei Requisiti
 
 ---
+## Indice
+#### 1. Introduzione
+   - **1.1 Obiettivo del documento**
+   - **1.2 Elicitazione dei requisiti**
+   - **1.3 Obiettivo generale**
+   - **1.4 Panoramica generale**
+   - **1.5 Glossario**
+#### 2. Descrizione generale
+   - **2.1 Prospettiva del prodotto**
+   - **2.2 Funzionalità del prodotto**
+   - **2.3 Caratteristiche dell'utente**
+   - **2.4 vincoli**
+   - **2.5 Presupposti e dipendenze**
+   - **2.6 Architettura generale del sistema**
+#### 3. Requisiti specifici
+   - **3.1 Requisiti funzionali**
+      - **3.1.1 Gestione dell'autenticazione**
+      - **3.1.2 Gestione della modalità di gioco**
+      - **3.1.3 Configurazione della partita offline**
+      - **3.1.4 Svolgimento della partita**
+      - **3.1.5 Gestione del salvataggio nella modalità offline**
+      - **3.1.6 Visualizzazione delle statistiche**
+      - **3.1.7 Visualizzazione del regolamento**
+      - **3.1.8 Logout e disconnessione**
+      - **3.1.9 Politiche di gioco**
+   - **3.2 Requisiti di interfaccia utente**
+      - **3.2.1 Schermata di Login**
+      - **3.2.2 Schermata di Registrazione**
+      - **3.2.3 Menù principale**
+      - **3.2.4 Schermata "Gioca contro computer"**
+      - **3.2.5 Configurazione nuova partita**
+      - **3.2.6 Regolamento**
+      - **3.2.7 Statistiche**
+      - **3.2.8 Impostazioni**
+   - **3.3 Requisiti interfaccia hardware e software**
+      - **3.3.1 Interfaccia hardware**
+      - **3.3.2 Interccia software**
+   - **3.4 Requisiti di comunicazione**
+   - **3.5 Vincoli di progettazione**
+   - **3.6 Requisiti del database**
+      - **3.6.1 Tipologia**
+      - **3.6.2 Struttura delle tabelle**
+      - **3.6.3 Vincoli e integrità**
+      - **3.6.4 Requisiti e sicurezza**
+      - **3.6.5 Prestazioni**
+      - **3.6.6 Gestione degli errori**
+   - **3.7 Requisiti del server**
+      - **3.7.1 Architettura**
+      - **3.7.2 Requisiti funzionali**
+      - **3.7.3 Sicurezza**
+      - **3.7.5 Logging e monitoraggio**
+   - **3.8 Requisiti non funzionali (in riferimento ad ISO 9126)**
+      - **3.8.1 Usabilità**
+      - **3.8.2 Efficienza**
+      - **3.8.3 Affidabilità**
+      - **3.8.4 Portabilità**
+      - **3.8.5 Sicurezza**
+#### 4. Piano di testing
+#### 5. Strumenti e standard di lavoro
+#### 6. Use Case Principali
 
+---
 ## 1. Introduzione
 
 ### 1.1 Obiettivo del documento
@@ -148,7 +209,7 @@ I giocatori possono scegliere se registrarsi o partecipare come utenti anonimi. 
          - "Registrati": permette di provare a creare un account;
          - "Annulla": consente di ritornare alla schermata 3.3.1;
       - RI6: in caso di errore nel processo di registrazione, deve comparire un messaggio di errore informativo;
-   - ### 3.2.2 Menù principale
+   - ### 3.2.3 Menù principale
       - RI7: dopo l’accesso, l’utente visualizza il menù principale con le seguenti opzioni:
          - "Gioca con amici": pulsante che consente di entrare nella modalità online;
          - "Gioca contro computer": pulsante che consente di entrare nella modalità offline;
@@ -159,27 +220,27 @@ I giocatori possono scegliere se registrarsi o partecipare come utenti anonimi. 
          - lo stato di connessione ("Connessione"/"Disconnessione") al server;
          - il tipo di utente (se l'utente è anonimo oppure registrato);
          - se l'utente è registrato, il nome utente in basso a destra diventa un bottone che porta alle impostazioni dell'account;
-   - ### 3.2.3 Schermata "Gioca contro computer"
+   - ### 3.2.4 Schermata "Gioca contro computer"
       - RI9: l'utente può scegliere:
          - se giocare una nuova partita (questa funzione è disponibile per tutti gli utenti);
          - se caricare una partita già iniziata (funzione disponibile solo per gli utenti registrati);
       - RI10: pulsanti di navigazione:
          - "Home": consente di tornare al menù principale;
          - "Logout": disconnette l'utente dal sistema;
-   - ### 3.2.4 Configurazione nuova partita
+   - ### 3.2.5 Configurazione nuova partita
       - RI11: l'utente può selezionare il numero di giocatori (minimo 2, massimo 10);
       - RI12: pulsanti: 
             - "Avvia partita": consente di avviare la partita;
             - "Annulla": consente di annullare la configurazione della partita e tornare alla schermata precedente;
       - RI13: (solo per utenti registrati) schermata aggiuntiva in cui si seleziona il nome del nuovo salvataggio (lasciando vuoto viene generato il nome in automatico) oppure si dichiara di non voler salvare la partita che si vuole creare;
-   - ### 3.2.5 Regolamento
+   - ### 3.2.6 Regolamento
       - RI14: visualizza le regole del gioco "ONE", è composto da una parte testuale e da delle immagini inerenti al gioco
       - RI15: pulsanti:
          - "Avanti": passaggio alla pagina successiva;
          - "Indietro": passaggio alla pagina precedente;
-   - ### 3.2.6 Statistiche 
+   - ### 3.2.7 Statistiche 
       - RI16: (solo per utenti registrati) mostra i dati relativi alle partite giocate: numero di vittorie, sconfitte, ecc.;
-   - ### 3.2.7 Impostazioni
+   - ### 3.2.8 Impostazioni
       - RI17: (solo per utenti registrati) pulsanti:
             - "Modifica nome": consente di modificare il nome utente;
             - "Modifica password": consente di modificare la password attutale (inserendo password vecchia, password nuova e conferma password nuova);
@@ -274,7 +335,7 @@ I giocatori possono scegliere se registrarsi o partecipare come utenti anonimi. 
       - RFN7: le credenziali, degli utenti registrati, devono essere memorizzate nel database. Le password devono essere crittografate;
       - RFN8: le comunicazioni tra client e server deveno avvenire tramite protocollo sicuro;
 
-## 4. Piano di testing (provvisorio)
+## 4. Piano di testing
    |Area di test        | Descrizione                                                           | Tipo di test       |
    |--------------------|-----------------------------------------------------------------------|-----------------   |
    |Autenticazione      |Verifica di registrazione/login con credenziali corrette e scorrette	| Test funzionale    |
@@ -294,7 +355,7 @@ I giocatori possono scegliere se registrarsi o partecipare come utenti anonimi. 
    - Standard di scrittura requisiti: IEEE 830;
    - Condivisione e consegna: GitHub;
 
-## 6. Use Case Principali (incompleto)
+## 6. Use Case Principali
 ![UseCase](../UMLDiagrams/ONEuseCaseDiagram.PNG)
 | UC ID | Nome                                    | Attori             | Descrizione sintetica                                          |
 |-------|-----------------------------------------|--------------------|----------------------------------------------------------------|
