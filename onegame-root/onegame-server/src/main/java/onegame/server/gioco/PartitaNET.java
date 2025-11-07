@@ -81,6 +81,7 @@ public class PartitaNET {
 		} while (cartaIniziale.getColore() == Colore.NERO);
 		this.cartaCorrente = cartaIniziale;
 		this.coloreCorrente = cartaIniziale.getColore();
+		avviaTimerTurno();
 	}
 
 	/**
@@ -286,7 +287,7 @@ public class PartitaNET {
 			// Logica semplice per i bot: se possono giocare, giocano la prima carta valida
 			for (CartaNET carta : giocatore.getMano()) {
 				if (isCartaGiocabile(carta)) {
-					giocaCarta(carta, carta.getColore() == Colore.NERO ? Colore.ROSSO : null, giocatore);
+					giocaCarta(carta, carta.getColore() == Colore.NERO ? Colore.scegliColoreCasuale() : null, giocatore);
 					return;
 				}
 			}

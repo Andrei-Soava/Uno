@@ -67,6 +67,7 @@ public class ControlloreGiocoOnline extends Controllore implements StatoPartitaO
 	        scelta.thenAccept(confermato -> {
 	            if (confermato) {
 	            	cs.esciStanza(null);
+	            	bloccaTimerTurno();
 	            	vg.mostraMenuOnline();
 	            } else {
 	                aspettaAbbandona();
