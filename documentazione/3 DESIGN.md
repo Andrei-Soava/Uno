@@ -2,47 +2,64 @@
 
 ---
 
-## Architettura generale
-L’applicazione si basa su un’architettura client–server.\
-Client costituito da un'applicazione desktop Java sviluppata con JavaFX strutturata secondo il pattern MVC, dove:
-- Modello gestisce lo stato del gioco e dei dati utente.
-- Vista rappresenta l’interfaccia grafica e visualizza lo stato.
-- Controllore coordina interazioni, logica e comunicazione.
-- Server applicativo: gestisce autenticazione, statistiche, creazione e gestione delle lobby, salvataggio partite contro bot, e interfaccia verso il database.
-- Database: database relazionale embedded per conservare utenti, statistiche e salvataggi delle partite incompiute.
-
-Comunicazione in rete:
-- Comunicazione da client verso server realizzata con la libreria socket.io-client.
-- Comunicazione da server verso client realizzata con la libreria netty-socketio.
-
-Pattern architetturale di riferimento:
-- Chiarezza di separazione tra presentazione (GUI), logica di gioco (engine) e gestione dati.
-- Indipendenza e modularità per facilitare manutenzione e testing.
+## Introduzione
+Questo documento descrive l’architettura e il design dell’applicazione, con focus sui componenti principali, i flussi di processo e il protocollo di comunicazione.
 
 ---
 
-## Views architetturali
-Secondo i diversi punti di vista architetturali:
+## Architettura generale
+Applicazione client–server con client desktop JavaFX (pattern MVC), motore di gioco separato e server centralizzato per servizi di gioco e persistenza.
+- Client (JavaFX, MVC):
+    - Modello: stato del gioco e dati utente.
+    - Vista: interfaccia grafica e rendering dello stato.
+    - Controllore: coordinamento interazioni, logica e comunicazione.
 
-### 1. Vista logica
-Mostra la suddivisione in macro‑blocchi:
+- Server applicativo:
+    - Servizi: autenticazione, statistiche, lobby, salvataggi bot.
+    - Integrazione: interfaccia verso database, orchestrazione partite.
+
+- Database embedded (relazionale):
+    - Persistenza: utenti, statistiche, salvataggi di partite incompiute.
+
+- Comunicazione:
+    - Client→Server: socket.io-client.
+    - Server→Client: netty-socketio.
+
+- Principi architetturali:
+    - Separazione: presentazione, logica di dominio, persistenza.
+    - Modularità: indipendenza dei componenti per manutenzione e testing.
+
+---
+
+## Viste architetturali
+Secondo alcuni punti di vista architetturali:
+
+### <u>Vista logica</u>
+Suddivisione in macro‑blocchi e responsabilità, con focus su coesione interna e interfacce pulite tra moduli
 - Client GUI (MVC).
 - Motore di gioco (regole, turni, validazioni).
 - Server (servizi remoti, gestione lobby, persistenza).
 - Database (tabelle principali e relazioni).
-- Evidenzia la separazione tra strato di presentazione, logica di dominio e persistenza.
 
 #### Diagramma delle classi (incompleto)
 ![Class](../UMLDiagrams/ONEclassDiagram.PNG)
 
-#### Macchina degli stati finiti
+#### Macchina degli stati finiti (sistema)
 ![StateMachine](../UMLDiagrams/ONEstateMachineDiagram.PNG)
 
-### 2. Vista di processo
-Rappresenta i principali flussi e interazioni concorrenti:
-- Ciclo di vita di una partita multiplayer (creazione lobby → avvio → scambio mosse → conclusione).
-- Partita contro bot e gestione salvataggi locali/remoti.
-- Eventi asincroni (notifiche turno, ONE!, aggiornamenti stato).
+### <u>Vista di processo</u>
+Principali flussi e interazioni concorrenti, inclusi eventi asincroni e cicli di vita delle partite
+
+- Multiplayer:
+    - Ciclo vita: creazione lobby → avvio → scambio mosse → conclusione.
+    - Sincronizzazione: ordine turni, eventi ONE!, aggiornamenti stato.
+
+- Partita contro bot:
+    - Gestione: logica locale, salvataggi locali/remoti, ripresa partite.
+    - Persistenza: salvataggi incompiuti e ripristino.
+
+- Eventi asincroni:
+    - Notifiche: turno, carte giocate/pescate, mossa non valida.
 
 #### Diagrammi di sequenza (accesso lato client)
 ![Sequence](../UMLDiagrams/ONEsequenceDiagramAccesso.PNG)
@@ -54,21 +71,12 @@ Rappresenta i principali flussi e interazioni concorrenti:
 #### Diagramma di attività (gestione partita online lato client)
 ![Activity](../UMLDiagrams/ONEactivityDiagram.PNG)
 
-### 3. Vista fisica
-Mostra la distribuzione sui nodi:
-- Postazioni client (Java + JavaFX) sui PC degli utenti.
-- Server applicativo centralizzato.
-- Database su macchina dedicata o cluster.
-- Connessioni sicure client–server e P2P client–client per la fase di gioco.
+---
 
-### 4. Vista dei dati
-Illustra le entità principali (utenti, statistiche, partite incompiute) e la loro persistenza.\
-Mostra i flussi di aggiornamento (fine partita, abbandono, cancellazione account).
+## Protocollo di comunicazione
+API di alto livello per autenticazione, gestione stanze, azioni di gioco, disconnessione e statistiche.
 
-### 5. Vista delle interfacce (alto livello)
-Descrive le API server disponibili (login, registrazione, lobby, statistiche, salvataggi).\
-Sintetizza il protocollo base usato per scambio mosse e sincronizzazione.
-#### Autenticazione
+### Autenticazione
 
 | Messaggio              | Direzione       | Descrizione                                | Payload              |
 |------------------------|-----------------|--------------------------------------------|----------------------|
@@ -79,7 +87,7 @@ Sintetizza il protocollo base usato per scambio mosse e sincronizzazione.
 
 ---
 
-#### Gestione stanze e partite
+### Gestione stanze e partite
 
 | Messaggio            | Direzione       | Descrizione                                           | Payload                         |
 |----------------------|-----------------|-------------------------------------------------------|---------------------------------|
@@ -90,7 +98,7 @@ Sintetizza il protocollo base usato per scambio mosse e sincronizzazione.
 
 ---
 
-#### Azioni di gioco
+### Azioni di gioco
 
 | Messaggio             | Direzione       | Descrizione                                          | Payload                       |
 |-----------------------|-----------------|------------------------------------------------------|-------------------------------|
@@ -103,7 +111,7 @@ Sintetizza il protocollo base usato per scambio mosse e sincronizzazione.
 
 ---
 
-#### Disconnessione e abbandono
+### Disconnessione e abbandono
 
 | Messaggio             | Direzione       | Descrizione                                         | Payload      |
 |-----------------------|-----------------|-----------------------------------------------------|--------------|
@@ -113,7 +121,7 @@ Sintetizza il protocollo base usato per scambio mosse e sincronizzazione.
 
 ---
 
-#### Elenchi e statistiche
+### Elenchi e statistiche
 
 | Messaggio                 | Direzione       | Descrizione                                          | Payload                                |
 |---------------------------|-----------------|------------------------------------------------------|----------------------------------------|

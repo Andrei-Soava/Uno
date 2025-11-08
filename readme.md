@@ -1,6 +1,7 @@
-# 🃏 ONE – Gioco di Carte Multiplayer
+# 🃏 ONE – Gioco di Carte
 
-Benvenuto nel progetto **ONE**, un gioco di carte multiplayer ispirato a UNO, sviluppato in Java con architettura modulare Maven e supporto per partite client-server.
+Benvenuto nel progetto **ONE**, un gioco di carte ispirato a UNO, sviluppato in Java con architettura modulare Maven e supporto per partite multigiocatore client-server.\
+Per iniziare, <u>clonare questo repository</u>.
 
 ---
 
@@ -81,7 +82,7 @@ Tutti i file di esecuzione si trovano nella cartella `onegame-root`.
 
 ---
 
-## 📚 Documentazione
+## Documentazione
 
 Consulta la cartella `documentazione/` per:
 
