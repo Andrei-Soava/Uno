@@ -465,17 +465,29 @@
       <ownedAttribute xmi:type="uml:Property" xmi:id="_hvpz0LwOEfCvW93Me98a4Q" name="gestorePartiteOffline" type="_rvvbwLspEfCC2_ot-L-QRw"/>
       <ownedAttribute xmi:type="uml:Property" xmi:id="_nuUKoLwOEfCvW93Me98a4Q" name="gestoreUtenti" visibility="private" type="_QrJ-oLsqEfCC2_ot-L-QRw"/>
       <ownedAttribute xmi:type="uml:Property" xmi:id="_vnzPYLwOEfCvW93Me98a4Q" name="gestoreStatistiche" visibility="private" type="_N0HgELsqEfCC2_ot-L-QRw"/>
-      <ownedAttribute xmi:type="uml:Property" xmi:id="_aO3FcLwaEfCvW93Me98a4Q" name="gestoreconnessioni" type="_MfCNQLpKEfCd3t07ws92fA" association="_aOhuQLwaEfCvW93Me98a4Q">
-        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_aO6IwLwaEfCvW93Me98a4Q"/>
-        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_aO6v0LwaEfCvW93Me98a4Q" value="1"/>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_cyDbsLyuEfCSEPqHnrEiJA" name="gestorepartiteoffline" type="_rvvbwLspEfCC2_ot-L-QRw" aggregation="composite" association="_cx2nYLyuEfCSEPqHnrEiJA">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_8aaeoLywEfCSEPqHnrEiJA" name="LiteralInteger1" value="1"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_8aaeobywEfCSEPqHnrEiJA" name="LiteralUnlimitedNatural1" value="1"/>
       </ownedAttribute>
-      <ownedAttribute xmi:type="uml:Property" xmi:id="_moEd0LwaEfCvW93Me98a4Q" name="gestoresessioni" type="_7KhHsLspEfCC2_ot-L-QRw" association="_moAzcLwaEfCvW93Me98a4Q">
-        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_6hCMULwaEfCvW93Me98a4Q" name="LiteralInteger1" value="1"/>
-        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_6hEBgLwaEfCvW93Me98a4Q" name="LiteralUnlimitedNatural1" value="1"/>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_W1akgby2EfCSEPqHnrEiJA" name="gestoreconnessioni" type="_MfCNQLpKEfCd3t07ws92fA" aggregation="composite" association="_W1ZWYLy2EfCSEPqHnrEiJA">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_Xqt00Ly2EfCSEPqHnrEiJA" name="LiteralInteger1" value="1"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_Xqub4Ly2EfCSEPqHnrEiJA" name="LiteralUnlimitedNatural1" value="1"/>
       </ownedAttribute>
-      <ownedAttribute xmi:type="uml:Property" xmi:id="_0efbEbwaEfCvW93Me98a4Q" name="gestorestanzapartita" type="_LQcCYLsqEfCC2_ot-L-QRw" association="_0ecXwLwaEfCvW93Me98a4Q">
-        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_0egpMLwaEfCvW93Me98a4Q"/>
-        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_0ehQQLwaEfCvW93Me98a4Q" value="1"/>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_2fGIAry2EfCSEPqHnrEiJA" name="gestoresessioni" type="_7KhHsLspEfCC2_ot-L-QRw" aggregation="composite" association="_2fFg8Ly2EfCSEPqHnrEiJA">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_3Q1uALy2EfCSEPqHnrEiJA" name="LiteralInteger1" value="1"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_3Q2VELy2EfCSEPqHnrEiJA" name="LiteralUnlimitedNatural1" value="1"/>
+      </ownedAttribute>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_4jjTEby2EfCSEPqHnrEiJA" name="gestorestanzapartita" type="_LQcCYLsqEfCC2_ot-L-QRw" aggregation="composite" association="_4jiE8Ly2EfCSEPqHnrEiJA">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_5aHusLy2EfCSEPqHnrEiJA" name="LiteralInteger1" value="1"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_5aHusby2EfCSEPqHnrEiJA" name="LiteralUnlimitedNatural1" value="1"/>
+      </ownedAttribute>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_Bjr20ry3EfCSEPqHnrEiJA" name="gestoreutenti" type="_QrJ-oLsqEfCC2_ot-L-QRw" aggregation="composite" association="_BjrPwLy3EfCSEPqHnrEiJA">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_CLv8YLy3EfCSEPqHnrEiJA" name="LiteralInteger1" value="1"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_CLv8Yby3EfCSEPqHnrEiJA" name="LiteralUnlimitedNatural1" value="1"/>
+      </ownedAttribute>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_GS4w4by3EfCSEPqHnrEiJA" name="gestorestatistiche" type="_N0HgELsqEfCC2_ot-L-QRw" aggregation="composite" association="_GS3iwLy3EfCSEPqHnrEiJA">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_HWJksLy3EfCSEPqHnrEiJA" name="LiteralInteger1" value="1"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_HWJksby3EfCSEPqHnrEiJA" name="LiteralUnlimitedNatural1" value="1"/>
       </ownedAttribute>
       <ownedOperation xmi:type="uml:Operation" xmi:id="_kU8XoLo4EfCd3t07ws92fA" name="avvia(): void"/>
       <ownedOperation xmi:type="uml:Operation" xmi:id="_qEvMALo4EfCd3t07ws92fA" name="stop(): void"/>
@@ -483,6 +495,10 @@
     </packagedElement>
     <packagedElement xmi:type="uml:Class" xmi:id="_MfCNQLpKEfCd3t07ws92fA" name="GestoreConnessioni">
       <ownedAttribute xmi:type="uml:Property" xmi:id="_AbowALpOEfCd3t07ws92fA" name="gestoreSessioni" visibility="private" type="_7KhHsLspEfCC2_ot-L-QRw"/>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_LZbz8by3EfCSEPqHnrEiJA" name="gestoresessioni" type="_7KhHsLspEfCC2_ot-L-QRw" association="_LZal0Ly3EfCSEPqHnrEiJA">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_SXHXwLy3EfCSEPqHnrEiJA" name="LiteralInteger1"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_SXHXwby3EfCSEPqHnrEiJA" name="LiteralUnlimitedNatural1" value="*"/>
+      </ownedAttribute>
       <ownedOperation xmi:type="uml:Operation" xmi:id="_5X5ooLsrEfCC2_ot-L-QRw" name="handleLogin(): void"/>
       <ownedOperation xmi:type="uml:Operation" xmi:id="__KyNQLsrEfCC2_ot-L-QRw" name="handleRegister(): void"/>
       <ownedOperation xmi:type="uml:Operation" xmi:id="_DJ1cwLssEfCC2_ot-L-QRw" name="handleAnonimo(): void"/>
@@ -490,6 +506,10 @@
       <ownedOperation xmi:type="uml:Operation" xmi:id="_LS2yULssEfCC2_ot-L-QRw" name="handleDisconnessione(): void"/>
     </packagedElement>
     <packagedElement xmi:type="uml:Class" xmi:id="_rvvbwLspEfCC2_ot-L-QRw" name="GestorePartiteOffline">
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_YQHLcry3EfCSEPqHnrEiJA" name="gestoresessioni" type="_7KhHsLspEfCC2_ot-L-QRw" association="_YQF9ULy3EfCSEPqHnrEiJA">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_YQHygLy3EfCSEPqHnrEiJA"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_YQHygby3EfCSEPqHnrEiJA" value="1"/>
+      </ownedAttribute>
       <ownedOperation xmi:type="uml:Operation" xmi:id="_XL3nsLssEfCC2_ot-L-QRw" name="handleSalvaPartita(): void"/>
       <ownedOperation xmi:type="uml:Operation" xmi:id="_bI7TILssEfCC2_ot-L-QRw" name="handleCaricaPartita(): void"/>
       <ownedOperation xmi:type="uml:Operation" xmi:id="_fjzjALssEfCC2_ot-L-QRw" name="handleListaSalvataggi(): void"/>
@@ -504,6 +524,14 @@
       <ownedAttribute xmi:type="uml:Property" xmi:id="_Gq-lMLwREfCvW93Me98a4Q" name="MAX_CODICE" visibility="private">
         <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
       </ownedAttribute>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_qZd9gry3EfCSEPqHnrEiJA" name="stanza" type="_vYyJkLsqEfCC2_ot-L-QRw" aggregation="composite" association="_qZdWcLy3EfCSEPqHnrEiJA">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_saSlwLy3EfCSEPqHnrEiJA" name="LiteralInteger1"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_saSlwby3EfCSEPqHnrEiJA" name="LiteralUnlimitedNatural1" value="*"/>
+      </ownedAttribute>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_tvjvkry3EfCSEPqHnrEiJA" name="sessione" type="_t9M8YLsqEfCC2_ot-L-QRw" aggregation="shared" association="_tvjIgLy3EfCSEPqHnrEiJA">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_0uCkoLy3EfCSEPqHnrEiJA" name="LiteralInteger1"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_0uCkoby3EfCSEPqHnrEiJA" name="LiteralUnlimitedNatural1" value="*"/>
+      </ownedAttribute>
       <ownedOperation xmi:type="uml:Operation" xmi:id="_S_RtoLs7EfCC2_ot-L-QRw" name="handleCreaStanza(): void"/>
       <ownedOperation xmi:type="uml:Operation" xmi:id="_anxJALs7EfCC2_ot-L-QRw" name="handleEntraStanza(): void"/>
       <ownedOperation xmi:type="uml:Operation" xmi:id="_dkk4YLs7EfCC2_ot-L-QRw" name="handleDettagliStanza(): void"/>
@@ -513,6 +541,14 @@
       <nestedClassifier xmi:type="uml:Class" xmi:id="_jSefELsqEfCC2_ot-L-QRw" name="GestoreStanze"/>
     </packagedElement>
     <packagedElement xmi:type="uml:Class" xmi:id="_7KhHsLspEfCC2_ot-L-QRw" name="GestoreSessioni">
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_4JGoMry1EfCSEPqHnrEiJA" name="sessione" type="_t9M8YLsqEfCC2_ot-L-QRw" aggregation="composite" association="_4JGBILy1EfCSEPqHnrEiJA">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_5iA74Ly1EfCSEPqHnrEiJA" name="LiteralInteger1"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_5iBi8Ly1EfCSEPqHnrEiJA" name="LiteralUnlimitedNatural1" value="*"/>
+      </ownedAttribute>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_PK56cry3EfCSEPqHnrEiJA" name="sessioneobserver" type="_xLgZsLtREfCC2_ot-L-QRw" aggregation="shared" association="_PK4sULy3EfCSEPqHnrEiJA">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_TdUK0Ly3EfCSEPqHnrEiJA" name="LiteralInteger1"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_TdUK0by3EfCSEPqHnrEiJA" name="LiteralUnlimitedNatural1" value="*"/>
+      </ownedAttribute>
       <ownedOperation xmi:type="uml:Operation" xmi:id="_AHLHkLstEfCC2_ot-L-QRw" name="associaToken(): void"/>
       <ownedOperation xmi:type="uml:Operation" xmi:id="_CfwIgLstEfCC2_ot-L-QRw" name="getSessione(): Sessione"/>
       <ownedOperation xmi:type="uml:Operation" xmi:id="_E2sKsLstEfCC2_ot-L-QRw" name="getSessioneByClinet(): Sessione"/>
@@ -523,15 +559,28 @@
       <ownedOperation xmi:type="uml:Operation" xmi:id="_gc0ZMLstEfCC2_ot-L-QRw" name="removeObServer(): boolean"/>
     </packagedElement>
     <packagedElement xmi:type="uml:Class" xmi:id="_LQcCYLsqEfCC2_ot-L-QRw" name="GestoreStanzaPartita">
+      <generalization xmi:type="uml:Generalization" xmi:id="_7ANtULy3EfCSEPqHnrEiJA" general="_vxrnMLspEfCC2_ot-L-QRw"/>
       <ownedOperation xmi:type="uml:Operation" xmi:id="_20ePULs7EfCC2_ot-L-QRw" name="creaStanza(): StanzaPartita" visibility="protected"/>
       <ownedOperation xmi:type="uml:Operation" xmi:id="_8bqhULs7EfCC2_ot-L-QRw" name="handleIniziaPartita(): void"/>
       <ownedOperation xmi:type="uml:Operation" xmi:id="__fjwILs7EfCC2_ot-L-QRw" name="handleEffettuaMossa(): void"/>
     </packagedElement>
     <packagedElement xmi:type="uml:Class" xmi:id="_N0HgELsqEfCC2_ot-L-QRw" name="GestoreStatistiche">
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_oWbuwry3EfCSEPqHnrEiJA" name="sessione" type="_t9M8YLsqEfCC2_ot-L-QRw" association="_oWbHsLy3EfCSEPqHnrEiJA">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_oWcV0Ly3EfCSEPqHnrEiJA"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_oWcV0by3EfCSEPqHnrEiJA" value="1"/>
+      </ownedAttribute>
       <ownedOperation xmi:type="uml:Operation" xmi:id="_QhSbsLtQEfCC2_ot-L-QRw" name="handleCaricaStatistiche(): void"/>
     </packagedElement>
     <packagedElement xmi:type="uml:Class" xmi:id="_QrJ-oLsqEfCC2_ot-L-QRw" name="GestoreUtenti">
       <ownedAttribute xmi:type="uml:Property" xmi:id="_RjFXMLwREfCvW93Me98a4Q" name="gestoreSessioni" visibility="private" type="_7KhHsLspEfCC2_ot-L-QRw"/>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_ikK1Mry3EfCSEPqHnrEiJA" name="gestoresessioni" type="_7KhHsLspEfCC2_ot-L-QRw" association="_ikKOILy3EfCSEPqHnrEiJA">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_jaMeQLy3EfCSEPqHnrEiJA" name="LiteralInteger1" value="1"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_jaMeQby3EfCSEPqHnrEiJA" name="LiteralUnlimitedNatural1" value="1"/>
+      </ownedAttribute>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_ks3nEry3EfCSEPqHnrEiJA" name="sessione" type="_t9M8YLsqEfCC2_ot-L-QRw" association="_ks2Y8Ly3EfCSEPqHnrEiJA">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_ks4OILy3EfCSEPqHnrEiJA"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_ks4OIby3EfCSEPqHnrEiJA" value="1"/>
+      </ownedAttribute>
       <ownedOperation xmi:type="uml:Operation" xmi:id="_VxqJILtQEfCC2_ot-L-QRw" name="handleCambioUsername(): void"/>
       <ownedOperation xmi:type="uml:Operation" xmi:id="_a86tELtQEfCC2_ot-L-QRw" name="handleCambioPassword(): void"/>
       <ownedOperation xmi:type="uml:Operation" xmi:id="_d1GbILtQEfCC2_ot-L-QRw" name="handleEliminaAccount(): void"/>
@@ -584,6 +633,10 @@
         <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Boolean"/>
       </ownedAttribute>
       <ownedAttribute xmi:type="uml:Property" xmi:id="_9ZFpcLwYEfCvW93Me98a4Q" name="proprietario" visibility="protected" type="_t9M8YLsqEfCC2_ot-L-QRw"/>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_9LQokry3EfCSEPqHnrEiJA" name="sessione" type="_t9M8YLsqEfCC2_ot-L-QRw" association="_9LQBgLy3EfCSEPqHnrEiJA">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_BTebILy4EfCSEPqHnrEiJA" name="LiteralInteger1"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_BTebIby4EfCSEPqHnrEiJA" name="LiteralUnlimitedNatural1" value="*"/>
+      </ownedAttribute>
       <ownedOperation xmi:type="uml:Operation" xmi:id="_HGki0LtSEfCC2_ot-L-QRw" name="aggiungiSessione(): boolean"/>
       <ownedOperation xmi:type="uml:Operation" xmi:id="_JhkloLtSEfCC2_ot-L-QRw" name="rimuoviSessione(): boolean"/>
       <ownedOperation xmi:type="uml:Operation" xmi:id="_OCDHMLtSEfCC2_ot-L-QRw" name="isVuota(): boolean"/>
@@ -599,11 +652,11 @@
       <ownedOperation xmi:type="uml:Operation" xmi:id="_sZhb8LtSEfCC2_ot-L-QRw" name="getProprietario(): Sessione"/>
       <ownedOperation xmi:type="uml:Operation" xmi:id="_v9Aw0LtSEfCC2_ot-L-QRw" name="trasferisciProprietario(): boolean()"/>
     </packagedElement>
-    <packagedElement xmi:type="uml:Class" xmi:id="_nGgVELtQEfCC2_ot-L-QRw" name="ServerUnoExceptionListener"/>
     <packagedElement xmi:type="uml:Interface" xmi:id="_xLgZsLtREfCC2_ot-L-QRw" name="SessioneObserver">
       <ownedOperation xmi:type="uml:Operation" xmi:id="_8bguULtREfCC2_ot-L-QRw" name="onSessioneAttiva(): void"/>
     </packagedElement>
     <packagedElement xmi:type="uml:Class" xmi:id="_w9AVYLsqEfCC2_ot-L-QRw" name="StanzaPartita">
+      <generalization xmi:type="uml:Generalization" xmi:id="_HJFjoLy4EfCSEPqHnrEiJA" general="_vYyJkLsqEfCC2_ot-L-QRw"/>
       <ownedOperation xmi:type="uml:Operation" xmi:id="_5F8EMLtSEfCC2_ot-L-QRw" name="avviaPartita(): void"/>
       <ownedOperation xmi:type="uml:Operation" xmi:id="_72k_0LtSEfCC2_ot-L-QRw" name="riceviMossa(): void"/>
       <ownedOperation xmi:type="uml:Operation" xmi:id="_-cJT4LtSEfCC2_ot-L-QRw" name="partitaAggiornata(): void"/>
@@ -616,23 +669,101 @@
     <ownedAttribute xmi:type="uml:Property" xmi:id="_Jli_8LsAEfCC2_ot-L-QRw" name="gestoreStanze"/>
   </packagedElement>
   <packagedElement xmi:type="uml:Class" xmi:id="_BVDwcLsAEfCC2_ot-L-QRw" name="GestorePartiteOffline"/>
-  <packagedElement xmi:type="uml:Association" xmi:id="_aOhuQLwaEfCvW93Me98a4Q" memberEnd="_aO3FcLwaEfCvW93Me98a4Q _aO7W4LwaEfCvW93Me98a4Q">
-    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_aOw-0LwaEfCvW93Me98a4Q" source="org.eclipse.papyrus">
-      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_aOyM8LwaEfCvW93Me98a4Q" key="nature" value="UML_Nature"/>
+  <packagedElement xmi:type="uml:Association" xmi:id="_cx2nYLyuEfCSEPqHnrEiJA" memberEnd="_cyDbsLyuEfCSEPqHnrEiJA _cyEp0byuEfCSEPqHnrEiJA">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_cyCNkLyuEfCSEPqHnrEiJA" source="org.eclipse.papyrus">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_cyC0oLyuEfCSEPqHnrEiJA" key="nature" value="UML_Nature"/>
     </eAnnotations>
-    <ownedEnd xmi:type="uml:Property" xmi:id="_aO7W4LwaEfCvW93Me98a4Q" name="serveruno" type="_XUdj4Lo4EfCd3t07ws92fA" association="_aOhuQLwaEfCvW93Me98a4Q"/>
+    <ownedEnd xmi:type="uml:Property" xmi:id="_cyEp0byuEfCSEPqHnrEiJA" name="serveruno" type="_XUdj4Lo4EfCd3t07ws92fA" association="_cx2nYLyuEfCSEPqHnrEiJA"/>
   </packagedElement>
-  <packagedElement xmi:type="uml:Association" xmi:id="_moAzcLwaEfCvW93Me98a4Q" memberEnd="_moEd0LwaEfCvW93Me98a4Q _moHhILwaEfCvW93Me98a4Q">
-    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_moDPsLwaEfCvW93Me98a4Q" source="org.eclipse.papyrus">
-      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_moD2wLwaEfCvW93Me98a4Q" key="nature" value="UML_Nature"/>
+  <packagedElement xmi:type="uml:Association" xmi:id="_4JGBILy1EfCSEPqHnrEiJA" memberEnd="_4JGoMry1EfCSEPqHnrEiJA _4JGoNby1EfCSEPqHnrEiJA">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_4JGoMLy1EfCSEPqHnrEiJA" source="org.eclipse.papyrus">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_4JGoMby1EfCSEPqHnrEiJA" key="nature" value="UML_Nature"/>
     </eAnnotations>
-    <ownedEnd xmi:type="uml:Property" xmi:id="_moHhILwaEfCvW93Me98a4Q" name="serveruno" type="_XUdj4Lo4EfCd3t07ws92fA" association="_moAzcLwaEfCvW93Me98a4Q"/>
+    <ownedEnd xmi:type="uml:Property" xmi:id="_4JGoNby1EfCSEPqHnrEiJA" name="gestoresessioni" type="_7KhHsLspEfCC2_ot-L-QRw" association="_4JGBILy1EfCSEPqHnrEiJA"/>
   </packagedElement>
-  <packagedElement xmi:type="uml:Association" xmi:id="_0ecXwLwaEfCvW93Me98a4Q" memberEnd="_0efbEbwaEfCvW93Me98a4Q _0eh3ULwaEfCvW93Me98a4Q">
-    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_0ee0ALwaEfCvW93Me98a4Q" source="org.eclipse.papyrus">
-      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_0efbELwaEfCvW93Me98a4Q" key="nature" value="UML_Nature"/>
+  <packagedElement xmi:type="uml:Association" xmi:id="_W1ZWYLy2EfCSEPqHnrEiJA" memberEnd="_W1akgby2EfCSEPqHnrEiJA _W1bLkLy2EfCSEPqHnrEiJA">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_W1Z9cLy2EfCSEPqHnrEiJA" source="org.eclipse.papyrus">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_W1akgLy2EfCSEPqHnrEiJA" key="nature" value="UML_Nature"/>
     </eAnnotations>
-    <ownedEnd xmi:type="uml:Property" xmi:id="_0eh3ULwaEfCvW93Me98a4Q" name="serveruno" type="_XUdj4Lo4EfCd3t07ws92fA" association="_0ecXwLwaEfCvW93Me98a4Q"/>
+    <ownedEnd xmi:type="uml:Property" xmi:id="_W1bLkLy2EfCSEPqHnrEiJA" name="serveruno" type="_XUdj4Lo4EfCd3t07ws92fA" association="_W1ZWYLy2EfCSEPqHnrEiJA"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Association" xmi:id="_2fFg8Ly2EfCSEPqHnrEiJA" memberEnd="_2fGIAry2EfCSEPqHnrEiJA _2fGvEry2EfCSEPqHnrEiJA">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_2fGIALy2EfCSEPqHnrEiJA" source="org.eclipse.papyrus">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_2fGIAby2EfCSEPqHnrEiJA" key="nature" value="UML_Nature"/>
+    </eAnnotations>
+    <ownedEnd xmi:type="uml:Property" xmi:id="_2fGvEry2EfCSEPqHnrEiJA" name="serveruno" type="_XUdj4Lo4EfCd3t07ws92fA" association="_2fFg8Ly2EfCSEPqHnrEiJA"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Association" xmi:id="_4jiE8Ly2EfCSEPqHnrEiJA" memberEnd="_4jjTEby2EfCSEPqHnrEiJA _4jj6ILy2EfCSEPqHnrEiJA">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_4jisALy2EfCSEPqHnrEiJA" source="org.eclipse.papyrus">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_4jjTELy2EfCSEPqHnrEiJA" key="nature" value="UML_Nature"/>
+    </eAnnotations>
+    <ownedEnd xmi:type="uml:Property" xmi:id="_4jj6ILy2EfCSEPqHnrEiJA" name="serveruno" type="_XUdj4Lo4EfCd3t07ws92fA" association="_4jiE8Ly2EfCSEPqHnrEiJA"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Association" xmi:id="_BjrPwLy3EfCSEPqHnrEiJA" memberEnd="_Bjr20ry3EfCSEPqHnrEiJA _Bjsd4ry3EfCSEPqHnrEiJA">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_Bjr20Ly3EfCSEPqHnrEiJA" source="org.eclipse.papyrus">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_Bjr20by3EfCSEPqHnrEiJA" key="nature" value="UML_Nature"/>
+    </eAnnotations>
+    <ownedEnd xmi:type="uml:Property" xmi:id="_Bjsd4ry3EfCSEPqHnrEiJA" name="serveruno" type="_XUdj4Lo4EfCd3t07ws92fA" association="_BjrPwLy3EfCSEPqHnrEiJA"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Association" xmi:id="_GS3iwLy3EfCSEPqHnrEiJA" memberEnd="_GS4w4by3EfCSEPqHnrEiJA _GS5X8by3EfCSEPqHnrEiJA">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_GS4J0Ly3EfCSEPqHnrEiJA" source="org.eclipse.papyrus">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_GS4w4Ly3EfCSEPqHnrEiJA" key="nature" value="UML_Nature"/>
+    </eAnnotations>
+    <ownedEnd xmi:type="uml:Property" xmi:id="_GS5X8by3EfCSEPqHnrEiJA" name="serveruno" type="_XUdj4Lo4EfCd3t07ws92fA" association="_GS3iwLy3EfCSEPqHnrEiJA"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Association" xmi:id="_LZal0Ly3EfCSEPqHnrEiJA" memberEnd="_LZbz8by3EfCSEPqHnrEiJA _LZbz9Ly3EfCSEPqHnrEiJA">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_LZbM4Ly3EfCSEPqHnrEiJA" source="org.eclipse.papyrus">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_LZbz8Ly3EfCSEPqHnrEiJA" key="nature" value="UML_Nature"/>
+    </eAnnotations>
+    <ownedEnd xmi:type="uml:Property" xmi:id="_LZbz9Ly3EfCSEPqHnrEiJA" name="gestoreconnessioni" type="_MfCNQLpKEfCd3t07ws92fA" association="_LZal0Ly3EfCSEPqHnrEiJA"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Association" xmi:id="_PK4sULy3EfCSEPqHnrEiJA" memberEnd="_PK56cry3EfCSEPqHnrEiJA _PK6hgry3EfCSEPqHnrEiJA">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_PK56cLy3EfCSEPqHnrEiJA" source="org.eclipse.papyrus">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_PK56cby3EfCSEPqHnrEiJA" key="nature" value="UML_Nature"/>
+    </eAnnotations>
+    <ownedEnd xmi:type="uml:Property" xmi:id="_PK6hgry3EfCSEPqHnrEiJA" name="gestoresessioni" type="_7KhHsLspEfCC2_ot-L-QRw" association="_PK4sULy3EfCSEPqHnrEiJA"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Association" xmi:id="_YQF9ULy3EfCSEPqHnrEiJA" memberEnd="_YQHLcry3EfCSEPqHnrEiJA _YQHygry3EfCSEPqHnrEiJA">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_YQHLcLy3EfCSEPqHnrEiJA" source="org.eclipse.papyrus">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_YQHLcby3EfCSEPqHnrEiJA" key="nature" value="UML_Nature"/>
+    </eAnnotations>
+    <ownedEnd xmi:type="uml:Property" xmi:id="_YQHygry3EfCSEPqHnrEiJA" name="gestorepartiteoffline" type="_rvvbwLspEfCC2_ot-L-QRw" association="_YQF9ULy3EfCSEPqHnrEiJA"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Association" xmi:id="_ikKOILy3EfCSEPqHnrEiJA" memberEnd="_ikK1Mry3EfCSEPqHnrEiJA _ikLcQry3EfCSEPqHnrEiJA">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_ikK1MLy3EfCSEPqHnrEiJA" source="org.eclipse.papyrus">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_ikK1Mby3EfCSEPqHnrEiJA" key="nature" value="UML_Nature"/>
+    </eAnnotations>
+    <ownedEnd xmi:type="uml:Property" xmi:id="_ikLcQry3EfCSEPqHnrEiJA" name="gestoreutenti" type="_QrJ-oLsqEfCC2_ot-L-QRw" association="_ikKOILy3EfCSEPqHnrEiJA"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Association" xmi:id="_ks2Y8Ly3EfCSEPqHnrEiJA" memberEnd="_ks3nEry3EfCSEPqHnrEiJA _ks4OIry3EfCSEPqHnrEiJA">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_ks3nELy3EfCSEPqHnrEiJA" source="org.eclipse.papyrus">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_ks3nEby3EfCSEPqHnrEiJA" key="nature" value="UML_Nature"/>
+    </eAnnotations>
+    <ownedEnd xmi:type="uml:Property" xmi:id="_ks4OIry3EfCSEPqHnrEiJA" name="gestoreutenti" type="_QrJ-oLsqEfCC2_ot-L-QRw" association="_ks2Y8Ly3EfCSEPqHnrEiJA"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Association" xmi:id="_oWbHsLy3EfCSEPqHnrEiJA" memberEnd="_oWbuwry3EfCSEPqHnrEiJA _oWcV0ry3EfCSEPqHnrEiJA">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_oWbuwLy3EfCSEPqHnrEiJA" source="org.eclipse.papyrus">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_oWbuwby3EfCSEPqHnrEiJA" key="nature" value="UML_Nature"/>
+    </eAnnotations>
+    <ownedEnd xmi:type="uml:Property" xmi:id="_oWcV0ry3EfCSEPqHnrEiJA" name="gestorestatistiche" type="_N0HgELsqEfCC2_ot-L-QRw" association="_oWbHsLy3EfCSEPqHnrEiJA"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Association" xmi:id="_qZdWcLy3EfCSEPqHnrEiJA" memberEnd="_qZd9gry3EfCSEPqHnrEiJA _qZekkry3EfCSEPqHnrEiJA">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_qZd9gLy3EfCSEPqHnrEiJA" source="org.eclipse.papyrus">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_qZd9gby3EfCSEPqHnrEiJA" key="nature" value="UML_Nature"/>
+    </eAnnotations>
+    <ownedEnd xmi:type="uml:Property" xmi:id="_qZekkry3EfCSEPqHnrEiJA" name="gestorestanze" type="_vxrnMLspEfCC2_ot-L-QRw" association="_qZdWcLy3EfCSEPqHnrEiJA"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Association" xmi:id="_tvjIgLy3EfCSEPqHnrEiJA" memberEnd="_tvjvkry3EfCSEPqHnrEiJA _tvkWory3EfCSEPqHnrEiJA">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_tvjvkLy3EfCSEPqHnrEiJA" source="org.eclipse.papyrus">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_tvjvkby3EfCSEPqHnrEiJA" key="nature" value="UML_Nature"/>
+    </eAnnotations>
+    <ownedEnd xmi:type="uml:Property" xmi:id="_tvkWory3EfCSEPqHnrEiJA" name="gestorestanze" type="_vxrnMLspEfCC2_ot-L-QRw" association="_tvjIgLy3EfCSEPqHnrEiJA"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Association" xmi:id="_9LQBgLy3EfCSEPqHnrEiJA" memberEnd="_9LQokry3EfCSEPqHnrEiJA _9LRPory3EfCSEPqHnrEiJA">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_9LQokLy3EfCSEPqHnrEiJA" source="org.eclipse.papyrus">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_9LQokby3EfCSEPqHnrEiJA" key="nature" value="UML_Nature"/>
+    </eAnnotations>
+    <ownedEnd xmi:type="uml:Property" xmi:id="_9LRPory3EfCSEPqHnrEiJA" name="stanza" type="_vYyJkLsqEfCC2_ot-L-QRw" association="_9LQBgLy3EfCSEPqHnrEiJA"/>
   </packagedElement>
   <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_VQGfYLr8EfCC2_ot-L-QRw">
     <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_VQN0ILr8EfCC2_ot-L-QRw" source="http://www.eclipse.org/uml2/2.0.0/UML">
