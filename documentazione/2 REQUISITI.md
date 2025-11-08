@@ -2,14 +2,14 @@
 
 ---
 ## Indice
-#### 1. Introduzione
+#### [1 Introduzione](#1-introduzione)
 - [1.1 Obiettivo del documento](#11-obiettivo-del-documento)
 - [1.2 Elicitazione dei requisiti](#12-elicitazione-dei-requisiti)
 - [1.3 Obiettivo generale](#13-obiettivo-generale)
 - [1.4 Panoramica generale](#14-panoramica-generale)
 - [1.5 Glossario](#15-glossario)
 
-#### 2. Descrizione generale
+#### [2 Descrizione generale](#2-descrizione-generale)
 - [2.1 Prospettiva del prodotto](#21-prospettiva-del-prodotto)
 - [2.2 Funzionalità del prodotto](#22-funzionalità-del-prodotto)
 - [2.3 Caratteristiche dell'utente](#23-caratteristiche-dellutente)
@@ -17,7 +17,7 @@
 - [2.5 Presupposti e dipendenze](#25-presupposti-e-dipendenze)
 - [2.6 Architettura generale del sistema](#26-architettura-generale-del-sistema)
 
-#### 3. Requisiti specifici
+#### [3 Requisiti specifici](#3-requisiti-specifici)
 - [3.1 Requisiti funzionali](#31-requisiti-funzionali)
   - [3.1.1 Gestione dell'autenticazione](#311-gestione-dellautenticazione)
   - [3.1.2 Gestione della modalità di gioco](#312-gestione-della-modalità-di-gioco)
@@ -61,14 +61,11 @@
   - [3.8.4 Portabilità](#384-portabilità)
   - [3.8.5 Sicurezza](#385-sicurezza)
 
-#### 4. Piano di testing
-- [4. Piano di testing](#4-piano-di-testing)
+#### [4. Piano di testing](#4-piano-di-testing)
 
-#### 5. Strumenti e standard di lavoro
-- [5. Strumenti e standard di lavoro](#5-strumenti-e-standard-di-lavoro)
+#### [5. Strumenti e standard di lavoro](#5-strumenti-e-standard-di-lavoro)
 
-#### 6. Use Case Principali
-- [6. Use Case Principali](#6-use-case-principali)
+#### [6. Use Case Principali](#6-use-case-principali)
 
 
 ---
