@@ -8,7 +8,7 @@ Questo documento descrive l’architettura e il design dell’applicazione, con 
 ---
 
 ## Architettura generale
-Applicazione client–server con client desktop JavaFX (pattern MVC), motore di gioco separato e server centralizzato per servizi di gioco e persistenza.
+Applicazione client–server con client desktop JavaFX (pattern MVC) e server centralizzato per servizi di gioco e persistenza.
 - Client (JavaFX, MVC):
     - Modello: stato del gioco e dati utente.
     - Vista: interfaccia grafica e rendering dello stato.
@@ -29,6 +29,35 @@ Applicazione client–server con client desktop JavaFX (pattern MVC), motore di 
     - Separazione: presentazione, logica di dominio, persistenza.
     - Modularità: indipendenza dei componenti per manutenzione e testing.
 
+### Diagramma esemplificativo
+```mermaid
+flowchart LR
+    subgraph Client["Client (JavaFX - MVC)"]
+        Vista[Vista<br>Interfaccia grafica]
+        Controller[Controllore<br>Logica e comunicazione]
+        Modello[Modello<br>Stato gioco e dati utente]
+        Vista --> Controller --> Modello
+    end
+
+    subgraph Server["Server applicativo"]
+        Servizi[Servizi<br>Autenticazione, statistiche, lobby, salvataggi bot]
+        Integrazione[Integrazione<br>Interfaccia DB,<br>orchestrazione partite]
+        Servizi --> Integrazione
+    end
+
+    subgraph Database["Database embedded"]
+        Utenti[(Utenti)]
+        Salvataggi[(Partite incompiute)]
+    end
+
+    %% Comunicazione
+    Client -- "socket.io-client" --> Server
+    Server -- "netty-socketio" --> Client
+
+    %% Server ↔ DB
+    Server <--> Database
+
+```
 ---
 
 ## Viste architetturali
