@@ -29,7 +29,7 @@ Applicazione client–server con client desktop JavaFX (pattern MVC) e server ce
     - Separazione: presentazione, logica di dominio, persistenza.
     - Modularità: indipendenza dei componenti per manutenzione e testing.
 
-### Diagramma esemplificativo
+### Diagramma delle componenti (semplificato)
 ```mermaid
 flowchart LR
     subgraph Client["Client (JavaFX - MVC)"]
