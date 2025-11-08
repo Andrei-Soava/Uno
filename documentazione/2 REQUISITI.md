@@ -3,64 +3,73 @@
 ---
 ## Indice
 #### 1. Introduzione
-   - **1.1 Obiettivo del documento**
-   - **1.2 Elicitazione dei requisiti**
-   - **1.3 Obiettivo generale**
-   - **1.4 Panoramica generale**
-   - **1.5 Glossario**
+- [1.1 Obiettivo del documento](#11-obiettivo-del-documento)
+- [1.2 Elicitazione dei requisiti](#12-elicitazione-dei-requisiti)
+- [1.3 Obiettivo generale](#13-obiettivo-generale)
+- [1.4 Panoramica generale](#14-panoramica-generale)
+- [1.5 Glossario](#15-glossario)
+
 #### 2. Descrizione generale
-   - **2.1 Prospettiva del prodotto**
-   - **2.2 Funzionalità del prodotto**
-   - **2.3 Caratteristiche dell'utente**
-   - **2.4 vincoli**
-   - **2.5 Presupposti e dipendenze**
-   - **2.6 Architettura generale del sistema**
+- [2.1 Prospettiva del prodotto](#21-prospettiva-del-prodotto)
+- [2.2 Funzionalità del prodotto](#22-funzionalità-del-prodotto)
+- [2.3 Caratteristiche dell'utente](#23-caratteristiche-dellutente)
+- [2.4 Vincoli](#24-vincoli)
+- [2.5 Presupposti e dipendenze](#25-presupposti-e-dipendenze)
+- [2.6 Architettura generale del sistema](#26-architettura-generale-del-sistema)
+
 #### 3. Requisiti specifici
-   - **3.1 Requisiti funzionali**
-      - **3.1.1 Gestione dell'autenticazione**
-      - **3.1.2 Gestione della modalità di gioco**
-      - **3.1.3 Configurazione della partita offline**
-      - **3.1.4 Svolgimento della partita**
-      - **3.1.5 Gestione del salvataggio nella modalità offline**
-      - **3.1.6 Visualizzazione delle statistiche**
-      - **3.1.7 Visualizzazione del regolamento**
-      - **3.1.8 Logout e disconnessione**
-      - **3.1.9 Politiche di gioco**
-   - **3.2 Requisiti di interfaccia utente**
-      - **3.2.1 Schermata di Login**
-      - **3.2.2 Schermata di Registrazione**
-      - **3.2.3 Menù principale**
-      - **3.2.4 Schermata "Gioca contro computer"**
-      - **3.2.5 Configurazione nuova partita**
-      - **3.2.6 Regolamento**
-      - **3.2.7 Statistiche**
-      - **3.2.8 Impostazioni**
-   - **3.3 Requisiti interfaccia hardware e software**
-      - **3.3.1 Interfaccia hardware**
-      - **3.3.2 Interccia software**
-   - **3.4 Requisiti di comunicazione**
-   - **3.5 Vincoli di progettazione**
-   - **3.6 Requisiti del database**
-      - **3.6.1 Tipologia**
-      - **3.6.2 Struttura delle tabelle**
-      - **3.6.3 Vincoli e integrità**
-      - **3.6.4 Requisiti e sicurezza**
-      - **3.6.5 Prestazioni**
-      - **3.6.6 Gestione degli errori**
-   - **3.7 Requisiti del server**
-      - **3.7.1 Architettura**
-      - **3.7.2 Requisiti funzionali**
-      - **3.7.3 Sicurezza**
-      - **3.7.5 Logging e monitoraggio**
-   - **3.8 Requisiti non funzionali (in riferimento ad ISO 9126)**
-      - **3.8.1 Usabilità**
-      - **3.8.2 Efficienza**
-      - **3.8.3 Affidabilità**
-      - **3.8.4 Portabilità**
-      - **3.8.5 Sicurezza**
+- [3.1 Requisiti funzionali](#31-requisiti-funzionali)
+  - [3.1.1 Gestione dell'autenticazione](#311-gestione-dellautenticazione)
+  - [3.1.2 Gestione della modalità di gioco](#312-gestione-della-modalità-di-gioco)
+  - [3.1.3 Configurazione della partita offline](#313-configurazione-della-partita-offline)
+  - [3.1.4 Svolgimento della partita](#314-svolgimento-della-partita)
+  - [3.1.5 Gestione del salvataggio nella modalità offline](#315-gestione-del-salvataggio-nella-modalità-offline)
+  - [3.1.6 Visualizzazione delle statistiche](#316-visualizzazione-delle-statistiche)
+  - [3.1.7 Visualizzazione del regolamento](#317-visualizzazione-del-regolamento)
+  - [3.1.8 Logout e disconnessione](#318-logout-e-disconnessione)
+  - [3.1.9 Politiche di gioco](#319-politiche-di-gioco)
+- [3.2 Requisiti di interfaccia utente](#32-requisiti-di-interfaccia-utente)
+  - [3.2.1 Schermata di Login](#321-schermata-di-login)
+  - [3.2.2 Schermata di Registrazione](#322-schermata-di-registrazione)
+  - [3.2.3 Menù principale](#323-menù-principale)
+  - [3.2.4 Schermata "Gioca contro computer"](#324-schermata-gioca-contro-computer)
+  - [3.2.5 Configurazione nuova partita](#325-configurazione-nuova-partita)
+  - [3.2.6 Regolamento](#326-regolamento)
+  - [3.2.7 Statistiche](#327-statistiche)
+  - [3.2.8 Impostazioni](#328-impostazioni)
+- [3.3 Requisiti interfaccia hardware e software](#33-requisiti-interfaccia-hardware-e-software)
+  - [3.3.1 Interfaccia hardware](#331-interfaccia-hardware)
+  - [3.3.2 Interfaccia software](#332-interfaccia-software)
+- [3.4 Requisiti di comunicazione](#34-requisiti-di-comunicazione)
+- [3.5 Vincoli di progettazione](#35-vincoli-di-progettazione)
+- [3.6 Requisiti del database](#36-requisiti-del-database)
+  - [3.6.1 Tipologia](#361-tipologia)
+  - [3.6.2 Struttura delle tabelle](#362-struttura-delle-tabelle)
+  - [3.6.3 Vincoli e integrità](#363-vincoli-e-integrità)
+  - [3.6.4 Requisiti e sicurezza](#364-requisiti-e-sicurezza)
+  - [3.6.5 Prestazioni](#365-prestazioni)
+  - [3.6.6 Gestione degli errori](#366-gestione-degli-errori)
+- [3.7 Requisiti del server](#37-requisiti-del-server)
+  - [3.7.1 Architettura](#371-architettura)
+  - [3.7.2 Requisiti funzionali](#372-requisiti-funzionali)
+  - [3.7.3 Sicurezza](#373-sicurezza)
+  - [3.7.5 Logging e monitoraggio](#375-logging-e-monitoraggio)
+- [3.8 Requisiti non funzionali (in riferimento ad ISO 9126)](#38-requisiti-non-funzionali-in-riferimento-ad-iso-9126)
+  - [3.8.1 Usabilità](#381-usabilità)
+  - [3.8.2 Efficienza](#382-efficienza)
+  - [3.8.3 Affidabilità](#383-affidabilità)
+  - [3.8.4 Portabilità](#384-portabilità)
+  - [3.8.5 Sicurezza](#385-sicurezza)
+
 #### 4. Piano di testing
+- [4. Piano di testing](#4-piano-di-testing)
+
 #### 5. Strumenti e standard di lavoro
+- [5. Strumenti e standard di lavoro](#5-strumenti-e-standard-di-lavoro)
+
 #### 6. Use Case Principali
+- [6. Use Case Principali](#6-use-case-principali)
+
 
 ---
 ## 1. Introduzione
