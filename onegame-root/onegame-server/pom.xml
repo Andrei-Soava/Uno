@@ -71,6 +71,7 @@
   </dependencies>
 
   <build>
+    <finalName>app</finalName>
     <plugins>
 
       <!-- Plugin per eseguire direttamente la classe main -->
@@ -80,9 +81,6 @@
         <version>3.5.1</version>
         <configuration>
           <mainClass>onegame.server.ServerUno</mainClass>
-          <arguments>
-            <argument>--enable-native-access=ALL-UNNAMED</argument>
-          </arguments>
         </configuration>
       </plugin>
 
@@ -91,6 +89,8 @@
         <artifactId>maven-assembly-plugin</artifactId>
         <version>3.3.0</version>
         <configuration>
+          <finalName>app</finalName>
+          <appendAssemblyId>false</appendAssemblyId>
           <archive>
             <manifest>
               <mainClass>onegame.server.ServerUno</mainClass>
@@ -151,6 +151,4 @@
 
     </plugins>
   </build>
-
-
 </project>

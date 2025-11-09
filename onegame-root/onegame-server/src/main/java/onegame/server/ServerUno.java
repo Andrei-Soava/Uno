@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import com.corundumstudio.socketio.Configuration;
 import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.SocketIOServer;
+import com.corundumstudio.socketio.Transport;
 
 import onegame.net.messaggi.Messaggi;
 import onegame.net.messaggi.MessaggiGioco;
@@ -32,9 +33,10 @@ public class ServerUno {
 
 	public ServerUno(String host, int port) {
 		Configuration config = new Configuration();
+		config.setTransports(Transport.WEBSOCKET);
 		config.setHostname(host);
 		config.setPort(port);
-		config.setPingInterval(10000);
+		config.setPingInterval(25000);
 		config.setPingTimeout(60000);
 		config.setExceptionListener(new ServerUnoExceptionListener());
 

@@ -45,9 +45,14 @@ public class ClientSocket {
 	private MessStatoPartita statoPartita;
 
 	public ClientSocket(String url) throws Exception {
-		IO.Options opts = new IO.Options();
-		opts.reconnection = true;
-		this.socket = IO.socket(new URI(url), opts);
+		IO.Options options = new IO.Options();
+		options.transports = new String[] { "websocket" };
+		options.reconnection = true;
+		options.timeout = 10000;
+		options.reconnectionAttempts = Integer.MAX_VALUE;
+		options.reconnectionDelay = 2000;
+
+		this.socket = IO.socket(new URI(url), options);
 		this.utente = new Utente(true);
 		registerBaseHandlers();
 	}

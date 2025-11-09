@@ -34,7 +34,10 @@ public class AppWithMaven extends Application {
 	public void start(Stage stage) {
 		this.primaryStage = stage;
 		try {
-			cs = new ClientSocket("http://127.0.0.1:8080/");
+			ConfigLoader config = new ConfigLoader("config.properties");
+			String host = config.getServerHost();
+			
+			cs = new ClientSocket(host);
 			cm=new ConnectionMonitor(cs);
 			cs.connect();
 			System.out.println("connessione avvenuta con successo");
