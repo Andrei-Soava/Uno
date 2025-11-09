@@ -34,7 +34,10 @@ public class AppWithMaven extends Application {
 	public void start(Stage stage) {
 		this.primaryStage = stage;
 		try {
-			cs = new ClientSocket("https://one-production-f97f.up.railway.app/");
+			ConfigLoader config = new ConfigLoader("config.properties");
+			String host = config.getServerHost();
+			
+			cs = new ClientSocket(host);
 			cm=new ConnectionMonitor(cs);
 			cs.connect();
 			System.out.println("connessione avvenuta con successo");
