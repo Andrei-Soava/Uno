@@ -25,8 +25,6 @@ public class ControlloreRegistrazione extends Controllore{
 	
 	private void eseguiRegistrazione() {
 		vr.ottieniDati((username,password,confermaPassword)->{
-			System.out.println(username);
-			System.out.println(password);
 			if(username.length()==0 || password.length()==0 || confermaPassword.length()==0) {
 				vr.compilaMessaggioErrore("Uno o più campi vuoti");
 				eseguiRegistrazione();

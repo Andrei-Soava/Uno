@@ -40,7 +40,6 @@ public class AppWithMaven extends Application {
 			cs = new ClientSocket(host);
 			cm=new ConnectionMonitor(cs);
 			cs.connect();
-			System.out.println("connessione avvenuta con successo");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -65,7 +64,6 @@ public class AppWithMaven extends Application {
 			try {
 				cs.esciStanza(null);
 				cs.disconnect();
-				System.out.println("disconnessione avvenuta con successo");
 				cm.stop();
 			} catch (Exception exc) {
 				exc.printStackTrace();

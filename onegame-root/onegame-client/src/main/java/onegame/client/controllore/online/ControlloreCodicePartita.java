@@ -25,7 +25,6 @@ public class ControlloreCodicePartita extends Controllore {
 	
 	private void eseguiAccesso() {
 		vic.ottieniCodice((codice)->{
-			System.out.println(codice);
 			if(codice.length()==0) {
 				vic.compilaMessaggioErrore("Codice nullo. Riprovare");
 				eseguiAccesso();
@@ -36,7 +35,6 @@ public class ControlloreCodicePartita extends Controllore {
 				int codiceParsato=Integer.parseInt(codice);
 				cs.entraStanza(codiceParsato, respEntraStanza -> {
 					Platform.runLater(()->{
-						System.out.println("DENTRO CALLBACK RICHIESTA INGRESSO");
 						if(respEntraStanza.success) {
 							vic.mostraStanza(codice);
 						} else {
