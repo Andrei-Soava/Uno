@@ -6,7 +6,8 @@
 
 Il presente progetto verrà svolto, perlomeno per quanto preventivato, utilizzando le metodologie "agili" per la modellazione e lo sviluppo di codice. 
 In particolare, si conta di utilizzare SCRUM, con sprint settimanali e riunioni giornaliere (per aggiornarsi costantemente).
-Qualora lo si ritenesse necessario, si considera la possibilità di attingere (in minore misura) ai modelli "tradizionali", come quello a cascata, ad esempio quando è necessario uno sviluppo più collettivo (ingegneria dei requisiti oppure progettazione).
+Qualora lo si ritenesse necessario, si considera la possibilità di attingere (in minore misura) ai modelli "tradizionali", come quello a cascata, ad esempio quando è necessario uno sviluppo più collettivo (ingegneria dei requisiti oppure progettazione).\
+A fine documento è presente il [resoconto](#resoconto) finale della gestione del progetto.
 
 ---
 
@@ -162,3 +163,22 @@ Esempio COMPLETO:
 - 5/11, Andrei, creazione activity diagram per mostrare flusso della partita online lato CLIENT (con la funzione aggiornaPartita) + aggiornamento documento 3 con .PNG, null;
 - 6/11, Giuseppe, (aggiornamento diagramma UML delle classi, non ancora terminato);
 - 6/11, Fabio, (aggiornamento documento testing, indice documento requisiti), null;
+- 7/11, Andrei e Fabio, creazione pptx per presentazione progetto, null;
+- 10/11, **AVVISO**, Andrei, inserire i ruoli finali in questo documento e dentro la presentazione pptx;
+
+---
+
+## Resoconto
+### Modello di processo
+Rispetto a quanto preventivato ad inizio progetto:
+    - non si è utilizzato SCRUM → occasionalmente sviluppo agile (per implementazione), simile ad Extreme Programming
+    - non si è utilizzato il modello a cascata → sviluppo della documentazione con modello a V
+
+### Ruoli a fine progetto
+- Giuseppe Luisi:
+- Fabio Locatelli:
+- Andrei Soava
+    - sviluppo front-end: interfaccia grafica con JavaFX, partita offline, funzionalità lato client
+    - documentazione: gestione del progetto, design e testing (parziale)
+    - diagrammi UML: diagrammi in Papyrus di casi d'uso, classe, stati finiti, sequenza, comunicazione, attività + pseudo-diagramma di componenti (con mermaid)
+
