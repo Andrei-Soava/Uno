@@ -287,7 +287,8 @@ public class PartitaNET {
 			// Logica semplice per i bot: se possono giocare, giocano la prima carta valida
 			for (CartaNET carta : giocatore.getMano()) {
 				if (isCartaGiocabile(carta)) {
-					giocaCarta(carta, carta.getColore() == Colore.NERO ? Colore.scegliColoreCasuale() : null, giocatore);
+					giocaCarta(carta, carta.getColore() == Colore.NERO ? Colore.scegliColoreCasuale() : null,
+							giocatore);
 					return;
 				}
 			}
@@ -620,6 +621,7 @@ public class PartitaNET {
 			partitaFinita = true;
 			cancellaTimer();
 			notifyObserverspartitaAggiornata(null);
+			logger.debug("La partita è stata interrotta");
 		} finally {
 			lock.unlock();
 		}

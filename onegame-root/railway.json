@@ -1,0 +1,3 @@
+{
+  "start": "bash onegame-server/start.sh"
+}
