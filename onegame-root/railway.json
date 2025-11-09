@@ -1,0 +1,6 @@
+{
+  "build": {
+    "builder": "maven"
+  },
+  "start": "bash onegame-server/start.sh"
+}

@@ -108,8 +108,6 @@ public class ServerUno {
 		// Statistiche
 		server.addEventListener(MessaggiStatistiche.EVENT_CARICA_STATISTICHE, Void.class,
 				(client, data, ack) -> gestoreStatistiche.handleCaricaStatistiche(getSessione(client), ack));
-
-		logger.debug("Eventi registrati");
 	}
 
 	/**
@@ -148,9 +146,10 @@ public class ServerUno {
 			logger.error(e.getMessage());
 			System.exit(1);
 		}
-		String host = "127.0.0.1";
-		int port = 8080;
-		ServerUno srv = new ServerUno(host, port);
+		String host = "0.0.0.0";
+		String port = System.getenv("PORT");
+		int portNumber = port != null ? Integer.parseInt(port) : 8080;
+		ServerUno srv = new ServerUno(host, portNumber);
 		srv.avvia();
 
 		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
