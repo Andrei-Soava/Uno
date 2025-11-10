@@ -177,6 +177,9 @@ Rispetto a quanto preventivato ad inizio progetto:
 
 ### Ruoli a fine progetto
 - Giuseppe Luisi:
+    - sviluppo back-end: sviluppo parte iniziale del database, piccoli contributi nel server
+    - documentazione: requisiti, maintenance
+    - diagrammi UML: diagramma delle classi (parziale, solo parte lato server)
 - Fabio 
     - sviluppo back-end: modulo server, integrazione database, partita online, funzionalità lato server
     - protocollo di comunicazione (messaggi e dto) e socket client
