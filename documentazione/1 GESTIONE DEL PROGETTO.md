@@ -164,6 +164,7 @@ Esempio COMPLETO:
 - 6/11, Giuseppe, (aggiornamento diagramma UML delle classi, non ancora terminato);
 - 6/11, Fabio, (aggiornamento documento testing, indice documento requisiti), null;
 - 7/11, Andrei e Fabio, creazione pptx per presentazione progetto, null;
+- 9/11, Fabio, adattamento del server e distribuzione su railway con docker, null;
 - 10/11, **AVVISO**, Andrei, inserire i ruoli finali in questo documento e dentro la presentazione pptx;
 
 ---
@@ -176,7 +177,12 @@ Rispetto a quanto preventivato ad inizio progetto:
 
 ### Ruoli a fine progetto
 - Giuseppe Luisi:
-- Fabio Locatelli:
+- Fabio 
+    - sviluppo back-end: modulo server, integrazione database, partita online, funzionalità lato server
+    - protocollo di comunicazione (messaggi e dto) e socket client
+    - gestione generale del progetto Maven
+    - documentazione: testing (parziale), design (parziale)
+    - distribuzione su railway con docker
 - Andrei Soava
     - sviluppo front-end: interfaccia grafica con JavaFX, partita offline, funzionalità lato client
     - documentazione: gestione del progetto, design e testing (parziale)

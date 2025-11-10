@@ -32,6 +32,7 @@ Per questo prodotto, tale tipo di manutenzione sarà impiegato per:
 3. Configurazione del gioco per funzionare su sistemi operativi diversi o server aggiornati;
 4. Eventuale migrazione del database verso un nuovo DBMS o un servizio cloud;
 ### Log messaggi:
+- 9/11, Fabio, adattamento del server a essere distribuito attraverso docker su railway
 
 ## Manutenzione preventiva
 Questo tipo di manutenzione riguarda le attività volte ad aumentare la manutenibilità del sistema, come l'aggiornamento della documentazione, l'aggiunta di commenti e il miglioramento della struttura modulare del sistema. 
