@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_IJ030L89EfCNepw4u42RXA" name="UMLstateMachinaPartitaOnline">
+  <packageImport xmi:type="uml:PackageImport" xmi:id="_IMJzEL89EfCNepw4u42RXA">
+    <importedPackage xmi:type="uml:Model" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#_0"/>
+  </packageImport>
+  <packagedElement xmi:type="uml:StateMachine" xmi:id="_IL7JkL89EfCNepw4u42RXA" name="StateMachine1">
+    <ownedOperation xmi:type="uml:Operation" xmi:id="_geEe0L89EfCNepw4u42RXA" name="giocaCarta"/>
+    <ownedOperation xmi:type="uml:Operation" xmi:id="_k9nMQL89EfCNepw4u42RXA" name="dichiaraUno"/>
+    <ownedOperation xmi:type="uml:Operation" xmi:id="_m8LxwL89EfCNepw4u42RXA" name="pescaCarta"/>
+    <ownedOperation xmi:type="uml:Operation" xmi:id="_oGMGwL89EfCNepw4u42RXA" name="mossaPassa"/>
+    <ownedOperation xmi:type="uml:Operation" xmi:id="_tX53AL9IEfCNepw4u42RXA" name="passaTurno" method="_TMiuoL9OEfCNepw4u42RXA"/>
+    <ownedOperation xmi:type="uml:Operation" xmi:id="_8eMKkL9REfCNepw4u42RXA" name="interrompiPartita" visibility="protected"/>
+    <region xmi:type="uml:Region" xmi:id="_IL8XsL89EfCNepw4u42RXA" name="Region1">
+      <transition xmi:type="uml:Transition" xmi:id="_dylgQL9OEfCNepw4u42RXA" source="_LJkmcL89EfCNepw4u42RXA" target="_AbzQoL9HEfCNepw4u42RXA">
+        <trigger xmi:type="uml:Trigger" xmi:id="_BHQncL9SEfCNepw4u42RXA" name="" event="_4QTN0L9REfCNepw4u42RXA"/>
+      </transition>
+      <subvertex xmi:type="uml:State" xmi:id="_LJkmcL89EfCNepw4u42RXA" name="PartitaInCorso">
+        <region xmi:type="uml:Region" xmi:id="_Oen2sL89EfCNepw4u42RXA" name="Region1">
+          <transition xmi:type="uml:Transition" xmi:id="_AsfHEL8-EfCNepw4u42RXA" name="TransizioneGiocaCarta" source="_Oeodwb89EfCNepw4u42RXA" target="_rWmuoL89EfCNepw4u42RXA">
+            <trigger xmi:type="uml:Trigger" xmi:id="_IVNL8L8-EfCNepw4u42RXA" name="" event="_Wxpc0L89EfCNepw4u42RXA"/>
+          </transition>
+          <transition xmi:type="uml:Transition" xmi:id="_Uy4NkL8-EfCNepw4u42RXA" name="TransizioneCarteInMano>1" guard="_wduf0L9FEfCNepw4u42RXA" source="_rWmuoL89EfCNepw4u42RXA" target="_Oeodwb89EfCNepw4u42RXA">
+            <ownedRule xmi:type="uml:Constraint" xmi:id="_wduf0L9FEfCNepw4u42RXA" name="">
+              <specification xmi:type="uml:OpaqueExpression" xmi:id="_wdvG4L9FEfCNepw4u42RXA" name="">
+                <language>JAVA</language>
+                <body>carteInMano > 1</body>
+              </specification>
+            </ownedRule>
+          </transition>
+          <transition xmi:type="uml:Transition" xmi:id="_I6eNcL9EEfCNepw4u42RXA" name="TransizioneCarteInMano==1" guard="_pKXxgL9GEfCNepw4u42RXA" source="_rWmuoL89EfCNepw4u42RXA" target="_PgAbML89EfCNepw4u42RXA">
+            <ownedRule xmi:type="uml:Constraint" xmi:id="_pKXxgL9GEfCNepw4u42RXA" name="constraintCarteInMano==1">
+              <specification xmi:type="uml:OpaqueExpression" xmi:id="_pKYYkL9GEfCNepw4u42RXA" name="constraintCarteInMano==1">
+                <language>JAVA</language>
+                <body>carteInMano==1</body>
+              </specification>
+            </ownedRule>
+          </transition>
+          <transition xmi:type="uml:Transition" xmi:id="_G81xML9GEfCNepw4u42RXA" source="_PgAbML89EfCNepw4u42RXA" target="_Oeodwb89EfCNepw4u42RXA">
+            <trigger xmi:type="uml:Trigger" xmi:id="_KumLkL9GEfCNepw4u42RXA" name="TriggerDichiaraUno" event="_ZAVh8L89EfCNepw4u42RXA"/>
+          </transition>
+          <transition xmi:type="uml:Transition" xmi:id="_RMDXML9GEfCNepw4u42RXA" source="_Oeodwb89EfCNepw4u42RXA" target="_Q1_9wL89EfCNepw4u42RXA">
+            <trigger xmi:type="uml:Trigger" xmi:id="_UaCWIL9GEfCNepw4u42RXA" name="TriggerPescaCarta" event="_aP6TcL89EfCNepw4u42RXA"/>
+          </transition>
+          <transition xmi:type="uml:Transition" xmi:id="_egXs8L9GEfCNepw4u42RXA" source="_Q1_9wL89EfCNepw4u42RXA" target="_Oeodwb89EfCNepw4u42RXA">
+            <trigger xmi:type="uml:Trigger" xmi:id="_hzxXYL9GEfCNepw4u42RXA" name="" event="_bPKxAL89EfCNepw4u42RXA"/>
+          </transition>
+          <transition xmi:type="uml:Transition" xmi:id="_CaKawL9HEfCNepw4u42RXA" name="TransizioneCarteInMano==0" guard="_XBJF0L9HEfCNepw4u42RXA" source="_rWmuoL89EfCNepw4u42RXA" target="_AbzQoL9HEfCNepw4u42RXA">
+            <ownedRule xmi:type="uml:Constraint" xmi:id="_XBJF0L9HEfCNepw4u42RXA" name="">
+              <specification xmi:type="uml:OpaqueExpression" xmi:id="_XBJs4L9HEfCNepw4u42RXA" name="">
+                <language>JAVA</language>
+                <body>carteInMano == 0</body>
+              </specification>
+            </ownedRule>
+          </transition>
+          <transition xmi:type="uml:Transition" xmi:id="_j-HSkL9HEfCNepw4u42RXA" name="TransizioneGiocaCartaPescata" guard="_q_ZkAL9HEfCNepw4u42RXA" source="_Q1_9wL89EfCNepw4u42RXA" target="_rWmuoL89EfCNepw4u42RXA">
+            <ownedRule xmi:type="uml:Constraint" xmi:id="_q_ZkAL9HEfCNepw4u42RXA" name="">
+              <specification xmi:type="uml:OpaqueExpression" xmi:id="_q_aLEL9HEfCNepw4u42RXA" name="">
+                <language>JAVA</language>
+                <body>carta==cartaPescata</body>
+              </specification>
+            </ownedRule>
+            <trigger xmi:type="uml:Trigger" xmi:id="_nmypcL9HEfCNepw4u42RXA" name="" event="_Wxpc0L89EfCNepw4u42RXA"/>
+          </transition>
+          <transition xmi:type="uml:Transition" xmi:id="_1vvhIL9HEfCNepw4u42RXA" name="TransizioneTimeoutDichiaraUno" source="_PgAbML89EfCNepw4u42RXA" target="_Oeodwb89EfCNepw4u42RXA">
+            <trigger xmi:type="uml:Trigger" xmi:id="_CyYRAL9IEfCNepw4u42RXA" name="" event="__121gL9HEfCNepw4u42RXA"/>
+          </transition>
+          <transition xmi:type="uml:Transition" xmi:id="_eUb30L9IEfCNepw4u42RXA" source="_Oeodwb89EfCNepw4u42RXA" target="_Oeodwb89EfCNepw4u42RXA">
+            <trigger xmi:type="uml:Trigger" xmi:id="_iE2OYL9IEfCNepw4u42RXA" name="" event="_Zg1l8L9IEfCNepw4u42RXA"/>
+          </transition>
+          <subvertex xmi:type="uml:State" xmi:id="_Oeodwb89EfCNepw4u42RXA" name="AttesaMossa">
+            <entry xmi:type="uml:OpaqueBehavior" xmi:id="_TMiuoL9OEfCNepw4u42RXA" name="passaTurno" specification="_tX53AL9IEfCNepw4u42RXA"/>
+          </subvertex>
+          <subvertex xmi:type="uml:State" xmi:id="_PgAbML89EfCNepw4u42RXA" name="AttesaDichiaraUNO"/>
+          <subvertex xmi:type="uml:State" xmi:id="_Q1_9wL89EfCNepw4u42RXA" name="AttesaSceltaDopoPesca"/>
+          <subvertex xmi:type="uml:Pseudostate" xmi:id="_rWmuoL89EfCNepw4u42RXA" name="" kind="choice"/>
+        </region>
+      </subvertex>
+      <subvertex xmi:type="uml:FinalState" xmi:id="_AbzQoL9HEfCNepw4u42RXA" name="FinePartita"/>
+    </region>
+  </packagedElement>
+  <packagedElement xmi:type="uml:CallEvent" xmi:id="_Wxpc0L89EfCNepw4u42RXA" name="giocaCarta" operation="_geEe0L89EfCNepw4u42RXA"/>
+  <packagedElement xmi:type="uml:CallEvent" xmi:id="_ZAVh8L89EfCNepw4u42RXA" name="dichiaraUno" operation="_k9nMQL89EfCNepw4u42RXA"/>
+  <packagedElement xmi:type="uml:CallEvent" xmi:id="_aP6TcL89EfCNepw4u42RXA" name="pescaCarta" operation="_m8LxwL89EfCNepw4u42RXA"/>
+  <packagedElement xmi:type="uml:CallEvent" xmi:id="_bPKxAL89EfCNepw4u42RXA" name="mossaPassa" operation="_oGMGwL89EfCNepw4u42RXA"/>
+  <packagedElement xmi:type="uml:Signal" xmi:id="_9Z038L9HEfCNepw4u42RXA" name="timeoutDichiaraUno"/>
+  <packagedElement xmi:type="uml:SignalEvent" xmi:id="__121gL9HEfCNepw4u42RXA" name="timeoutDichiaraUno" signal="_9Z038L9HEfCNepw4u42RXA"/>
+  <packagedElement xmi:type="uml:Signal" xmi:id="_XeIuYL9IEfCNepw4u42RXA" name="timeoutTurno"/>
+  <packagedElement xmi:type="uml:SignalEvent" xmi:id="_Zg1l8L9IEfCNepw4u42RXA" name="timeoutTurno"/>
+  <packagedElement xmi:type="uml:CallEvent" xmi:id="_4QTN0L9REfCNepw4u42RXA" name="interrompiPartita" operation="_8eMKkL9REfCNepw4u42RXA"/>
+</uml:Model>

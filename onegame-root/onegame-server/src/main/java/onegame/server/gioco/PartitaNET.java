@@ -244,7 +244,7 @@ public class PartitaNET {
 	}
 
 	/**
-	 * Esegue la mossa di pescare una carta e passare il turno
+	 * Esegue la mossa di pescare una carta e passare il turno. Se ha già pescato, passa semplicemente il turno.
 	 * @param giocatore il giocatore che effettua la mossa
 	 * @throws EccezionePartita se la mossa non è valida o la partita è finita
 	 */

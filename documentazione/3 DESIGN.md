@@ -70,7 +70,7 @@ Suddivisione in macro‑blocchi e responsabilità, con focus su coesione interna
 - Server (servizi remoti, gestione lobby, persistenza).
 - Database (tabelle principali e relazioni).
 
-#### Diagramma delle classi (incompleto)
+#### Diagramma delle classi
 ![Class](../UMLDiagrams/ONEclassDiagram.PNG)
 
 #### Macchina degli stati finiti (sistema)
