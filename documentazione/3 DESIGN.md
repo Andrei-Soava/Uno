@@ -70,11 +70,14 @@ Suddivisione in macro‑blocchi e responsabilità, con focus su coesione interna
 - Server (servizi remoti, gestione lobby, persistenza).
 - Database (tabelle principali e relazioni).
 
-#### Diagramma delle classi
+#### Diagramma delle classi (e package)
 ![Class](../UMLDiagrams/ONEclassDiagram.PNG)
 
 #### Macchina degli stati finiti (sistema)
 ![StateMachine](../UMLDiagrams/ONEstateMachineDiagram.PNG)
+
+#### Macchina degli stati finiti (partita online lato server)
+![StateMachine](../UMLDiagrams/UMLstateMachineDiagramPartitaOnline.PNG)
 
 ### <u>Vista di processo</u>
 Principali flussi e interazioni concorrenti, inclusi eventi asincroni e cicli di vita delle partite

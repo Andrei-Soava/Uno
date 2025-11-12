@@ -3,7 +3,7 @@
   <packageImport xmi:type="uml:PackageImport" xmi:id="_IMJzEL89EfCNepw4u42RXA">
     <importedPackage xmi:type="uml:Model" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#_0"/>
   </packageImport>
-  <packagedElement xmi:type="uml:StateMachine" xmi:id="_IL7JkL89EfCNepw4u42RXA" name="StateMachine1">
+  <packagedElement xmi:type="uml:StateMachine" xmi:id="_IL7JkL89EfCNepw4u42RXA" name="PartitaOnline">
     <ownedOperation xmi:type="uml:Operation" xmi:id="_geEe0L89EfCNepw4u42RXA" name="giocaCarta"/>
     <ownedOperation xmi:type="uml:Operation" xmi:id="_k9nMQL89EfCNepw4u42RXA" name="dichiaraUno"/>
     <ownedOperation xmi:type="uml:Operation" xmi:id="_m8LxwL89EfCNepw4u42RXA" name="pescaCarta"/>
@@ -14,6 +14,7 @@
       <transition xmi:type="uml:Transition" xmi:id="_dylgQL9OEfCNepw4u42RXA" source="_LJkmcL89EfCNepw4u42RXA" target="_AbzQoL9HEfCNepw4u42RXA">
         <trigger xmi:type="uml:Trigger" xmi:id="_BHQncL9SEfCNepw4u42RXA" name="" event="_4QTN0L9REfCNepw4u42RXA"/>
       </transition>
+      <transition xmi:type="uml:Transition" xmi:id="_pFj5oL-sEfC5VsFJpjn3uQ" source="_ltJzYL-sEfC5VsFJpjn3uQ" target="_LJkmcL89EfCNepw4u42RXA"/>
       <subvertex xmi:type="uml:State" xmi:id="_LJkmcL89EfCNepw4u42RXA" name="PartitaInCorso">
         <region xmi:type="uml:Region" xmi:id="_Oen2sL89EfCNepw4u42RXA" name="Region1">
           <transition xmi:type="uml:Transition" xmi:id="_AsfHEL8-EfCNepw4u42RXA" name="TransizioneGiocaCarta" source="_Oeodwb89EfCNepw4u42RXA" target="_rWmuoL89EfCNepw4u42RXA">
@@ -67,15 +68,18 @@
           <transition xmi:type="uml:Transition" xmi:id="_eUb30L9IEfCNepw4u42RXA" source="_Oeodwb89EfCNepw4u42RXA" target="_Oeodwb89EfCNepw4u42RXA">
             <trigger xmi:type="uml:Trigger" xmi:id="_iE2OYL9IEfCNepw4u42RXA" name="" event="_Zg1l8L9IEfCNepw4u42RXA"/>
           </transition>
+          <transition xmi:type="uml:Transition" xmi:id="_wSbI8L-sEfC5VsFJpjn3uQ" source="_s9LrcL-sEfC5VsFJpjn3uQ" target="_Oeodwb89EfCNepw4u42RXA"/>
           <subvertex xmi:type="uml:State" xmi:id="_Oeodwb89EfCNepw4u42RXA" name="AttesaMossa">
-            <entry xmi:type="uml:OpaqueBehavior" xmi:id="_TMiuoL9OEfCNepw4u42RXA" name="passaTurno" specification="_tX53AL9IEfCNepw4u42RXA"/>
+            <entry xmi:type="uml:OpaqueBehavior" xmi:id="_TMiuoL9OEfCNepw4u42RXA" name="passaTurno" visibility="package" specification="_tX53AL9IEfCNepw4u42RXA"/>
           </subvertex>
           <subvertex xmi:type="uml:State" xmi:id="_PgAbML89EfCNepw4u42RXA" name="AttesaDichiaraUNO"/>
           <subvertex xmi:type="uml:State" xmi:id="_Q1_9wL89EfCNepw4u42RXA" name="AttesaSceltaDopoPesca"/>
           <subvertex xmi:type="uml:Pseudostate" xmi:id="_rWmuoL89EfCNepw4u42RXA" name="" kind="choice"/>
+          <subvertex xmi:type="uml:Pseudostate" xmi:id="_s9LrcL-sEfC5VsFJpjn3uQ"/>
         </region>
       </subvertex>
       <subvertex xmi:type="uml:FinalState" xmi:id="_AbzQoL9HEfCNepw4u42RXA" name="FinePartita"/>
+      <subvertex xmi:type="uml:Pseudostate" xmi:id="_ltJzYL-sEfC5VsFJpjn3uQ" name=""/>
     </region>
   </packagedElement>
   <packagedElement xmi:type="uml:CallEvent" xmi:id="_Wxpc0L89EfCNepw4u42RXA" name="giocaCarta" operation="_geEe0L89EfCNepw4u42RXA"/>

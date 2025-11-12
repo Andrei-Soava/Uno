@@ -161,11 +161,14 @@ Esempio COMPLETO:
 - 4/11, Andrei, creazione communication diagram per mostrare logica di gestione dei salvataggio lato CLIENT (con particolare enfasi su il caricamento di una partita) + aggiornamento documento 3 con .PNG, continuazione documentazione e diagrammi;
 - 4/11, Fabio, (creati file bat e vbs per esecuzione di client e server con maven, aggiornati plugin, scrittura del readme.md), null;
 - 5/11, Andrei, creazione activity diagram per mostrare flusso della partita online lato CLIENT (con la funzione aggiornaPartita) + aggiornamento documento 3 con .PNG, null;
-- 6/11, Giuseppe, (aggiornamento diagramma UML delle classi, non ancora terminato);
+- 6/11, Giuseppe, (aggiornamento diagramma UML delle classi, non ancora terminato), null;
 - 6/11, Fabio, (aggiornamento documento testing, indice documento requisiti), null;
 - 7/11, Andrei e Fabio, creazione pptx per presentazione progetto, null;
 - 9/11, Fabio, adattamento del server e distribuzione su railway con docker, null;
 - 10/11, **AVVISO**, Andrei, inserire i ruoli finali in questo documento e dentro la presentazione pptx;
+- 11/11, Fabio, macchina a stati per partita online, null;
+- 12/11, Andrei, ultime modifiche prima della release + conclusione pptx, null;
+- 12/11, **AVVISO**, Andrei, progetto concluso → stop modifiche;
 
 ---
 
@@ -186,6 +189,7 @@ Rispetto a quanto preventivato ad inizio progetto:
     - gestione generale del progetto Maven
     - documentazione: testing (parziale), design (parziale)
     - distribuzione su railway con docker
+    - diagrammi UML: diagramma stati finiti per partita online (lato server)
 - Andrei Soava
     - sviluppo front-end: interfaccia grafica con JavaFX, partita offline, funzionalità lato client
     - documentazione: gestione del progetto, design e testing (parziale)
